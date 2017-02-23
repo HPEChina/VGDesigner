@@ -1,54 +1,140 @@
 /**
  * Created by jinbin on 2017/2/13.
  */
-// document.write(" <script language=\"javascript\" src="\/com\/ Js_file02.js \" > <\/script>");
-// <script type="text/javascript" src="js/Init.js"></script>
-// <script type="text/javascript" src="jscolor/jscolor.js"></script>
-// <script type="text/javascript" src="sanitizer/sanitizer.min.js"></script>
-// <script type="text/javascript" src="src/js/mxClient.js"></script>
-// <script type="text/javascript" src="js/EditorUi.js"></script>
-// <script type="text/javascript" src="js/Editor.js"></script>
-// <script type="text/javascript" src="js/Sidebar.js"></script>
-// <script type="text/javascript" src="js/Graph.js"></script>
-// <script type="text/javascript" src="js/Shapes.js"></script>
-// <script type="text/javascript" src="js/Actions.js"></script>
-// <script type="text/javascript" src="js/Menus.js"></script>
-// <script type="text/javascript" src="js/Format.js"></script>
-// <script type="text/javascript" src="js/Toolbar.js"></script>
-// <script type="text/javascript" src="js/Dialogs.js"></script>
-// <script type="text/javascript" src="js/FileSaver.js"></script>
-// <!--<script type="text/javascript" src="js/Utils.js"></script>-->
-// <script type="text/javascript" src="js/CodeTranslator.js"></script>
-// <script type="text/javascript" src="js/codemirror/codemirror.js"></script>
-// <script type="text/javascript" src="js/codemirror/javascript.js"></script>
-// <script type="text/javascript" src="js/codemirror/xml.js"></script>
-// <script type="text/javascript" src="js/codemirror/yaml.js"></script>
 
-// JavaScript Document
+var VGDesigner = function(model, container) {
+    this.model = model;
+    this.container = container;
+    this.urlParams(window.location.href);
+    // mxLoadResources = false;
+    this.loadJsCssFiles();
+};
 
+/**
+ * 编辑模式加载的js文件数组
+ */
+VGDesigner.prototype.editorJsFiles = ['js/Init.js', 'jscolor/jscolor.js', 'sanitizer/sanitizer.min.js', 'src/js/mxClient.js', 'js/EditorUi.js',
+    'js/Editor.js', 'js/Sidebar.js', 'js/Graph.js', 'js/Shapes.js', 'js/Actions.js', 'js/Menus.js', 'js/Format.js',
+    'js/Toolbar.js', 'js/Dialogs.js', 'js/FileSaver.js', 'js/CodeTranslator.js', 'js/codemirror/codemirror.js',
+    'js/codemirror/javascript.js', 'js/codemirror/xml.js', 'js/codemirror/yaml.js', 'js/ModelAttribute.js'];
 
+/**
+ * 编辑模式加载的CSS文件名称数组
+ */
+VGDesigner.prototype.editorCssFiles = ['styles/grapheditor.css', 'js/codemirror/codemirror.css'];
 
-function loadJsCssFiles(fileNames){
-    for( var arr in fileNames)
+/**
+ * 监控模式加载的js文件数组
+ */
+VGDesigner.prototype.viewerJsFiles = [];
+
+/**
+ * 监控模式加载的CSS文件名称数组
+ */
+VGDesigner.prototype.viewerCssFiles = [];
+
+/**
+ * Extends EditorUi to update I/O action states based on availability of backend
+ */
+VGDesigner.prototype.init = function()
+{
+    var editorUiInit = EditorUi.prototype.init;
+
+    EditorUi.prototype.init = function()
     {
+        editorUiInit.apply(this, arguments);
+        this.actions.get('export').setEnabled(true);
+    };
 
+    // Adds required resources (disables loading of fallback properties, this can only
+    // be used if we know that all keys are defined in the language specific file)
+    mxResources.loadDefaultBundle = false;
+    var bundle = mxResources.getDefaultBundle(RESOURCE_BASE, mxLanguage) ||
+        mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage);
+
+    // Fixes possible asynchronous requests
+    mxUtils.getAll([bundle, STYLE_PATH + '/default.xml'], mxUtils.bind(this,function(xhr)
+    {
+        // Adds bundle text to resources
+        mxResources.parse(xhr[0].getText());
+
+        // Configures the default graph theme
+        var themes = new Object();
+        themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
+
+        // Main
+        new EditorUi(new Editor(urlParams['chrome'] == '0', themes, null, null, this.container), this.container);
+    }), mxUtils.bind(this,function()
+    {
+        this.container.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
+    }));
+};
+
+/**
+ * Parses URL parameters. Supported parameters are:
+ * - lang=xy: Specifies the language of the user interface.
+ * - touch=1: Enables a touch-style user interface.
+ * - storage=local: Enables HTML5 local storage.
+ * - chrome=0: Chromeless mode.
+ */
+VGDesigner.prototype.urlParams = function(url)
+{
+    var result = new Object();
+    var idx = url.lastIndexOf('?');
+    if (idx > 0)
+    {
+        var params = url.substring(idx + 1).split('&');
+
+        for (var i = 0; i < params.length; i++)
+        {
+            idx = params[i].indexOf('=');
+
+            if (idx > 0)
+            {
+                result[params[i].substring(0, idx)] = params[i].substring(idx + 1);
+            }
+        }
     }
-    if (filetype == "js"){
-        var fileref = document.createElement('script');
-        fileref.setAttribute("type","text/javascript");
-        fileref.setAttribute("src",filename);
+    return result;
+};
+
+/**
+ * 同步加载js/css文件
+ */
+VGDesigner.prototype.loadJsCssFiles = function()
+{
+    if (this.model == 'editor')
+    {
+        loadJsCssFiles(this.editorCssFiles);
+        loadJsCssFiles(this.editorJsFiles);
     }
-    else if (filetype == "css"){
-        var fileref = document.createElement('link');
-        fileref.setAttribute("rel","stylesheet");
-        fileref.setAttribute("type","text/css");
-        fileref.setAttribute("href",filename);
-    }
-    if (typeof fileref != "undefined"){
-        document.getElementsByTagName("head")[0].appendChild(fileref);
+    else if (this.model == 'viewer')
+    {
+        loadJsCssFiles(this.viewerCssFiles);
+        loadJsCssFiles(this.viewerJsFiles);
     }
 };
 
-loadJsCssFiles("do.js","js");
+/**
+ * Load css and js files
+ * @param fileNames array
+ */
+function loadJsCssFiles(fileNames)
+{
+    var type;
+    for( var index in fileNames)
+    {
+        var filename = fileNames[index];
+        var pos = filename.lastIndexOf('.');
+        type = filename.substr(pos + 1).toLowerCase();
+        if (type == 'js')
+        {
+            document.write('<script type="text/javascript" src="'+ filename +'"></script>');
+        }
+        else if (type == 'css')
+        {
+            document.write('<link rel="stylesheet" type="text/css" href="'+filename+'">');
+        }
 
-loadJsCssFiles("test.css","css");
+    }
+};

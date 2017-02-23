@@ -184,9 +184,16 @@ mxPopupMenuHandler.prototype.mouseUp = function(sender, me)
 
 		// Menu is shifted by 1 pixel so that the mouse up event
 		// is routed via the underlying shape instead of the DIV
+
+		// LLLLL画布弹出菜单
 		var origin = mxUtils.getScrollOrigin();
-		this.popup(me.getX() + origin.x + 1, me.getY() + origin.y + 1, cell, me.getEvent());
-		me.consume();
+		// this.popup(me.getX() + origin.x + 1, me.getY() + origin.y + 1, cell, me.getEvent());
+		// this.popup(me.getX() + origin.x + 1, me.getY() + origin.y + 1, cell, me.getEvent());
+		// me.consume();
+        var lmenu = this.vgdContainer.offsetLeft;
+        var tmenu = this.vgdContainer.offsetTop;
+		this.popup(me.getX() + origin.x + 1 - lmenu, me.getY() + origin.y + 1 - tmenu, cell, me.getEvent());
+        me.consume();
 	}
 	
 	this.popupTrigger = false;

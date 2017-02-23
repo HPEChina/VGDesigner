@@ -106,7 +106,7 @@
 	{
 		if (window.parent.Editor.useLocalStorage)
 		{
-			document.body.innerHTML = '';
+			mxGraphDiv.innerHTML = '';
 			var div = document.createElement('div');
 			div.style.fontFamily = 'Arial';
 			
@@ -188,7 +188,7 @@
 			cancelBtn.className = 'geBtn';
 			div.appendChild(cancelBtn);
 			
-			document.body.appendChild(div);
+			mxGraphDiv.appendChild(div);
 		}
 		else
 		{

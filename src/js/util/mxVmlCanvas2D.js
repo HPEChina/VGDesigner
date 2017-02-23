@@ -848,7 +848,7 @@ mxVmlCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 				
 				div.style.visibility = 'hidden';
 				div.style.position = 'absolute';
-				document.body.appendChild(div);
+				this.vgdContainer.appendChild(div);
 				
 				var sizeDiv = div;
 				
@@ -937,7 +937,7 @@ mxVmlCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 				// Adds div to document to measure size
 				var divParent = div.parentNode;
 				div.style.visibility = 'hidden';
-				document.body.appendChild(div);
+				this.vgdContainer.appendChild(div);
 				
 				w = div.offsetWidth;
 				var oh = div.offsetHeight;

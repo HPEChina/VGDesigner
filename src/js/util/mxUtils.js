@@ -3473,7 +3473,7 @@ var mxUtils =
 		
 		// Gets the size and removes from DOM
 		var size = new mxRectangle(0, 0, div.offsetWidth, div.offsetHeight);
-		document.body.removeChild(div);
+        document.body.removeChild(div);
 		
 		return size;
 	},

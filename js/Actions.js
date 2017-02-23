@@ -94,19 +94,47 @@ Actions.prototype.init = function()
     // Edit actions
     this.addAction('undo', function() {ui.undo();}, null, 'sprite-undo', 'Ctrl+Z');
     this.addAction('redo', function() {ui.redo();}, null, 'sprite-redo', 'Ctrl+Y');
-    this.addAction('cut', function() {
-        //todo
-    }, null, 'sprite-cut', 'Ctrl+X');
-    this.addAction('copy', function() {
-        //todo
-    }, null, 'sprite-copy', 'Ctrl+C');
+    this.addAction('cut', function() { mxClipboard.cut(graph); }, null, 'sprite-cut', 'Ctrl+X');
+    this.addAction('copy', function() { mxClipboard.copy(graph); }, null, 'sprite-copy', 'Ctrl+C');
     this.addAction('paste', function()
     {
-        //todo
+        if (graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent()))
+        {
+            mxClipboard.paste(graph);
+        }
     }, false, 'sprite-paste', 'Ctrl+V');
     this.addAction('pasteHere', function(evt)
     {
-        //todo
+        if (graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent()))
+        {
+            graph.getModel().beginUpdate();
+            try
+            {
+                var cells = mxClipboard.paste(graph);
+
+                if (cells != null)
+                {
+                    var bb = graph.getBoundingBoxFromGeometry(cells);
+
+                    if (bb != null)
+                    {
+                        var t = graph.view.translate;
+                        var s = graph.view.scale;
+                        var dx = t.x;
+                        var dy = t.y;
+
+                        var x = Math.round(graph.snap(graph.popupMenuHandler.triggerX / s - dx));
+                        var y = Math.round(graph.snap(graph.popupMenuHandler.triggerY / s - dy));
+
+                        graph.cellsMoved(cells, x - bb.x, y - bb.y);
+                    }
+                }
+            }
+            finally
+            {
+                graph.getModel().endUpdate();
+            }
+        }
     });
 
     function deleteCells(includeEdges)
@@ -144,11 +172,11 @@ Actions.prototype.init = function()
     }, null, null, 'Delete');
     this.addAction('deleteAll', function()
     {
-        //todo
+        deleteCells(true);
     }, null, null, 'Ctrl+Delete');
     this.addAction('duplicate', function()
     {
-        //todo
+        graph.setSelectionCells(graph.duplicateCells());
     }, null, null, 'Ctrl+D');
     this.addAction('turn', function()
     {
@@ -305,18 +333,28 @@ Actions.prototype.init = function()
     var action = null;
     action = this.addAction('grid', function()
     {
-        //todo
+        graph.setGridEnabled(!graph.isGridEnabled());
+        ui.fireEvent(new mxEventObject('gridEnabledChanged'));
     }, null, null, 'Ctrl+Shift+G');
+    action.setToggleAction(true);
+    action.setSelectedCallback(function() { return graph.isGridEnabled(); });
+    action.setEnabled(false);
 
     action = this.addAction('guides', function()
     {
-        //todo
+        graph.graphHandler.guidesEnabled = !graph.graphHandler.guidesEnabled;
+        ui.fireEvent(new mxEventObject('guidesEnabledChanged'));
     });
+    action.setToggleAction(true);
+    action.setSelectedCallback(function() { return graph.graphHandler.guidesEnabled; });
+    action.setEnabled(false);
 
     action = this.addAction('tooltips', function()
     {
-        //todo
+        graph.tooltipHandler.setEnabled(!graph.tooltipHandler.isEnabled());
     });
+    action.setToggleAction(true);
+    action.setSelectedCallback(function() { return graph.tooltipHandler.isEnabled(); });
 
     action = this.addAction('collapseExpand', function()
     {
@@ -327,23 +365,62 @@ Actions.prototype.init = function()
     {
         //todo
     });
-    action = this.addAction('pageView', function()
+    action = this.addAction('pageView', mxUtils.bind(this, function()
     {
-        //todo
-    });
+        var hasScrollbars = mxUtils.hasScrollbars(graph.container);
+        var tx = 0;
+        var ty = 0;
+
+        if (hasScrollbars)
+        {
+            tx = graph.view.translate.x * graph.view.scale - graph.container.scrollLeft;
+            ty = graph.view.translate.y * graph.view.scale - graph.container.scrollTop;
+        }
+
+        graph.pageVisible = !graph.pageVisible;
+        graph.pageBreaksVisible = graph.pageVisible;
+        graph.preferPageSize = graph.pageBreaksVisible;
+        graph.view.validateBackground();
+
+        // Workaround for possible handle offset
+        if (hasScrollbars)
+        {
+            var cells = graph.getSelectionCells();
+            graph.clearSelection();
+            graph.setSelectionCells(cells);
+        }
+
+        // Calls updatePageBreaks
+        graph.sizeDidChange();
+
+        if (hasScrollbars)
+        {
+            graph.container.scrollLeft = graph.view.translate.x * graph.view.scale - tx;
+            graph.container.scrollTop = graph.view.translate.y * graph.view.scale - ty;
+        }
+
+        ui.fireEvent(new mxEventObject('pageViewChanged'));
+    }));
+    action.setToggleAction(true);
+    action.setSelectedCallback(function() { return graph.pageVisible; });
     this.put('pageBackgroundColor', function()
     {
         //todo
     });
     action = this.addAction('connectionArrows', function()
     {
-        //todo
+        graph.connectionArrowsEnabled = !graph.connectionArrowsEnabled;
+        ui.fireEvent(new mxEventObject('connectionArrowsChanged'));
     }, null, null, 'Ctrl+Q');
-
+    action.setToggleAction(true);
+    action.setSelectedCallback(function() { return graph.connectionArrowsEnabled; });
     action = this.addAction('connectionPoints', function()
     {
-        //todo
+        graph.setConnectable(!graph.connectionHandler.isEnabled());
+        ui.fireEvent(new mxEventObject('connectionPointsChanged'));
     }, null, null, 'Ctrl+Shift+Q');
+    action.setToggleAction(true);
+    action.setSelectedCallback(function() { return graph.connectionHandler.isEnabled(); });
     action = this.addAction('copyConnect', function()
     {
         //todo
@@ -445,11 +522,17 @@ Actions.prototype.init = function()
     }, null, null, 'Ctrl+E');
     this.addAction('setAsDefaultStyle', function()
     {
-        //todo
+        if (graph.isEnabled() && !graph.isSelectionEmpty())
+        {
+            ui.setDefaultStyle(graph.getSelectionCell());
+        }
     }, null, null, 'Ctrl+Shift+D');
     this.addAction('clearDefaultStyle', function()
     {
-        //todo
+        if (graph.isEnabled())
+        {
+            ui.clearDefaultStyle();
+        }
     }, null, null, 'Ctrl+Shift+R');
     this.addAction('addWaypoint', function()
     {

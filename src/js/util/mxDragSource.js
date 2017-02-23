@@ -135,7 +135,7 @@ mxDragSource.prototype.autoscroll = true;
  *
  * Specifies if <mxGuide> should be enabled. Default is true.
  */
-mxDragSource.prototype.guidesEnabled = false;
+mxDragSource.prototype.guidesEnabled = true;
 
 /**
  * Variable: gridEnabled
@@ -441,7 +441,7 @@ mxDragSource.prototype.mouseMove = function(evt)
 		
 		if (this.dragElement.parentNode == null)
 		{
-			document.body.appendChild(this.dragElement);
+            this.vgdContainer.appendChild(this.dragElement);
 		}
 
 		this.dragElement.style.visibility = 'visible';
@@ -453,9 +453,13 @@ mxDragSource.prototype.mouseMove = function(evt)
 		}
 		
 		var offset = mxUtils.getDocumentScrollOrigin(document);
-		
-		this.dragElement.style.left = (x + offset.x) + 'px';
-		this.dragElement.style.top = (y + offset.y) + 'px';
+		//LLLLL修改拖动F生成虚线框的位置
+		// this.dragElement.style.left = (x + offset.x) + 'px';
+		// this.dragElement.style.top = (y + offset.y) + 'px';
+        var lmenu = this.vgdContainer.offsetLeft;
+        var tmenu = this.vgdContainer.offsetTop;
+        this.dragElement.style.left = (x + offset.x) - lmenu + 'px';
+        this.dragElement.style.top = (y + offset.y) - tmenu + 'px';
 	}
 	else if (this.dragElement != null)
 	{
@@ -604,7 +608,8 @@ mxDragSource.prototype.dragOver = function(graph, evt)
 	}
 
 	// Updates the location of the preview
-	if (this.previewElement != null)
+    // LLLLL传进参数为空的时候 所有位置虚线框偏移 注释掉以后取消判断
+	/*if (this.previewElement != null)
 	{
 		if (this.previewElement.parentNode == null)
 		{
@@ -653,7 +658,7 @@ mxDragSource.prototype.dragOver = function(graph, evt)
 		this.previewElement.style.left = Math.round(x) + 'px';
 		this.previewElement.style.top = Math.round(y) + 'px';
 		this.previewElement.style.visibility = 'visible';
-	}
+	}*/
 	
 	this.currentPoint = new mxPoint(x, y);
 };

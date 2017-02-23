@@ -563,8 +563,8 @@ mxGraphView.prototype.validate = function(cell)
 		this.textDiv.style.visibility = 'hidden';
 		this.textDiv.style.display = (mxClient.IS_QUIRKS) ? 'inline' : 'inline-block';
 		this.textDiv.style.zoom = '1';
-		
-		document.body.appendChild(this.textDiv);
+
+        this.vgdContainer.appendChild(this.textDiv);
 	}
 	
 	var graphBounds = this.getBoundingBox(this.validateCellState(

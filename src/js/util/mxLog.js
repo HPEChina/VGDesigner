@@ -55,7 +55,7 @@ var mxLog =
 	 */
 	init: function()
 	{
-		if (mxLog.window == null && document.body != null)
+		if (mxLog.window == null)
 		{
 			var title = mxLog.consoleName + ' - mxGraph ' + mxClient.VERSION;
 

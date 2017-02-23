@@ -135,14 +135,13 @@ mxTooltipHandler.prototype.setHideOnHover = function(value)
  */
 mxTooltipHandler.prototype.init = function()
 {
-	if (document.body != null)
+	if (this.vgdContainer != null)
 	{
 		this.div = document.createElement('div');
 		this.div.className = 'mxTooltip';
 		this.div.style.visibility = 'hidden';
 
-		document.body.appendChild(this.div);
-
+        this.vgdContainer.appendChild(this.div);
 		mxEvent.addGestureListeners(this.div, mxUtils.bind(this, function(evt)
 		{
 			this.hideTooltip();
@@ -241,7 +240,7 @@ mxTooltipHandler.prototype.reset = function(me, restart)
 					// this (delayed) point in time is not possible in IE as it no
 					// longer contains the required information (member not found)
 					var tip = this.graph.getTooltip(state, node, x, y);
-					this.show(tip, x, y);
+					this.show(tip, x-this.vgdContainer.offsetLeft, y-this.vgdContainer.offsetTop);
 					this.state = state;
 					this.node = node;
 					this.stateSource = stateSource;

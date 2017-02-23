@@ -812,7 +812,7 @@ mxPrintPreview.prototype.renderPage = function(w, h, dx, dy, content, pageNumber
 			
 			innerDiv.appendChild(viewport);
 			div.appendChild(innerDiv);
-			document.body.appendChild(div);
+            this.vgdContainer.appendChild(div);
 			arg = viewport;
 		}
 		// FIXME: IE10/11 too many pages
@@ -851,7 +851,7 @@ mxPrintPreview.prototype.renderPage = function(w, h, dx, dy, content, pageNumber
 			}
 
 			div.appendChild(innerDiv);
-			document.body.appendChild(div);
+            this.vgdContainer.appendChild(div);
 			arg = innerDiv;
 		}
 	}
