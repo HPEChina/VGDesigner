@@ -1537,7 +1537,7 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 				div2.innerHTML = (mxUtils.isNode(str)) ? str.outerHTML : str;
 				clone.appendChild(div2);
 
-				document.body.appendChild(clone);
+                this.vgdContainer.appendChild(clone);
 
 				// Workaround for different box models
 				if (document.documentMode != 8 && document.documentMode != 9 && s.fontBorderColor != null)
@@ -1605,7 +1605,7 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 				if (this.root.ownerDocument != document)
 				{
 					div.style.visibility = 'hidden';
-					document.body.appendChild(div);
+                    this.vgdContainer.appendChild(div);
 				}
 				else
 				{
@@ -1630,7 +1630,7 @@ mxSvgCanvas2D.prototype.text = function(x, y, w, h, str, align, valign, wrap, fo
 				if (tmp == 0 && div.parentNode == fo)
 				{
 					div.style.visibility = 'hidden';
-					document.body.appendChild(div);
+                    this.vgdContainer.appendChild(div);
 					
 					tmp = sizeDiv.offsetWidth;
 				}
@@ -2089,8 +2089,8 @@ mxSvgCanvas2D.prototype.addTextBackground = function(node, str, x, y, w, h, alig
 			
 			str = mxUtils.htmlEntities(str, false);
 			div.innerHTML = str.replace(/\n/g, '<br/>');
-			
-			document.body.appendChild(div);
+
+            this.vgdContainer.appendChild(div);
 			var w = div.offsetWidth;
 			var h = div.offsetHeight;
 			div.parentNode.removeChild(div);

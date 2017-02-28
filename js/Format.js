@@ -1852,7 +1852,10 @@ ArrangePanel.prototype.addGeometry = function(container)
 	autosizeBtn.style.cursor = 'pointer';
 	autosizeBtn.style.marginTop = '-3px';
 	autosizeBtn.style.border = '0px';
-	autosizeBtn.style.left = '52px';
+
+	// LLLLL调整按钮位置伸缩偏移
+	// autosizeBtn.style.left = '52px';
+    autosizeBtn.style.left = '32px';
 	mxUtils.setOpacity(autosizeBtn, 50);
 	
 	mxEvent.addListener(autosizeBtn, 'mouseenter', function()
@@ -2496,6 +2499,7 @@ TextFormatPanel.prototype.addFont = function(container)
 	if (!mxClient.IS_QUIRKS)
 	{
 		input.style.position = 'absolute';
+		//PPPPP元素属性字体input框
 		input.style.right = '32px';
 	}
 	
@@ -2542,6 +2546,7 @@ TextFormatPanel.prototype.addFont = function(container)
 	
 	if (!mxClient.IS_QUIRKS)
 	{
+		// PPPPP上下字体大小
 		stepper.style.right = '20px';
 	}
 	
@@ -3639,6 +3644,9 @@ StyleFormatPanel.prototype.addStroke = function(container)
 	input.style.textAlign = 'right';
 	input.style.marginTop = '2px';
 	input.style.width = '41px';
+
+    // LLLLLL修改线条样式菜单 添加创建classname
+    input.style.className = 'edgeMenu';
 	input.setAttribute('title', mxResources.get('linewidth'));
 	
 	stylePanel.appendChild(input);
@@ -4194,7 +4202,7 @@ StyleFormatPanel.prototype.addEffects = function(div)
 	{
 		table.style.fontSize = '1em';
 	}
-
+	// ppppp复选按钮
 	table.style.width = '100%';
 	table.style.fontWeight = 'bold';
 	table.style.paddingRight = '20px';
@@ -4940,18 +4948,431 @@ DiagramFormatPanel.prototype.destroy = function()
 var AttributePanel = function(format, editorUi, container, cell)
 {
     BaseFormatPanel.call(this, format, editorUi, container);
-    this.init(editorUi,cell);
+
+    //Get attribute
+    var graph = editorUi.editor.graph;
+    var value = graph.getModel().getValue(cell);
+    // Converts the value to an XML node
+    if (!mxUtils.isNode(value))
+    {
+        var doc = mxUtils.createXmlDocument();
+        var obj = doc.createElement('object');
+        obj.setAttribute('label', value || '');
+        value = obj;
+    }
+    var attrs = value.attributes;
+    var nAttrs = [];
+    for (var i = 0; i < attrs.length; i++)
+    {
+        if (attrs[i].nodeName != 'label' && attrs[i].nodeName != 'placeholders')
+        {
+        	nAttrs[attrs[i].nodeName] = JSON.parse(attrs[i].nodeValue);
+        }
+    }
+	for( var o in nAttrs){
+        this.createAttrsPanel(editorUi,cell, value, nAttrs[o], o);
+	}
+
 };
 
 mxUtils.extend(AttributePanel, BaseFormatPanel);
 
 
-AttributePanel.prototype.init = function(ui,cell)
+/**
+ * 创建固有属性面板
+ * @param ui
+ * @param cell
+ */
+AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, type)
 {
+    var graph = ui.editor.graph;
+	var container = this.container;
+    var title = this.createTitle(mxResources.get(type));
+    title.style.paddingLeft = '18px';
+    title.style.paddingTop = '10px';
+    title.style.paddingBottom = '6px';
+    container.appendChild(title);
+
     var div = this.createPanel();
     this.container.appendChild(div);
 
+    var form = new mxForm('properties');
+    form.table.style.width = '95%';
+    form.table.style.paddingRight = '20px';
+
+    var names = [];
+    var arrAttr = [];
+    var count = 0;
+
+    var addRemoveButton = function(ele, name)
+    {
+        var td = document.createElement('td');
+        var removeAttr = document.createElement('a');
+        var img = mxUtils.createImage(Dialog.prototype.closeImage);
+        img.style.height = '9px';
+        img.style.fontSize = '9px';
+
+        removeAttr.className = 'geButton';
+        removeAttr.setAttribute('title', mxResources.get('delete'));
+        removeAttr.style.margin = '0px';
+        removeAttr.style.width = '14px';
+        removeAttr.style.height = '14px';
+        removeAttr.style.fontSize = '14px';
+        removeAttr.style.cursor = 'pointer';
+        removeAttr.style.marginLeft = '6px';
+        removeAttr.appendChild(img);
+
+        var removeAttrFn = (function(name)
+        {
+            return function()
+            {
+                var count = 0;
+
+                for (var j = 0; j < names.length; j++)
+                {
+                    if (names[j] == name)
+                    {
+                        delete arrAttr[j];
+                        form.table.deleteRow(count);
+                        break;
+                    }
+
+                    if (arrAttr[j] != null)
+                    {
+                        count++;
+                    }
+                }
+            };
+        })(name);
+
+        mxEvent.addListener(removeAttr, 'click', removeAttrFn);
+
+        td.appendChild(removeAttr);
+        ele.appendChild(td);
+    };
+
+    var addEditButton = function(ele, name)
+    {
+        var td = document.createElement('td');
+        var editAttr = document.createElement('a');
+        var img = mxUtils.createImage(Dialog.prototype.editImage);
+        img.style.height = '9px';
+        img.style.fontSize = '9px';
+
+        editAttr.className = 'geButton';
+        editAttr.setAttribute('title', mxResources.get('edit'));
+        editAttr.style.margin = '0px';
+        editAttr.style.width = '14px';
+        editAttr.style.height = '14px';
+        editAttr.style.fontSize = '14px';
+        editAttr.style.cursor = 'pointer';
+        editAttr.style.marginLeft = '6px';
+        editAttr.appendChild(img);
+
+        var editAttrFn = (function(name)
+        {
+        	return function()
+			{
+				alert(name + ":hiahiaaaaaaaaaaaaaa");
+			};
+        })(name);
+
+        mxEvent.addListener(editAttr, 'click', editAttrFn);
+
+        td.appendChild(editAttr);
+        ele.appendChild(td);
+    };
+
+    // var addText = function(index, name, values)
+    // {
+    //     names[index] = name;
+    //     arrAttr[index] = form.addText2(names[count] + ':', values);
+    //     for( var i in arrAttr[index]) {
+    //         texts[index][i].style.width = '95%';
+    //     }
+    //     texts[index][0].setAttribute('placeholder', mxResources.get('enterPropertyCName'));
+    //     texts[index][1].setAttribute('placeholder', mxResources.get('enterPropertyValue'));
+    //
+    //     addRemoveButton(texts[index][i], name);
+    // };
+
+    // function addElement()
+	// {
+     //    // var tr = document.createElement('tr');
+     //    // var td = document.createElement('td');
+     //    // mxUtils.write(td, name);
+     //    // tr.appendChild(td);
+     //    //
+     //    // for(var i in arr) {
+     //    //     td = document.createElement('td');
+     //    //     td.appendChild(arr[i]);
+     //    //     tr.appendChild(td);
+     //    // }
+     //    //
+     //    // this.body.appendChild(tr);
+    //
+	// }
+
+    //添加属性列表
+    var addRows = function(attr, index)
+	{
+		if(attr == null)
+			return;
+		var name = attr.eName;
+		var dType = attr.dType;
+		var data = [];
+        data['eName'] = attr.eName;
+        data['cName'] = attr.cName;
+		if(dType == 'string'){
+            data['value'] = attr.value;
+		}
+		else if(dType == 'number'){
+			if( attr.vType == 'appoint') {
+                data.push(attr.value);
+			}
+			else {
+				var range = [];
+				for(var i in attr.operator){
+                    if(attr.operator[i] == '<') range[i] = ')';
+                    if(attr.operator[i] == '<=') range[i] = ']';
+                    if(attr.operator[i] == '>') range[i] = '(';
+                    if(attr.operator[i] == '>=') range[i] = '[';
+				}
+                data['valueRange'] = range[0] + attr.minValue + ',' + attr.maxValue + range[1];
+			}
+		}
+		else if(dType == 'enum'){
+            data['enumValue'] = attr.enumData[attr.value];
+		}
+        names[index] = name;
+        var ele = form.addListAttributeElements(data)
+        arrAttr[index] = attr;
+        addEditButton(ele, name);
+        addRemoveButton(ele, name);
+	};
+
+    for (var i = 0; i < attrs.length; i++)
+    {
+    	addRows(attrs[i], count);
+		count++;
+    }
+
+    div.appendChild(form.table);
+
+    var newProp = document.createElement('div');
+    newProp.style.whiteSpace = 'nowrap';
+    newProp.style.marginTop = '6px';
+
+    var nameInput = document.createElement('input');
+    nameInput.setAttribute('placeholder', mxResources.get('enterPropertyName'));
+    nameInput.setAttribute('type', 'text');
+    nameInput.setAttribute('size', (mxClient.IS_QUIRKS) ? '18' : '22');
+    nameInput.style.marginLeft = '2px';
+    nameInput.style.width = '55%';
+
+    newProp.appendChild(nameInput);
+    div.appendChild(newProp);
+
+    var addBtn = mxUtils.button(mxResources.get('addProperty'), function()
+    {
+        if (nameInput.value.length > 0)
+        {
+            var name = nameInput.value;
+
+            if (name != null && name.length > 0 && name != 'label' && name != 'placeholders')
+            {
+                try
+                {
+                    var idx = mxUtils.indexOf(names, name);
+
+                    if (idx >= 0 && texts[idx] != null)
+                    {
+                    	window.alert("");
+                        texts[idx][0].focus();
+                    }
+                    else
+                    {
+                        // Checks if the name is valid
+                        var clone = value.cloneNode(false);
+                        clone.setAttribute(name, '');
+
+                        if (idx >= 0)
+                        {
+                            names.splice(idx, 1);
+                            texts.splice(idx, 1);
+                        }
+
+                        names.push(name);
+                        var arrValue = ['',''];
+                        var text = form.addText2(name + ':', arrValue);
+                        for(var i in text) {
+                            text[i].style.width = '95%';
+                        }
+                        text[0].setAttribute('placeholder', mxResources.get('enterPropertyCName'));
+                        text[1].setAttribute('placeholder', mxResources.get('enterPropertyValue'));
+                        texts.push(text);
+                        addRemoveButton(text[i], name);
+
+                        text[0].focus();
+                    }
+
+                    nameInput.value = '';
+                }
+                catch (e)
+                {
+                    mxUtils.alert(e);
+                }
+            }
+        }
+        else
+        {
+            mxUtils.alert(mxResources.get('invalidName'));
+        }
+    });
+
+    // this.init = function()
+    // {
+    //     if (texts.length > 0)
+    //     {
+    //         texts[0][0].focus();
+    //     }
+    //     else
+    //     {
+    //         nameInput.focus();
+    //     }
+    // };
+
+    addBtn.setAttribute('disabled', 'disabled');
+    addBtn.style.marginLeft = '10px';
+    addBtn.style.width = '30%';
+    newProp.appendChild(addBtn);
+
+    var cancelBtn = mxUtils.button(mxResources.get('cancel'), function()
+    {
+        container.style.display = 'none';
+    });
+    cancelBtn.className = 'geBtn';
+
+    var applyBtn = mxUtils.button(mxResources.get('apply'), function()
+    {
+        try
+        {
+            // Clones and updates the value
+            value = value.cloneNode(true);
+
+			var arr = [];
+			for(var i in arrAttr){
+				if(arrAttr[i] != null){
+					arr.push(arrAttr[i]);
+				}
+			}
+			//set mxCell.modelAttribute
+            cell.modelAttribute.setValue(type, arr);
+			//set value's attribute
+			value.setAttribute(type, JSON.stringify(arr));
+             // Updates the value of the cell (undoable)
+            graph.getModel().setValue(cell, value);
+        }
+        catch (e)
+        {
+            mxUtils.alert(e);
+        }
+    });
+    applyBtn.className = 'geBtn gePrimaryBtn';
+
+    function updateAddBtn()
+    {
+        if (nameInput.value.length > 0)
+        {
+            addBtn.removeAttribute('disabled');
+        }
+        else
+        {
+            addBtn.setAttribute('disabled', 'disabled');
+        }
+    };
+
+    mxEvent.addListener(nameInput, 'keyup', updateAddBtn);
+
+    // Catches all changes that don't fire a keyup (such as paste via mouse)
+    mxEvent.addListener(nameInput, 'change', updateAddBtn);
+
+    var buttons = document.createElement('div');
+    buttons.style.marginTop = '18px';
+    buttons.style.textAlign = 'center';
+
+    // if (ui.editor.graph.getModel().isVertex(cell) || ui.editor.graph.getModel().isEdge(cell))
+    // {
+    //     var replace = document.createElement('span');
+    //     replace.style.marginRight = '10px';
+    //     var input = document.createElement('input');
+    //     input.setAttribute('type', 'checkbox');
+    //     input.style.marginRight = '6px';
+    //
+    //     if (value.getAttribute('placeholders') == '1')
+    //     {
+    //         input.setAttribute('checked', 'checked');
+    //         input.defaultChecked = true;
+    //     }
+    //
+    //     mxEvent.addListener(input, 'click', function()
+    //     {
+    //         if (value.getAttribute('placeholders') == '1')
+    //         {
+    //             value.removeAttribute('placeholders');
+    //         }
+    //         else
+    //         {
+    //             value.setAttribute('placeholders', '1');
+    //         }
+    //     });
+    //
+    //     // replace.appendChild(input);
+    //     // mxUtils.write(replace, mxResources.get('placeholders'));
+    //
+    //     if (EditDataDialog.placeholderHelpLink != null)
+    //     {
+    //         var link = document.createElement('a');
+    //         link.setAttribute('href', EditDataDialog.placeholderHelpLink);
+    //         link.setAttribute('title', mxResources.get('help'));
+    //         link.setAttribute('target', '_blank');
+    //         link.style.marginLeft = '10px';
+    //         link.style.cursor = 'help';
+    //
+    //         var icon = document.createElement('img');
+    //         icon.setAttribute('border', '0');
+    //         icon.setAttribute('valign', 'middle');
+    //         icon.style.marginTop = '-4px';
+    //         icon.setAttribute('src', Editor.helpImage);
+    //         link.appendChild(icon);
+    //
+    //         replace.appendChild(link);
+    //     }
+    //
+    //     buttons.appendChild(replace);
+    // }
+
+    if (ui.editor.cancelFirst)
+    {
+        buttons.appendChild(cancelBtn);
+        buttons.appendChild(applyBtn);
+    }
+    else
+    {
+        buttons.appendChild(applyBtn);
+        buttons.appendChild(cancelBtn);
+    }
+
+    div.appendChild(buttons);
+};
+
+AttributePanel.prototype.init = function(ui,cell)
+{
     var container = this.container;
+
+    var div = this.createPanel();
+    this.container.appendChild(div);
+
     var graph = ui.editor.graph;
     var value = graph.getModel().getValue(cell);
 

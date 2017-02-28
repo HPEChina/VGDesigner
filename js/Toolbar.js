@@ -875,10 +875,15 @@ Toolbar.prototype.addMenuHandler = function(elt, showLabels, funct, showAll)
 				menu.showDisabled = showAll;
 				menu.labels = showLabels;
 				menu.autoExpand = true;
-				
-				var offset = mxUtils.getOffset(elt);
-				menu.popup(offset.x, offset.y + elt.offsetHeight, null, evt);
-				this.editorUi.setCurrentMenu(menu, elt);
+				// LLLLL工具栏弹出菜单
+				// var offset = mxUtils.getOffset(elt);
+				// menu.popup(offset.x, offset.y + elt.offsetHeight, null, evt);
+				// this.editorUi.setCurrentMenu(menu, elt);
+                var offset = mxUtils.getOffset(elt);
+                var lmenu = this.editorUi.container.offsetLeft;
+                var tmenu = this.editorUi.container.offsetTop;
+                menu.popup(offset.x - lmenu , offset.y + elt.offsetHeight - tmenu, null, evt);
+                this.editorUi.setCurrentMenu(menu, elt);
 				
 				// Workaround for scrollbar hiding menu items
 				if (!showLabels && menu.div.scrollHeight > menu.div.clientHeight)

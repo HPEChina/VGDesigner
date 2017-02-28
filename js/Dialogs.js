@@ -18,8 +18,8 @@ function Dialog(editorUi, elt, w, h, modal, closable, onClose)
 	w += dx;
 	h += dx;
 	
-	var left = Math.max(0, Math.round((document.body.scrollWidth - w) / 2));
-	var top = Math.max(0, Math.round((Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - h - editorUi.footerHeight) / 3));
+	var left = Math.max(0, Math.round((editorUi.container.scrollWidth - w) / 2));
+	var top = Math.max(0, Math.round((Math.max(editorUi.container.scrollHeight, document.documentElement.scrollHeight) - h - editorUi.footerHeight) / 3));
 	
 	// Increments zIndex to put subdialogs and background over existing dialogs and background
 	if (editorUi.dialogs.length > 0)
@@ -55,11 +55,11 @@ function Dialog(editorUi, elt, w, h, modal, closable, onClose)
 
 	if (modal)
 	{
-		document.body.appendChild(this.bg);
+        editorUi.container.appendChild(this.bg);
 	}
 	
 	div.appendChild(elt);
-	document.body.appendChild(div);
+    editorUi.container.appendChild(div);
 	
 	if (closable)
 	{
@@ -76,8 +76,8 @@ function Dialog(editorUi, elt, w, h, modal, closable, onClose)
 		{
 			editorUi.hideDialog(true);
 		}));
-		
-		document.body.appendChild(img);
+
+        editorUi.container.appendChild(img);
 		this.dialogImg = img;
 		
 		mxEvent.addListener(this.bg, 'click', mxUtils.bind(this, function()
@@ -115,8 +115,12 @@ Dialog.prototype.clearImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/clear.gif' : '
 /**
  * 
  */
-Dialog.prototype.lockedImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/locked.png' : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzdDMDZCODExNzIxMTFFNUI0RTk5NTg4OTcyMUUyODEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzdDMDZCODIxNzIxMTFFNUI0RTk5NTg4OTcyMUUyODEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDozN0MwNkI3RjE3MjExMUU1QjRFOTk1ODg5NzIxRTI4MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozN0MwNkI4MDE3MjExMUU1QjRFOTk1ODg5NzIxRTI4MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvqMCFYAAAAVUExURZmZmb+/v7KysqysrMzMzLGxsf///4g8N1cAAAAHdFJOU////////wAaSwNGAAAAPElEQVR42lTMQQ4AIQgEwUa0//9kTQirOweYOgDqAMbZUr10AGlAwx4/BJ2QJ4U0L5brYjovvpv32xZgAHZaATFtMbu4AAAAAElFTkSuQmCC';
+Dialog.prototype.editImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/edit.png' : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzdDMDZCODExNzIxMTFFNUI0RTk5NTg4OTcyMUUyODEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzdDMDZCODIxNzIxMTFFNUI0RTk5NTg4OTcyMUUyODEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDozN0MwNkI3RjE3MjExMUU1QjRFOTk1ODg5NzIxRTI4MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozN0MwNkI4MDE3MjExMUU1QjRFOTk1ODg5NzIxRTI4MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvqMCFYAAAAVUExURZmZmb+/v7KysqysrMzMzLGxsf///4g8N1cAAAAHdFJOU////////wAaSwNGAAAAPElEQVR42lTMQQ4AIQgEwUa0//9kTQirOweYOgDqAMbZUr10AGlAwx4/BJ2QJ4U0L5brYjovvpv32xZgAHZaATFtMbu4AAAAAElFTkSuQmCC';
 
+/**
+ *
+ */
+Dialog.prototype.lockedImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/locked.png' : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzdDMDZCODExNzIxMTFFNUI0RTk5NTg4OTcyMUUyODEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzdDMDZCODIxNzIxMTFFNUI0RTk5NTg4OTcyMUUyODEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDozN0MwNkI3RjE3MjExMUU1QjRFOTk1ODg5NzIxRTI4MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozN0MwNkI4MDE3MjExMUU1QjRFOTk1ODg5NzIxRTI4MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvqMCFYAAAAVUExURZmZmb+/v7KysqysrMzMzLGxsf///4g8N1cAAAAHdFJOU////////wAaSwNGAAAAPElEQVR42lTMQQ4AIQgEwUa0//9kTQirOweYOgDqAMbZUr10AGlAwx4/BJ2QJ4U0L5brYjovvpv32xZgAHZaATFtMbu4AAAAAElFTkSuQmCC';
 /**
  * 
  */
@@ -190,7 +194,7 @@ var ColorDialog = function(editorUi, color, apply, cancelFn)
 	if (mxClient.IS_IE)
 	{
 		input.style.marginTop = '10px';
-		document.body.appendChild(input);
+        editorUi.container.appendChild(input);
 	}
 	
 	this.init = function()
@@ -1642,6 +1646,14 @@ var ExportDialog = function(editorUi) {
         imageFormatSelect.appendChild(xmlOption);
     }
 
+    if (ExportDialog.showYamlOption)
+    {
+        var yamlOption = document.createElement('option');
+        yamlOption.setAttribute('value', 'yaml');
+        mxUtils.write(yamlOption, mxResources.get('formatYaml'));
+        imageFormatSelect.appendChild(yamlOption);
+    }
+
     if (ExportDialog.showPngOption)
     {
         var pngOption = document.createElement('option');
@@ -1675,241 +1687,255 @@ var ExportDialog = function(editorUi) {
     }
 
     if (ExportDialog.showSvgOption)
-	{
+    {
         var svgOption = document.createElement('option');
         svgOption.setAttribute('value', 'svg');
         mxUtils.write(svgOption, mxResources.get('formatSvg'));
         imageFormatSelect.appendChild(svgOption);
-	}
+    }
 
-	td = document.createElement('td');
-	td.appendChild(imageFormatSelect);
-	row.appendChild(td);
-	
-	tbody.appendChild(row);
+    td = document.createElement('td');
+    td.appendChild(imageFormatSelect);
+    row.appendChild(td);
 
-	var row1 = document.createElement('tr');
-	
-	td = document.createElement('td');
-	td.style.fontSize = '10pt';
-	mxUtils.write(td, mxResources.get('backgroundColor') + ':');
-	
-	row1.appendChild(td);
-	
-	var backgroundInput = document.createElement('input');
-	var tmp = (graph.background == null || graph.background == mxConstants.NONE) ? '#ffffff' : graph.background;
-	backgroundInput.setAttribute('value', tmp);
-	backgroundInput.style.width = '80px';
+    tbody.appendChild(row);
 
-	var backgroundCheckbox = document.createElement('input');
-	backgroundCheckbox.setAttribute('type', 'checkbox');
-	backgroundCheckbox.checked = graph.background == null || graph.background == mxConstants.NONE;
+    var row1 = document.createElement('tr');
 
-	td = document.createElement('td');
-	td.appendChild(backgroundInput);
-	td.appendChild(backgroundCheckbox);
-	mxUtils.write(td, mxResources.get('transparent'));
-	
-	row1.appendChild(td);
-	
-	tbody.appendChild(row1);
-	
-	var row2 = document.createElement('tr');
+    td = document.createElement('td');
+    td.style.fontSize = '10pt';
+    mxUtils.write(td, mxResources.get('backgroundColor') + ':');
 
-	td = document.createElement('td');
-	td.style.fontSize = '10pt';
-	mxUtils.write(td, mxResources.get('width') + ':');
-	
-	row2.appendChild(td);
-	
-	var widthInput = document.createElement('input');
-	widthInput.setAttribute('value', width);
-	widthInput.style.width = '180px';
+    row1.appendChild(td);
 
-	td = document.createElement('td');
-	td.appendChild(widthInput);
-	row2.appendChild(td);
+    var backgroundInput = document.createElement('input');
+    var tmp = (graph.background == null || graph.background == mxConstants.NONE) ? '#ffffff' : graph.background;
+    backgroundInput.setAttribute('value', tmp);
+    backgroundInput.style.width = '80px';
 
-	tbody.appendChild(row2);
-	
-	var row3 = document.createElement('tr');
-	
-	td = document.createElement('td');
-	td.style.fontSize = '10pt';
-	mxUtils.write(td, mxResources.get('height') + ':');
-	
-	row3.appendChild(td);
-	
-	var heightInput = document.createElement('input');
-	heightInput.setAttribute('value', height);
-	heightInput.style.width = '180px';
+    var backgroundCheckbox = document.createElement('input');
+    backgroundCheckbox.setAttribute('type', 'checkbox');
+    backgroundCheckbox.checked = graph.background == null || graph.background == mxConstants.NONE;
 
-	td = document.createElement('td');
-	td.appendChild(heightInput);
-	row3.appendChild(td);
+    td = document.createElement('td');
+    td.appendChild(backgroundInput);
+    td.appendChild(backgroundCheckbox);
+    mxUtils.write(td, mxResources.get('transparent'));
 
-	tbody.appendChild(row3);
+    row1.appendChild(td);
 
-	var row4 = document.createElement('tr');
+    tbody.appendChild(row1);
 
-	td = document.createElement('td');
-	td.style.fontSize = '10pt';
-	mxUtils.write(td, mxResources.get('borderWidth') + ':');
-	
-	row4.appendChild(td);
-	
-	var borderInput = document.createElement('input');
-	borderInput.setAttribute('value', width);
-	borderInput.style.width = '180px';
-	borderInput.value = '0';
+    var row2 = document.createElement('tr');
 
-	td = document.createElement('td');
-	td.appendChild(borderInput);
-	row4.appendChild(td);
+    td = document.createElement('td');
+    td.style.fontSize = '10pt';
+    mxUtils.write(td, mxResources.get('width') + ':');
 
-	tbody.appendChild(row4);
-	table.appendChild(tbody);
-	
-	// Handles changes in the export format
-	function formatChanged()
-	{
-		var name = nameInput.value;
-		var dot = name.lastIndexOf('.');
-		
-		if (dot > 0)
-		{
-			nameInput.value = name.substring(0, dot + 1) + imageFormatSelect.value;
-		}
-		else
-		{
-			nameInput.value = name + '.' + imageFormatSelect.value;
-		}
-		
-		if (imageFormatSelect.value === 'xml' || imageFormatSelect.value === 'json')
-		{
-			// widthInput.setAttribute('disabled', 'true');
-			// heightInput.setAttribute('disabled', 'true');
-			// borderInput.setAttribute('disabled', 'true');
-			row1.setAttribute('hidden', 'true');
+    row2.appendChild(td);
+
+    var widthInput = document.createElement('input');
+    widthInput.setAttribute('value', width);
+    widthInput.style.width = '180px';
+
+    td = document.createElement('td');
+    td.appendChild(widthInput);
+    row2.appendChild(td);
+
+    tbody.appendChild(row2);
+
+    var row3 = document.createElement('tr');
+
+    td = document.createElement('td');
+    td.style.fontSize = '10pt';
+    mxUtils.write(td, mxResources.get('height') + ':');
+
+    row3.appendChild(td);
+
+    var heightInput = document.createElement('input');
+    heightInput.setAttribute('value', height);
+    heightInput.style.width = '180px';
+
+    td = document.createElement('td');
+    td.appendChild(heightInput);
+    row3.appendChild(td);
+
+    tbody.appendChild(row3);
+
+    var row4 = document.createElement('tr');
+
+    td = document.createElement('td');
+    td.style.fontSize = '10pt';
+    mxUtils.write(td, mxResources.get('borderWidth') + ':');
+
+    row4.appendChild(td);
+
+    var borderInput = document.createElement('input');
+    borderInput.setAttribute('value', width);
+    borderInput.style.width = '180px';
+    borderInput.value = '0';
+
+    td = document.createElement('td');
+    td.appendChild(borderInput);
+    row4.appendChild(td);
+
+    tbody.appendChild(row4);
+    table.appendChild(tbody);
+
+    // Handles changes in the export format
+    function formatChanged()
+    {
+        var name = nameInput.value;
+        var dot = name.lastIndexOf('.');
+
+        if (dot > 0)
+        {
+            nameInput.value = name.substring(0, dot + 1) + imageFormatSelect.value;
+        }
+        else
+        {
+            nameInput.value = name + '.' + imageFormatSelect.value;
+        }
+
+        if (imageFormatSelect.value === 'xml' || imageFormatSelect.value === 'json' || imageFormatSelect.value == 'yaml' || imageFormatSelect.value === 'png' || imageFormatSelect.value === 'svg' || imageFormatSelect.value === 'jpg')
+        {
+            // widthInput.setAttribute('disabled', 'true');
+            // heightInput.setAttribute('disabled', 'true');
+            // borderInput.setAttribute('disabled', 'true');
+            row1.setAttribute('hidden', 'true');
             row2.setAttribute('hidden', 'true');
             row3.setAttribute('hidden', 'true');
             row4.setAttribute('hidden', 'true');
-		}
-		else
-		{
-			// widthInput.removeAttribute('disabled');
-			// heightInput.removeAttribute('disabled');
-			// borderInput.removeAttribute('disabled');
+        }
+        else
+        {
+            // widthInput.removeAttribute('disabled');
+            // heightInput.removeAttribute('disabled');
+            // borderInput.removeAttribute('disabled');
             row1.removeAttribute('hidden');
             row2.removeAttribute('hidden');
             row3.removeAttribute('hidden');
             row4.removeAttribute('hidden');
-		}
-		
-		if (imageFormatSelect.value === 'png' || imageFormatSelect.value === 'svg')
-		{
-			backgroundCheckbox.removeAttribute('disabled');
-		}
-		else
-		{
-			backgroundCheckbox.setAttribute('disabled', 'disabled');
-		}
-	};
-	
-	mxEvent.addListener(imageFormatSelect, 'change', formatChanged);
-	formatChanged();
-	
-	function checkValues()
-	{
-		if (widthInput.value * heightInput.value > MAX_AREA || widthInput.value <= 0)
-		{
-			widthInput.style.backgroundColor = 'red';
-		}
-		else
-		{
-			widthInput.style.backgroundColor = '';
-		}
-		
-		if (widthInput.value * heightInput.value > MAX_AREA || heightInput.value <= 0)
-		{
-			heightInput.style.backgroundColor = 'red';
-		}
-		else
-		{
-			heightInput.style.backgroundColor = '';
-		}
-	};
+        }
 
-	mxEvent.addListener(widthInput, 'change', function()
-	{
-		if (width > 0)
-		{
-			heightInput.value = Math.ceil(parseInt(widthInput.value) * height / width);
-		}
-		else
-		{
-			heightInput.value = '0';
-		}
-		
-		checkValues();
-	});
+        // if (imageFormatSelect.value === 'png' || imageFormatSelect.value === 'svg')
+        // {
+        //     // backgroundCheckbox.removeAttribute('disabled');
+			//
+        // }
+        // else
+        // {
+        //     // backgroundCheckbox.setAttribute('disabled', 'disabled');
+        // }
+    };
 
-	mxEvent.addListener(heightInput, 'change', function()
-	{
-		if (height > 0)
-		{
-			widthInput.value = Math.ceil(parseInt(heightInput.value) * width / height);
-		}
-		else
-		{
-			widthInput.value = '0';
-		}
-		
-		checkValues();
-	});
+    mxEvent.addListener(imageFormatSelect, 'change', formatChanged);
+    formatChanged();
 
-	// Resuable image export instance
-	var imgExport = new mxImageExport();
-	
-	function getSvg()
-	{
-		var b = Math.max(0, parseInt(borderInput.value)) + 1;
-		var scale = parseInt(widthInput.value) / width;
-		var bg = null;
-	    
-		if (backgroundInput.value != '' && backgroundInput.value != mxConstants.NONE && !backgroundCheckbox.checked)
-		{
-			bg = backgroundInput.value;
-		}
-		
-		return graph.getSvg(bg, scale, b);
-	};
-	
-	function getXml()
-	{
-		return mxUtils.getXml(editorUi.editor.getGraphXml());
-	};
+    function checkValues()
+    {
+        if (widthInput.value * heightInput.value > MAX_AREA || widthInput.value <= 0)
+        {
+            widthInput.style.backgroundColor = 'red';
+        }
+        else
+        {
+            widthInput.style.backgroundColor = '';
+        }
 
-	row = document.createElement('tr');
-	td = document.createElement('td');
-	td.setAttribute('align', 'right');
-	td.style.paddingTop = '24px';
-	td.colSpan = 2;
-	
-	var saveBtn = mxUtils.button(mxResources.get('export'), mxUtils.bind(this, function()
-	{
-		if (parseInt(widthInput.value) <= 0 && parseInt(heightInput.value) <= 0)
-		{
-			mxUtils.alert(mxResources.get('drawingEmpty'));
-		}
-		else
-		{
-			var format = imageFormatSelect.value;
-	    	var name = nameInput.value;
-	        if (format == 'xml' || format == 'json')
-	    	{
-	    		var outValue;
-				editorUi.hideDialog();
+        if (widthInput.value * heightInput.value > MAX_AREA || heightInput.value <= 0)
+        {
+            heightInput.style.backgroundColor = 'red';
+        }
+        else
+        {
+            heightInput.style.backgroundColor = '';
+        }
+    };
+
+    mxEvent.addListener(widthInput, 'change', function()
+    {
+        if (width > 0)
+        {
+            heightInput.value = Math.ceil(parseInt(widthInput.value) * height / width);
+        }
+        else
+        {
+            heightInput.value = '0';
+        }
+
+        checkValues();
+    });
+
+    mxEvent.addListener(heightInput, 'change', function()
+    {
+        if (height > 0)
+        {
+            widthInput.value = Math.ceil(parseInt(heightInput.value) * width / height);
+        }
+        else
+        {
+            widthInput.value = '0';
+        }
+
+        checkValues();
+    });
+
+    // Resuable image export instance
+    var imgExport = new mxImageExport();
+
+    function getSvg()
+    {
+        var b = Math.max(0, parseInt(borderInput.value)) + 1;
+        var scale = parseInt(widthInput.value) / width;
+        var bg = null;
+
+        if (backgroundInput.value != '' && backgroundInput.value != mxConstants.NONE && !backgroundCheckbox.checked)
+        {
+            bg = backgroundInput.value;
+        }
+
+        return graph.getSvg(bg, scale, b);
+    };
+
+    function getXml()
+    {
+        return mxUtils.getXml(editorUi.editor.getGraphXml());
+    };
+    function loadImage(url) {
+        return new Promise(function(resolve, reject) {
+            var image = new Image();
+            image.src = url;
+            image.crossOrigin = 'Anonymous';
+            image.onload = function() {
+                resolve(this);
+            };
+            image.onerror = function(err) {
+                reject(err);
+            };
+        });
+    };
+
+    row = document.createElement('tr');
+    td = document.createElement('td');
+    td.setAttribute('align', 'right');
+    td.style.paddingTop = '24px';
+    td.colSpan = 2;
+
+    var saveBtn = mxUtils.button(mxResources.get('export'), mxUtils.bind(this, function()
+    {
+        if (parseInt(widthInput.value) <= 0 && parseInt(heightInput.value) <= 0)
+        {
+            mxUtils.alert(mxResources.get('drawingEmpty'));
+        }
+        else
+        {
+            var format = imageFormatSelect.value;
+            var name = nameInput.value;
+            if (format == 'xml' || format == 'json' || format == 'yaml')
+            {
+                var outValue;
+                editorUi.hideDialog();
                 var graphXml = editorUi.editor.getGraphXml();
                 if(format == 'xml') {
                     outValue = mxUtils.getPrettyXml(graphXml);
@@ -1918,118 +1944,181 @@ var ExportDialog = function(editorUi) {
                     var xmlDoc = mxUtils.parseXml(mxUtils.getXml(graphXml));
                     outValue = CodeTranslator.xml2json(xmlDoc, '  ');
                 }
+                else if(format == 'yaml') {
+                    //Todo: yaml format display
+                }
                 var blob = new Blob([outValue], {type: "text/plain;charset=utf-8"});
                 fileSaveAs(blob, name);
-	    	}
-	        else if (format == 'svg')
-	    	{
-	        	var xml = mxUtils.getXml(getSvg());
-				
-				if (xml.length < MAX_REQUEST_SIZE)
-				{
-					editorUi.hideDialog();
-					ExportDialog.saveLocalFile(xml, name, format);
-				}
-				else
-				{
-					mxUtils.alert(mxResources.get('drawingTooLarge'));
-					mxUtils.popup(xml);
-				}
-	    	}
-	        else
-	        {
-	        	var param = null;
-	        	var w = parseInt(widthInput.value) || 0;
-	        	var h = parseInt(heightInput.value) || 0;
-				var b = Math.max(0, parseInt(borderInput.value)) + 1;
-	        	
-	        	var exp = ExportDialog.getExportParameter(editorUi, format);
-	        	
-	        	if (typeof exp == 'function')
-	        	{
-	        		param = exp();
-	        	}
-	        	else
-	        	{
-					var scale = parseInt(widthInput.value) / width;
-					var bounds = graph.getGraphBounds();
-					var vs = graph.view.scale;
-					
-		        	// New image export
-					var xmlDoc = mxUtils.createXmlDocument();
-					var root = xmlDoc.createElement('output');
-					xmlDoc.appendChild(root);
-					
-				    // Renders graph. Offset will be multiplied with state's scale when painting state.
-					var xmlCanvas = new mxXmlCanvas2D(root);
-					xmlCanvas.translate(Math.floor((b / scale - bounds.x) / vs), Math.floor((b / scale - bounds.y) / vs));
-					xmlCanvas.scale(scale / vs);
-				    imgExport.drawState(graph.getView().getState(graph.model.root), xmlCanvas);
-				    
-					// Puts request data together
-					w = Math.ceil(bounds.width * scale / vs + 2 * b);
-					h = Math.ceil(bounds.height * scale / vs + 2 * b);
-					param = 'xml=' + encodeURIComponent(mxUtils.getXml(root));
-	        	}
-	
-				// Requests image if request is valid
-				if (param != null && param.length <= MAX_REQUEST_SIZE && w * h < MAX_AREA)
-				{
-					var bg = '&bg=none';
-					
-					if (backgroundInput.value != '' && backgroundInput.value != mxConstants.NONE &&
-						(format != 'png' || !backgroundCheckbox.checked))
-					{
-						bg = '&bg=' + backgroundInput.value;
-					}
-					
-					editorUi.hideDialog();
-					var data = decodeURIComponent(param.substring(param.indexOf('=') + 1));
-					ExportDialog.saveRequest(data, name, format,
-						function(newTitle, base64)
-						{
-							// Base64 not used in this example
-							return new mxXmlRequest(EXPORT_URL, 'format=' + format + '&base64=' + (base64 || '0') +
-								((newTitle != null) ? '&filename=' + encodeURIComponent(newTitle) : '') +
-								bg + '&w=' + w + '&h=' + h + '&border=' + b + '&' + param);
-						});
-				}
-				else
-				{
-					mxUtils.alert(mxResources.get('drawingTooLarge'));
-				}
-	    	}
-		}
-	}));
-	saveBtn.className = 'geBtn gePrimaryBtn';
-	
-	var cancelBtn = mxUtils.button(mxResources.get('cancel'), function()
-	{
-		editorUi.hideDialog();
-	});
-	cancelBtn.className = 'geBtn';
-	
-	if (editorUi.editor.cancelFirst)
-	{
-		td.appendChild(cancelBtn);
-		td.appendChild(saveBtn);
-	}
-	else
-	{
-		td.appendChild(saveBtn);
-		td.appendChild(cancelBtn);
-	}
+            }
+            else if (format == 'svg')
+            {
+                var svgXml = mxUtils.getXml(getSvg());
 
-	row.appendChild(td);
-	tbody.appendChild(row);
-	table.appendChild(tbody);
-	this.container = table;
+                if (svgXml.length < MAX_REQUEST_SIZE)
+                {
+                    editorUi.hideDialog();
+                    var blob = new Blob([svgXml], {type: "text/plain;charset=utf-8"});
+                    fileSaveAs(blob, name);
+                    // ExportDialog.saveLocalFile(xml, name, format);
+                }
+                else
+                {
+                    mxUtils.alert(mxResources.get('drawingTooLarge'));
+                    mxUtils.popup(xml);
+                }
+            }
+            else if(format == 'png' || format == 'gif' || format == 'jpg')
+            {
+            	var svg = getSvg();
+                var svgXml = mxUtils.getXml(svg);
+                //在canvas中加载SVG需要先去掉image，否则重新绘制image（底色透明）时未遮盖部分会有默认图片出现
+                svgXml = svgXml.replace(/\<image[^\\>]*\>/g, '');
+				var svgUrl = 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svgXml)));
+                var svgWidth = parseInt(svg.getAttribute('width'));
+                var svgHeight = parseInt(svg.getAttribute('height'));
+                var embededImages = svg.querySelectorAll('image');
+                // 由 nodeList 转为 array
+                embededImages = Array.prototype.slice.call(embededImages);
+                editorUi.hideDialog();
+                // 加载底层的图
+                loadImage(svgUrl).then(function(img) {
+                    var canvas = document.createElement('canvas');
+                    var ctx = canvas.getContext("2d");
+                    canvas.width = svgWidth;
+                    canvas.height = svgHeight;
+                    ctx.drawImage(img, 0, 0);
+
+                    // 遍历 svg 里面所有的 image 元素
+                    embededImages.reduce(function(sequence, svgImg){
+                        return sequence.then(function() {
+                            var url = svgImg.getAttribute('xlink:href'),
+                                dX = parseInt(svgImg.getAttribute('x')),
+                                dY = parseInt(svgImg.getAttribute('y')),
+                                dW = parseInt(svgImg.getAttribute('width')),
+                                dH = parseInt(svgImg.getAttribute('height'));
+                            return loadImage(url).then(function(sImg) {
+                            	var sx = 0, sy = 0, sw = sImg.width, sh = sImg.height;
+                            	var dx,dy,dw,dh;
+								sw/sh > dW/dH ? (dx = dX, dy = dY + (dH - sh*dW/sw)/2, dw = sw*dW/sw, dh = sh*dW/sw) :
+                                    			(dx = dX + (dW - sw*dH/sh)/2, dy = dY, dw = sw*dH/sh, dh = sh*dH/sh);
+                                ctx.drawImage(sImg, sx, sy, sw, sh, dx, dy, dw, dh);
+                            }, function(err) {
+                                console.log(err);
+                            });
+                        }, function(err) {
+                            console.log(err);
+                        });
+                    }, Promise.resolve()).then(function() {
+                        // 准备在前端下载
+                        var a = document.createElement("a");
+                        a.download = name;
+                        format == 'jpg' ? format = 'jpeg' : format;
+                        a.href = canvas.toDataURL("image/" + format, '1.0');
+                        var clickEvent = new MouseEvent("click", {
+                            "view": window,
+                            "bubbles": true,
+                            "cancelable": false
+                        });
+                        a.dispatchEvent(clickEvent);
+                    });
+                }, function(err) {
+                    console.log(err);
+                })
+            }
+            else
+            {
+                var param = null;
+                var w = parseInt(widthInput.value) || 0;
+                var h = parseInt(heightInput.value) || 0;
+                var b = Math.max(0, parseInt(borderInput.value)) + 1;
+
+                var exp = ExportDialog.getExportParameter(editorUi, format);
+
+                if (typeof exp == 'function')
+                {
+                    param = exp();
+                }
+                else
+                {
+                    var scale = parseInt(widthInput.value) / width;
+                    var bounds = graph.getGraphBounds();
+                    var vs = graph.view.scale;
+
+                    // New image export
+                    var xmlDoc = mxUtils.createXmlDocument();
+                    var root = xmlDoc.createElement('output');
+                    xmlDoc.appendChild(root);
+
+                    // Renders graph. Offset will be multiplied with state's scale when painting state.
+                    var xmlCanvas = new mxXmlCanvas2D(root);
+                    xmlCanvas.translate(Math.floor((b / scale - bounds.x) / vs), Math.floor((b / scale - bounds.y) / vs));
+                    xmlCanvas.scale(scale / vs);
+                    imgExport.drawState(graph.getView().getState(graph.model.root), xmlCanvas);
+
+                    // Puts request data together
+                    w = Math.ceil(bounds.width * scale / vs + 2 * b);
+                    h = Math.ceil(bounds.height * scale / vs + 2 * b);
+                    param = 'xml=' + encodeURIComponent(mxUtils.getXml(root));
+                }
+
+                // Requests image if request is valid
+                if (param != null && param.length <= MAX_REQUEST_SIZE && w * h < MAX_AREA)
+                {
+                    var bg = '&bg=none';
+
+                    if (backgroundInput.value != '' && backgroundInput.value != mxConstants.NONE &&
+                        (format != 'png' || !backgroundCheckbox.checked))
+                    {
+                        bg = '&bg=' + backgroundInput.value;
+                    }
+
+                    editorUi.hideDialog();
+                    var data = decodeURIComponent(param.substring(param.indexOf('=') + 1));
+                    ExportDialog.saveRequest(data, name, format,
+                        function(newTitle, base64)
+                        {
+                            // Base64 not used in this example
+                            return new mxXmlRequest(EXPORT_URL, 'format=' + format + '&base64=' + (base64 || '0') +
+                                ((newTitle != null) ? '&filename=' + encodeURIComponent(newTitle) : '') +
+                                bg + '&w=' + w + '&h=' + h + '&border=' + b + '&' + param);
+                        });
+                }
+                else
+                {
+                    mxUtils.alert(mxResources.get('drawingTooLarge'));
+                }
+            }
+        }
+    }));
+    saveBtn.className = 'geBtn gePrimaryBtn';
+
+    var cancelBtn = mxUtils.button(mxResources.get('cancel'), function()
+    {
+        editorUi.hideDialog();
+    });
+    cancelBtn.className = 'geBtn';
+
+    if (editorUi.editor.cancelFirst)
+    {
+        td.appendChild(cancelBtn);
+        td.appendChild(saveBtn);
+    }
+    else
+    {
+        td.appendChild(saveBtn);
+        td.appendChild(cancelBtn);
+    }
+
+    row.appendChild(td);
+    tbody.appendChild(row);
+    table.appendChild(tbody);
+    this.container = table;
 };
 
 /**
  * Global switches for the export dialog.
  */
-ExportDialog.showPngOption = false;
+ExportDialog.showPngOption = true;
 
 /**
  * Global switches for the export dialog.
@@ -2039,12 +2128,12 @@ ExportDialog.showGifOption = false;
 /**
  * Global switches for the export dialog.
  */
-ExportDialog.showJpgOption = false;
+ExportDialog.showJpgOption = true;
 
 /**
  * Global switches for the export dialog.
  */
-ExportDialog.showSvgOption = false;
+ExportDialog.showSvgOption = true;
 
 /**
  * Global switches for the export dialog.
@@ -2544,7 +2633,7 @@ var LinkDialog = function(editorUi, initialValue, btnLabel, fn)
 var OutlineWindow = function(editorUi, x, y, w, h)
 {
 	var graph = editorUi.editor.graph;
-	
+
 	var div = document.createElement('div');
 	div.style.position = 'absolute';
 	div.style.width = '100%';
@@ -2552,6 +2641,7 @@ var OutlineWindow = function(editorUi, x, y, w, h)
 	div.style.border = '1px solid whiteSmoke';
 	div.style.overflow = 'hidden';
 
+	this.editorUi = editorUi;
 	this.window = new mxWindow(mxResources.get('outline'), div, x, y, w, h, true, true);
 	this.window.destroyOnClose = false;
 	this.window.setMaximizable(false);
@@ -2568,8 +2658,8 @@ var OutlineWindow = function(editorUi, x, y, w, h)
 	
 	mxEvent.addListener(window, 'resize', mxUtils.bind(this, function()
 	{
-		var iw = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-		var ih = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		var iw = window.innerWidth || document.documentElement.clientWidth || this.editorUi.container.clientWidth;
+		var ih = window.innerHeight || document.documentElement.clientHeight || this.editorUi.container.clientHeight;
 		
 		var x = this.window.getX();
 		var y = this.window.getY();
@@ -3226,6 +3316,7 @@ var LayersWindow = function(editorUi, x, y, w, h)
 		}
 	});
 
+	this.editorUi = editorUi;
 	this.window = new mxWindow(mxResources.get('layers'), div, x, y, w, h, true, true);
 	this.window.destroyOnClose = false;
 	this.window.setMaximizable(false);
@@ -3245,8 +3336,8 @@ var LayersWindow = function(editorUi, x, y, w, h)
 	
 	mxEvent.addListener(window, 'resize', mxUtils.bind(this, function()
 	{
-		var iw = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-		var ih = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		var iw = window.innerWidth || document.documentElement.clientWidth || this.editorUi.container.clientWidth;
+		var ih = window.innerHeight || document.documentElement.clientHeight || this.editorUi.container.clientHeight;
 		
 		var x = this.window.getX();
 		var y = this.window.getY();

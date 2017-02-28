@@ -34,7 +34,7 @@ function Sidebar(editorUi, container)
 		this.graph.container.style.display = 'none';
 	}
 
-	document.body.appendChild(this.graph.container);
+	editorUi.container.appendChild(this.graph.container);
 	
 	this.pointerUpHandler = mxUtils.bind(this, function()
 	{
@@ -280,7 +280,7 @@ Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel)
 					this.tooltip = document.createElement('div');
 					this.tooltip.className = 'geSidebarTooltip';
 					this.tooltip.style.zIndex = mxPopupMenu.prototype.zIndex - 1;
-					document.body.appendChild(this.tooltip);
+					this.editorUi.container.appendChild(this.tooltip);
 					
 					this.graph2 = new Graph(this.tooltip, null, null, this.editorUi.editor.graph.getStylesheet());
 					this.graph2.resetViewOnRootChange = false;
@@ -302,8 +302,8 @@ Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel)
 					this.tooltipImage.style.position = 'absolute';
 					this.tooltipImage.style.width = '14px';
 					this.tooltipImage.style.height = '27px';
-					
-					document.body.appendChild(this.tooltipImage);
+
+                    this.editorUi.container.appendChild(this.tooltipImage);
 				}
 				
 				this.graph2.model.clear();
@@ -394,13 +394,19 @@ Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel)
 				var x0 = -Math.round(bounds.x - this.tooltipBorder);
 				var y0 = -Math.round(bounds.y - this.tooltipBorder);
 				
-				var b = document.body;
+				var b = this.editorUi.container;
 				var d = document.documentElement;
 				var bottom = b.clientHeight || d.clientHeight;
 
-				var left = this.container.clientWidth + this.editorUi.splitSize + 3 + this.editorUi.container.offsetLeft;
-				var top = Math.min(bottom - height - 20 /*status bar*/, Math.max(0, (this.editorUi.container.offsetTop +
-					this.container.offsetTop + elt.offsetTop - this.container.scrollTop - height / 2 + 16)));
+				// LLLLLsidebar的tooltip弹出
+				// var left = this.container.clientWidth + this.editorUi.splitSize + 3 + this.editorUi.container.offsetLeft;
+				// var top = Math.min(bottom - height - 20 /*status bar*/, Math.max(0, (this.editorUi.container.offsetTop +
+				// 	this.container.offsetTop + elt.offsetTop - this.container.scrollTop - height / 2 + 16)));
+                var lmenu = b.offsetLeft;
+                var tmenu = b.offsetTop;
+                var left = this.container.clientWidth + this.editorUi.splitSize + 3 + this.editorUi.container.offsetLeft - lmenu;
+                var top = Math.min(bottom - height - 20 /*status bar*/, Math.max(0, (this.editorUi.container.offsetTop +
+                    this.container.offsetTop + elt.offsetTop - this.container.scrollTop - height / 2 + 16))) - tmenu;
 
 				if (mxClient.IS_SVG)
 				{
@@ -958,13 +964,16 @@ Sidebar.prototype.getModelClassRecords = function(url, params) {
     mxUtils.post(url, params, mxUtils.bind(this, function (req) {
 		var result = JSON.parse(req.getText());
 		if(result.status == 0) {
+			var queryArr = [];
             for(var i=0;i<result.data.length;i++)
 			{
                 this.modelClass.push(result.data[i].name);
+                queryArr.push('d.class=="' + result.data[i].name + '"')
 			}
 			if(this.modelClass.length > 0) {
             	//获取model记录
-                var params = 'query=' + encodeURIComponent('d.class=="general" || d.class=="clipart"');
+				var params;
+				queryArr.length > 0 ? params = 'query=' + encodeURIComponent(queryArr.join('||')) : '';
                 var url = BASE_URL + MODEL_COLLECTION + GET_URL;
 				this.getModelAndAddPalette(url, params);
 			}
@@ -997,10 +1006,8 @@ Sidebar.prototype.getModelAndAddPalette = function(url, params) {
 					case 'general':
                         this.addGeneralPalette(arr[key], key);
                         break;
-					case 'clipart':
-                        this.addGeneralPalette(arr[key], key, false);
-						break;
 					default:
+                        this.addGeneralPalette(arr[key], key, false);
 						break;
 				}
             }
@@ -3212,16 +3219,17 @@ Sidebar.prototype.createVertexTemplate = function(attr, style, width, height, va
 	cells[0].vertex = true;
 
 	//当组件模型有属性时，给CELL添加user object，属性格式：{"eName":"", "cName":"", "value":""}
-	if(attr.length > 0) {
+	if(attr != null) {
         var doc = mxUtils.createXmlDocument();
         var obj = doc.createElement('object');
         obj.setAttribute('label', value || '');
-		for(var i in attr) {
-            if (attr.hasOwnProperty(i)) {
-                obj.setAttribute(attr[i].eName, attr[i].cName + ":" + attr[i].value);
-            }
-        }
+        var ma = new ModelAttribute(attr);
+        var arr = ma.toAttributeString();
+		for(var o in arr){
+			obj.setAttribute(o, arr[o]);
+		}
         cells[0].setValue(obj);
+        cells[0].modelAttribute = ma;
 	}
 
 	return this.createVertexTemplateFromCells(cells, width, height, title, showLabel, showTitle, allowCellsInserted);

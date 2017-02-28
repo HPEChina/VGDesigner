@@ -1191,7 +1191,7 @@ mxText.prototype.updateSize = function(node, enableWrap)
 			{
 				var prev = node.parentNode;
 				node.style.visibility = 'hidden';
-				document.body.appendChild(node);
+                document.body.appendChild(node);
 				tmp = sizeDiv.offsetWidth;
 				node.style.visibility = '';
 				prev.appendChild(node);

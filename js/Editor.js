@@ -4,7 +4,7 @@
 /**
  * Editor constructor executed on page load.
  */
-Editor = function(chromeless, themes, model, graph)
+Editor = function(chromeless, themes, model, graph, vgdContainer)
 {
 	mxEventSource.call(this);
 	this.chromeless = (chromeless != null) ? chromeless : this.chromeless;
@@ -12,6 +12,7 @@ Editor = function(chromeless, themes, model, graph)
 	this.graph = graph || this.createGraph(themes, model);
 	this.undoManager = this.createUndoManager();
 	this.status = '';
+	this.vgdContainer = vgdContainer;	//编辑器的容器div
 
 	this.getOrCreateFilename = function()
 	{
@@ -237,7 +238,22 @@ Editor.prototype.editBlankFallbackUrl = window.location.protocol + '//' + window
 /**
  * Initializes the environment.
  */
-Editor.prototype.init = function() { };
+Editor.prototype.init = function()
+{
+    //给mxPopupMenuHandler添加属性：编辑器容器
+    mxPopupMenuHandler.prototype.vgdContainer = this.vgdContainer;
+    //给mxTooltipHandler添加属性：编辑器容器
+    mxTooltipHandler.prototype.vgdContainer = this.vgdContainer;
+    //给mxDragSource添加属性：编辑器容器
+    mxDragSource.prototype.vgdContainer = this.vgdContainer;
+    //给mxPopupMenu添加属性：编辑器容器
+    mxPopupMenu.prototype.vgdContainer = this.vgdContainer;
+    mxSvgCanvas2D.prototype.vgdContainer = this.vgdContainer;
+    mxVmlCanvas2D.prototype.vgdContainer = this.vgdContainer;
+    mxWindow.prototype.vgdContainer = this.vgdContainer;
+    mxGraphView.prototype.vgdContainer = this.vgdContainer;
+    mxPrintPreview.prototype.vgdContainer = this.vgdContainer;
+};
 
 /**
  * Sets the XML node for the current diagram.
@@ -1172,5 +1188,6 @@ OpenFile.prototype.cancel = function(cancel)
 		
 		return cell;
 	};
+
 
 })();

@@ -204,6 +204,25 @@ mxForm.prototype.addField = function(name, input)
 };
 
 /**
+ * Function: add elementes about datatype == string
+ */
+mxForm.prototype.addListAttributeElements = function(arr)
+{
+    var tr = document.createElement('tr');
+    for(var e in arr)
+	{
+        var td = document.createElement('td');
+        mxUtils.write(td, arr[e]);
+        td.setAttribute('title', mxResources.get(e));
+        td.style.border = '1px solid black';
+        tr.appendChild(td);
+	}
+    this.body.appendChild(tr);
+
+    return tr;
+};
+
+/**
  * Function: addText2
  *
  * Adds a textfield for the given name and values and returns the textfield(array).

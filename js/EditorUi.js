@@ -10,7 +10,7 @@ EditorUi = function(editor, container, lightbox)
 	this.destroyFunctions = [];
 
 	this.editor = editor || new Editor();
-	this.container = container || document.body;
+    this.container = container;
 	var graph = this.editor.graph;
 	graph.lightbox = lightbox;
 
@@ -65,28 +65,25 @@ EditorUi = function(editor, container, lightbox)
 	});
 
 	// Disables text selection while not editing and no dialog visible
-	if (this.container == document.body)
-	{
-		this.menubarContainer.onselectstart = textEditing;
-		this.menubarContainer.onmousedown = textEditing;
-		this.toolbarContainer.onselectstart = textEditing;
-		this.toolbarContainer.onmousedown = textEditing;
-		this.diagramContainer.onselectstart = textEditing;
-		this.diagramContainer.onmousedown = textEditing;
-		this.sidebarContainer.onselectstart = textEditing;
-		this.sidebarContainer.onmousedown = textEditing;
-		this.formatContainer.onselectstart = textEditing;
-		this.formatContainer.onmousedown = textEditing;
-		this.footerContainer.onselectstart = textEditing;
-		this.footerContainer.onmousedown = textEditing;
+	this.menubarContainer.onselectstart = textEditing;
+	this.menubarContainer.onmousedown = textEditing;
+	this.toolbarContainer.onselectstart = textEditing;
+	this.toolbarContainer.onmousedown = textEditing;
+	this.diagramContainer.onselectstart = textEditing;
+	this.diagramContainer.onmousedown = textEditing;
+	this.sidebarContainer.onselectstart = textEditing;
+	this.sidebarContainer.onmousedown = textEditing;
+	this.formatContainer.onselectstart = textEditing;
+	this.formatContainer.onmousedown = textEditing;
+	this.footerContainer.onselectstart = textEditing;
+	this.footerContainer.onmousedown = textEditing;
 		
-		if (this.tabContainer != null)
-		{
-			// Mouse down is needed for drag and drop
-			this.tabContainer.onselectstart = textEditing;
-		}
+	if (this.tabContainer != null)
+	{
+		// Mouse down is needed for drag and drop
+		this.tabContainer.onselectstart = textEditing;
 	}
-	
+
 	// And uses built-in context menu while editing
 	if (!this.editor.chromeless)
 	{
@@ -1594,7 +1591,7 @@ EditorUi.prototype.initCanvas = function()
 					var style = mxUtils.getCurrentStyle(this.editor.graph.container);
 					this.layersDialog.style.zIndex = style.zIndex;
 					
-					document.body.appendChild(this.layersDialog);
+					this.container.appendChild(this.layersDialog);
 				}
 				
 				mxEvent.consume(evt);
@@ -1626,7 +1623,7 @@ EditorUi.prototype.initCanvas = function()
 			}), Editor.editLargeImage, mxResources.get('openInNewWindow') || 'Open in New Window');
 		}
 		
-		if (graph.lightbox && this.container != document.body)
+		if (graph.lightbox)
 		{
 			addButton(mxUtils.bind(this, function(evt)
 			{
@@ -2522,12 +2519,9 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	var w = this.container.clientWidth;
 	var h = this.container.clientHeight;
 
-	if (this.container == document.body)
-	{
-		w = document.body.clientWidth || document.documentElement.clientWidth;
-		h = (quirks) ? document.body.clientHeight || document.documentElement.clientHeight : document.documentElement.clientHeight;
-	}
-	
+	w = w || document.documentElement.clientWidth;
+	h = (quirks) ? h || document.documentElement.clientHeight : document.documentElement.clientHeight;
+
 	// Workaround for bug on iOS see
 	// http://stackoverflow.com/questions/19012135/ios-7-ipad-safari-landscape-innerheight-outerheight-layout-issue
 	// FIXME: Fix if footer visible

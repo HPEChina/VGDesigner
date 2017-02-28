@@ -185,7 +185,32 @@ mxCell.prototype.edges = null;
  * the language.
  */
 mxCell.prototype.mxTransient = ['id', 'value', 'parent', 'source',
-                                'target', 'children', 'edges'];
+                                'target', 'children', 'edges', 'modelAttribute'];
+
+/**
+ * model attribute
+ */
+mxCell.prototype.modelAttribute = null;
+
+/**
+ * Function: getModelAttribute
+ *
+ * Returns the modelAttribute of the cell as a string.
+ */
+mxCell.prototype.getModelAttribute = function()
+{
+    return this.modelAttribute;
+};
+
+/**
+ * Function: setModelAttribute
+ *
+ * Sets the modelAttribute of the cell to the given string.
+ */
+mxCell.prototype.setModelAttribute = function(value)
+{
+    this.modelAttribute = value;
+};
 
 /**
  * Function: getId

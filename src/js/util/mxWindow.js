@@ -210,7 +210,7 @@ function mxWindow(title, content, x, y, width, height, minimizable, movable, rep
 		}
 		else
 		{
-			document.body.appendChild(this.div);
+			this.vgdContainer.appendChild(this.div);
 		}
 	}
 };
@@ -803,15 +803,15 @@ mxWindow.prototype.installMaximizeHandler = function()
 
 				this.div.style.left = '0px';
 				this.div.style.top = '0px';
-				var docHeight = Math.max(document.body.clientHeight || 0, document.documentElement.clientHeight || 0);
+				var docHeight = Math.max(this.vgdContainer.clientHeight || 0, document.documentElement.clientHeight || 0);
 
 				if (!mxClient.IS_QUIRKS)
 				{
-					this.div.style.width = (document.body.clientWidth - 2) + 'px';
+					this.div.style.width = (this.vgdContainer.clientWidth - 2) + 'px';
 					this.div.style.height = (docHeight - 2) + 'px';
 				}
 
-				this.table.style.width = (document.body.clientWidth - 2) + 'px';
+				this.table.style.width = (this.vgdContainer.clientWidth - 2) + 'px';
 				this.table.style.height = (docHeight - 2) + 'px';
 				
 				if (this.resize != null)

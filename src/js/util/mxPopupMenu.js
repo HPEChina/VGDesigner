@@ -416,14 +416,14 @@ mxPopupMenu.prototype.showSubmenu = function(parent, row)
 		row.div.style.left = (parent.div.offsetLeft +
 			row.offsetLeft+row.offsetWidth - 1) + 'px';
 		row.div.style.top = (parent.div.offsetTop+row.offsetTop) + 'px';
-		document.body.appendChild(row.div);
+		this.vgdContainer.appendChild(row.div);
 		
 		// Moves the submenu to the left side if there is no space
 		var left = parseInt(row.div.offsetLeft);
 		var width = parseInt(row.div.offsetWidth);
 		var offset = mxUtils.getDocumentScrollOrigin(document);
 		
-		var b = document.body;
+		var b = this.vgdContainer;
 		var d = document.documentElement;
 		
 		var right = offset.x + (b.clientWidth || d.clientWidth);
@@ -527,7 +527,7 @@ mxPopupMenu.prototype.popup = function(x, y, cell, evt)
  */
 mxPopupMenu.prototype.isMenuShowing = function()
 {
-	return this.div != null && this.div.parentNode == document.body;
+	return this.div != null && this.div.parentNode == this.vgdContainer;
 };
 
 /**
@@ -544,7 +544,7 @@ mxPopupMenu.prototype.showMenu = function()
 	}
 	
 	// Fits the div inside the viewport
-	document.body.appendChild(this.div);
+    this.vgdContainer.appendChild(this.div);
 	mxUtils.fit(this.div);
 };
 
