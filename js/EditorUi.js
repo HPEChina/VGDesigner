@@ -3221,7 +3221,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
 
 		if (outValue.length < MAX_REQUEST_SIZE)
 		{
-			//update by wangjianhui
+			//update by Wang,Jianhui
 			var url = BASE_URL + collection + action;
 			var params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue);
 			mxUtils.post(url, params, mxUtils.bind(this, function(req)
