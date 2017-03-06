@@ -204,6 +204,30 @@ mxForm.prototype.addField = function(name, input)
 };
 
 /**
+ * Function: add elementes about datatype == string
+ */
+mxForm.prototype.addListAttributeElements = function(arr)
+{
+    var tr = document.createElement('tr');
+    for(var e in arr)
+	{
+        var td = document.createElement('td');
+        mxUtils.write(td, arr[e]);
+        td.setAttribute('title', mxResources.get(e) + ":" + arr[e]);
+        td.style.border = '1px solid black';
+        td.style.overflow = 'hidden';
+        td.style.width = '80px';
+        td.style.minWidth = '50px';
+        td.style.maxWidth = '90px';
+
+        tr.appendChild(td);
+	}
+    this.body.appendChild(tr);
+
+    return tr;
+};
+
+/**
  * Function: addText2
  *
  * Adds a textfield for the given name and values and returns the textfield(array).

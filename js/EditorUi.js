@@ -6,6 +6,9 @@
  */
 EditorUi = function(editor, container, lightbox)
 {
+	//新增属性名称的序号
+	this.attributeNameIndex = 1;
+
 	mxEventSource.call(this);
 	this.destroyFunctions = [];
 
@@ -932,7 +935,7 @@ EditorUi.prototype.formatEnabled = true;
 /**
  * Specifies the width of the format panel. Default is 240.
  */
-EditorUi.prototype.formatWidth = 240;
+EditorUi.prototype.formatWidth = 300;
 
 /**
  * Specifies the height of the toolbar. Default is 36.
@@ -966,15 +969,54 @@ EditorUi.prototype.hsplitPosition = (screen.width <= 500) ? 116 : 204;
 EditorUi.prototype.allowAnimation = true;
 
 /**
+ * 图形的初始化属性
+ * @type {Array}
+ */
+EditorUi.prototype.initAttributes = [];
+
+/**
+ * 数据类型（字符串、数字、枚举）
+ * @type {[*]}
+ */
+EditorUi.prototype.attributeDataType = ['string', 'number'];
+
+/**
+ * 数据类型操作符
+ * @type {Array}
+ */
+EditorUi.prototype.attributeOperator = {'string':['==', '!='], 'number':['==', '!=', '>', '>=', '<', '<=']};
+
+/**
+ * 数据类型逻辑符
+ * @type {Array}
+ */
+EditorUi.prototype.attributeLogic = ['none', 'or', 'and'];
+
+/**
+ * 图形的操作：new(新建), edit(编辑)
+ * @type {string}
+ */
+EditorUi.prototype.operator = 'new';
+
+/**
+ * Specifies the type of the ui.
+ * 'model':模型
+ * 'topology':逻辑环境(拓扑图)
+ * 'environment':物理环境
+ */
+EditorUi.prototype.type = 'model';
+
+/**
  * Installs the listeners to update the action states.
  */
 EditorUi.prototype.init = function()
 {
+    this.setInitAttributes(this.type);
 	/**
 	 * Keypress starts immediate editing on selection cell
 	 */
 	var graph = this.editor.graph;
-		
+
 	mxEvent.addListener(graph.container, 'keydown', mxUtils.bind(this, function(evt)
 	{
 		// Tab selects next cell
@@ -1051,6 +1093,60 @@ EditorUi.prototype.init = function()
 	{
 		this.format.init();
 	}
+};
+
+/**
+ * 图形属性默认字段
+ * @type {[*]}
+ */
+EditorUi.prototype.defaultAttributesStructure = function()
+{
+	var obj = {};
+	var l = 4 - this.attributeNameIndex.toString().length;
+    obj['name'] = 'name' + ((l >= 0) ? Array(l).join(0) : '') + this.attributeNameIndex;
+    this.attributeNameIndex++;
+    obj['description'] = '';
+    obj['dataType'] = '';
+    obj['operator'] = [''];
+    obj['value'] = [''];
+    obj['logic'] = [''];
+    return obj;
+};
+/**
+ * 设置初始化图形属性
+ * @param type
+ */
+EditorUi.prototype.setInitAttributes = function(type)
+{
+	var arr = [];
+    if(type == 'model') {
+        arr['intrinsic'] = [
+            { "name": "name", "description": "名称", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
+            { "name": "category", "description": "分类", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
+            { "name": "type", "description": "单元类型", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] }
+        ];
+        arr['extended'] = [];
+        arr['userFunc'] = [];
+    }
+    else if(type == 'topology') {
+        arr['intrinsic'] = [
+            { "name": "name", "description": "名称", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
+            { "name": "category", "description": "分类", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
+            { "name": "type", "description": "单元类型", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] }
+        ];
+        arr['extended'] = [];
+        arr['userFunc'] = [];
+    }
+    else if(type == 'environment') {
+        arr['intrinsic'] = [
+            { "name": "name", "description": "名称", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
+            { "name": "category", "description": "分类", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
+            { "name": "type", "description": "单元类型", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] }
+        ];
+        arr['extended'] = [];
+        arr['userFunc'] = [];
+    }
+    this.initAttributes = arr;
 };
 
 /**
@@ -3112,15 +3208,17 @@ EditorUi.prototype.extractGraphModelFromEvent = function(evt)
  */
 EditorUi.prototype.saveFile = function(forceDialog)
 {
-	if (!forceDialog && this.editor.filename != null)
+	var cellection = (this.type == "model") ? MODEL_COLLECTION : VIEWER_COLLECTION;
+
+	if ((!forceDialog && this.editor.filename != null) || this.type == "model")
 	{
-		this.saveDB(this.editor.getOrCreateJsonFilename(), VIEWER_COLLECTION, UPDATE_ACTION);
+		this.saveDB(this.editor.getOrCreateJsonFilename(), cellection, UPDATE_ACTION);
 	}
 	else
 	{
 		var dlg = new FilenameDialog(this, this.editor.getOrCreateJsonFilename(), mxResources.get('save'), mxUtils.bind(this, function(name)
 		{
-			this.saveDB(name, VIEWER_COLLECTION, SAVE_ACTION);
+			this.saveDB(name, cellection, SAVE_ACTION);
 		}), null, mxUtils.bind(this, function(name)
 		{
 			if (name != null && name.length > 0)
@@ -3199,6 +3297,71 @@ EditorUi.prototype.save = function(name)
 	}
 };
 
+EditorUi.prototype.getModelJsonString = function()
+{
+    var graph = this.editor.graph;
+    graph.selectAll(null, true)
+    if (!graph.isSelectionEmpty()) {
+		var group = graph.groupCells(null, 0);
+		graph.setSelectionCell(group);
+        var cells = graph.getSelectionCells();
+
+        //获取自定义的属性
+        var rObj = graph.model.getRoot().value;
+        var attrs = [];
+        if(rObj != undefined) {
+            attrs['intrinsic'] = rObj.getAttribute('intrinsic');
+            attrs['extended'] = rObj.getAttribute('extended');
+            attrs['userFunc'] = rObj.getAttribute('userFunc');
+            attrs.length = 3;
+        }
+
+        var doc = mxUtils.createXmlDocument();
+        var obj = doc.createElement('object');
+        obj.setAttribute('label', '');
+        for(var o in attrs){
+            obj.setAttribute(o, attrs[o]);
+        }
+        group.setValue(obj);
+
+        var bounds = graph.view.getBounds(cells);
+
+        var s = graph.view.scale;
+
+        bounds.x /= s;
+        bounds.y /= s;
+        bounds.width /= s;
+        bounds.height /= s;
+
+        bounds.x -= graph.view.translate.x;
+        bounds.y -= graph.view.translate.y;
+
+        cells = graph.cloneCells(graph.model.getTopmostCells(cells));
+
+        // Translates cells to origin
+        for (var i = 0; i < cells.length; i++) {
+            var geo = graph.getCellGeometry(cells[i]);
+
+            if (geo != null) {
+                geo.translate(-bounds.x, -bounds.y);
+            }
+        }
+        var xml = mxUtils.getXml(this.editor.graph.encodeCells(cells));
+        var entry = { xml: xml, w: bounds.width, h: bounds.height };
+        var ret = [];
+        ret['json'] = JSON.stringify(entry);
+        ret['attr'] = attrs;
+        ret['statu'] = true;
+        return ret;
+    }
+    else {
+        var ret = [];
+		ret['statu'] = false;
+		return ret;
+    }
+
+};
+
 /**
  * Insert/update the current graph to arangoDB under the given filename.
  */
@@ -3213,16 +3376,81 @@ EditorUi.prototype.saveDB = function(name, collection, action)
         {
             this.editor.graph.stopEditing();
         }
+        var url = BASE_URL + collection + action;
+        if (this.type == 'model')
+		{
+            var category, type, description, codetype = 'xml';
+            var res = this.getModelJsonString();
+            if(res['statu'] == false)
+			{
+				window.alert('空画面不能保存');
+				return;
+			}
+            var outValue = res['json'];
+            var attrs = res['attr'];
+            if (attrs.length == 0){
+            	window.alert('未配置初始属性');
+            	return;
+			}
+			var attribute = {};
+			for(var i in attrs)
+			{
+				attribute[i] = JSON.parse(attrs[i]);
+				var atts = JSON.parse(attrs[i]);
+				for(var j in atts)
+				{
+					if(atts[j].name == 'name' && atts[j].value.length > 0){
+						name = atts[j].value[0];
+						description = atts[j].description;
+					}
+					if(atts[j].name == 'category' && atts[j].value.length > 0)
+					{
+                        category = atts[j].value[0];
+					}
+                    if(atts[j].name == 'type' && atts[j].value.length > 0)
+                    {
+                        type = atts[j].value[0];
+                    }
+				}
+			}
+			if(name == ''){
+                window.alert('初始属性中未配置\'名称\'');
+                return;
+			}
+            if(category == ''){
+                window.alert('初始属性中未配置\'模型分类\'');
+                return;
+            }
+            if(type == ''){
+                window.alert('初始属性中未配置\'单元类型\'');
+                return;
+            }
+            var params = 'filename=' + name;
+            params += '&codetype=' + codetype;
+            params += '&data=' + encodeURIComponent(outValue);
+            params += '&class=' + category;
+            //必填的输入字段
+            params += '&name=' + name;
+            params += '&category=' + category;
+            params += '&type=' + type;
+            params += '&property.tags=' + 'vertex';
+            params += '&property.title=' + 'vertex';
+            params += '&property.type=' + 'vertex';
+            params += '&attribute=' + JSON.stringify(attribute);
+		}
+		else
+		{
+            var graphXml = this.editor.getGraphXml();
+            var outValue = mxUtils.getXml(graphXml);
+            var xmlDoc = mxUtils.parseXml(outValue);
+            outValue = CodeTranslator.xml2json(xmlDoc);
+            var params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue);
+		}
 
-        var graphXml = this.editor.getGraphXml();
-        var outValue = mxUtils.getXml(graphXml);
-		var xmlDoc = mxUtils.parseXml(outValue);
-        outValue = CodeTranslator.xml2json(xmlDoc);
 
 		if (outValue.length < MAX_REQUEST_SIZE)
 		{
-			var url = BASE_URL + collection + action;
-			var params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue);
+
 			mxUtils.post(url, params, mxUtils.bind(this, function(req)
 			{
                 var result = JSON.parse(req.getText());
