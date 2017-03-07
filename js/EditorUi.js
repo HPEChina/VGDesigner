@@ -3437,24 +3437,6 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             params += '&property.title=' + 'vertex';
             params += '&property.type=' + 'vertex';
             params += '&attribute=' + JSON.stringify(attribute);
-			
-var arr = params.split("&"),query={};
-
-for (var i=0;i<arr.length;i++){
-var key=arr[i].split("=")[0]
-var value=arr[i].split("=")[1]
-var key1=key.split(".")[0]
-var key2=key.split(".")[1]
-if(key2){
-query[key1]?'':query[key1]={}
-query[key1][key2]=value
-}else
-query[key1]=value;
-}
-console.log([query][0].type)
-				this.sidebar.addGeneralPalette([query],category)
-			}
-
 		}
 		else
 		{
