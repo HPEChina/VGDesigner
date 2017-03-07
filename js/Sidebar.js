@@ -957,7 +957,7 @@ Sidebar.prototype.addGeneralPalette = function(modelData, id, expand)
             fns.push(this.createVertexTemplateEntry(attr, prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
         }
     }//update by wang,jianhui
-    this.addPaletteFunctions(id, this.modelClass[id], (expand != null) ? expand : true, fns);
+    this.addPaletteFunctions(id, this.modelClass[id]||id, (expand != null) ? expand : true, fns);
 };
 
 Sidebar.prototype.createVertexTemplateFromXML = function(data, name) {
