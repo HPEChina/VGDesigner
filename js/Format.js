@@ -1540,8 +1540,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		})
 		
 		btn.setAttribute('title', mxResources.get('group') + ' (' + this.editorUi.actions.get('group').shortcut + ')');
-		btn.style.width = '80%';
-		btn.style.marginLeft = '10%';
+		btn.style.width = '82%';
+		btn.style.marginLeft = '9%';
 		btn.style.marginBottom = '2px';
 		div.appendChild(btn);
 		count++;
@@ -1555,8 +1555,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		})
 		
 		btn.setAttribute('title', mxResources.get('ungroup') + ' (' + this.editorUi.actions.get('ungroup').shortcut + ')');
-		btn.style.width = '80%';
-		btn.style.marginLeft = '10%'
+		btn.style.width = '82%';
+		btn.style.marginLeft = '9%'
 		btn.style.marginBottom = '2px';
 		div.appendChild(btn);
 		count++;
@@ -1576,7 +1576,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		})
 		
 		btn.setAttribute('title', mxResources.get('removeFromGroup'));
-		btn.style.width = '202px';
+		btn.style.width = '82%';
+		btn.style.marginLeft = '9%';
 		btn.style.marginBottom = '2px';
 		div.appendChild(btn);
 		count++;
@@ -1594,7 +1595,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		}));
 		
 		btn.setAttribute('title', mxResources.get('clearWaypoints'));
-		btn.style.width = '202px';
+		btn.style.width = '82%';
+		btn.style.marginLeft = '9%'
 		btn.style.marginBottom = '2px';
 		div.appendChild(btn);
 
@@ -1663,30 +1665,18 @@ ArrangePanel.prototype.addAlign = function(div)
 	}
 	
 	var left = this.editorUi.toolbar.addButton('geSprite-alignleft', mxResources.get('left'),
-		function() {
-		//todo
-		}, stylePanel);
+		function() { graph.alignCells(mxConstants.ALIGN_LEFT); }, stylePanel);
 	var center = this.editorUi.toolbar.addButton('geSprite-aligncenter', mxResources.get('center'),
-		function() {
-		//todo
-		}, stylePanel);
+		function() { graph.alignCells(mxConstants.ALIGN_CENTER); }, stylePanel);
 	var right = this.editorUi.toolbar.addButton('geSprite-alignright', mxResources.get('right'),
-		function() {
-		//todo
-		}, stylePanel);
+		function() { graph.alignCells(mxConstants.ALIGN_RIGHT); }, stylePanel);
 
 	var top = this.editorUi.toolbar.addButton('geSprite-aligntop', mxResources.get('top'),
-		function() {
-		//todo
-		}, stylePanel);
+		function() { graph.alignCells(mxConstants.ALIGN_TOP); }, stylePanel);
 	var middle = this.editorUi.toolbar.addButton('geSprite-alignmiddle', mxResources.get('middle'),
-		function() {
-		//todo
-		}, stylePanel);
+		function() { graph.alignCells(mxConstants.ALIGN_MIDDLE); }, stylePanel);
 	var bottom = this.editorUi.toolbar.addButton('geSprite-alignbottom', mxResources.get('bottom'),
-		function() {
-		//todo
-		}, stylePanel);
+		function() { graph.alignCells(mxConstants.ALIGN_BOTTOM); }, stylePanel);
 	
 	this.styleButtons([left, center, right, top, middle, bottom]);
 	right.style.marginRight = '6px';
@@ -1751,21 +1741,22 @@ ArrangePanel.prototype.addDistribute = function(div)
 
 	var btn = mxUtils.button(mxResources.get('horizontal'), function(evt)
 	{
-		//todo
+		graph.distributeCells(true);
 	})
 	
 	btn.setAttribute('title', mxResources.get('horizontal'));
-	btn.style.width = '100px';
-	btn.style.marginRight = '2px';
+	btn.style.width = '40%';
+	btn.style.marginLeft = '9%';
 	div.appendChild(btn);
 	
 	var btn = mxUtils.button(mxResources.get('vertical'), function(evt)
 	{
-		//todo；
+		graph.distributeCells(false);
 	})
 	
 	btn.setAttribute('title', mxResources.get('vertical'));
-	btn.style.width = '100px';
+	btn.style.width = '40%';
+	btn.style.marginLeft = '2%';
 	div.appendChild(btn);
 	
 	return div;
@@ -3381,7 +3372,8 @@ StyleFormatPanel.prototype.addEditOps = function(div)
 		}));
 		
 		btn.setAttribute('title', mxResources.get('editStyle') + ' (' + this.editorUi.actions.get('editStyle').shortcut + ')');
-		btn.style.width = '202px';
+		btn.style.width = '82%';
+		btn.style.marginLeft = '9%';
 		btn.style.marginBottom = '2px';
 		
 		div.appendChild(btn);
@@ -3399,8 +3391,8 @@ StyleFormatPanel.prototype.addEditOps = function(div)
 		
 		if (btn == null)
 		{
-			btn2.style.width = '80%';
-			btn2.style.marginLeft = '10%';
+			btn2.style.width = '82%';
+			btn2.style.marginLeft = '9%';
 		}
 		else
 		{
@@ -4929,8 +4921,8 @@ DiagramFormatPanel.prototype.addStyleOps = function(div)
 	}));
 	
 	btn.setAttribute('title', mxResources.get('editData') + ' (' + this.editorUi.actions.get('editData').shortcut + ')');
-	btn.style.width = '70%';
-	btn.style.marginLeft = '15%';
+	btn.style.width = '82%';
+	btn.style.marginLeft = '9%';
 	btn.style.marginBottom = '2px';
 	div.appendChild(btn);
 
@@ -4942,8 +4934,8 @@ DiagramFormatPanel.prototype.addStyleOps = function(div)
 	}));
 	
 	btn.setAttribute('title', mxResources.get('clearDefaultStyle') + ' (' + this.editorUi.actions.get('clearDefaultStyle').shortcut + ')');
-    btn.style.width = '70%';
-    btn.style.marginLeft = '15%';
+    btn.style.width = '82%';
+    btn.style.marginLeft = '9%';
 	div.appendChild(btn);
 
 	return div;
@@ -4982,7 +4974,7 @@ var AttributePanel = function(format, editorUi, container, cell)
         obj.setAttribute('label', value || '');
 
         //如果新建图形，则object(id==0)设置默认初始属性
-        if(editorUi.operator == 'new' && cell.getId() == 0)
+        if(editorUi.interfaceOperator == 'new' && cell.getId() == 0)
         {
         	for(var o in editorUi.initAttributes){
                 obj.setAttribute(o,  JSON.stringify(editorUi.initAttributes[o]));
@@ -4991,21 +4983,26 @@ var AttributePanel = function(format, editorUi, container, cell)
         value = obj;
     }
     var attrs = value.attributes;
-    var nAttrs = [];
+    var tObj = {};
     var allNames = [];
     for (var i = 0; i < attrs.length; i++)
     {
         if (attrs[i].nodeName != 'label' && attrs[i].nodeName != 'placeholders')
         {
-        	nAttrs[attrs[i].nodeName] = JSON.parse(attrs[i].nodeValue);
-            for( var j in nAttrs[attrs[i].nodeName]){
-                allNames.push(nAttrs[attrs[i].nodeName][j].name);
+            tObj[attrs[i].nodeName] = JSON.parse(attrs[i].nodeValue);
+            for( var j in tObj[attrs[i].nodeName]){
+                allNames.push(tObj[attrs[i].nodeName][j].name);
 			}
         }
     }
-
-	for( var o in nAttrs){
-        this.createAttrsPanel(editorUi,cell, value, nAttrs[o], o, allNames);
+	if(Object.keys(tObj).length < 3)
+	{
+        tObj['intrinsic'] = (tObj['intrinsic'] != null) ? tObj['intrinsic'] : [];
+        tObj['extended'] = (tObj['extended'] != null) ? tObj['extended'] : [];
+        tObj['userFunc'] = (tObj['userFunc'] != null) ? tObj['userFunc'] : [];
+	}
+	for( var o in tObj){
+        this.createAttrsPanel(editorUi,cell, value, tObj[o], o, allNames);
 	}
 };
 
@@ -5061,7 +5058,7 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
         return false;
     };
 
-	//保存属性到cell的object, 传入index参数则更新arrAttr, 不穿入index参数不需要更新arrAttr(比如删除某个属性)
+	//保存属性到cell的object, 传入index参数则更新arrAttr, 不传入index参数不需要更新arrAttr(比如删除某个属性)
 	function saveAttributesToObject(ele, index)
 	{
         value = value.cloneNode(true);

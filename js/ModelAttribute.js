@@ -10,13 +10,10 @@
 function ModelAttribute(attribute)
 {
 
-    this.intrinsic = (attribute != null ) ? attribute.intrinsic : [];
-    this.extended = (attribute != null ) ? attribute.extended : [];
-    this.userFunc = (attribute != null ) ? attribute.userFunc : [];
+    this.intrinsic = (attribute != null && attribute.intrinsic != null ) ? attribute.intrinsic : [];
+    this.extended = (attribute != null && attribute.extended != null ) ? attribute.extended : [];
+    this.userFunc = (attribute != null && attribute.userFunc != null ) ? attribute.userFunc : [];
 };
-
-
-
 
 /**
  * 设置属性
@@ -24,12 +21,6 @@ function ModelAttribute(attribute)
 ModelAttribute.prototype.setValue = function(type, value)
 {
     this[type] = value;
-    // if(type == 'intrinsic' )
-    //     this.intrinsic = value;
-    // if(type == 'extended')
-    //     this.extended = value;
-    // if(type == 'uFunc')
-    //     this.userFunc = value;
 };
 
 /**
@@ -37,7 +28,7 @@ ModelAttribute.prototype.setValue = function(type, value)
  */
 ModelAttribute.prototype.toAttributeString = function()
 {
-    var arr = [];
+    var arr = {};
     arr['intrinsic'] = JSON.stringify(this.intrinsic);
     arr['extended'] = JSON.stringify(this.extended);
     arr['userFunc'] = JSON.stringify(this.userFunc);

@@ -11,9 +11,14 @@
         <script type="text/javascript" src="js/VGDesigner.js"></script>
         <script type="text/javascript">
             (function(){
+                var interfaceParams = GetRequest();
+                var model = (interfaceParams.model != null) ? interfaceParams.model : 'editor';
+                var type = (interfaceParams.type != null) ? interfaceParams.type : 'model';
+                var operator = (interfaceParams.operator != null) ? interfaceParams.operator : 'new';
+
                 var vgDesignerDiv = document.getElementsByClassName("geEditor")[0];
-                var vgDesigner = new VGDesigner('editor', vgDesignerDiv);
-                window.onload = function(){ vgDesigner.init(); };
+                var vgDesigner = new VGDesigner(model, vgDesignerDiv);
+                window.onload = function(){ vgDesigner.init(type, operator); };
             })();
         </script>
     </body>

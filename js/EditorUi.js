@@ -993,25 +993,27 @@ EditorUi.prototype.attributeOperator = {'string':['==', '!='], 'number':['==', '
 EditorUi.prototype.attributeLogic = ['none', 'or', 'and'];
 
 /**
+ * 接口入参
  * 图形的操作：new(新建), edit(编辑)
  * @type {string}
  */
-EditorUi.prototype.operator = 'new';
+EditorUi.prototype.interfaceOperator = 'new';
 
 /**
+ * 接口入参
  * Specifies the type of the ui.
  * 'model':模型
  * 'topology':逻辑环境(拓扑图)
  * 'environment':物理环境
  */
-EditorUi.prototype.type = 'model';
+EditorUi.prototype.interfaceType = 'model';
 
 /**
  * Installs the listeners to update the action states.
  */
 EditorUi.prototype.init = function()
 {
-    this.setInitAttributes(this.type);
+    this.setInitAttributes();
 	/**
 	 * Keypress starts immediate editing on selection cell
 	 */
@@ -1116,8 +1118,9 @@ EditorUi.prototype.defaultAttributesStructure = function()
  * 设置初始化图形属性
  * @param type
  */
-EditorUi.prototype.setInitAttributes = function(type)
+EditorUi.prototype.setInitAttributes = function()
 {
+    var type = this.interfaceType;
 	var arr = [];
     if(type == 'model') {
         arr['intrinsic'] = [
@@ -3208,11 +3211,16 @@ EditorUi.prototype.extractGraphModelFromEvent = function(evt)
  */
 EditorUi.prototype.saveFile = function(forceDialog)
 {
-	var cellection = (this.type == "model") ? MODEL_COLLECTION : VIEWER_COLLECTION;
+	var cellection = (this.interfaceType == 'model') ? MODEL_COLLECTION : VIEWER_COLLECTION;
 
-	if ((!forceDialog && this.editor.filename != null) || this.type == "model")
+	if ((!forceDialog && this.editor.filename != null) || this.interfaceType == 'model')
 	{
-		this.saveDB(this.editor.getOrCreateJsonFilename(), cellection, UPDATE_ACTION);
+		var action = UPDATE_ACTION;
+		if(this.interfaceOperator == 'new')
+		{
+            action = SAVE_ACTION;
+		}
+		this.saveDB(this.editor.getOrCreateJsonFilename(), cellection, action);
 	}
 	else
 	{
@@ -3302,19 +3310,65 @@ EditorUi.prototype.getModelJsonString = function()
     var graph = this.editor.graph;
     graph.selectAll(null, true)
     if (!graph.isSelectionEmpty()) {
-		var group = graph.groupCells(null, 0);
-		graph.setSelectionCell(group);
-        var cells = graph.getSelectionCells();
-
         //获取自定义的属性
+        var ret = {};
         var rObj = graph.model.getRoot().value;
-        var attrs = [];
+        var attrs = {};
         if(rObj != undefined) {
             attrs['intrinsic'] = rObj.getAttribute('intrinsic');
             attrs['extended'] = rObj.getAttribute('extended');
             attrs['userFunc'] = rObj.getAttribute('userFunc');
-            attrs.length = 3;
         }
+        if(Object.keys(attrs).length == 0)
+        {
+            ret['statu'] = false;
+            ret['msg'] = '未配置初始属性';
+            return ret;
+        }
+        var attribute = {};
+        for(var i in attrs)
+        {
+            attribute[i] = JSON.parse(attrs[i]);
+            var atts = JSON.parse(attrs[i]);
+            for(var j in atts)
+            {
+                if(atts[j].name == 'name' && atts[j].value.length > 0){
+                    ret['name'] = atts[j].value[0];
+                }
+                if(atts[j].name == 'category' && atts[j].value.length > 0)
+                {
+                    ret['category'] = atts[j].value[0];
+                    ret['description'] = atts[j].description;
+                }
+                if(atts[j].name == 'type' && atts[j].value.length > 0)
+                {
+                    ret['type'] = atts[j].value[0];
+                }
+            }
+        }
+        if(ret['name'] == null || ret['name'] == ''){
+            ret['statu'] = false;
+            ret['msg'] = '初始属性中未配置\'名称\'';
+            return ret;
+        }
+        if(ret['category'] == null || ret['category'] == ''){
+            ret['statu'] = false;
+            ret['msg'] = '初始属性中未配置\'模型分类\'';
+            return ret;
+        }
+        if(ret['type'] == null || ret['type'] == ''){
+            ret['statu'] = false;
+            ret['msg'] = '初始属性中未配置\'单元类型\'';
+            return ret;
+        }
+		ret['attribute'] = attribute;
+
+        graph.getModel().beginUpdate();
+		var group = graph.groupCells(null, 0);
+		graph.setSelectionCell(group);
+        var cells = graph.getSelectionCells();
+        graph.setCellStyles('strokeColor', '#FF00FF', cells);
+        graph.setCellStyles('dashed', '1', cells);
 
         var doc = mxUtils.createXmlDocument();
         var obj = doc.createElement('object');
@@ -3323,6 +3377,8 @@ EditorUi.prototype.getModelJsonString = function()
             obj.setAttribute(o, attrs[o]);
         }
         group.setValue(obj);
+        graph.getModel().endUpdate();
+
 
         var bounds = graph.view.getBounds(cells);
 
@@ -3348,38 +3404,19 @@ EditorUi.prototype.getModelJsonString = function()
         }
         var xml = mxUtils.getXml(this.editor.graph.encodeCells(cells));
         var entry = { xml: xml, w: bounds.width, h: bounds.height };
-        var ret = [];
+
         ret['json'] = JSON.stringify(entry);
-        ret['attr'] = attrs;
         ret['statu'] = true;
         return ret;
     }
     else {
         var ret = [];
 		ret['statu'] = false;
+		ret['msg'] = '空画面不需要保存';
 		return ret;
     }
 
 };
-
-EditorUi.prototype.showModel = function (params,outValue) {
-	var arr = params.split("&"), query = {};
-
-	for (var i = 0; i < arr.length; i++) {
-		var key = arr[i].split("=")[0]
-		var value = arr[i].split("=")[1]
-		var key1 = key.split(".")[0]
-		var key2 = key.split(".")[1]
-		if (key2) {
-			query[key1] ? '' : query[key1] = {}
-			query[key1][key2] = value
-		} else {
-			query[key1] = value;
-		}
-	}
-	query.data = outValue
-	this.sidebar.addGeneralPalette([query], 'new:'+(query.description||query.class))
-}
 
 /**
  * Insert/update the current graph to arangoDB under the given filename.
@@ -3396,66 +3433,38 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             this.editor.graph.stopEditing();
         }
         var url = BASE_URL + collection + action;
-        if (this.type == 'model')
+        if (this.interfaceType == 'model')
 		{
-            var category, type, description, codetype = 'xml';
+
             var res = this.getModelJsonString();
             if(res['statu'] == false)
 			{
-				window.alert('空画面不能保存');
+				window.alert(res['msg']);
 				return;
 			}
             var outValue = res['json'];
-            var attrs = res['attr'];
-            if (attrs.length == 0){
-            	window.alert('未配置初始属性');
-            	return;
-			}
-			var attribute = {};
-			for(var i in attrs)
-			{
-				attribute[i] = JSON.parse(attrs[i]);
-				var atts = JSON.parse(attrs[i]);
-				for(var j in atts)
-				{
-					if(atts[j].name == 'name' && atts[j].value.length > 0){
-						name = atts[j].value[0];
-						description = atts[j].description;
-					}
-					if(atts[j].name == 'category' && atts[j].value.length > 0)
-					{
-                        category = atts[j].value[0];
-					}
-                    if(atts[j].name == 'type' && atts[j].value.length > 0)
-                    {
-                        type = atts[j].value[0];
-                    }
-				}
-			}
-			if(name == ''){
-                window.alert('初始属性中未配置\'名称\'');
-                return;
-			}
-            if(category == ''){
-                window.alert('初始属性中未配置\'模型分类\'');
-                return;
-            }
-            if(type == ''){
-                window.alert('初始属性中未配置\'单元类型\'');
-                return;
-            }
+            name = res['name'];
+            var category = res['category'];
+            var type = res['type'];
+            var description = res['description'];
+            var codetype = 'xml';
+
             var params = 'filename=' + name;
             params += '&codetype=' + codetype;
             params += '&data=' + encodeURIComponent(outValue);
             params += '&class=' + category;
             //必填的输入字段
+            params += '&description=' + description;
             params += '&name=' + name;
             params += '&category=' + category;
             params += '&type=' + type;
             params += '&property.tags=' + 'vertex';
             params += '&property.title=' + 'vertex';
             params += '&property.type=' + 'vertex';
-            params += '&attribute=' + JSON.stringify(attribute);
+            params += '&attribute=' + JSON.stringify(res['attribute']);
+            if(this.interfaceOperator == 'new') {
+                params += '&uuid=' + mxUtils.createUUID(16);
+            }
 		}
 		else
 		{
@@ -3477,7 +3486,6 @@ EditorUi.prototype.saveDB = function(name, collection, action)
                     this.editor.setModified(false);
                     this.editor.setFilename(name);
                     this.updateDocumentTitle();
-					this.showModel(params,outValue)
                 }
                 else {
                     mxUtils.alert(result.data.msg);

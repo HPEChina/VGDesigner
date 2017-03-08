@@ -957,7 +957,7 @@ Sidebar.prototype.addGeneralPalette = function(modelData, id, expand)
             fns.push(this.createVertexTemplateEntry(attr, prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
         }
     }//update by wang,jianhui
-    this.addPaletteFunctions(id, this.modelClass[id]||id, (expand != null) ? expand : true, fns);
+    this.addPaletteFunctions(id, this.modelClass[id], (expand != null) ? expand : true, fns);
 };
 
 Sidebar.prototype.createVertexTemplateFromXML = function(data, name) {
@@ -3288,19 +3288,17 @@ Sidebar.prototype.createEdgeTemplate = function(attr, style, width, height, valu
 	cell.geometry.relative = true;
 	cell.edge = true;
 
-    //当组件模型有属性时，给CELL添加user object，属性格式：{"eName":"", "cName":"", "value":""}
-    if(attr.length > 0) {
-        var doc = mxUtils.createXmlDocument();
-        var obj = doc.createElement('object');
-        obj.setAttribute('label', value || '');
-        for (var i in attr) {
-            if (attr.hasOwnProperty(i)) {
-                obj.setAttribute(attr[i].eName, attr[i].cName + ":" + attr[i].value);
-            }
-        }
-        cell.setValue(obj);
+    //给CELL添加object，属性:intrinsic\extended\userFunc
+    var doc = mxUtils.createXmlDocument();
+    var obj = doc.createElement('object');
+    obj.setAttribute('label', value || '');
+    var ma = new ModelAttribute(attr);
+    var arr = ma.toAttributeString();
+    for(var o in arr){
+        obj.setAttribute(o, arr[o]);
     }
-	
+    cell.setValue(obj);
+
 	return this.createEdgeTemplateFromCells([cell], width, height, title, showLabel, allowCellsInserted);
 };
 

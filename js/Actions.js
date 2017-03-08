@@ -207,31 +207,40 @@ Actions.prototype.init = function()
 	}, null, null, 'Ctrl+L');
 
 	// Navigation actions
-	this.addAction('home', function() { //todo
-		}, null, null, 'Home');
-	this.addAction('exitGroup', function() {
-		//
-	}, null, null, 'Ctrl+Shift+Page Up');
-	this.addAction('enterGroup', function() {
-		//todo
-	}, null, null, 'Ctrl+Shift+Page Down');
+	this.addAction('home', function() { graph.home(); }, null, null, 'Home');
+	this.addAction('exitGroup', function() { graph.exitGroup(); }, null, null, 'Ctrl+Shift+Page Up');
+	this.addAction('enterGroup', function() { graph.enterGroup(); }, null, null, 'Ctrl+Shift+Page Down');
 	this.addAction('expand', function() { graph.foldCells(false); }, null, null, 'Ctrl+Page Down');
 	this.addAction('collapse', function() { graph.foldCells(true); }, null, null, 'Ctrl+Page Up');
 
 	// Arrange actions
-	this.addAction('toFront', function() {
-		//todo
-	}, null, null, 'Ctrl+Shift+F');
-	this.addAction('toBack', function() {
-		//todo
-	}, null, null, 'Ctrl+Shift+B');
+	this.addAction('toFront', function() { graph.orderCells(false); }, null, null, 'Ctrl+Shift+F');
+	this.addAction('toBack', function() { graph.orderCells(true); }, null, null, 'Ctrl+Shift+B');
 	this.addAction('group', function()
 	{
-		//todo
+		if (graph.getSelectionCount() == 1)
+		{
+			graph.setCellStyles('container', '1');
+		}
+		else
+		{
+            graph.getModel().beginUpdate();
+            var select = graph.setSelectionCell(graph.groupCells(null, 0));
+            graph.setCellStyles('strokeColor', '#FF00FF', select);
+            graph.setCellStyles('dashed', '1', select);
+            graph.getModel().endUpdate();
+		}
 	}, null, null, 'Ctrl+G');
 	this.addAction('ungroup', function()
 	{
-		//todo;
+		if (graph.getSelectionCount() == 1 && graph.getModel().getChildCount(graph.getSelectionCell()) == 0)
+		{
+			graph.setCellStyles('container', '0');
+		}
+		else
+		{
+			graph.setSelectionCells(graph.ungroupCells());
+		}
 	}, null, null, 'Ctrl+Shift+U');
 	this.addAction('removeFromGroup', function() { graph.removeCellsFromParent(); });
 	// Adds action
@@ -1170,7 +1179,27 @@ Actions.prototype.init = function()
 	}).isEnabled = isGraphEnabled;
 	action = this.addAction('layers', mxUtils.bind(this, function()
 	{
-		//todo
+		if (this.layersWindow == null)
+		{
+			// LATER: Check outline window for initial placement
+			this.layersWindow = new LayersWindow(ui, ui.container.offsetWidth - 280, 120, 220, 180);
+			this.layersWindow.window.addListener('show', function()
+			{
+				ui.fireEvent(new mxEventObject('layers'));
+			});
+			this.layersWindow.window.addListener('hide', function()
+			{
+				ui.fireEvent(new mxEventObject('layers'));
+			});
+			this.layersWindow.window.setVisible(true);
+			ui.fireEvent(new mxEventObject('layers'));
+		}
+		else
+		{
+			this.layersWindow.window.setVisible(!this.layersWindow.window.isVisible());
+		}
+		
+		//ui.fireEvent(new mxEventObject('layers'));
 	}), null, null, 'Ctrl+Shift+L');
 	action.setToggleAction(true);
 	action.setSelectedCallback(mxUtils.bind(this, function() { return this.layersWindow != null && this.layersWindow.window.isVisible(); }));
@@ -1182,7 +1211,27 @@ Actions.prototype.init = function()
 	action.setSelectedCallback(mxUtils.bind(this, function() { return ui.formatWidth > 0; }));
 	action = this.addAction('outline', mxUtils.bind(this, function()
 	{
-		//todo
+		if (this.outlineWindow == null)
+		{
+			// LATER: Check layers window for initial placement
+			this.outlineWindow = new OutlineWindow(ui, ui.container.offsetWidth - 260, 100, 180, 180);
+			this.outlineWindow.window.addListener('show', function()
+			{
+				ui.fireEvent(new mxEventObject('outline'));
+			});
+			this.outlineWindow.window.addListener('hide', function()
+			{
+				ui.fireEvent(new mxEventObject('outline'));
+			});
+			this.outlineWindow.window.setVisible(true);
+			ui.fireEvent(new mxEventObject('outline'));
+		}
+		else
+		{
+			this.outlineWindow.window.setVisible(!this.outlineWindow.window.isVisible());
+		}
+		
+		ui.fireEvent(new mxEventObject('outline'));
 	}), null, null, 'Ctrl+Shift+O');
 	
 	action.setToggleAction(true);
