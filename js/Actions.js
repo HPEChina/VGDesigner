@@ -224,11 +224,7 @@ Actions.prototype.init = function()
 		}
 		else
 		{
-            graph.getModel().beginUpdate();
-            var select = graph.setSelectionCell(graph.groupCells(null, 0));
-            graph.setCellStyles('strokeColor', '#FF00FF', select);
-            graph.setCellStyles('dashed', '1', select);
-            graph.getModel().endUpdate();
+            graph.setSelectionCell(graph.groupCells(null, 0));
 		}
 	}, null, null, 'Ctrl+G');
 	this.addAction('ungroup', function()

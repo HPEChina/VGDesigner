@@ -36,7 +36,7 @@ VGDesigner.prototype.viewerCssFiles = [];
 /**
  * Extends EditorUi to update I/O action states based on availability of backend
  */
-VGDesigner.prototype.init = function(type, operator)
+VGDesigner.prototype.init = function(interfaceParams)
 {
     var editorUiInit = EditorUi.prototype.init;
 
@@ -63,9 +63,7 @@ VGDesigner.prototype.init = function(type, operator)
         themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
         // Main
-        var ui = new EditorUi(new Editor(urlParams['chrome'] == '0', themes, null, null, this.container), this.container);
-        ui.interfaceOperator = operator || ui.interfaceOperator;
-        ui.interfaceType = type || ui.interfaceType;
+        new EditorUi(new Editor(urlParams['chrome'] == '0', themes, null, null, this.container), this.container, null, interfaceParams);
 
     }), mxUtils.bind(this,function()
     {

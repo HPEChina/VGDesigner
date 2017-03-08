@@ -1407,7 +1407,7 @@ var EditDiagramDialog = function(editorUi, type)
 	textarea.style.height = '370px';
 	textarea.style.marginBottom = '16px';
 
-    var graphXml = editorUi.editor.getGraphXml(), tValue;
+    var graphXml = editorUi.editor.getGraphXml(editorUi), tValue;
 
 	if(type == 'XML')
 	{
@@ -1908,7 +1908,7 @@ var ExportDialog = function(editorUi) {
 
     function getXml()
     {
-        return mxUtils.getXml(editorUi.editor.getGraphXml());
+        return mxUtils.getXml(editorUi.editor.getGraphXml(editorUi));
     };
     function loadImage(url) {
         return new Promise(function(resolve, reject) {
@@ -1944,7 +1944,7 @@ var ExportDialog = function(editorUi) {
             {
                 var outValue;
                 editorUi.hideDialog();
-                var graphXml = editorUi.editor.getGraphXml();
+                var graphXml = editorUi.editor.getGraphXml(editorUi);
                 if(format == 'xml') {
                     outValue = mxUtils.getPrettyXml(graphXml);
                 }

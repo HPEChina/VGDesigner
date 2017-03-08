@@ -4,7 +4,7 @@
 /**
  * Constructs a new graph editor
  */
-EditorUi = function(editor, container, lightbox)
+EditorUi = function(editor, container, lightbox, interfaceParams)
 {
 	//新增属性名称的序号
 	this.attributeNameIndex = 1;
@@ -905,7 +905,7 @@ EditorUi = function(editor, container, lightbox)
 
    	// Resets UI, updates action and menu states
    	this.editor.resetGraph();
-   	this.init();
+   	this.init(interfaceParams);
    	this.open();
 };
 
@@ -1004,16 +1004,32 @@ EditorUi.prototype.interfaceOperator = 'new';
  * Specifies the type of the ui.
  * 'model':模型
  * 'topology':逻辑环境(拓扑图)
- * 'environment':物理环境
+ * 'physics':物理环境
  */
 EditorUi.prototype.interfaceType = 'model';
 
 /**
+ * 环境图形UUID
+ * @type {string}
+ */
+EditorUi.prototype.environmentUUID = '';
+
+/**
+ * 产品线ID
+ */
+EditorUi.prototype.productLineId = '';
+
+/**
  * Installs the listeners to update the action states.
  */
-EditorUi.prototype.init = function()
+EditorUi.prototype.init = function(interfaceParams)
 {
     this.setInitAttributes();
+    this.interfaceOperator = interfaceParams.operator || this.interfaceOperator;
+    this.interfaceType = interfaceParams.type || this.interfaceType;
+	this.environmentUUID = interfaceParams.UUID || mxUtils.createUUID(32);
+	this.productLineId = interfaceParams.pId || this.productLineId;
+
 	/**
 	 * Keypress starts immediate editing on selection cell
 	 */
@@ -2268,7 +2284,7 @@ EditorUi.prototype.canUndo = function()
  */
 EditorUi.prototype.getEditBlankXml = function()
 {
-	return mxUtils.getXml(this.getGraphXml());
+	return mxUtils.getXml(this.getGraphXml(this));
 };
 
 /**
@@ -3255,7 +3271,7 @@ EditorUi.prototype.save = function(name)
 			this.editor.graph.stopEditing();
 		}
 		
-		var xml = mxUtils.getXml(this.editor.getGraphXml());
+		var xml = mxUtils.getXml(this.editor.getGraphXml(this));
 		
 		try
 		{
@@ -3363,12 +3379,13 @@ EditorUi.prototype.getModelJsonString = function()
         }
 		ret['attribute'] = attribute;
 
-        graph.getModel().beginUpdate();
+        // graph.getModel().beginUpdate();
+        //组合
 		var group = graph.groupCells(null, 0);
-		graph.setSelectionCell(group);
+        graph.setSelectionCell(group);
         var cells = graph.getSelectionCells();
-        graph.setCellStyles('strokeColor', '#FF00FF', cells);
-        graph.setCellStyles('dashed', '1', cells);
+        // graph.setCellStyles('strokeColor', '#CCCCCC', cells);
+        // graph.setCellStyles('dashed', '1', cells);
 
         var doc = mxUtils.createXmlDocument();
         var obj = doc.createElement('object');
@@ -3377,7 +3394,7 @@ EditorUi.prototype.getModelJsonString = function()
             obj.setAttribute(o, attrs[o]);
         }
         group.setValue(obj);
-        graph.getModel().endUpdate();
+        // graph.getModel().endUpdate();
 
 
         var bounds = graph.view.getBounds(cells);
@@ -3402,7 +3419,11 @@ EditorUi.prototype.getModelJsonString = function()
                 geo.translate(-bounds.x, -bounds.y);
             }
         }
-        var xml = mxUtils.getXml(this.editor.graph.encodeCells(cells));
+        var xml = mxUtils.getXml(graph.encodeCells(cells));
+
+        //解组
+        // group.setCellStyles('strokeColor', 'none', cells);
+        graph.setSelectionCells(graph.ungroupCells());
         var entry = { xml: xml, w: bounds.width, h: bounds.height };
 
         ret['json'] = JSON.stringify(entry);
@@ -3463,16 +3484,17 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             params += '&property.type=' + 'vertex';
             params += '&attribute=' + JSON.stringify(res['attribute']);
             if(this.interfaceOperator == 'new') {
-                params += '&uuid=' + mxUtils.createUUID(16);
+
+                params += '&uuid=' + ((this.environmentUUID == '') ? mxUtils.createUUID(32) : this.environmentUUID);
             }
 		}
 		else
 		{
-            var graphXml = this.editor.getGraphXml();
+            var graphXml = this.editor.getGraphXml(this);
             var outValue = mxUtils.getXml(graphXml);
             var xmlDoc = mxUtils.parseXml(outValue);
             outValue = CodeTranslator.xml2json(xmlDoc);
-            var params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue);
+            var params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue) +'&uuid=' + ((this.environmentUUID == '') ? mxUtils.createUUID(32) : this.environmentUUID);;
 		}
 
 
@@ -3486,6 +3508,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
                     this.editor.setModified(false);
                     this.editor.setFilename(name);
                     this.updateDocumentTitle();
+                    this.interfaceOperator = 'edit';
                 }
                 else {
                     mxUtils.alert(result.data.msg);
