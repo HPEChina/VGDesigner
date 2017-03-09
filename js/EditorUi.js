@@ -3494,7 +3494,8 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             var outValue = mxUtils.getXml(graphXml);
             var xmlDoc = mxUtils.parseXml(outValue);
             outValue = CodeTranslator.xml2json(xmlDoc);
-            var params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue) +'&uuid=' + ((this.environmentUUID == '') ? mxUtils.createUUID(32) : this.environmentUUID);;
+            // var params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue) +'&uuid=' + ((this.environmentUUID == '') ? mxUtils.createUUID(32) : this.environmentUUID);;
+            var params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue);
 		}
 
 

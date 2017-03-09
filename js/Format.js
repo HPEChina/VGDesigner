@@ -5061,7 +5061,7 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
 	//保存属性到cell的object, 传入index参数则更新arrAttr, 不传入index参数不需要更新arrAttr(比如删除某个属性)
 	function saveAttributesToObject(ele, index)
 	{
-        value = value.cloneNode(true);
+        // value = value.cloneNode(true);
         var arr = [];
         if(index != null) {
         	var name = ele.name.value;
@@ -5332,7 +5332,7 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
                 editTr[0].previousSibling.childNodes[0].setAttribute('title', mxResources.get('name') + ":" + arrAttr[index].name);
                 editTr[0].previousSibling.childNodes[1].innerText = arrAttr[index].description;
                 editTr[0].previousSibling.childNodes[1].setAttribute('title', mxResources.get('description') + ":" + arrAttr[index].description);
-                arr = [];
+                var arr = [];
                 for(var i in arrAttr[index].value){
                     arr.push(arrAttr[index].operator[i] + arrAttr[index].value[i] + ((arrAttr[index].logic[i] != null　&& arrAttr[index].logic[i] != 'none') ? (' ' + arrAttr[index].logic[i]) : ''));
                 }
