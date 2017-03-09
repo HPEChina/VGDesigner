@@ -3383,7 +3383,7 @@ EditorUi.prototype.getModelJsonString = function()
         //组合
 		var group = graph.groupCells(null, 0);
         graph.setSelectionCell(group);
-        var cells = graph.getSelectionCells();
+        // var cells = graph.getSelectionCells();
         // graph.setCellStyles('strokeColor', '#CCCCCC', cells);
         // graph.setCellStyles('dashed', '1', cells);
 
@@ -3395,32 +3395,15 @@ EditorUi.prototype.getModelJsonString = function()
         }
         group.setValue(obj);
         // graph.getModel().endUpdate();
-
-
-        var bounds = graph.view.getBounds(cells);
-
-        var s = graph.view.scale;
-
-        bounds.x /= s;
-        bounds.y /= s;
-        bounds.width /= s;
-        bounds.height /= s;
-
-        bounds.x -= graph.view.translate.x;
-        bounds.y -= graph.view.translate.y;
-
-        cells = graph.cloneCells(graph.model.getTopmostCells(cells));
-
-        // Translates cells to origin
-        for (var i = 0; i < cells.length; i++) {
-            var geo = graph.getCellGeometry(cells[i]);
-
-            if (geo != null) {
-                geo.translate(-bounds.x, -bounds.y);
-            }
-        }
-        var xml = mxUtils.getXml(graph.encodeCells(cells));
-
+//update by wang,jianhui--start
+		var xml = this.editor.getGraphXml(this);
+		var bounds=xml.getElementsByTagName("mxGeometry")[0];
+		bounds.setAttribute("x",0);
+		bounds.setAttribute("y",0);
+		bounds.width=bounds.getAttribute("width");
+		bounds.height=bounds.getAttribute("height");
+		xml = mxUtils.getXml(xml);
+//update by wang,jianhui--end
         //解组
         // group.setCellStyles('strokeColor', 'none', cells);
         graph.setSelectionCells(graph.ungroupCells());
