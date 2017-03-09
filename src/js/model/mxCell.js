@@ -188,10 +188,6 @@ mxCell.prototype.mxTransient = ['id', 'value', 'parent', 'source',
                                 'target', 'children', 'edges'];
 
 /**
- * model attribute
- */
-mxCell.prototype.modelAttribute = null;
-/**
  * Function: getId
  *
  * Returns the Id of the cell as a string.

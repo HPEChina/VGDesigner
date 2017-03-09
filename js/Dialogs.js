@@ -115,8 +115,17 @@ Dialog.prototype.clearImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/clear.gif' : '
 /**
  * 
  */
-Dialog.prototype.lockedImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/locked.png' : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzdDMDZCODExNzIxMTFFNUI0RTk5NTg4OTcyMUUyODEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzdDMDZCODIxNzIxMTFFNUI0RTk5NTg4OTcyMUUyODEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDozN0MwNkI3RjE3MjExMUU1QjRFOTk1ODg5NzIxRTI4MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozN0MwNkI4MDE3MjExMUU1QjRFOTk1ODg5NzIxRTI4MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvqMCFYAAAAVUExURZmZmb+/v7KysqysrMzMzLGxsf///4g8N1cAAAAHdFJOU////////wAaSwNGAAAAPElEQVR42lTMQQ4AIQgEwUa0//9kTQirOweYOgDqAMbZUr10AGlAwx4/BJ2QJ4U0L5brYjovvpv32xZgAHZaATFtMbu4AAAAAElFTkSuQmCC';
+Dialog.prototype.editImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/edit.png' : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAbwAAAG8B8aLcQwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAJFSURBVFiF3Ze/axNhGMc/T34jCLoI4uIJyZkKVdE2IkiNgrMidnJxcRGUgOL/oAFFB3FREB10VHSsk9jEOCiS3KVopEtxsFVQbDG5x6GUavtekrsmKfWZ7u778Hw/7/M+7x0nqsp6RmRd3Tc0gIj0BF7CzIBt5woCRaCBclei3KvVSl8HAmDbh3cIrU9A4q/H84qcdt3JF0EBQrTRK6wwB0iJ6KXgtQICWNb+LYKeN2mq+jYMQCxIcjKeuABsNkgL0ah3G8C2cydFZOfqFH3vOKWJ0ACWlU8lE1z0kR9Wq5UZERE7PTIGWCsTBDYB4QGSyZ/nUNlmkFRpFRcvVIFCtzWhyxkQGY+ictkoqj5z3YoTxDQwQCYzfQbYZa6g18KaQ5dbIOhVH+G147x5BZBNj46pSNa3SERnHaf8JDBANn3oBBH2mTRVllcf4Riw16+OamTOsvJPG42X8/+sodObcLedmwDyBqnu1stZVfXaFugQbWfAtkdHfMxRtLhW844AIhj3XuGL5809WKs5tJmBbDaXQeWUSYvALXdqagEWuyQqBzo6BR1C9biCuUM/4snEnaUbUTkKHO/kryqzXQ/h0NDB7V4r+pnVXz1QvenUy4Hedu3COAOeFxs3mkMz1vJu9MrcF0A84sZs5fGHj5XpvgN4oi2jv3C9l+a+ACKy8nx/Q/Ss65beDQZAlzsg8ByJ73Gc8qNem4PfMVR+I3xHpVCrT97vh/FSGI/h8PCRrc3mr1S1Wpnpp7kvwCBj4/6a/TcAfwDYcdFseNencAAAAABJRU5ErkJggg==';
 
+/**
+ *
+ */
+Dialog.prototype.addImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/add.png' : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAbwAAAG8B8aLcQwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAIXSURBVFiFzZe/attQFIe/I9vQRzCpp4KRUrIU/G9xoFBoDS3Ea7a+RrvnOTp1bSBD3KUFd5GSQJeQyGjoYoc8gim1TodaQpaU+jqO5fw2Sdfn+7jyvfdIVJVtxtoqHSivMti2W89EeYvFvqjUFHYABG5UdEzIEEtOfN/7ZVpTTF6BbbdeCXIENE2KKrgifPR979taAnt7reqf3/IJ4bUJOCeDckXfX16e3a4s4DjtBsox8PSe8CgThAPf9y6MBZ7XO53Q0u/AkzXhUaZWKC+vAtddKlCvd2olS8+B6gPBo9zOQmkGgTtO3swsw5Kln43hoj1Ee4YC1XntVInEDNh2+0Dgi2FB/JEnAI7dNt7NFPqjkXccXS/MgMCRaaH7Js2IBer15gtgd9MCwO6ctShgWaV3BcAzrFhA0P2iBJKs5H+gVpRAkpU8jHZyh4r2fP9s8L9q0WpIx3Fab1A5zXkUsx7VcXwD2JkRKqeO3c798fJ9IHdiIhawOAPjnIGbSsyKBRQZFkVPsmKBMJydFCWQZMUCQXD+E7gugH89Zy0KACh82DQ9zcj0A47dHgJdo2rRUZy/1vPywx95CztupiuehXJo3JCYg+FfQ3KYvpnZiILAHVuh9IHpCsWXZWqF0k93Q7kCAFeB6yJ0gckDwCcI3bx+8E4BAN/3LsoVbaB8XQM+KFe0cVdHDI/9wyRHZDufZpvM1o/jv1853ddhRcR9AAAAAElFTkSuQmCC';
+
+/**
+ *
+ */
+Dialog.prototype.lockedImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/locked.png' : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzdDMDZCODExNzIxMTFFNUI0RTk5NTg4OTcyMUUyODEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzdDMDZCODIxNzIxMTFFNUI0RTk5NTg4OTcyMUUyODEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDozN0MwNkI3RjE3MjExMUU1QjRFOTk1ODg5NzIxRTI4MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozN0MwNkI4MDE3MjExMUU1QjRFOTk1ODg5NzIxRTI4MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvqMCFYAAAAVUExURZmZmb+/v7KysqysrMzMzLGxsf///4g8N1cAAAAHdFJOU////////wAaSwNGAAAAPElEQVR42lTMQQ4AIQgEwUa0//9kTQirOweYOgDqAMbZUr10AGlAwx4/BJ2QJ4U0L5brYjovvpv32xZgAHZaATFtMbu4AAAAAElFTkSuQmCC';
 /**
  * 
  */
@@ -1398,7 +1407,7 @@ var EditDiagramDialog = function(editorUi, type)
 	textarea.style.height = '370px';
 	textarea.style.marginBottom = '16px';
 
-    var graphXml = editorUi.editor.getGraphXml(), tValue;
+    var graphXml = editorUi.editor.getGraphXml(editorUi), tValue;
 
 	if(type == 'XML')
 	{
@@ -1412,15 +1421,18 @@ var EditDiagramDialog = function(editorUi, type)
     textarea.value = tValue;
 	div.appendChild(textarea);
 	
-	this.init = function()
-	{
-        CodeMirror.fromTextArea(textarea, {
-        lineNumbers: true,
-        smartIndent: true,
-        mode: type == 'XML' ? 'xml' : 'javascript'
-    });
-		textarea.focus();
-	};
+    this.init = function()
+    {
+        var code = CodeMirror.fromTextArea(textarea, {
+            lineNumbers: true,
+            smartIndent: true,
+            mode: type == 'XML' ? 'xml' : 'javascript'
+        });
+        code.on('change', function () {
+            textarea.value = code.getValue()
+        });
+        textarea.focus();
+    };
 	
 	// Enables dropping files
 	if (Graph.fileSupport)
@@ -1896,7 +1908,7 @@ var ExportDialog = function(editorUi) {
 
     function getXml()
     {
-        return mxUtils.getXml(editorUi.editor.getGraphXml());
+        return mxUtils.getXml(editorUi.editor.getGraphXml(editorUi));
     };
     function loadImage(url) {
         return new Promise(function(resolve, reject) {
@@ -1932,7 +1944,7 @@ var ExportDialog = function(editorUi) {
             {
                 var outValue;
                 editorUi.hideDialog();
-                var graphXml = editorUi.editor.getGraphXml();
+                var graphXml = editorUi.editor.getGraphXml(editorUi);
                 if(format == 'xml') {
                     outValue = mxUtils.getPrettyXml(graphXml);
                 }

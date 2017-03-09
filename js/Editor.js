@@ -459,7 +459,7 @@ Editor.prototype.setGraphXml = function(node)
 /**
  * Returns the XML node that represents the current diagram.
  */
-Editor.prototype.getGraphXml = function(ignoreSelection)
+Editor.prototype.getGraphXml = function(ui, ignoreSelection)
 {
 	ignoreSelection = (ignoreSelection != null) ? ignoreSelection : true;
 	var node = null;
@@ -474,6 +474,8 @@ Editor.prototype.getGraphXml = function(ignoreSelection)
 		node = this.graph.encodeCells(this.graph.getSelectionCells());
 	}
 
+    node.setAttribute('envType', ui.interfaceType);
+    node.setAttribute('uuid', ui.environmentUUID);
 	if (this.graph.view.translate.x != 0 || this.graph.view.translate.y != 0)
 	{
 		node.setAttribute('dx', Math.round(this.graph.view.translate.x * 100) / 100);
@@ -491,6 +493,7 @@ Editor.prototype.getGraphXml = function(ignoreSelection)
 	node.setAttribute('pageScale', this.graph.pageScale);
 	node.setAttribute('pageWidth', this.graph.pageFormat.width);
 	node.setAttribute('pageHeight', this.graph.pageFormat.height);
+
 
 	if (this.graph.background != null)
 	{

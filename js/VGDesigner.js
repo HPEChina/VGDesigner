@@ -36,7 +36,7 @@ VGDesigner.prototype.viewerCssFiles = [];
 /**
  * Extends EditorUi to update I/O action states based on availability of backend
  */
-VGDesigner.prototype.init = function()
+VGDesigner.prototype.init = function(interfaceParams)
 {
     var editorUiInit = EditorUi.prototype.init;
 
@@ -63,7 +63,8 @@ VGDesigner.prototype.init = function()
         themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
         // Main
-        new EditorUi(new Editor(urlParams['chrome'] == '0', themes, null, null, this.container), this.container);
+        new EditorUi(new Editor(urlParams['chrome'] == '0', themes, null, null, this.container), this.container, null, interfaceParams);
+
     }), mxUtils.bind(this,function()
     {
         this.container.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
@@ -138,3 +139,21 @@ function loadJsCssFiles(fileNames)
 
     }
 };
+
+/**
+ * 获取参数
+ * @returns {Object}
+ * @constructor
+ */
+function GetRequest() {
+    var url = location.search; //获取url中"?"符后的字串
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        var strs = str.split("&");
+        for(var i = 0; i < strs.length; i ++) {
+            theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+        }
+    }
+    return theRequest;
+}

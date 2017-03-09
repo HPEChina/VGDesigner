@@ -218,7 +218,7 @@ Menus.prototype.init = function()
 		{
 			var tmp = graph.getSelectionCell();
 			var roots = null;
-			
+
 			if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
 			{
 				if (graph.getModel().getEdgeCount(tmp) == 0)
@@ -235,13 +235,13 @@ Menus.prototype.init = function()
 			{
 				tmp = roots[0];
 			}
-			
+
 			if (tmp != null)
 			{
 				var layout = new mxCompactTreeLayout(graph, true);
 				layout.edgeRouting = false;
 				layout.levelDistance = 30;
-	
+
 				this.editorUi.executeLayout(function()
 	    		{
 					layout.execute(graph.getDefaultParent(), tmp);
@@ -252,7 +252,7 @@ Menus.prototype.init = function()
 		{
 			var tmp = graph.getSelectionCell();
 			var roots = null;
-			
+
 			if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
 			{
 				if (graph.getModel().getEdgeCount(tmp) == 0)
@@ -269,14 +269,14 @@ Menus.prototype.init = function()
 			{
 				tmp = roots[0];
 			}
-			
+
 			if (tmp != null)
 			{
 
 				var layout = new mxCompactTreeLayout(graph, false);
 				layout.edgeRouting = false;
 				layout.levelDistance = 30;
-				
+
 				this.editorUi.executeLayout(function()
 	    		{
 					layout.execute(graph.getDefaultParent(), tmp);
@@ -287,7 +287,7 @@ Menus.prototype.init = function()
 		{
 			var tmp = graph.getSelectionCell();
 			var roots = null;
-			
+
 			if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
 			{
 				if (graph.getModel().getEdgeCount(tmp) == 0)
@@ -304,21 +304,21 @@ Menus.prototype.init = function()
 			{
 				tmp = roots[0];
 			}
-			
+
 			if (tmp != null)
 			{
 				var layout = new mxRadialTreeLayout(graph, false);
 				layout.levelDistance = 60;
 				layout.autoRadius = true;
-				
+
 	    		this.editorUi.executeLayout(function()
 	    		{
 	    			layout.execute(graph.getDefaultParent(), tmp);
-	    			
+
 	    			if (!graph.isSelectionEmpty())
 	    			{
 		    			tmp = graph.getModel().getParent(tmp);
-		    			
+
 		    			if (graph.getModel().isVertex(tmp))
 		    			{
 		    				graph.updateGroupBounds([tmp], graph.gridSize * 2, true);
@@ -335,14 +335,14 @@ Menus.prototype.init = function()
     		this.editorUi.executeLayout(function()
     		{
     			var tmp = graph.getSelectionCell();
-    			
+
     			if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
     			{
     				tmp = graph.getDefaultParent();
     			}
-    			
+
     			layout.execute(tmp);
-    			
+
     			if (graph.getModel().isVertex(tmp))
     			{
     				graph.updateGroupBounds([tmp], graph.gridSize * 2, true);
@@ -355,14 +355,14 @@ Menus.prototype.init = function()
     		this.editorUi.executeLayout(function()
     		{
     			var tmp = graph.getSelectionCell();
-    			
+
     			if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
     			{
     				tmp = graph.getDefaultParent();
     			}
 
     			layout.execute(tmp);
-    			
+
     			if (graph.getModel().isVertex(tmp))
     			{
     				graph.updateGroupBounds([tmp], graph.gridSize * 2, true);
