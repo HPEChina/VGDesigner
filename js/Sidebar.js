@@ -944,6 +944,12 @@ Sidebar.prototype.addGeneralPalette = function(modelData, id, expand)
 {
     var fns = [];
     for(var i in modelData) {
+		if (this.editorUi.modelId && this.editorUi.modelId == modelData[i].uuid) {
+			window.opener = {}
+			window.opener.openFile = new OpenFile()
+			window.opener.openFile.setData(JSON.parse(modelData[i].data).xml, modelData[i].filename)
+			this.editorUi.open()
+		}
         var prop = modelData[i].property;
         var attr = modelData[i].attribute;
 

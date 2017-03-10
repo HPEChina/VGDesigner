@@ -1029,6 +1029,7 @@ EditorUi.prototype.init = function(interfaceParams)
     this.interfaceType = interfaceParams.type || this.interfaceType;
 	this.environmentUUID = interfaceParams.UUID || mxUtils.createUUID(32);
 	this.productLineId = interfaceParams.pId || this.productLineId;
+	this.modelId = interfaceParams.modelId;
 
 	/**
 	 * Keypress starts immediate editing on selection cell
