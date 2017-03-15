@@ -3,7 +3,7 @@ body{
 	padding:0;
 }
 .geEditor {
-	font-family:微软雅黑,宋体,黑体,Helvetica Neue,Helvetica,Arial Unicode MS,Arial;
+	font-family:Verdana,Helvetica Neue,Helvetica,Arial Unicode MS,Arial;
 	font-size:11pt;
 	border:none;
 	margin:0px;
@@ -197,11 +197,15 @@ body{
 	text-decoration:none;
 }
 .geMenubarContainer {
-	background-color:#ffffff;
+	background-color:whitesmoke;
 }
 .geMenubar {
 	padding:0px 2px 0px 2px;
 	vertical-align:middle;
+	border-top:1px solid #e0e0e0;
+	-webkit-box-shadow: inset 0 1px 0 0 #fff;
+	-moz-box-shadow: inset 0 1px 0 0 #fff;
+	box-shadow: inset 0 1px 0 0 #fff;
 }
 .geMenubarContainer .geItem, .geToolbar .geItem {
 	padding:6px 8px 6px 8px;
@@ -227,7 +231,6 @@ body{
 }
 .geToolbarContainer {
 	background:whiteSmoke;
-	border-bottom:1px solid #e0e0e0;
 }
 .geSidebarContainer .geToolbarContainer {
 	background:transparent;
@@ -668,7 +671,7 @@ html table.mxPopupMenu {
 }
 html td.mxPopupMenuItem {
 	padding:5px 30px 5px 30px;
-	font-family:微软雅黑,Helvetica Neue,Helvetica,Arial Unicode MS,Arial;
+	font-family:Verdana,Helvetica Neue,Helvetica,Arial Unicode MS,Arial;
 	font-size:11pt;
 }
 html td.mxPopupMenuIcon {
@@ -703,7 +706,7 @@ table.mxPopupMenu tr {
 	font-size:4pt;
 }
 html td.mxWindowTitle {
-	font-family:微软雅黑,Helvetica Neue,Helvetica,Arial Unicode MS,Arial;
+	font-family:Verdana,Helvetica Neue,Helvetica,Arial Unicode MS,Arial;
  	text-align:left;
  	font-size:12px;
  	color:rgb(112, 112, 112);

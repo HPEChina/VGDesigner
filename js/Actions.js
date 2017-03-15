@@ -27,7 +27,7 @@ Actions.prototype.init = function()
 	// File actions
 	//this.addAction('new...', function() { window.open(ui.getUrl()); });
     this.addAction('newViewer', function() { window.open(ui.getUrl()); });
-    this.addAction('newComponent', function() { window.open(ui.getUrl()); });
+    this.addAction('newModel', function() { window.open(ui.getUrl()); });
     this.addAction('open...', function()
 	{
 		window.openNew = true;

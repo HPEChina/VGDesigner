@@ -5118,9 +5118,9 @@ mxGraph.prototype.swapBounds = function(cell, willCollapse)
 		if (geo != null)
 		{
 			geo = geo.clone();
-			
+
 			this.updateAlternateBounds(cell, geo, willCollapse);
-			geo.swap();
+            geo.swap();
 			
 			this.model.setGeometry(cell, geo);
 		}
