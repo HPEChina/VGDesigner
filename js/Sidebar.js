@@ -3348,8 +3348,8 @@ Sidebar.prototype.addPaletteFunctions = function(id, title, expanded, fns)
 Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
 {
 	if (this[id]) {
-		if (this[id].style.display == 'none') {
-			this[title].click();
+		if (!this[id].style.display||this[id].style.display == 'none') {
+			this[id+title].click();
 		}
 		onInit(this[id]);
 		return this[id];
@@ -3401,7 +3401,7 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
     	this.palettes[id] = [elt, outer];
     }
     this[id]=div;
-	this[title]=elt;
+	this[id+title]=elt;
     return div;
 };
 

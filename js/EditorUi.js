@@ -3507,7 +3507,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
                     this.editor.setFilename(name);
                     this.updateDocumentTitle();
                     // this.interfaceParams.operator = 'edit';
-					if (this.interfaceType == 'model') this.showModel(params,outValue);
+					if (this.interfaceParams.type == 'model') this.showModel(params,outValue);
                 }
                 else {
                     mxUtils.alert(result.data.msg);
