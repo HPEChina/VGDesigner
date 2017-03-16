@@ -5322,7 +5322,7 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
         });
         cancelBtn.className = 'geBtn';
 
-        var applyBtn = mxUtils.button(mxResources.get('save'), function()
+        var applyBtn = mxUtils.button(mxResources.get('save', ['']), function()
         {
             try
             {

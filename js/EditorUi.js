@@ -6,6 +6,15 @@
  */
 EditorUi = function(editor, container, lightbox, interfaceParams)
 {
+	//传入参数
+    this.interfaceParams = interfaceParams;
+    this.interfaceParams.type = this.interfaceParams.type || 'model';
+    this.interfaceParams.operator = this.interfaceParams.operator || 'new';
+    this.interfaceParams.model = this.interfaceParams.model || 'editor';
+    this.interfaceParams.designLibraryId = this.interfaceParams.designLibraryId || '';		//产品线id
+    this.interfaceParams.id = this.interfaceParams.id || '';		//图形id
+    this.interfaceParams.author = this.interfaceParams.author || '';	//用户标示
+
 	//新增属性名称的序号
 	this.attributeNameIndex = 1;
 
@@ -905,7 +914,7 @@ EditorUi = function(editor, container, lightbox, interfaceParams)
 
    	// Resets UI, updates action and menu states
    	this.editor.resetGraph();
-   	this.interfaceParams = interfaceParams;
+
    	this.init();
    	this.open();
 };
@@ -3317,7 +3326,7 @@ EditorUi.prototype.save = function(name)
 EditorUi.prototype.getModelJsonString = function()
 {
     var graph = this.editor.graph;
-    graph.selectAll(null, true)
+    graph.selectAll(null, true);
     if (!graph.isSelectionEmpty()) {
         //获取自定义的属性
         var ret = {};
@@ -3374,8 +3383,9 @@ EditorUi.prototype.getModelJsonString = function()
 
         // graph.getModel().beginUpdate();
         //组合
-		var group = graph.groupCells(null, 0);
+        var group = graph.groupCells(null, 0);
         graph.setSelectionCell(group);
+
         // var cells = graph.getSelectionCells();
         // graph.setCellStyles('strokeColor', '#CCCCCC', cells);
         // graph.setCellStyles('dashed', '1', cells);
@@ -3506,8 +3516,10 @@ EditorUi.prototype.saveDB = function(name, collection, action)
                     this.editor.setModified(false);
                     this.editor.setFilename(name);
                     this.updateDocumentTitle();
-                    // this.interfaceParams.operator = 'edit';
+                    this.interfaceParams.operator = 'edit';
+
 					if (this.interfaceParams.type == 'model') this.showModel(params,outValue);
+
                 }
                 else {
                     mxUtils.alert(result.data.msg);
