@@ -25,7 +25,9 @@ Actions.prototype.init = function()
 	};
 
 	// File actions
+
 	this.addAction('new...', function() { window.open(ui.getUrl()); },null,null,null,this.editorUi.interfaceParams.type);
+
     this.addAction('open...', function()
 	{
 		window.openNew = true;

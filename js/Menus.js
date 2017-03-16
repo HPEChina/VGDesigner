@@ -426,6 +426,7 @@ Menus.prototype.init = function()
 
 		this.addMenuItems(menu, ['-', 'fitWindow', 'fitPageWidth', 'fitPage', 'fitTwoPages', '-', 'customZoom'], parent);
 	})));
+
 	this.put('file', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
         // this.addMenuItems(menu, ['new', 'open', '-', 'save', 'saveAs', '-', 'import', 'export', '-', 'pageSetup', 'print'], parent);
