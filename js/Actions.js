@@ -25,9 +25,9 @@ Actions.prototype.init = function()
 	};
 
 	// File actions
-	//this.addAction('new...', function() { window.open(ui.getUrl()); });
-    this.addAction('newViewer', function() { window.open(ui.getUrl()); });
-    this.addAction('newModel', function() { window.open(ui.getUrl()); });
+
+	this.addAction('new...', function() { window.open(ui.getUrl()); },null,null,null,this.editorUi.interfaceParams.type);
+
     this.addAction('open...', function()
 	{
 		window.openNew = true;
@@ -70,7 +70,7 @@ Actions.prototype.init = function()
 			window.openFile = null;
 		});
 	}).isEnabled = isGraphEnabled;
-	this.addAction('save', function() { ui.saveFile(false); }, null, null, 'Ctrl+S').isEnabled = isGraphEnabled;
+	this.addAction('save', function() { ui.saveFile(false); }, null, null, 'Ctrl+S', this.editorUi.interfaceParams.type).isEnabled = isGraphEnabled;
 	this.addAction('saveAs...', function() { ui.saveFile(true); }, null, null, 'Ctrl+Shift+S').isEnabled = isGraphEnabled;
 	this.addAction('export...', function() { ui.showDialog(new ExportDialog(ui).container, 300, 210, true, true); });
 	this.addAction('editDiagramXML', function()
@@ -942,14 +942,34 @@ Actions.prototype.init = function()
 	});
 	this.addAction('collapsible', function()
 	{
-		var state = graph.view.getState(graph.getSelectionCell());
+		var select = graph.getSelectionCell();
+		var state = graph.view.getState(select);
 		var value = '1';
 		
 		if (state != null && graph.getFoldingImage(state) != null)
 		{
 			value = '0';	
 		}
-		
+
+		// Collapsible enabled: set group.x(y)-10, group.width(height)+10,
+		// and set group.children.geometry.x(y)+10
+		// Collapsible disabled: restore original coordinates and dimensions
+		var geo = select.geometry;
+		var chd = select.children;
+		var offset = 20;
+		if(value == '1'){
+			geo.x -= offset, geo.y -= offset, geo.width += offset, geo.height += offset;
+			for (var i in chd){
+				chd[i].geometry.x += offset, chd[i].geometry.y += offset;
+			}
+		}
+		else {
+            geo.x += offset, geo.y += offset, geo.width -= offset, geo.height -= offset;
+            for (var i in chd){
+                chd[i].geometry.x -= offset, chd[i].geometry.y -= offset;
+            }
+		}
+
 		graph.setCellStyles('collapsible', value);
 		ui.fireEvent(new mxEventObject('styleChanged', 'keys', ['collapsible'],
 				'values', [value], 'cells', graph.getSelectionCells()));
@@ -1237,20 +1257,32 @@ Actions.prototype.init = function()
 /**
  * Registers the given action under the given name.
  */
-Actions.prototype.addAction = function(key, funct, enabled, iconCls, shortcut)
+Actions.prototype.addAction = function(key, funct, enabled, iconCls, shortcut, params)
 {
 	var title;
-	
+
 	if (key.substring(key.length - 3) == '...')
 	{
 		key = key.substring(0, key.length - 3);
-		title = mxResources.get(key) + '...';
+		if(params != null){
+            title = mxResources.get(key, [params])　+ '...';
+		}
+		else{
+            title = mxResources.get(key)　+ '...';
+		}
+
 	}
 	else
 	{
-		title = mxResources.get(key);
+        if(params != null) {
+            title = mxResources.get(key, [params]);
+        }
+        else
+		{
+            title = mxResources.get(key);
+		}
 	}
-	
+
 	return this.put(key, new Action(title, funct, enabled, iconCls, shortcut));
 };
 
