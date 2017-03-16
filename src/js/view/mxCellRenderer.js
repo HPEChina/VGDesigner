@@ -1229,12 +1229,19 @@ mxCellRenderer.prototype.getControlBounds = function(state, w, h)
 		var s = state.view.scale;
 		var cx = state.getCenterX();
 		var cy = state.getCenterY();
-	
+        var collapseFlag = state.view.graph.isCellCollapsed(state.cell);
 		if (!state.view.graph.getModel().isEdge(state.cell))
 		{
-			cx = state.x + w * s;
-			cy = state.y + h * s;
-			
+
+			if(!collapseFlag){
+                cx = state.x + w * s;
+                cy = state.y + h * s;
+			}
+			else {
+                cx = state.x;
+                cy = state.y;
+			}
+
 			if (state.shape != null)
 			{
 				// TODO: Factor out common code
@@ -1267,10 +1274,24 @@ mxCellRenderer.prototype.getControlBounds = function(state, w, h)
 				}
 			}
 		}
-		
-		return (state.view.graph.getModel().isEdge(state.cell)) ? 
-			new mxRectangle(Math.round(cx - w / 2 * s), Math.round(cy - h / 2 * s), Math.round(w * s), Math.round(h * s))
-			: new mxRectangle(Math.round(cx - w / 2 * s), Math.round(cy - h / 2 * s), Math.round(w * s), Math.round(h * s));
+
+        if(!collapseFlag) {
+			cx = Math.round(cx - w / 2 * s);
+			cy = Math.round(cy - h / 2 * s);
+			w = Math.round(w * s);
+			h = Math.round(h * s);
+		}
+		else {
+            cx = Math.round(cx);
+            cy = Math.round(cy);
+            w = Math.round(w * s);
+            h = Math.round(h * s);
+		}
+        return (state.view.graph.getModel().isEdge(state.cell)) ?
+            new mxRectangle(cx, cy, w, h) : new mxRectangle(cx, cy, w, h);
+		// return (state.view.graph.getModel().isEdge(state.cell)) ?
+		// 	new mxRectangle(Math.round(cx - w / 2 * s), Math.round(cy - h / 2 * s), Math.round(w * s), Math.round(h * s))
+		// 	: new mxRectangle(Math.round(cx - w / 2 * s), Math.round(cy - h / 2 * s), Math.round(w * s), Math.round(h * s));
 	}
 	
 	return null;

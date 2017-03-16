@@ -20,7 +20,7 @@ Menus = function(editorUi)
 /**
  * Sets the default font family.
  */
-Menus.prototype.defaultFont = '微软雅黑';
+Menus.prototype.defaultFont = 'Verdana';
 
 /**
  * Sets the default font size.
@@ -36,7 +36,7 @@ Menus.prototype.defaultMenuItems = ['file', 'edit', 'view', 'arrange', 'extras']
 /**
  * Sets the default font family array.
  */
-Menus.prototype.defaultFonts = ['微软雅黑','黑体','Verdana', 'Helvetica', 'Times New Roman', 'Garamond', 'Comic Sans MS',
+Menus.prototype.defaultFonts = ['Verdana', 'Helvetica', 'Times New Roman', 'Garamond', 'Comic Sans MS',
            		             'Courier New', 'Georgia', 'Lucida Console', 'Tahoma'];
 
 /**
@@ -426,15 +426,10 @@ Menus.prototype.init = function()
 
 		this.addMenuItems(menu, ['-', 'fitWindow', 'fitPageWidth', 'fitPage', 'fitTwoPages', '-', 'customZoom'], parent);
 	})));
-    this.put('new', new Menu(mxUtils.bind(this, function(menu, parent)
-    {
-        this.addMenuItems(menu, ['newViewer', 'newComponent'], parent);
-    })));
 	this.put('file', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
-        this.addSubmenu('new', menu, parent);
-        this.addMenuItems(menu, ['open', '-', 'save', 'saveAs', '-', 'import', 'export', '-', 'pageSetup', 'print'], parent);
-		//this.addMenuItems(menu, ['new', 'open', '-', 'save', 'saveAs', '-', 'import', 'export', '-', 'pageSetup', 'print'], parent);
+        // this.addMenuItems(menu, ['new', 'open', '-', 'save', 'saveAs', '-', 'import', 'export', '-', 'pageSetup', 'print'], parent);
+		this.addMenuItems(menu, ['new', '-', 'save', '-', 'import', 'export', '-', 'pageSetup', 'print'], parent);
 	})));
 	this.put('edit', new Menu(mxUtils.bind(this, function(menu, parent)
 	{

@@ -2236,7 +2236,7 @@ TextFormatPanel.prototype.addFont = function(container)
 	colorPanel.style.paddingTop = '6px';
 	colorPanel.style.paddingBottom = '6px';
 
-	var fontMenu = this.editorUi.toolbar.addMenu('微软雅黑', mxResources.get('fontFamily'), true, 'fontFamily', stylePanel);
+	var fontMenu = this.editorUi.toolbar.addMenu('Verdana', mxResources.get('fontFamily'), true, 'fontFamily', stylePanel);
 	fontMenu.style.color = 'rgb(112, 112, 112)';
 	fontMenu.style.whiteSpace = 'nowrap';
 	fontMenu.style.overflow = 'hidden';
@@ -4974,7 +4974,7 @@ var AttributePanel = function(format, editorUi, container, cell)
         obj.setAttribute('label', value || '');
 
         //如果新建图形，则object(id==0)设置默认初始属性
-        if(editorUi.interfaceOperator == 'new' && cell.getId() == 0)
+        if(editorUi.interfaceParams.operator == 'new' && editorUi.interfaceParams.type == 'model' && cell.getId() == 0)
         {
         	for(var o in editorUi.initAttributes){
                 obj.setAttribute(o,  JSON.stringify(editorUi.initAttributes[o]));
@@ -5033,6 +5033,7 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
     var names = [];
     var arrAttr = [];
     var count = 0;
+    var currentName;
 
     //删除编辑表格tr
     function removeEditTr()
@@ -5048,14 +5049,18 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
     //检测数组中是否有重复值
 	function checkArrayIfDuplicateValues(arr){
         var narr = arr.sort();
+        var ret = {};
+        ret.status = false;
         for(var i in arr)
         {
             if (narr[i] == narr[parseInt(i) + 1])
             {
-                return narr[i];
+            	ret.status = true;
+            	ret.data = narr[i];
+                return ret;
             }
         }
-        return false;
+        return ret;
     };
 
 	//保存属性到cell的object, 传入index参数则更新arrAttr, 不传入index参数不需要更新arrAttr(比如删除某个属性)
@@ -5067,18 +5072,19 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
         	var name = ele.name.value;
         	if (name == '')
         	{
-        		window.alert('属性名称不能为空');
+        		window.alert(mxResources.get('propertyNameIsEmpty'));
         		return false;
 			}
 			for (var i in allNames)
 			{
                 if (arrAttr[index].name == allNames[i]){
 					allNames[i] = name;
-                    var ret = checkArrayIfDuplicateValues(allNames);
-                    if(ret)
+					var tmp = mxUtils.clone(allNames);
+                    var ret = checkArrayIfDuplicateValues(tmp);
+                    if(ret.status)
                     {
                         allNames[i] = arrAttr[index].name;
-                        window.alert('属性名称重复: \'' + ret +'\'');
+                        window.alert(mxResources.get('duplicateName') + ': "' + ret.data +'"');
                         return false;
                     }
 					break;
@@ -5131,17 +5137,17 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
         removeAttr.style.cursor = 'pointer';
         removeAttr.style.marginLeft = '6px';
         removeAttr.appendChild(img);
-
-        var removeAttrFn = (function(name)
+        var removeAttrFn = (function(ele)
         {
             return function()
             {
+            	var name = ele.childNodes[0].innerText;
                 var count = 0;
                 for (var j = 0; j < names.length; j++)
                 {
                     if (names[j] == name)
                     {
-                    	if (!window.confirm('确定要删除属性:\'' + name + '\'吗?')){
+                    	if (!window.confirm(mxResources.get('sureToDelete', ['"' + name + '"']) + '?')){
                     		break;
 						}
                         delete arrAttr[j];
@@ -5162,7 +5168,7 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
                     }
                 }
             };
-        })(name);
+        })(ele);
 
         mxEvent.addListener(removeAttr, 'click', removeAttrFn);
 
@@ -5239,7 +5245,7 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
         var ele = form.addListAttributeElements(data);
         arrAttr[index] = attr;
         addEditButton(ele, attr);
-        if(type != 'intrinsic') {
+        if(type != 'intrinsic' || ( type == 'intrinsic' &&  ui.interfaceParams.type == 'model') ) {
             addRemoveButton(ele, name);
         }
 	};
@@ -5309,14 +5315,14 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
 
         var br = document.createElement('br');
 
-        var editElement = [];
+        var editElement = {};
         var cancelBtn = mxUtils.button(mxResources.get('cancel'), function()
         {
             removeEditTr();
         });
         cancelBtn.className = 'geBtn';
 
-        var applyBtn = mxUtils.button(mxResources.get('save'), function()
+        var applyBtn = mxUtils.button(mxResources.get('save', ['']), function()
         {
             try
             {
@@ -5479,7 +5485,12 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
     };
 
     //固有属性不允许添加和删除， 可以修改编辑
-    if(cell.getId() != 0 || type != 'intrinsic') {
+    if(type != 'intrinsic' || cell.getCategory() == 'general' ||
+		(type == 'intrinsic' &&
+		(ui.interfaceParams.type == 'model' ||
+		(ui.interfaceParams.type != 'model' && cell.getId() == 0)
+		)))
+    {
 		var newProp = document.createElement('div');
 		newProp.style.whiteSpace = 'nowrap';
 		newProp.style.marginTop = '6px';
@@ -5503,8 +5514,8 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
 
         });
 
-        addBtn.style.marginLeft = '35%';
-        addBtn.style.width = '30%';
+        addBtn.style.marginLeft = '19%';
+        addBtn.style.width = '62%';
         newProp.appendChild(addBtn);
 
     }

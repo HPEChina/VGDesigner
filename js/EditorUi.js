@@ -6,6 +6,15 @@
  */
 EditorUi = function(editor, container, lightbox, interfaceParams)
 {
+	//传入参数
+    this.interfaceParams = interfaceParams;
+    this.interfaceParams.type = this.interfaceParams.type || 'model';
+    this.interfaceParams.operator = this.interfaceParams.operator || 'new';
+    this.interfaceParams.model = this.interfaceParams.model || 'editor';
+    this.interfaceParams.designLibraryId = this.interfaceParams.designLibraryId || '';		//产品线id
+    this.interfaceParams.id = this.interfaceParams.id || '';		//图形id
+    this.interfaceParams.author = this.interfaceParams.author || '';	//用户标示
+
 	//新增属性名称的序号
 	this.attributeNameIndex = 1;
 
@@ -905,7 +914,7 @@ EditorUi = function(editor, container, lightbox, interfaceParams)
 
    	// Resets UI, updates action and menu states
    	this.editor.resetGraph();
-   	this.init(interfaceParams);
+   	this.init();
    	this.open();
 };
 
@@ -925,7 +934,8 @@ EditorUi.prototype.splitSize = (mxClient.IS_TOUCH || mxClient.IS_POINTER) ? 12 :
 /**
  * Specifies the height of the menubar. Default is 34.
  */
-EditorUi.prototype.menubarHeight = 30;
+// PPPPP
+EditorUi.prototype.menubarHeight = 34;
 
 /**
  * Specifies the width of the format panel should be enabled. Default is true.
@@ -994,41 +1004,23 @@ EditorUi.prototype.attributeLogic = ['none', 'or', 'and'];
 
 /**
  * 接口入参
- * 图形的操作：new(新建), edit(编辑)
+ *
+ * type	       建模类型: model（模型）/topo（拓扑环境）/physic（物理环境）
+ * operator	   操作: new（新建）/edit（编辑）
+ * designLibraryId	产品线ID
+ * user	          用户标识
+ * id	       模型ID,仅在编辑时需要
  * @type {string}
  */
-EditorUi.prototype.interfaceOperator = 'new';
+EditorUi.prototype.interfaceParams = null;
 
-/**
- * 接口入参
- * Specifies the type of the ui.
- * 'model':模型
- * 'topology':逻辑环境(拓扑图)
- * 'physics':物理环境
- */
-EditorUi.prototype.interfaceType = 'model';
-
-/**
- * 环境图形UUID
- * @type {string}
- */
-EditorUi.prototype.environmentUUID = '';
-
-/**
- * 产品线ID
- */
-EditorUi.prototype.productLineId = '';
 
 /**
  * Installs the listeners to update the action states.
  */
-EditorUi.prototype.init = function(interfaceParams)
+EditorUi.prototype.init = function()
 {
     this.setInitAttributes();
-    this.interfaceOperator = interfaceParams.operator || this.interfaceOperator;
-    this.interfaceType = interfaceParams.type || this.interfaceType;
-	this.environmentUUID = interfaceParams.UUID || mxUtils.createUUID(32);
-	this.productLineId = interfaceParams.pId || this.productLineId;
 
 	/**
 	 * Keypress starts immediate editing on selection cell
@@ -1136,31 +1128,31 @@ EditorUi.prototype.defaultAttributesStructure = function()
  */
 EditorUi.prototype.setInitAttributes = function()
 {
-    var type = this.interfaceType;
+    var type = this.interfaceParams.type;
 	var arr = [];
     if(type == 'model') {
         arr['intrinsic'] = [
-            { "name": "name", "description": "名称", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "category", "description": "分类", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "type", "description": "单元类型", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] }
+            { "name": "name", "description": "name", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
+            { "name": "category", "description": "category", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
+            { "name": "type", "description": "type", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] }
         ];
         arr['extended'] = [];
         arr['userFunc'] = [];
     }
     else if(type == 'topology') {
         arr['intrinsic'] = [
-            { "name": "name", "description": "名称", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "category", "description": "分类", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "type", "description": "单元类型", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] }
+            { "name": "name", "description": "name", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
+            { "name": "category", "description": "category", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
+            { "name": "type", "description": "type", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] }
         ];
         arr['extended'] = [];
         arr['userFunc'] = [];
     }
     else if(type == 'environment') {
         arr['intrinsic'] = [
-            { "name": "name", "description": "名称", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "category", "description": "分类", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "type", "description": "单元类型", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] }
+            { "name": "name", "description": "name", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
+            { "name": "category", "description": "category", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
+            { "name": "type", "description": "name", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] }
         ];
         arr['extended'] = [];
         arr['userFunc'] = [];
@@ -2660,13 +2652,13 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 		this.menubarContainer.style.height = this.menubarHeight + 'px';
 		tmp += this.menubarHeight;
 	}
-	
-	if (this.toolbar != null)
+	// PPPPP
+	/*if (this.toolbar != null)
 	{
 		this.toolbarContainer.style.top = this.menubarHeight + 'px';
 		this.toolbarContainer.style.height = this.toolbarHeight + 'px';
 		tmp += this.toolbarHeight;
-	}
+	}*/
 	
 	if (tmp > 0 && !mxClient.IS_QUIRKS)
 	{
@@ -2778,7 +2770,8 @@ EditorUi.prototype.createDivs = function()
 	this.menubarContainer.style.top = '0px';
 	this.menubarContainer.style.left = '0px';
 	this.menubarContainer.style.right = '0px';
-	this.toolbarContainer.style.left = '0px';
+	// PPPPP
+	this.toolbarContainer.style.left = '30%';
 	this.toolbarContainer.style.right = '0px';
 	this.sidebarContainer.style.left = '0px';
 	this.formatContainer.style.right = '0px';
@@ -3227,12 +3220,12 @@ EditorUi.prototype.extractGraphModelFromEvent = function(evt)
  */
 EditorUi.prototype.saveFile = function(forceDialog)
 {
-	var cellection = (this.interfaceType == 'model') ? MODEL_COLLECTION : VIEWER_COLLECTION;
+	var cellection = (this.interfaceParams.type == 'model') ? MODEL_COLLECTION : VIEWER_COLLECTION;
 
-	if ((!forceDialog && this.editor.filename != null) || this.interfaceType == 'model')
+	if ((!forceDialog && this.editor.filename != null) || this.interfaceParams.type == 'model')
 	{
 		var action = UPDATE_ACTION;
-		if(this.interfaceOperator == 'new')
+		if(this.interfaceParams.operator != null &&	this.interfaceParams.operator == 'new')
 		{
             action = SAVE_ACTION;
 		}
@@ -3324,7 +3317,7 @@ EditorUi.prototype.save = function(name)
 EditorUi.prototype.getModelJsonString = function()
 {
     var graph = this.editor.graph;
-    graph.selectAll(null, true)
+    graph.selectAll(null, true);
     if (!graph.isSelectionEmpty()) {
         //获取自定义的属性
         var ret = {};
@@ -3338,7 +3331,7 @@ EditorUi.prototype.getModelJsonString = function()
         if(Object.keys(attrs).length == 0)
         {
             ret['statu'] = false;
-            ret['msg'] = '未配置初始属性';
+            ret['msg'] = mxResources.get('initPropertyNotConfig', ['']);
             return ret;
         }
         var attribute = {};
@@ -3364,25 +3357,26 @@ EditorUi.prototype.getModelJsonString = function()
         }
         if(ret['name'] == null || ret['name'] == ''){
             ret['statu'] = false;
-            ret['msg'] = '初始属性中未配置\'名称\'';
+            ret['msg'] = mxResources.get('initPropertyNotConfig', ['"name"']);
             return ret;
         }
         if(ret['category'] == null || ret['category'] == ''){
             ret['statu'] = false;
-            ret['msg'] = '初始属性中未配置\'模型分类\'';
+            ret['msg'] = mxResources.get('initPropertyNotConfig', ['"category"']);
             return ret;
         }
         if(ret['type'] == null || ret['type'] == ''){
             ret['statu'] = false;
-            ret['msg'] = '初始属性中未配置\'单元类型\'';
+            ret['msg'] = mxResources.get('initPropertyNotConfig', ['"type"']);
             return ret;
         }
 		ret['attribute'] = attribute;
 
         // graph.getModel().beginUpdate();
         //组合
-		var group = graph.groupCells(null, 0);
+        var group = graph.groupCells(null, 0);
         graph.setSelectionCell(group);
+
         // var cells = graph.getSelectionCells();
         // graph.setCellStyles('strokeColor', '#CCCCCC', cells);
         // graph.setCellStyles('dashed', '1', cells);
@@ -3416,7 +3410,7 @@ EditorUi.prototype.getModelJsonString = function()
     else {
         var ret = [];
 		ret['statu'] = false;
-		ret['msg'] = '空画面不需要保存';
+		ret['msg'] = mxResources.get('drawingEmpty');
 		return ret;
     }
 
@@ -3436,8 +3430,8 @@ EditorUi.prototype.saveDB = function(name, collection, action)
         {
             this.editor.graph.stopEditing();
         }
-        var url = BASE_URL + collection + action;
-        if (this.interfaceType == 'model')
+        var url = BASE_URL + collection + action, params;
+        if (this.interfaceParams.type == 'model')
 		{
 
             var res = this.getModelJsonString();
@@ -3453,7 +3447,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             var description = res['description'];
             var codetype = 'xml';
 
-            var params = 'filename=' + name;
+            params = 'filename=' + name;
             params += '&codetype=' + codetype;
             params += '&data=' + encodeURIComponent(outValue);
             params += '&class=' + category;
@@ -3466,10 +3460,10 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             params += '&property.title=' + 'vertex';
             params += '&property.type=' + 'vertex';
             params += '&attribute=' + JSON.stringify(res['attribute']);
-            if(this.interfaceOperator == 'new') {
+            params += '&uuid=' + this.interfaceParams.id;
+            params += '&designLibraryId=' + this.interfaceParams.designLibraryId;
+            params += '&author=' + this.interfaceParams.author;
 
-                params += '&uuid=' + ((this.environmentUUID == '') ? mxUtils.createUUID(32) : this.environmentUUID);
-            }
 		}
 		else
 		{
@@ -3477,8 +3471,10 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             var outValue = mxUtils.getXml(graphXml);
             var xmlDoc = mxUtils.parseXml(outValue);
             outValue = CodeTranslator.xml2json(xmlDoc);
-            // var params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue) +'&uuid=' + ((this.environmentUUID == '') ? mxUtils.createUUID(32) : this.environmentUUID);;
-            var params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue);
+            params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue);
+            params += '&uuid=' + this.interfaceParams.id;
+            params += '&designLibraryId=' + this.interfaceParams.designLibraryId;
+            params += '&author=' + this.interfaceParams.author;
 		}
 
 
@@ -3492,7 +3488,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
                     this.editor.setModified(false);
                     this.editor.setFilename(name);
                     this.updateDocumentTitle();
-                    this.interfaceOperator = 'edit';
+                    this.interfaceParams.operator = 'edit';
                 }
                 else {
                     mxUtils.alert(result.data.msg);

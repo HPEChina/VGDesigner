@@ -948,19 +948,19 @@ Sidebar.prototype.addGeneralPalette = function(modelData, id, expand)
         var attr = modelData[i].attribute;
 
         if(prop.type.toLowerCase() == 'edge') {
-            fns.push(this.createEdgeTemplateEntry(attr, prop.style, prop.width, prop.height, prop.value, prop.title));
+            fns.push(this.createEdgeTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title));
         }//update by wang,jianhui
         else if (modelData[i].data) {
-            fns.push(this.createVertexTemplateFromXML(modelData[i].data, modelData[i].name));
+            fns.push(this.createVertexTemplateFromXML(modelData[i].data, modelData[i].name, id));
         }
         else {
-            fns.push(this.createVertexTemplateEntry(attr, prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
+            fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
         }
     }//update by wang,jianhui
     this.addPaletteFunctions(id, this.modelClass[id], (expand != null) ? expand : true, fns);
 };
 
-Sidebar.prototype.createVertexTemplateFromXML = function(data, name) {
+Sidebar.prototype.createVertexTemplateFromXML = function(data, name, id) {
     return function () {
         var img = JSON.parse(data);
         var doc = mxUtils.parseXml(img.xml);
@@ -973,6 +973,7 @@ Sidebar.prototype.createVertexTemplateFromXML = function(data, name) {
         for (var j = 0; j < model.getChildCount(parent); j++) {
             cells.push(model.getChildAt(parent, j));
         }
+        cells[0].setCategory(id);
         if (cells.length > 0) {
             return this.createVertexTemplateFromCells(cells, img.w, img.h, name, true, false, false)
         }
@@ -994,10 +995,19 @@ Sidebar.prototype.getModelClassRecords = function(url, params) {
                 this.modelClass.length++;
                 queryArr.push('d.class=="' + result.data[i].name + '"')
 			}
+			var tmp = queryArr.join(' || ');
+            tmp = '(' + tmp + ') ';
+			if(this.editorUi.interfaceParams.designLibraryId != ''){
+                tmp += ' && d.designLibraryId=="' + this.editorUi.interfaceParams.designLibraryId + '"';
+			}
+            if(this.editorUi.interfaceParams.author != ''){
+                tmp += ' && d.author=="' + this.editorUi.interfaceParams.author + '"';
+            }
+            tmp += ' || d.class=="general"';
 			if(this.modelClass.length > 0) {
-            	//获取model记录
+            	//Get model records
 				var params;
-				queryArr.length > 0 ? params = 'query=' + encodeURIComponent(queryArr.join('||')) : '';
+				queryArr.length > 0 ? params = 'query=' + encodeURIComponent(tmp) : '';
                 var url = BASE_URL + MODEL_COLLECTION + GET_URL;
 				this.getModelAndAddPalette(url, params);
 			}
@@ -3224,23 +3234,24 @@ Sidebar.prototype.addClickHandler = function(elt, ds, cells)
 /**
  * Creates a drop handler for inserting the given cells.
  */
-Sidebar.prototype.createVertexTemplateEntry = function(attr, style, width, height, value, title, showLabel, showTitle, tags)
+Sidebar.prototype.createVertexTemplateEntry = function(attr, id, style, width, height, value, title, showLabel, showTitle, tags)
 {
 	tags = (tags != null && tags.length > 0) ? tags : title.toLowerCase();
 	
 	return this.addEntry(tags, mxUtils.bind(this, function()
  	{
- 		return this.createVertexTemplate(attr, style, width, height, value, title, showLabel, showTitle);
+ 		return this.createVertexTemplate(attr, id, style, width, height, value, title, showLabel, showTitle);
  	}));
 };
 
 /**
  * Creates a drop handler for inserting the given cells.
  */
-Sidebar.prototype.createVertexTemplate = function(attr, style, width, height, value, title, showLabel, showTitle, allowCellsInserted)
+Sidebar.prototype.createVertexTemplate = function(attr, id, style, width, height, value, title, showLabel, showTitle, allowCellsInserted)
 {
 	var cells = [new mxCell((value != null) ? value : '', new mxGeometry(0, 0, width, height), style)];
 	cells[0].vertex = true;
+	cells[0].setCategory(id);
 
 	//给CELL添加object，属性:intrinsic\extended\userFunc
 	var doc = mxUtils.createXmlDocument();
@@ -3267,26 +3278,27 @@ Sidebar.prototype.createVertexTemplateFromCells = function(cells, width, height,
 /**
  * 
  */
-Sidebar.prototype.createEdgeTemplateEntry = function(attr, style, width, height, value, title, showLabel, tags, allowCellsInserted)
+Sidebar.prototype.createEdgeTemplateEntry = function(attr, id, style, width, height, value, title, showLabel, tags, allowCellsInserted)
 {
 	tags = (tags != null && tags.length > 0) ? tags : title.toLowerCase();
 	
  	return this.addEntry(tags, mxUtils.bind(this, function()
  	{
- 		return this.createEdgeTemplate(attr, style, width, height, value, title, showLabel, allowCellsInserted);
+ 		return this.createEdgeTemplate(attr, id, style, width, height, value, title, showLabel, allowCellsInserted);
  	}));
 };
 
 /**
  * Creates a drop handler for inserting the given cells.
  */
-Sidebar.prototype.createEdgeTemplate = function(attr, style, width, height, value, title, showLabel, allowCellsInserted)
+Sidebar.prototype.createEdgeTemplate = function(attr, id, style, width, height, value, title, showLabel, allowCellsInserted)
 {
 	var cell = new mxCell((value != null) ? value : '', new mxGeometry(0, 0, width, height), style);
 	cell.geometry.setTerminalPoint(new mxPoint(0, height), true);
 	cell.geometry.setTerminalPoint(new mxPoint(width, 0), false);
 	cell.geometry.relative = true;
 	cell.edge = true;
+    cell.setCategory(id);
 
     //给CELL添加object，属性:intrinsic\extended\userFunc
     var doc = mxUtils.createXmlDocument();
@@ -3315,7 +3327,7 @@ Sidebar.prototype.createEdgeTemplateFromCells = function(cells, width, height, t
  */
 Sidebar.prototype.addPaletteFunctions = function(id, title, expanded, fns)
 {
-	this.addPalette(id, title, expanded, mxUtils.bind(this, function(content)
+	this.addPalette(id, id, expanded, mxUtils.bind(this, function(content)
 	{
 		for (var i = 0; i < fns.length; i++)
 		{
