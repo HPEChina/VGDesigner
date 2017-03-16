@@ -2244,7 +2244,7 @@ TextFormatPanel.prototype.addFont = function(container)
     colorPanel.style.paddingTop = '6px';
     colorPanel.style.paddingBottom = '6px';
 
-    var fontMenu = this.editorUi.toolbar.addMenu('微软雅黑', mxResources.get('fontFamily'), true, 'fontFamily', stylePanel);
+    var fontMenu = this.editorUi.toolbar.addMenu('Verdana', mxResources.get('fontFamily'), true, 'fontFamily', stylePanel);
     fontMenu.style.color = 'rgb(112, 112, 112)';
     fontMenu.style.whiteSpace = 'nowrap';
     fontMenu.style.overflow = 'hidden';

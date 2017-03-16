@@ -105,6 +105,7 @@ mxCell.prototype.geometry = null;
  */
 mxCell.prototype.style = null;
 
+mxCell.prototype.category = null;
 /**
  * Variable: vertex
  *
@@ -285,6 +286,15 @@ mxCell.prototype.setStyle = function(style)
 	this.style = style;
 };
 
+mxCell.prototype.getCategory = function()
+{
+    return this.category;
+};
+
+mxCell.prototype.setCategory = function(category)
+{
+    this.category = category;
+};
 /**
  * Function: isVertex
  *

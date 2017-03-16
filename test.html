@@ -3,37 +3,43 @@
 <html>
 <head>
     <title>GraphEditor</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="./styles/test.css">
     <link rel="stylesheet" type="text/css" href="styles/grapheditor.css">
     <script type="text/javascript" src="js/VGDesigner.js"></script>
-
 </head>
 <body>
-	<div class="top">
-        <div class="headline">
-            <a href="#">华为2012实验室环境建模可视化编辑器</a>
-        </div>
-	</div>
-	<div class="left">
-        <ul id="nav-bar">
-            <a id="opt1">
-                <li class="level-one" id="d1"><p>建模前台</p></li>
-            </a>
-            <a id="opt2">
-                <li class="level-one" id="d2"><p>建模后台</p></li>
-            </a>
-        </ul>
-	</div>
-    <div id="demo1" class="geEditor" ></div>
-    <script type="text/javascript">
-        (function(){
-            var vgDesignerDiv = document.getElementsByClassName("geEditor")[0];
-            var vgDesigner = new VGDesigner('editor', vgDesignerDiv);
-            window.onload = function(){ vgDesigner.init(); };
-        })()
-    </script>
+<div class="top">
+    <div class="headline">
+        华为2012实验室环境建模可视化编辑器
+</div>
+</div>
+<div class="left">
+    <ul id="nav-bar">
+        <a id="opt1" href="editor.html" target="demo1">
+            <li class="level-one" id="d1" ><p>editor</p ></li>
+        </a>
+        <a id="opt2" >
+            <li class="level-one" id="d2" onclick="change2()"><p>clear</p ></li>
+        </a>
+    </ul>
+</div>
+<!--<div id="demo1" class="geEditor right" >-->
+<!--</div>-->
+<iframe frameborder="0" name="demo1" class="geEditor right"></iframe>
+<!--<script>
+    var mxGraphDiv = document.getElementsByClassName("geEditor")[0];
+    (function(){
+        var vgd = new VGDesigner('editor');
+        window.onload = function(){ vgd.init(); };
+    })()
+</script>-->
+<script>
+    change2 = function () {
+        window.frames["demo1"].document.write("");
+    }
+</script>
 
 </body>
 </html>
