@@ -2636,6 +2636,76 @@ var LinkDialog = function(editorUi, initialValue, btnLabel, fn)
 };
 
 /**
+ * Constructs a local image dialog.
+ */
+var LocalImgDialog = function(editorUi, btnLabel, fn)
+{
+	var div = document.createElement('div');
+	mxUtils.write(div, mxResources.get('insertLocal') + ':');
+	
+	var inner = document.createElement('div');
+	inner.className = 'geTitle';
+	inner.style.backgroundColor = 'transparent';
+	inner.style.borderColor = 'transparent';
+	inner.style.whiteSpace = 'nowrap';
+	inner.style.textOverflow = 'clip';
+	inner.style.cursor = 'default';
+	
+	if (!mxClient.IS_VML)
+	{
+		inner.style.paddingRight = '20px';
+	}
+	
+	var imgInput = document.createElement('input');
+	imgInput.setAttribute('type', 'file');
+	imgInput.setAttribute('accept', 'image/png,image/jpeg');
+	imgInput.style.marginTop = '6px';
+	
+	inner.appendChild(imgInput);
+	div.appendChild(inner);
+	
+	var btns = document.createElement('div');
+	btns.style.marginTop = '18px';
+	btns.style.textAlign = 'right';
+
+	var cancelBtn = mxUtils.button(mxResources.get('cancel'), function()
+	{
+		editorUi.hideDialog();
+	});
+	cancelBtn.className = 'geBtn';
+	
+	if (editorUi.editor.cancelFirst)
+	{
+		btns.appendChild(cancelBtn);
+	}
+	
+	var mainBtn = mxUtils.button(btnLabel, function()
+	{
+		editorUi.hideDialog();
+		if(imgInput.files.length > 0){
+			var img = new Image();
+			var reader = new FileReader();
+			reader.onload = function(e){
+				img.src = e.target.result;
+				fn(img.src.replace(';base64',''), img.width, img.height);
+			}
+			reader.readAsDataURL(imgInput.files[0]);
+		}
+	});
+	mainBtn.className = 'geBtn gePrimaryBtn';
+	btns.appendChild(mainBtn);
+	
+	if (!editorUi.editor.cancelFirst)
+	{
+		btns.appendChild(cancelBtn);
+	}
+
+	div.appendChild(btns);
+
+	this.container = div;
+};
+
+/**
  * 
  */
 var OutlineWindow = function(editorUi, x, y, w, h)
