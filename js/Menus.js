@@ -389,7 +389,7 @@ Menus.prototype.init = function()
 	}))).isEnabled = isGraphEnabled;
 	this.put('insert', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
-		this.addMenuItems(menu, ['insertLink', 'insertImage'], parent);
+		this.addMenuItems(menu, ['insertLink', 'insertImage', 'insertLocal'], parent);
 	})));
 	this.put('view', new Menu(mxUtils.bind(this, function(menu, parent)
 	{

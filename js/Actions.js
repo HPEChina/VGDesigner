@@ -1097,6 +1097,64 @@ Actions.prototype.init = function()
 			document.execCommand('superscript', false, null);
 		}
 	}), null, null, 'Ctrl+.');
+	var insertImg = function (newValue, w, h) {
+		var graph = editor.graph;
+		// Inserts image into HTML text
+		if (graph.cellEditor.isContentEditing()) {
+			graph.cellEditor.restoreSelection(selectionState);
+			graph.insertImage(newValue, w, h);
+		}
+		else {
+			var cells = graph.getSelectionCells();
+
+			if (newValue != null) {
+				var select = null;
+
+				graph.getModel().beginUpdate();
+				try {
+					// Inserts new cell if no cell is selected
+					if (cells.length == 0) {
+						var pt = graph.getInsertPoint();
+						cells = [graph.insertVertex(graph.getDefaultParent(), null, '', pt.x, pt.y, w, h,
+							'shape=image;verticalLabelPosition=bottom;verticalAlign=top;')];
+						select = cells;
+					}
+
+					graph.setCellStyles(mxConstants.STYLE_IMAGE, newValue, cells);
+
+					// Sets shape only if not already shape with image (label or image)
+					var state = graph.view.getState(cells[0]);
+					var style = (state != null) ? state.style : graph.getCellStyle(cells[0]);
+
+					if (style[mxConstants.STYLE_SHAPE] != 'image' && style[mxConstants.STYLE_SHAPE] != 'label') {
+						graph.setCellStyles(mxConstants.STYLE_SHAPE, 'image', cells);
+					}
+
+					if (graph.getSelectionCount() == 1) {
+						if (w != null && h != null) {
+							var cell = cells[0];
+							var geo = graph.getModel().getGeometry(cell);
+
+							if (geo != null) {
+								geo = geo.clone();
+								geo.width = w;
+								geo.height = h;
+								graph.getModel().setGeometry(cell, geo);
+							}
+						}
+					}
+				}
+				finally {
+					graph.getModel().endUpdate();
+				}
+
+				if (select != null) {
+					graph.setSelectionCells(select);
+					graph.scrollCellToVisible(select[0]);
+				}
+			}
+		}
+	}
 	this.addAction('image...', function()
 	{
 		if (graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent()))
@@ -1112,75 +1170,7 @@ Actions.prototype.init = function()
 	    	
 	    	var selectionState = graph.cellEditor.saveSelection();
 	    	
-	    	ui.showImageDialog(title, value, function(newValue, w, h)
-			{
-	    		// Inserts image into HTML text
-	    		if (graph.cellEditor.isContentEditing())
-	    		{
-	    			graph.cellEditor.restoreSelection(selectionState);
-	    			graph.insertImage(newValue, w, h);
-	    		}
-	    		else
-	    		{
-					var cells = graph.getSelectionCells();
-
-					if (newValue != null)
-					{
-						var select = null;
-						
-						graph.getModel().beginUpdate();
-			        	try
-			        	{
-			        		// Inserts new cell if no cell is selected
-			    			if (cells.length == 0)
-			    			{
-			    				var pt = graph.getInsertPoint();
-			    				cells = [graph.insertVertex(graph.getDefaultParent(), null, '', pt.x, pt.y, w, h,
-			    						'shape=image;verticalLabelPosition=bottom;verticalAlign=top;')];
-			    				select = cells;
-			    			}
-			    			
-			        		graph.setCellStyles(mxConstants.STYLE_IMAGE, newValue, cells);
-			        		
-			        		// Sets shape only if not already shape with image (label or image)
-			        		var state = graph.view.getState(cells[0]);
-			        		var style = (state != null) ? state.style : graph.getCellStyle(cells[0]);
-			        		
-			        		if (style[mxConstants.STYLE_SHAPE] != 'image' && style[mxConstants.STYLE_SHAPE] != 'label')
-			        		{
-			        			graph.setCellStyles(mxConstants.STYLE_SHAPE, 'image', cells);
-			        		}
-				        	
-				        	if (graph.getSelectionCount() == 1)
-				        	{
-					        	if (w != null && h != null)
-					        	{
-					        		var cell = cells[0];
-					        		var geo = graph.getModel().getGeometry(cell);
-					        		
-					        		if (geo != null)
-					        		{
-					        			geo = geo.clone();
-						        		geo.width = w;
-						        		geo.height = h;
-						        		graph.getModel().setGeometry(cell, geo);
-					        		}
-					        	}
-				        	}
-			        	}
-			        	finally
-			        	{
-			        		graph.getModel().endUpdate();
-			        	}
-			        	
-			        	if (select != null)
-			        	{
-			        		graph.setSelectionCells(select);
-			        		graph.scrollCellToVisible(select[0]);
-			        	}
-					}
-	    		}
-			}, graph.cellEditor.isContentEditing(), !graph.cellEditor.isContentEditing());
+	    	ui.showImageDialog(title, value, insertImg, graph.cellEditor.isContentEditing(), !graph.cellEditor.isContentEditing());
 		}
 	}).isEnabled = isGraphEnabled;
 	this.addAction('insertImage', function()
@@ -1189,6 +1179,15 @@ Actions.prototype.init = function()
 		{
 			graph.clearSelection();
 			ui.actions.get('image').funct();
+		}
+	}).isEnabled = isGraphEnabled;
+	this.addAction('insertLocal', function(){
+		if (graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent()))
+		{
+			graph.clearSelection();
+			var dlg = new LocalImgDialog(ui, mxResources.get('insert'), insertImg);
+			
+			ui.showDialog(dlg.container, 420, 90, true, true);
 		}
 	}).isEnabled = isGraphEnabled;
 	action = this.addAction('layers', mxUtils.bind(this, function()
