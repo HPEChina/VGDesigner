@@ -944,6 +944,12 @@ Sidebar.prototype.addGeneralPalette = function(modelData, id, expand)
 {
     var fns = [];
     for(var i in modelData) {
+		if (this.editorUi.interfaceParams.id && this.editorUi.interfaceParams.id == modelData[i].id) {
+			window.opener = {}
+			window.opener.openFile = new OpenFile()
+			window.opener.openFile.setData(JSON.parse(modelData[i].data).xml, modelData[i].filename)
+			this.editorUi.open()
+		}
         var prop = modelData[i].property;
         var attr = modelData[i].attribute;
 
@@ -957,7 +963,7 @@ Sidebar.prototype.addGeneralPalette = function(modelData, id, expand)
             fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
         }
     }//update by wang,jianhui
-    this.addPaletteFunctions(id, this.modelClass[id], (expand != null) ? expand : true, fns);
+    this.addPaletteFunctions(id, this.modelClass[id]||modelData[0].description || modelData[0].class, (expand != null) ? expand : true, fns);
 };
 
 Sidebar.prototype.createVertexTemplateFromXML = function(data, name, id) {
@@ -3341,6 +3347,13 @@ Sidebar.prototype.addPaletteFunctions = function(id, title, expanded, fns)
  */
 Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
 {
+	if (this[id]) {
+		if (!this[id].style.display||this[id].style.display == 'none') {
+			this[id+title].click();
+		}
+		onInit(this[id]);
+		return this[id];
+	}
 	var elt = this.createTitle(title);
 	this.container.appendChild(elt);
 	
@@ -3387,7 +3400,8 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
     {
     	this.palettes[id] = [elt, outer];
     }
-    
+    this[id]=div;
+	this[id+title]=elt;
     return div;
 };
 

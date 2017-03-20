@@ -2115,7 +2115,9 @@ EditorUi.prototype.open = function()
 					this.editor.setGraphXml(doc.documentElement);
 					this.editor.setModified(false);
 					this.editor.undoManager.clear();
-					
+
+					this.editor.graph.selectAll(null, true)
+					this.editor.graph.setSelectionCells(this.editor.graph.ungroupCells());
 					if (filename != null)
 					{
 						this.editor.setFilename(filename);
@@ -3416,6 +3418,25 @@ EditorUi.prototype.getModelJsonString = function()
 
 };
 
+EditorUi.prototype.showModel = function (params,outValue) {
+	var arr = params.split("&"), query = {};
+
+	for (var i = 0; i < arr.length; i++) {
+		var key = arr[i].split("=")[0]
+		var value = arr[i].split("=")[1]
+		var key1 = key.split(".")[0]
+		var key2 = key.split(".")[1]
+		if (key2) {
+			query[key1] ? '' : query[key1] = {}
+			query[key1][key2] = value
+		} else {
+			query[key1] = value;
+		}
+	}
+	query.data = outValue
+	this.sidebar.addGeneralPalette([query], query.class)
+}
+
 /**
  * Insert/update the current graph to arangoDB under the given filename.
  */
@@ -3489,6 +3510,8 @@ EditorUi.prototype.saveDB = function(name, collection, action)
                     this.editor.setFilename(name);
                     this.updateDocumentTitle();
                     this.interfaceParams.operator = 'edit';
+
+					if (this.interfaceParams.type == 'model') this.showModel(params,outValue);
                 }
                 else {
                     mxUtils.alert(result.data.msg);
