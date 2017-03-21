@@ -475,7 +475,7 @@ Editor.prototype.getGraphXml = function(ui, ignoreSelection)
 	}
 
     node.setAttribute('envType', ui.interfaceParams.type);
-    node.setAttribute('uuid', ui.interfaceParams.uuid);
+    node.setAttribute('uuid', ui.interfaceParams.id);
 	if (this.graph.view.translate.x != 0 || this.graph.view.translate.y != 0)
 	{
 		node.setAttribute('dx', Math.round(this.graph.view.translate.x * 100) / 100);

@@ -1043,6 +1043,12 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
 	}
 };
 
+Menus.prototype.createSidebarPopupMenu = function(menu, cell, evt)
+{
+
+	this.addMenuItems(menu, ['edit'], null, evt);
+};
+
 /**
  * Creates the keyboard event handler for the current graph and history.
  */

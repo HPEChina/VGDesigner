@@ -294,6 +294,7 @@ strokeColor=线条色
 style=样式
 subscript=Subscript
 superscript=Superscript
+sureNew=确定要新建？
 sureToDelete=确定要删除 {1}
 table=Table
 targetSpacing=Target Spacing

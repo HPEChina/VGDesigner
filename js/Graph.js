@@ -2100,6 +2100,25 @@ Graph.prototype.getTooltipForCell = function(cell)
 					{
 						tip += mxUtils.htmlEntities(this.getLinkUrl(attrs[i].nodeValue)) + '\n';
 					}
+					else if(attrs[i].nodeName == 'intrinsic' || attrs[i].nodeName == 'extended' || attrs[i].nodeName == 'userFunc')
+					{
+						var data = JSON.parse(attrs[i].nodeValue);
+						if(data.length > 0){
+							tip += attrs[i].nodeName + ':' + '\n';
+							for(var j in data) {
+                                tip += '&nbsp;&nbsp;&nbsp;&nbsp;' + data[j].name;
+								for(var k in data[j].value) {
+									if( data[j].logic[k] == 'none') {
+                                        tip += data[j].operator[k] + data[j].value[k];
+									}
+									else {
+                                        tip += data[j].operator[k] + data[j].value[k] + ' ' + data[j].logic[k] + ' ';
+									}
+								}
+								tip += '\n';
+							}
+						}
+					}
 					else
 					{
 						tip += attrs[i].nodeName + ': ' + mxUtils.htmlEntities(attrs[i].nodeValue) + '\n';
