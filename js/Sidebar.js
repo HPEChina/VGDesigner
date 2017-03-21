@@ -940,24 +940,26 @@ Sidebar.prototype.addSearchPalette = function(expand)
  *   }
  * }
  */
-Sidebar.prototype.addGeneralPalette = function(modelData, id, expand)
+Sidebar.prototype.addGeneralPalette = function(modelData, id, expand, saveFlag)
 {
     var fns = [];
     for(var i in modelData) {
-		if (this.editorUi.interfaceParams.id && this.editorUi.interfaceParams.id == modelData[i].id) {
-			window.opener = {}
-			window.opener.openFile = new OpenFile()
-			window.opener.openFile.setData(JSON.parse(modelData[i].data).xml, modelData[i].filename)
-			this.editorUi.open()
+    	//if operator == edit and id != null and id==modelData[i].id then open model
+		if (!saveFlag && this.editorUi.interfaceParams.id && this.editorUi.interfaceParams.id == modelData[i].id && this.editorUi.interfaceParams.operator == 'edit') {
+			window.opener = {};
+			window.opener.openFile = new OpenFile();
+			window.opener.openFile.setData(JSON.parse(modelData[i].data).xml, modelData[i].filename);
+			this.editorUi.openModel();
 		}
         var prop = modelData[i].property;
-        var attr = modelData[i].attribute;
+        // var attr = modelData[i].attribute;
+		var attr = modelData[i];
 
         if(prop.type.toLowerCase() == 'edge') {
             fns.push(this.createEdgeTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title));
         }//update by wang,jianhui
         else if (modelData[i].data) {
-            fns.push(this.createVertexTemplateFromXML(modelData[i].data, modelData[i].name, id));
+            fns.push(this.createVertexTemplateFromXML(attr, id));
         }
         else {
             fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
@@ -966,7 +968,11 @@ Sidebar.prototype.addGeneralPalette = function(modelData, id, expand)
     this.addPaletteFunctions(id, this.modelClass[id]||modelData[0].description || modelData[0].class, (expand != null) ? expand : true, fns);
 };
 
-Sidebar.prototype.createVertexTemplateFromXML = function(data, name, id) {
+Sidebar.prototype.createVertexTemplateFromXML = function(attr, id) {
+	var data = attr.data;
+	var name = attr.name;
+	var uuid = attr.id;
+	// var graph = this.editorUi.editor.graph;
     return function () {
         var img = JSON.parse(data);
         var doc = mxUtils.parseXml(img.xml);
@@ -980,8 +986,14 @@ Sidebar.prototype.createVertexTemplateFromXML = function(data, name, id) {
             cells.push(model.getChildAt(parent, j));
         }
         cells[0].setCategory(id);
+        // var value = graph.getModel().getValue(cells[0]);
+        // value.setAttribute('category', id);
+        if(uuid) {
+            cells[0].setUuid(uuid);
+            // value.setAttribute('uuid', uuid);
+        }
         if (cells.length > 0) {
-            return this.createVertexTemplateFromCells(cells, img.w, img.h, name, true, false, false)
+            return this.createVertexTemplateFromCells(cells, img.w, img.h, name, true, false, false, attr)
         }
     }.bind(this);
 };
@@ -1960,12 +1972,26 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 };
 
 /**
- * Creates and returns a new palette item for the given image.
+ * Creates and returns a new or update a palette item for the given image.
  */
-Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, width, height, allowCellsInserted)
+Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, width, height, allowCellsInserted, data)
 {
-	var elt = document.createElement('a');
-	elt.setAttribute('href', 'javascript:void(0);');
+    var uuid = cells[0].getUuid();
+    var elt = null;
+    if(uuid != ''){
+    	elt = document.getElementById(uuid);
+	}
+	if(elt != null) {
+    	elt.parentNode.removeChild(elt);
+    }
+	// else{
+        elt = document.createElement('a');
+        elt.setAttribute('href', 'javascript:void(0);');
+        if(uuid != '') {
+            elt.setAttribute('id', uuid);
+        }
+	// }
+
 	elt.className = 'geItem';
 	elt.style.overflow = 'hidden';
 	var border = (mxClient.IS_QUIRKS) ? 8 + 2 * this.thumbPadding : 2 * this.thumbBorder;
@@ -1974,10 +2000,27 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	elt.style.padding = this.thumbPadding + 'px';
 	
 	// Blocks default click action
-	mxEvent.addListener(elt, 'click', function(evt)
-	{
-		mxEvent.consume(evt);
-	});
+    mxEvent.addListener(elt, 'click', function(evt)
+    {
+        mxEvent.consume(evt);
+    });
+
+    elt.oncontextmenu = function(e){
+        return false;
+    };
+    //right mouse up to edit model
+	if(data) {
+        mxEvent.addListener(elt, 'mouseup', mxUtils.bind(this,function(evt)
+        {
+            if(mxEvent.isRightMouseButton(evt)){
+                this.editorUi.initInterfaceParams('editModel', uuid);
+                window.opener = {};
+                window.opener.openFile = new OpenFile();
+                window.opener.openFile.setData(JSON.parse(data.data).xml, data.filename);
+                this.editorUi.openModel();
+            }
+        }));
+	}
 
 	this.createThumb(cells, this.thumbWidth, this.thumbHeight, elt, title, showLabel, showTitle, width, height);
 	var bounds = new mxRectangle(0, 0, width, height);
@@ -2014,6 +2057,69 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	}
 	
 	return elt;
+};
+Sidebar.prototype.createItem1 = function(cells, title, showLabel, showTitle, width, height, allowCellsInserted)
+{
+    var uuid = cells[0].getUuid();
+    var elt = null;
+    if(uuid != ''){
+        elt = document.getElementById(uuid);
+    }
+    if(elt == null)
+        elt = document.createElement('a');
+    elt.setAttribute('href', 'javascript:void(0);');
+
+    if(uuid != '') {
+        elt.setAttribute('id', uuid);
+    }
+    elt.className = 'geItem';
+    elt.style.overflow = 'hidden';
+    var border = (mxClient.IS_QUIRKS) ? 8 + 2 * this.thumbPadding : 2 * this.thumbBorder;
+    elt.style.width = (this.thumbWidth + border) + 'px';
+    elt.style.height = (this.thumbHeight + border) + 'px';
+    elt.style.padding = this.thumbPadding + 'px';
+
+    // Blocks default click action
+    mxEvent.addListener(elt, 'click', function(evt)
+    {
+        mxEvent.consume(evt);
+    });
+
+    this.createThumb(cells, this.thumbWidth, this.thumbHeight, elt, title, showLabel, showTitle, width, height);
+    var bounds = new mxRectangle(0, 0, width, height);
+
+    if (cells.length > 1 || cells[0].vertex)
+    {
+        var ds = this.createDragSource(elt, this.createDropHandler(cells, true, allowCellsInserted,
+            bounds), this.createDragPreview(width, height), cells, bounds);
+        this.addClickHandler(elt, ds, cells);
+
+        // Uses guides for vertices only if enabled in graph
+        ds.isGuidesEnabled = mxUtils.bind(this, function()
+        {
+            return this.editorUi.editor.graph.graphHandler.guidesEnabled;
+        });
+    }
+    else if (cells[0] != null && cells[0].edge)
+    {
+        var ds = this.createDragSource(elt, this.createDropHandler(cells, false, allowCellsInserted,
+            bounds), this.createDragPreview(width, height), cells, bounds);
+        this.addClickHandler(elt, ds, cells);
+    }
+
+    // Shows a tooltip with the rendered cell
+    if (!mxClient.IS_IOS)
+    {
+        mxEvent.addGestureListeners(elt, null, mxUtils.bind(this, function(evt)
+        {
+            if (mxEvent.isMouseEvent(evt))
+            {
+                this.showTooltip(elt, cells, bounds.width, bounds.height, title, showLabel);
+            }
+        }));
+    }
+
+    return elt;
 };
 
 /**
@@ -3263,7 +3369,7 @@ Sidebar.prototype.createVertexTemplate = function(attr, id, style, width, height
 	var doc = mxUtils.createXmlDocument();
 	var obj = doc.createElement('object');
 	obj.setAttribute('label', value || '');
-	var ma = new ModelAttribute(attr);
+	var ma = new ModelAttribute(attr.attribute);
 	var arr = ma.toAttributeString();
 	for(var o in arr){
 		obj.setAttribute(o, arr[o]);
@@ -3276,9 +3382,9 @@ Sidebar.prototype.createVertexTemplate = function(attr, id, style, width, height
 /**
  * Creates a drop handler for inserting the given cells.
  */
-Sidebar.prototype.createVertexTemplateFromCells = function(cells, width, height, title, showLabel, showTitle, allowCellsInserted)
+Sidebar.prototype.createVertexTemplateFromCells = function(cells, width, height, title, showLabel, showTitle, allowCellsInserted, data)
 {
-	return this.createItem(cells, title, showLabel, showTitle, width, height, allowCellsInserted);
+	return this.createItem(cells, title, showLabel, showTitle, width, height, allowCellsInserted, data);
 };
 
 /**
@@ -3310,7 +3416,7 @@ Sidebar.prototype.createEdgeTemplate = function(attr, id, style, width, height, 
     var doc = mxUtils.createXmlDocument();
     var obj = doc.createElement('object');
     obj.setAttribute('label', value || '');
-    var ma = new ModelAttribute(attr);
+    var ma = new ModelAttribute(attr.attribute);
     var arr = ma.toAttributeString();
     for(var o in arr){
         obj.setAttribute(o, arr[o]);

@@ -25,9 +25,47 @@ Actions.prototype.init = function()
 	};
 
 	// File actions
+	this.addAction('new...', function()
+	{
+        ui.editor.graph.selectAll(null, true);
+        if(graph.getSelectionCount() > 0 ){
+        	var ret = mxUtils.confirm(mxResources.get('sureNew'));
+		}
+		if(!ret){
+        	return;
+		}
 
-	this.addAction('new...', function() { window.open(ui.getUrl()); },null,null,null,this.editorUi.interfaceParams.type);
+        ui.editor.graph.model.nextId = 0;
+        ui.attributeNameIndex = 1;
+		ui.initInterfaceParams('new');
 
+        deleteCells(true);
+
+        var cell = graph.getModel().getRoot();
+        var attriDiv = document.getElementById('attributePanel');
+        if(attriDiv){
+            attriDiv.parentNode.removeChild(attriDiv);
+        }
+		attriDiv = ui.format.createAttributePanel();
+		ui.format.container.appendChild(attriDiv);
+        var value = graph.getModel().getValue(cell);
+        if (!mxUtils.isNode(value))
+        {
+            var doc = mxUtils.createXmlDocument();
+            var obj = doc.createElement('object');
+            value = obj;
+        }
+        value.setAttribute('label', '');
+		ui.setInitAttributes();
+		for(var o in ui.initAttributes){
+			value.setAttribute(o,  JSON.stringify(ui.initAttributes[o]));
+		}
+		ui.format.panels.push(new AttributePanel(ui.format, ui, attriDiv, cell));
+		// window.open(ui.getUrl());
+
+	}
+	,null,null,null,this.editorUi.interfaceParams.type
+	);
     this.addAction('open...', function()
 	{
 		window.openNew = true;

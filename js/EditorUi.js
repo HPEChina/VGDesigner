@@ -8,12 +8,7 @@ EditorUi = function(editor, container, lightbox, interfaceParams)
 {
 	//传入参数
     this.interfaceParams = interfaceParams;
-    this.interfaceParams.type = this.interfaceParams.type || 'model';
-    this.interfaceParams.operator = this.interfaceParams.operator || 'new';
-    this.interfaceParams.model = this.interfaceParams.model || 'editor';
-    this.interfaceParams.designLibraryId = this.interfaceParams.designLibraryId || '';		//产品线id
-    this.interfaceParams.id = this.interfaceParams.id || '';		//图形id
-    this.interfaceParams.author = this.interfaceParams.author || '';	//用户标示
+    this.initInterfaceParams();
 
 	//新增属性名称的序号
 	this.attributeNameIndex = 1;
@@ -914,7 +909,6 @@ EditorUi = function(editor, container, lightbox, interfaceParams)
 
    	// Resets UI, updates action and menu states
    	this.editor.resetGraph();
-
    	this.init();
    	this.open();
 };
@@ -1015,19 +1009,36 @@ EditorUi.prototype.attributeLogic = ['none', 'or', 'and'];
  */
 EditorUi.prototype.interfaceParams = null;
 
+/**
+ * Init interface params
+ */
+EditorUi.prototype.initInterfaceParams = function(type, id)
+{
+	if(type == null){
+        this.interfaceParams.type = this.interfaceParams.type || 'model';
+        this.interfaceParams.operator = this.interfaceParams.operator || 'new';
+        this.interfaceParams.model = this.interfaceParams.model || 'editor';
+        this.interfaceParams.designLibraryId = this.interfaceParams.designLibraryId || '';		//产品线id
+        this.interfaceParams.id = this.interfaceParams.id || '';		//图形id
+        this.interfaceParams.author = this.interfaceParams.author || '';	//用户标示
+        this.interfaceParams.from = this.interfaceParams.from || '';		//调用系统的名称
+	}
+	else if(type == 'new') {
+        this.interfaceParams.operator = 'new';
+        this.interfaceParams.id = '';		//图形id
+	}
+	else if(type == 'editModel') {
+        this.interfaceParams.type = 'model';
+        this.interfaceParams.operator = 'edit';
+        this.interfaceParams.id = id;		//图形id
+	}
+}
 
 /**
  * Installs the listeners to update the action states.
  */
 EditorUi.prototype.init = function()
 {
-    this.interfaceParams.type = this.interfaceParams.type || 'model';
-    this.interfaceParams.operator = this.interfaceParams.operator || 'new';
-    this.interfaceParams.model = this.interfaceParams.model || 'editor';
-    this.interfaceParams.designLibraryId = this.interfaceParams.designLibraryId || '';		//产品线id
-    this.interfaceParams.id = this.interfaceParams.id || '';		//图形id
-    this.interfaceParams.author = this.interfaceParams.author || '';	//用户标示
-
     this.setInitAttributes();
 
 	/**
@@ -1148,23 +1159,21 @@ EditorUi.prototype.setInitAttributes = function()
         arr['userFunc'] = [];
     }
     else if(type == 'topology') {
-        arr['intrinsic'] = [
-            { "name": "name", "description": "name", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "category", "description": "category", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "type", "description": "type", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] }
-        ];
+        arr['intrinsic'] = [];
         arr['extended'] = [];
         arr['userFunc'] = [];
     }
     else if(type == 'environment') {
-        arr['intrinsic'] = [
-            { "name": "name", "description": "name", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "category", "description": "category", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "type", "description": "name", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] }
-        ];
+        arr['intrinsic'] = [];
         arr['extended'] = [];
         arr['userFunc'] = [];
     }
+    else {
+        arr['intrinsic'] = [];
+        arr['extended'] = [];
+        arr['userFunc'] = [];
+	}
+
     this.initAttributes = arr;
 };
 
@@ -2123,8 +2132,6 @@ EditorUi.prototype.open = function()
 					this.editor.setGraphXml(doc.documentElement);
 					this.editor.setModified(false);
 					this.editor.undoManager.clear();
-					this.editor.graph.selectAll(null, true)
-					this.editor.graph.setSelectionCells(this.editor.graph.ungroupCells());
 					if (filename != null)
 					{
 						this.editor.setFilename(filename);
@@ -2154,6 +2161,56 @@ EditorUi.prototype.open = function()
 	this.editor.fireEvent(new mxEventObject('resetGraphView'));
 };
 
+/**
+ * Opens the current diagram via the window.opener if one exists.
+ */
+EditorUi.prototype.openModel = function()
+{
+    // Cross-domain window access is not allowed in FF, so if we
+    // were opened from another domain then this will fail.
+    try
+    {
+        if (window.opener != null && window.opener.openFile != null)
+        {
+            window.opener.openFile.setConsumer(mxUtils.bind(this, function(xml, filename)
+            {
+                try
+                {
+                    var doc = mxUtils.parseXml(xml);
+                    this.editor.setGraphXml(doc.documentElement);
+                    this.editor.setModified(false);
+                    this.editor.undoManager.clear();
+
+                    this.editor.graph.selectAll(null, true);
+                    this.editor.graph.setSelectionCells(this.editor.graph.ungroupCells());
+                    if (filename != null)
+                    {
+                        this.editor.setFilename(filename);
+                        this.updateDocumentTitle();
+                    }
+
+                    return;
+                }
+                catch (e)
+                {
+                    mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
+                }
+            }));
+        }
+    }
+    catch(e)
+    {
+        // ignore
+    }
+
+    // Fires as the last step if no file was loaded
+    this.editor.graph.view.validate();
+
+    // Required only in special cases where an initial file is opened
+    // and the minimumGraphSize changes and CSS must be updated.
+    this.editor.graph.sizeDidChange();
+    this.editor.fireEvent(new mxEventObject('resetGraphView'));
+};
 /**
  * Sets the current menu and element.
  */
@@ -3425,23 +3482,24 @@ EditorUi.prototype.getModelJsonString = function()
 
 };
 
-EditorUi.prototype.showModel = function (params,outValue) {
+EditorUi.prototype.showModel = function (params,outValue, saveFlag) {
 	var arr = params.split("&"), query = {};
 
 	for (var i = 0; i < arr.length; i++) {
-		var key = arr[i].split("=")[0]
-		var value = arr[i].split("=")[1]
-		var key1 = key.split(".")[0]
-		var key2 = key.split(".")[1]
+		var key = arr[i].split("=")[0];
+		var value = arr[i].split("=")[1];
+		var key1 = key.split(".")[0];
+		var key2 = key.split(".")[1];
 		if (key2) {
-			query[key1] ? '' : query[key1] = {}
-			query[key1][key2] = value
+			query[key1] ? '' : query[key1] = {};
+			query[key1][key2] = value;
 		} else {
 			query[key1] = value;
 		}
 	}
-	query.data = outValue
-	this.sidebar.addGeneralPalette([query], query.class)
+	query['id'] = this.interfaceParams.id;
+	query.data = outValue;
+	this.sidebar.addGeneralPalette([query], query.class, null,saveFlag)
 }
 
 /**
@@ -3488,9 +3546,10 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             params += '&property.title=' + 'vertex';
             params += '&property.type=' + 'vertex';
             params += '&attribute=' + JSON.stringify(res['attribute']);
-            params += '&uuid=' + this.interfaceParams.id;
+            params += '&id=' + this.interfaceParams.id;
             params += '&designLibraryId=' + this.interfaceParams.designLibraryId;
             params += '&author=' + this.interfaceParams.author;
+            params += '&from=' + this.interfaceParams.from;
 
 		}
 		else
@@ -3500,7 +3559,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             var xmlDoc = mxUtils.parseXml(outValue);
             outValue = CodeTranslator.xml2json(xmlDoc);
             params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue);
-            params += '&uuid=' + this.interfaceParams.id;
+            params += '&id=' + this.interfaceParams.id;
             params += '&designLibraryId=' + this.interfaceParams.designLibraryId;
             params += '&author=' + this.interfaceParams.author;
 		}
@@ -3516,10 +3575,11 @@ EditorUi.prototype.saveDB = function(name, collection, action)
                     this.editor.setModified(false);
                     this.editor.setFilename(name);
                     this.updateDocumentTitle();
-                    this.interfaceParams.operator = 'edit';
-
-					if (this.interfaceParams.type == 'model') this.showModel(params,outValue);
-
+                    if( this.interfaceParams.operator == 'new'){
+                        this.interfaceParams.operator = 'edit';
+                        this.interfaceParams.id = result.data.id;
+					}
+					if (this.interfaceParams.type == 'model') this.showModel(params, outValue, true);
                 }
                 else {
                     mxUtils.alert(result.data.msg);

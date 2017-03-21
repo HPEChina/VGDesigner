@@ -477,6 +477,9 @@ Format.prototype.refresh = function()
 		addClickHandler(label2, textPanel, idx++);
 		addClickHandler(label3, arrangePanel, idx++);
 	}
+
+    this.editorUi.actions.get('editData').funct();
+
 };
 
 /**
@@ -506,7 +509,18 @@ Format.prototype.createAttributePanel = function()
     label.style.paddingTop = '8px';
     label.style.height = '25px';
     label.style.width = '100%';
-    mxUtils.write(label, mxResources.get('attribute'));
+
+    var graph = this.editorUi.editor.graph;
+    var cell = graph.getSelectionCell() || graph.getModel().getRoot();
+    var title = mxResources.get('attribute');
+    if(cell.getId() == '0'){
+    	title +=  ' of ' + this.editorUi.interfaceParams.type;
+    	label.style.color = '#0000c6';
+	}
+	else {
+        label.style.color = 'rgb(112, 112, 112)';
+	}
+    mxUtils.write(label, title);
 
     // Adds button to hide the format panel since
     // people don't seem to find the toolbar button
@@ -4987,7 +5001,7 @@ var AttributePanel = function(format, editorUi, container, cell)
     var allNames = [];
     for (var i = 0; i < attrs.length; i++)
     {
-        if (attrs[i].nodeName != 'label' && attrs[i].nodeName != 'placeholders')
+        if (attrs[i].nodeName != 'label' && attrs[i].nodeName != 'uuid' && attrs[i].nodeName != 'category' && attrs[i].nodeName != 'placeholders')
         {
             tObj[attrs[i].nodeName] = JSON.parse(attrs[i].nodeValue);
             for( var j in tObj[attrs[i].nodeName]){
@@ -5366,13 +5380,17 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
 			td1.appendChild(div);
 
             if(o == 'name' || o == 'description') {
-                editElement[o] = document.createElement('input');
+				editElement[o] = document.createElement('input');
                 editElement[o].style.width = '90%';
                 editElement[o].style.height = '15px';
                 editElement[o].style.float = 'left';
+                if(o == 'name' && (attr[o] == 'name' || attr[o] == 'category' || attr[o] == 'type')){
+                    editElement[o].disabled = 'disabled';
+                }
                 // input.style.marginLeft = '5px';
                 editElement[o].value = attr[o];
                 td2.appendChild(editElement[o]);
+
                 td2.appendChild(br);
             }
             else if(o == 'dataType') {
