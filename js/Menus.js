@@ -426,7 +426,6 @@ Menus.prototype.init = function()
 
 		this.addMenuItems(menu, ['-', 'fitWindow', 'fitPageWidth', 'fitPage', 'fitTwoPages', '-', 'customZoom'], parent);
 	})));
-
 	this.put('file', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
         // this.addMenuItems(menu, ['new', 'open', '-', 'save', 'saveAs', '-', 'import', 'export', '-', 'pageSetup', 'print'], parent);
@@ -1042,6 +1041,12 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt)
 	{
 		this.addMenuItems(menu, ['-', 'selectVertices', 'selectEdges', '-', 'selectAll'], null, evt);
 	}
+};
+
+Menus.prototype.createSidebarPopupMenu = function(menu, cell, evt)
+{
+
+	this.addMenuItems(menu, ['edit'], null, evt);
 };
 
 /**

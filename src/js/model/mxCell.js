@@ -106,6 +106,7 @@ mxCell.prototype.geometry = null;
 mxCell.prototype.style = null;
 
 mxCell.prototype.category = null;
+mxCell.prototype.uuid = null;
 /**
  * Variable: vertex
  *
@@ -294,6 +295,15 @@ mxCell.prototype.getCategory = function()
 mxCell.prototype.setCategory = function(category)
 {
     this.category = category;
+};
+mxCell.prototype.getUuid = function()
+{
+    return this.uuid || '';
+};
+
+mxCell.prototype.setUuid = function(uuid)
+{
+    this.uuid = uuid;
 };
 /**
  * Function: isVertex
