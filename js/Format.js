@@ -517,7 +517,11 @@ Format.prototype.createAttributePanel = function()
     	title +=  ' of ' + this.editorUi.interfaceParams.type;
     	label.style.color = '#0000c6';
 	}
-	else {
+	else if(cell.getStyle() == 'group') {
+        title +=  ' of group';
+        label.style.color = '#006600';
+	}
+	else{
         label.style.color = 'rgb(112, 112, 112)';
 	}
     mxUtils.write(label, title);
@@ -4988,7 +4992,7 @@ var AttributePanel = function(format, editorUi, container, cell)
         obj.setAttribute('label', value || '');
 
         //如果新建图形，则object(id==0)设置默认初始属性
-        if(editorUi.interfaceParams.operator == 'new' && editorUi.interfaceParams.type == 'model' && cell.getId() == 0)
+        if(editorUi.interfaceParams.operator == 'new' && editorUi.interfaceParams.type == 'model' && cell.getId() == '0')
         {
         	for(var o in editorUi.initAttributes){
                 obj.setAttribute(o,  JSON.stringify(editorUi.initAttributes[o]));
@@ -5019,7 +5023,9 @@ var AttributePanel = function(format, editorUi, container, cell)
         this.createAttrsPanel(editorUi, cell, value, tObj[o], o, allNames);
 	}
 
-	this.collapsedImage(editorUi, cell, value)
+	if(cell.getStyle() == 'group' || (cell.getId() == '0' && editorUi.interfaceParams.type == 'model')) {
+        this.collapsedImage(editorUi, cell, value)
+    }
 };
 
 mxUtils.extend(AttributePanel, BaseFormatPanel);
@@ -5074,6 +5080,12 @@ AttributePanel.prototype.collapsedImage = function(ui, cell, value)
 
     function uploadImg() {
         if (imgInput.files.length > 0) {
+            //Check file size
+            var fileSize = imgInput.files[0].size;
+            if(fileSize > ui.maxUploadImgSize * 1024 * 1024){
+                mxUtils.alert(mxResources.get('maxFileSize', [ui.maxUploadImgSize]));
+                return;
+            }
             var img = new Image();
             var reader = new FileReader();
             reader.onload = function (e) {
@@ -5418,7 +5430,7 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
         });
         cancelBtn.className = 'geBtn';
 
-        var applyBtn = mxUtils.button(mxResources.get('save', ['']), function()
+        var applyBtn = mxUtils.button(mxResources.get('apply', ['']), function()
         {
             try
             {
@@ -5466,7 +5478,7 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
                 editElement[o].style.width = '90%';
                 editElement[o].style.height = '15px';
                 editElement[o].style.float = 'left';
-                if(ui.interfaceParams.type == 'model' &&
+                if(ui.interfaceParams.type == 'model' && cell.getId() == '0' &&
 					o == 'name' && (attr[o] == 'name' || attr[o] == 'category' || attr[o] == 'type')){
                     editElement[o].disabled = 'disabled';
                 }

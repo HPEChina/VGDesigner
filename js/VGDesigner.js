@@ -63,7 +63,15 @@ VGDesigner.prototype.init = function(interfaceParams)
         themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
         // Main
-        new EditorUi(new Editor(urlParams['chrome'] == '0', themes, null, null, this.container), this.container, null, interfaceParams);
+        var ui = new EditorUi(new Editor(urlParams['chrome'] == '0', themes, null, null, this.container), this.container, null, interfaceParams);
+        var title;
+        if(ui.interfaceParams.operator == 'new') {
+            title = 'Create ' + ui.interfaceParams.operator + ' ' + ui.interfaceParams.type;
+        }
+        else if(ui.interfaceParams.operator == 'edit') {
+            title = 'Edit ' + ui.interfaceParams.type;
+        }
+        document.title = title;
 
     }), mxUtils.bind(this,function()
     {

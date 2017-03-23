@@ -2683,13 +2683,18 @@ var LocalImgDialog = function(editorUi, btnLabel, fn)
 	{
 		editorUi.hideDialog();
 		if(imgInput.files.length > 0){
+			//Check file size
+            var fileSize = imgInput.files[0].size;
+            if(fileSize > editorUi.maxUploadImgSize * 1024 * 1024){
+                mxUtils.alert(mxResources.get('maxFileSize', [editorUi.maxUploadImgSize]));
+                return;
+            }
 			var reader = new FileReader();
 			reader.onload = function(e) {
                 var img = new Image();
 				img.src = e.target.result;
 				var url = BASE_URL + SAVE_IMG;
 				var params = 'data=' + encodeURIComponent(img.src);
-				var path;
 				mxUtils.post(url, params, mxUtils.bind(this, function (req) {
 					var result = JSON.parse(req.getText());
 					if (result.status == 0) {

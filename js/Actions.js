@@ -44,6 +44,8 @@ Actions.prototype.init = function()
 		ui.initInterfaceParams('new');
 
         deleteCells(true);
+        //clear xml code
+        ui.footwall.reset();
 
         var cell = graph.getModel().getRoot();
         var attriDiv = document.getElementById('attributePanel');
@@ -66,6 +68,9 @@ Actions.prototype.init = function()
 		}
 		value.setAttribute('image', mxGraph.prototype.collapsedImage.src);
 		ui.format.panels.push(new AttributePanel(ui.format, ui, attriDiv, cell));
+        var title = 'Create new ' + ui.interfaceParams.type;
+        document.title = title;
+
 		// window.open(ui.getUrl());
 
 	}
