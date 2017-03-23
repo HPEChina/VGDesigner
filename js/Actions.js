@@ -28,8 +28,12 @@ Actions.prototype.init = function()
 	this.addAction('new...', function()
 	{
         ui.editor.graph.selectAll(null, true);
+        var ret;
         if(graph.getSelectionCount() > 0 ){
-        	var ret = mxUtils.confirm(mxResources.get('sureNew'));
+        	ret = mxUtils.confirm(mxResources.get('sureNew'));
+		}
+		else {
+        	ret = true;
 		}
 		if(!ret){
         	return;
@@ -60,6 +64,7 @@ Actions.prototype.init = function()
 		for(var o in ui.initAttributes){
 			value.setAttribute(o,  JSON.stringify(ui.initAttributes[o]));
 		}
+		value.setAttribute('image', mxGraph.prototype.collapsedImage.src);
 		ui.format.panels.push(new AttributePanel(ui.format, ui, attriDiv, cell));
 		// window.open(ui.getUrl());
 

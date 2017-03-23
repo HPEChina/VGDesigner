@@ -2082,7 +2082,7 @@ Graph.prototype.getTooltipForCell = function(cell)
 		}
 		else
 		{
-			var ignored = ['label', 'tooltip', 'placeholders'];
+			var ignored = ['label', 'tooltip', 'placeholders', 'image'];
 			var attrs = cell.value.attributes;
 			
 			// Hides links in edit mode

@@ -107,6 +107,7 @@ mxCell.prototype.style = null;
 
 mxCell.prototype.category = null;
 mxCell.prototype.uuid = null;
+mxCell.prototype.image = null;
 /**
  * Variable: vertex
  *
