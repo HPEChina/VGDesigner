@@ -931,7 +931,6 @@ EditorUi.prototype.splitSize = (mxClient.IS_TOUCH || mxClient.IS_POINTER) ? 12 :
 /**
  * Specifies the height of the menubar. Default is 34.
  */
-// PPPPP
 EditorUi.prototype.menubarHeight = 34;
 
 /**
@@ -952,7 +951,7 @@ EditorUi.prototype.toolbarHeight = 34;
 /**
  * Specifies the height of the footer. Default is 28.
  */
-EditorUi.prototype.footerHeight = 28;
+EditorUi.prototype.footerHeight = 10;
 
 /**
  * Specifies the height of the optional sidebarFooterContainer. Default is 34.
@@ -1016,6 +1015,10 @@ EditorUi.prototype.attributeLogic = ['none', 'or', 'and'];
  */
 EditorUi.prototype.interfaceParams = null;
 
+/**
+ * Upload image file max size(M)
+ */
+EditorUi.prototype.maxUploadImgSize = 1;
 /**
  * Init interface params
  */
@@ -2726,14 +2729,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 		this.menubarContainer.style.height = this.menubarHeight + 'px';
 		tmp += this.menubarHeight;
 	}
-	// PPPPP
-	/*if (this.toolbar != null)
-	{
-		this.toolbarContainer.style.top = this.menubarHeight + 'px';
-		this.toolbarContainer.style.height = this.toolbarHeight + 'px';
-		tmp += this.toolbarHeight;
-	}*/
-	
+
 	if (tmp > 0 && !mxClient.IS_QUIRKS)
 	{
 		tmp += 1;
@@ -2775,7 +2771,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
     this.footwallContainer.style.bottom = this.footerHeight + 'px';
     this.footwallContainer.style.position = 'absolute';
     this.footwallContainer.style.backgroundColor = 'whiteSmoke';
-    // this.footwallContainer.style.padding = '30px';
+
     this.foothsplit.style.left = this.footwallContainer.style.left;
     this.foothsplit.style.right = this.formatContainer.style.width;
     this.foothsplit.style.position = "absolute";
@@ -2785,6 +2781,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
     this.foothsplit.style.backgroundColor = "#d9d9d9";
 
     var diagramHeight = Math.max(0, h - this.footerHeight - this.menubarHeight - this.toolbarHeight) - efffootHsplitPosition;
+
     this.diagramContainer.style.height = diagramHeight - this.splitSize  + this.toolbarHeight + 'px';
     this.hsplit.style.height = this.sidebarContainer.style.height;
     this.formatContainer.style.borderLeft = '1px solid #E0E0E0';
@@ -3002,207 +2999,6 @@ EditorUi.prototype.createUi = function()
     {
         this.footwallContainer.appendChild(this.footwall.container);
         this.container.appendChild(this.footwallContainer);
-
-
-        var div = document.createElement('div');
-        div.id = 'textBoard';
-        div.style.height = '100%';
-        div.style.width = '100%';
-        div.style.backgroundColor = '#f5f5f5';
-        this.footwallContainer.appendChild(div);
-
-        var tabDiv = document.createElement('div');
-        tabDiv.id = 'tabDiv';
-        tabDiv.style.height = '28px';
-        tabDiv.style.width = '100%';
-        tabDiv.style.backgroundColor = '#adc4e4';
-        div.appendChild(tabDiv);
-
-        var conDiv = document.createElement('div');
-        conDiv.style.position = 'absolute';
-        conDiv.id = 'conDiv';
-        conDiv.style.width = '96%';
-        conDiv.style.left = '1%';
-        conDiv.style.height = '88%';
-        conDiv.style.border = '0px';
-        div.appendChild(conDiv);
-
-        var changeXml = document.createElement('div');
-        changeXml.id = 'xmlEdit';
-        changeXml.style.width = '32px';
-        changeXml.style.height = '17px';
-        changeXml.style.lineheight = '17px';
-        changeXml.style.fontSize = '9pt';
-        changeXml.style.textAlign = 'center';
-        changeXml.style.marginTop = '6px';
-        changeXml.style.marginLeft = '20px';
-        changeXml.style.cursor = 'pointer';
-        changeXml.innerHTML = 'XML';
-        changeXml.style.float = 'left';
-        changeXml.style.backgroundColor = '#adc4e4';
-        changeXml.style.borderLeft = '1px solid #7A9DAD';
-        changeXml.style.borderTop = '1px solid #7A9DAD';
-        changeXml.style.borderRight = '1px solid #7A9DAD';
-        tabDiv.appendChild(changeXml);
-
-        var changeJson = document.createElement('div');
-        changeJson.id = 'jsonEdit';
-        changeJson.style.width = '32px';
-        changeJson.style.height = '17px';
-        changeJson.style.lineheight = '17px';
-        changeJson.style.fontSize = '9pt';
-        changeJson.style.textAlign = 'center';
-        changeJson.style.marginTop = '6px';
-        changeJson.style.cursor = 'pointer';
-        changeJson.innerHTML = 'JSON';
-        changeJson.style.float = 'left';
-        changeJson.style.backgroundColor = '#7A9DAD';
-        changeJson.style.borderTop = '1px solid #7A9DAD';
-        changeJson.style.borderRight = '1px solid #7A9DAD';
-        tabDiv.appendChild(changeJson);
-
-		/*var textarea = document.createElement('textarea');
-		 textarea.style.display = 'none';
-		 window.onload=function(){
-		 var graphXml = this.editor.getGraphXml(), tValue;
-		 tValue = mxUtils.getPrettyXml(graphXml);
-		 textarea.value = tValue;
-		 conDiv.appendChild(textarea);
-		 alert(textarea.value);
-		 CodeMirror.fromTextArea(textarea, {
-		 lineNumbers: true,
-		 smartIndent: true,
-		 mode:'xml'
-		 });
-		 };*/
-
-
-        var textarea='';
-        var gXml = this.editor;
-        var divX = document.getElementById('xmlEdit');
-        mxEvent.addListener(divX, 'click', mxUtils.bind(this, function(){
-            var clearX = document.getElementById('conDiv');
-            clearX.innerHTML = "";
-            textarea = document.createElement('textarea');
-            var graphXml = gXml.getGraphXml(this), tValue;
-            tValue = mxUtils.getPrettyXml(graphXml);
-            textarea.value = tValue;
-            conDiv.appendChild(textarea);
-            changeXml.style.backgroundColor = '#adc4e4';
-            changeJson.style.backgroundColor = '#7A9DAD';
-            changeJson.style.borderBottom = '3px solid white';
-            changeJson.style.borderBottom = '0px';
-
-            var code = CodeMirror.fromTextArea(textarea, {
-                lineNumbers: true,
-                smartIndent: true,
-                mode: 'xml'
-            });
-            code.on('change', function () {
-                textarea.value = code.getValue()
-            });
-        }));
-
-
-        var divJ = document.getElementById('jsonEdit');
-        mxEvent.addListener(divJ, 'click', mxUtils.bind(this, function()
-        {
-            var clearX = document.getElementById('conDiv');
-            clearX.innerHTML = "";
-            textarea = document.createElement('textarea');
-            var graphXml = gXml.getGraphXml(this), tValue;
-            var xmlDoc = mxUtils.parseXml(mxUtils.getXml(graphXml));
-            tValue = CodeTranslator.xml2json(xmlDoc, "  ");
-            textarea.value = tValue;
-            conDiv.appendChild(textarea);
-            changeXml.style.backgroundColor = '#7A9DAD';
-            changeJson.style.backgroundColor = '#adc4e4';
-            changeXml.style.borderBottom = '3px solid white';
-            changeXml.style.borderBottom = '0px';
-
-            var code = CodeMirror.fromTextArea(textarea, {
-                lineNumbers: true,
-                smartIndent: true,
-                mode:'javascript'
-            });
-            code.on('change', function () {
-                textarea.value = code.getValue()
-            });
-        }));
-
-
-
-        var select = document.createElement('select');
-        select.style.width = '180px';
-        select.className = 'geBtn';
-        select.style.height = '20px';
-        select.style.marginLeft = '40px';
-        select.style.float = 'left';
-        select.style.marginTop = '4px';
-
-        var replaceOption = document.createElement('option');
-        replaceOption.setAttribute('value', 'replace');
-        mxUtils.write(replaceOption, mxResources.get('replaceExistingDrawing'));
-        select.appendChild(replaceOption);
-
-        var importOption = document.createElement('option');
-        importOption.setAttribute('value', 'import');
-        mxUtils.write(importOption, mxResources.get('addToExistingDrawing'));
-        select.appendChild(importOption);
-        tabDiv.appendChild(select);
-
-        var okBtn = mxUtils.button(mxResources.get('ok'), mxUtils.bind(this, function()
-        {
-            // Removes all illegal control characters before parsing
-            var data = this.editor.graph.zapGremlins(mxUtils.trim(textarea.value));
-            var error = null;
-
-            if (select.value == 'replace') {
-                this.editor.graph.model.beginUpdate();
-                try {
-                    this.editor.setGraphXml(mxUtils.parseXml(data).documentElement);
-
-                }
-                catch (e) {
-                    error = e;
-                }
-                finally {
-                    this.editor.graph.model.endUpdate();
-                }
-            }
-            else if (select.value == 'import') {
-                this.editor.graph.model.beginUpdate();
-                try {
-                    var doc = mxUtils.parseXml(data);
-                    var model = new mxGraphModel();
-                    var codec = new mxCodec(doc);
-                    codec.decode(doc.documentElement, model);
-
-                    var children = model.getChildren(model.getChildAt(model.getRoot(), 0));
-                    this.editor.graph.setSelectionCells(this.editor.graph.importCells(children));
-
-                }
-                catch (e) {
-                    error = e;
-                }
-                finally {
-                    this.editor.graph.model.endUpdate();
-                }
-            }
-
-            if (error != null) {
-                mxUtils.alert(error.message);
-            }
-        }));
-        okBtn.className = 'gePrimaryBtn';
-        okBtn.style.cursor = 'pointer';
-        okBtn.style.width = '50px';
-        okBtn.style.height = '18px';
-        okBtn.style.marginTop = '5px';
-        okBtn.style.lineheight = '20px';
-        okBtn.style.float = 'left';
-        okBtn.style.marginLeft = '15px';
-        tabDiv.appendChild(okBtn);
     }
 
 	// HSplit
@@ -3407,12 +3203,12 @@ EditorUi.prototype.addSplitHandler2 = function(elt, horizontal, dx, onChange)
         return result;
     });
 
-    function moveHandler(evt)
+    var moveHandler = mxUtils.bind(this,function(evt)
     {
         if (start != null)
         {
             var pt = new mxPoint(mxEvent.getClientX(evt), mxEvent.getClientY(evt));
-            onChange(Math.max(0, initial + (start.y - pt.y) - dx - 28));
+            onChange(Math.max(0, initial + (start.y - pt.y) - dx - this.footerHeight));
             mxEvent.consume(evt);
 
             if (initial != getValue())
@@ -3421,7 +3217,7 @@ EditorUi.prototype.addSplitHandler2 = function(elt, horizontal, dx, onChange)
                 last = null;
             }
         }
-    };
+    });
 
     function dropHandler(evt)
     {
@@ -3439,17 +3235,17 @@ EditorUi.prototype.addSplitHandler2 = function(elt, horizontal, dx, onChange)
     });
 
 
-    mxEvent.addListener(elt, 'click', function(evt)
+    mxEvent.addListener(elt, 'click', mxUtils.bind(this,function(evt)
     {
         if (!ignoreClick)
         {
             var next = (last != null) ? last - dx : 0;
             last = getValue();
             // 点击的时候第二次点击高度增加 是因为点击是在这里闯进去新参数
-            onChange(next - 28);
+            onChange(next - this.footerHeight);
             mxEvent.consume(evt);
         }
-    });
+    }));
 
     mxEvent.addGestureListeners(document, null, moveHandler, dropHandler);
 
@@ -3797,14 +3593,17 @@ EditorUi.prototype.getModelJsonString = function()
         }
 		ret['attribute'] = attribute;
 
-        // graph.getModel().beginUpdate();
         //组合
-        var group = graph.groupCells(null, 0);
-        graph.setSelectionCell(group);
-
-        // var cells = graph.getSelectionCells();
-        // graph.setCellStyles('strokeColor', '#CCCCCC', cells);
-        // graph.setCellStyles('dashed', '1', cells);
+		//检查所有图元是否已经组合, ==1组合，>1否
+		var num = graph.getSelectionCell().parent.children.length;
+		var group = null;
+        if(num > 1 || (num == 1 && graph.getSelectionCell().style != 'group' )) {
+            var group = graph.groupCells(null, 0);
+            graph.setSelectionCell(group);
+		}
+		else {
+        	group = graph.getSelectionCell();
+		}
 
         var doc = mxUtils.createXmlDocument();
         var obj = doc.createElement('object');
@@ -3813,7 +3612,7 @@ EditorUi.prototype.getModelJsonString = function()
             obj.setAttribute(o, attrs[o]);
         }
         group.setValue(obj);
-        // graph.getModel().endUpdate();
+
 //update by wang,jianhui--start
 		var xml = this.editor.getGraphXml(this);
 		var bounds=xml.getElementsByTagName("mxGeometry")[0];
@@ -3823,9 +3622,12 @@ EditorUi.prototype.getModelJsonString = function()
 		bounds.height=bounds.getAttribute("height");
 		xml = mxUtils.getXml(xml);
 //update by wang,jianhui--end
+
         //解组
-        // group.setCellStyles('strokeColor', 'none', cells);
-        graph.setSelectionCells(graph.ungroupCells());
+        if(num > 1) {
+            graph.setSelectionCells(graph.ungroupCells());
+		}
+
         var entry = { xml: xml, w: bounds.width, h: bounds.height };
 
         ret['json'] = JSON.stringify(entry);
@@ -3926,7 +3728,6 @@ EditorUi.prototype.saveDB = function(name, collection, action)
 
 		if (outValue.length < MAX_REQUEST_SIZE)
 		{
-
 			mxUtils.post(url, params, mxUtils.bind(this, function(req)
 			{
                 var result = JSON.parse(req.getText());

@@ -2013,6 +2013,18 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
         mxEvent.addListener(elt, 'mouseup', mxUtils.bind(this,function(evt)
         {
             if(mxEvent.isRightMouseButton(evt)) {
+                this.editorUi.editor.graph.selectAll(null, true);
+				var ret;
+                if(this.editorUi.editor.graph.getSelectionCount() > 0 ){
+                    ret = mxUtils.confirm(mxResources.get('sureNew'));
+                }
+                else {
+                    ret = true;
+                }
+                if(!ret){
+                    return;
+                }
+
                 this.editorUi.editor.graph.model.nextId = 0;
                 this.editorUi.attributeNameIndex = 1;
                 this.editorUi.initInterfaceParams('editModel', uuid);
@@ -2020,6 +2032,10 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
                 window.opener.openFile = new OpenFile();
                 window.opener.openFile.setData(JSON.parse(data.data).xml, data.filename);
                 this.editorUi.openModel();
+
+                var title = 'Edit model: ' + this.editorUi.editor.getOrCreateFilename();
+                document.title = title;
+                this.editorUi.footwall.reset();
             }
         }));
 	}
