@@ -5001,7 +5001,7 @@ var AttributePanel = function(format, editorUi, container, cell)
     var allNames = [];
     for (var i = 0; i < attrs.length; i++)
     {
-        if (attrs[i].nodeName != 'label' && attrs[i].nodeName != 'uuid' && attrs[i].nodeName != 'category' && attrs[i].nodeName != 'placeholders')
+        if (attrs[i].nodeName == 'intrinsic' || attrs[i].nodeName == 'extended' || attrs[i].nodeName == 'userFunc')
         {
             tObj[attrs[i].nodeName] = JSON.parse(attrs[i].nodeValue);
             for( var j in tObj[attrs[i].nodeName]){
@@ -5016,12 +5016,89 @@ var AttributePanel = function(format, editorUi, container, cell)
         tObj['userFunc'] = (tObj['userFunc'] != null) ? tObj['userFunc'] : [];
 	}
 	for( var o in tObj){
-        this.createAttrsPanel(editorUi,cell, value, tObj[o], o, allNames);
+        this.createAttrsPanel(editorUi, cell, value, tObj[o], o, allNames);
 	}
+
+	this.collapsedImage(editorUi, cell, value)
 };
 
 mxUtils.extend(AttributePanel, BaseFormatPanel);
 
+/**
+ * Set collapsed image
+ */
+AttributePanel.prototype.collapsedImage = function(ui, cell, value)
+{
+    var graph = ui.editor.graph;
+
+    var container = this.container;
+    var title = this.createTitle(mxResources.get('image'));
+    title.style.paddingLeft = '18px';
+    title.style.paddingTop = '10px';
+    title.style.paddingBottom = '6px';
+    container.appendChild(title);
+
+    var div = this.createPanel();
+    this.container.appendChild(div);
+    // div.style.position = 'absolute';
+
+    var form = new mxForm('properties');
+    form.table.style.width = '95%';
+    form.table.style.paddingRight = '20px';
+
+    var tr = document.createElement('tr');
+    var td1 = document.createElement('td');
+    var image = document.createElement('img');
+    image.style.maxWidth = '60px';
+    image.style.maxHeight = '60px';
+    image.style.border = '1px solid white';
+    image.src = value.getAttribute('image') ? value.getAttribute('image') : mxGraph.prototype.collapsedImage.src;
+    td1.appendChild(image);
+
+    var td0 = document.createElement('td');
+    td0.style.minWidth = '5px';
+
+    var td2 = document.createElement('td');
+    var imgInput = document.createElement('input');
+    imgInput.setAttribute('type', 'file');
+    imgInput.setAttribute('accept', 'image/png,image/jpeg');
+
+    td2.appendChild(imgInput);
+
+    tr.appendChild(td1);
+    tr.appendChild(td0);
+    tr.appendChild(td2);
+    form.table.appendChild(tr);
+
+    div.appendChild(form.table);
+
+    function uploadImg() {
+        if (imgInput.files.length > 0) {
+            var img = new Image();
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                img.src = e.target.result;
+                var url = BASE_URL + SAVE_IMG;
+                var params = 'data=' + encodeURIComponent(img.src);
+                mxUtils.post(url, params, mxUtils.bind(this, function (req) {
+                    var result = JSON.parse(req.getText());
+                    if (result.status == 0) {
+                        var src = UPLOADIMAGE_PATH + '/' + result.data.url;
+                		image.src = src;
+                        value.setAttribute('image', src);
+                        graph.getModel().setValue(cell, value);
+                    }
+                    else {
+                        mxUtils.alert(result.data.msg);
+                    }
+                }));
+            };
+            reader.readAsDataURL(imgInput.files[0]);
+        }
+    };
+    mxEvent.addListener(imgInput, 'change', uploadImg);
+
+};
 /**
  * 创建固有属性面板
  * @param ui
@@ -5259,8 +5336,13 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
         var ele = form.addListAttributeElements(data);
         arrAttr[index] = attr;
         addEditButton(ele, attr);
-        if(type != 'intrinsic' || ( type == 'intrinsic' &&  ui.interfaceParams.type == 'model') ) {
-            addRemoveButton(ele, name);
+        var rootFlag = (cell.getId() == '0') ? true : false;
+        var generalFlag = (cell.getCategory() == null || cell.getCategory() == 'general') ? true : false;
+        if(type != 'intrinsic' || (type == 'intrinsic' && ui.interfaceParams.type == 'model'
+			&& (!rootFlag || (rootFlag && attr.name != 'name' && attr.name != 'category' && attr.name != 'type')))
+			|| (type == 'intrinsic' && ui.interfaceParams.type != 'model' && (rootFlag || (!rootFlag && generalFlag)))
+		) {
+			addRemoveButton(ele, name);
         }
 	};
 
@@ -5384,7 +5466,8 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
                 editElement[o].style.width = '90%';
                 editElement[o].style.height = '15px';
                 editElement[o].style.float = 'left';
-                if(o == 'name' && (attr[o] == 'name' || attr[o] == 'category' || attr[o] == 'type')){
+                if(ui.interfaceParams.type == 'model' &&
+					o == 'name' && (attr[o] == 'name' || attr[o] == 'category' || attr[o] == 'type')){
                     editElement[o].disabled = 'disabled';
                 }
                 // input.style.marginLeft = '5px';
@@ -5503,7 +5586,7 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
     };
 
     //固有属性不允许添加和删除， 可以修改编辑
-    if(type != 'intrinsic' || cell.getCategory() == 'general' ||
+    if(type != 'intrinsic' || cell.getCategory() == null || cell.getCategory() == 'general' ||
 		(type == 'intrinsic' &&
 		(ui.interfaceParams.type == 'model' ||
 		(ui.interfaceParams.type != 'model' && cell.getId() == 0)

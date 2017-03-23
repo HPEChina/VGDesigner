@@ -1607,8 +1607,8 @@ mxGraph.prototype.panDy = 0;
  * Specifies the <mxImage> to indicate a collapsed state.
  * Default value is mxClient.imageBasePath + '/collapsed.gif'
  */
-// mxGraph.prototype.collapsedImage = new mxImage(mxClient.imageBasePath + '/collapsed.gif', 40, 40);
-mxGraph.prototype.collapsedImage = new mxImage(STENCIL_PATH + '/clipart/Server01_128X128.png', 80, 80);
+mxGraph.prototype.collapsedImage = new mxImage(mxClient.imageBasePath + '/collapsed.gif', 9, 9);
+// mxGraph.prototype.collapsedImage = new mxImage(mxClient.imageBasePath + '/nopic.png', 9, 9);
 
 /**
  * Variable: expandedImage
@@ -8548,7 +8548,38 @@ mxGraph.prototype.getFoldingImage = function(state)
 		
 		if (this.isCellFoldable(state.cell, !tmp))
 		{
-			return (tmp) ? this.collapsedImage : this.expandedImage;
+		    var ret;
+		    if(tmp) {
+		        var img = state.cell.getAttribute('image');
+		        if(img) {
+		            var w,h;
+		            var start = img.lastIndexOf('_');
+		            var end = img.lastIndexOf('.');
+		            var str = img.slice(start + 1, end);
+		            w = str.split('x')[0];
+		            h = str.split('x')[1];
+                    var maxW = 80, maxH = 80;
+                    if( w > maxW || h > maxH ) {
+                        if(w/h > maxW/maxH) {
+                            h = Math.floor(h * maxW / w);
+                            w = maxW;
+                        }
+                        else {
+                            w = Math.floor(w * maxH / h);
+                            h = maxH;
+                        }
+                    }
+                    ret = new mxImage(img, w, h);
+                }
+                else {
+                    ret = this.collapsedImage;
+                }
+            }
+            else {
+		        ret = this.expandedImage;
+            }
+            return ret;
+			// return (tmp) ? this.collapsedImage : this.expandedImage;
 		}
 	}
 	

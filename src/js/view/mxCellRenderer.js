@@ -1433,7 +1433,13 @@ mxCellRenderer.prototype.redrawShape = function(state, force, rendering)
 {
 	var model = state.view.graph.model;
 	var shapeChanged = false;
+	var graph = state.view.graph;
 
+    if(graph.isCellCollapsed(state.cell)) {
+        var image = graph.getFoldingImage(state);
+        state.height = image.height;
+        state.width = image.width;
+	}
 	// Forces creation of new shape if shape style has changed
 	if (state.shape != null && state.shape.style != null && state.style != null &&
 		state.shape.style[mxConstants.STYLE_SHAPE] != state.style[mxConstants.STYLE_SHAPE])

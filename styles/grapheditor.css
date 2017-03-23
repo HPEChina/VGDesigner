@@ -240,6 +240,10 @@ body{
 	text-overflow:ellipsis;
 	overflow:hidden;
 }
+.geFootwallContainer {
+	background:whiteSmoke;
+	border-top:1px solid #e0e0e0;
+}
 .geToolbar {
 	padding:1px 0px 0px 6px;
 	border-top:1px solid #e0e0e0;
@@ -432,6 +436,14 @@ div.mxWindow .geButton {
 }
 .geHsplit:hover, .geVsplit:hover {
 	background-color:#d5d5d5;
+}
+.gefootHsplit {
+	cursor:row-resize;
+	background-color:#e5e5e5;
+	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAEBAMAAACw6DhOAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAFElEQVQImWNgNVdzYBAUFBRggLMAEzYBy29kEPgAAAAASUVORK5CYII=);
+	_background-image:url('thumb_horz.png');
+	background-repeat:no-repeat;
+	background-position:center center;
 }
 .geDialog {
 	position:absolute;
