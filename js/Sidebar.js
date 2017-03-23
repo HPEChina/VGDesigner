@@ -2012,7 +2012,9 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	if(data) {
         mxEvent.addListener(elt, 'mouseup', mxUtils.bind(this,function(evt)
         {
-            if(mxEvent.isRightMouseButton(evt)){
+            if(mxEvent.isRightMouseButton(evt)) {
+                this.editorUi.editor.graph.model.nextId = 0;
+                this.editorUi.attributeNameIndex = 1;
                 this.editorUi.initInterfaceParams('editModel', uuid);
                 window.opener = {};
                 window.opener.openFile = new OpenFile();

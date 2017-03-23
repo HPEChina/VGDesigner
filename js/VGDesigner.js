@@ -14,7 +14,7 @@ var VGDesigner = function(model, container) {
  * 编辑模式加载的js文件数组
  */
 VGDesigner.prototype.editorJsFiles = ['js/Init.js', 'jscolor/jscolor.js', 'sanitizer/sanitizer.min.js', 'src/js/mxClient.js', 'js/EditorUi.js',
-    'js/Editor.js', 'js/Sidebar.js', 'js/Graph.js', 'js/Shapes.js', 'js/Actions.js', 'js/Menus.js', 'js/Format.js',
+    'js/Editor.js', 'js/Sidebar.js', 'js/Graph.js', 'js/Shapes.js', 'js/Actions.js', 'js/Menus.js', 'js/Format.js','js/Footwall.js',
     'js/Toolbar.js', 'js/Dialogs.js', 'js/FileSaver.js', 'js/CodeTranslator.js', 'js/codemirror/codemirror.js',
     'js/codemirror/javascript.js', 'js/codemirror/xml.js', 'js/codemirror/yaml.js', 'js/ModelAttribute.js'];
 

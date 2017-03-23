@@ -76,6 +76,8 @@ EditorUi = function(editor, container, lightbox, interfaceParams)
 	this.menubarContainer.onmousedown = textEditing;
 	this.toolbarContainer.onselectstart = textEditing;
 	this.toolbarContainer.onmousedown = textEditing;
+    this.footwallContainer.onselectstart = textEditing;
+    this.footwallContainer.onmousedown = textEditing;
 	this.diagramContainer.onselectstart = textEditing;
 	this.diagramContainer.onmousedown = textEditing;
 	this.sidebarContainer.onselectstart = textEditing;
@@ -968,6 +970,11 @@ EditorUi.prototype.editButtonLink = null;
  */
 EditorUi.prototype.hsplitPosition = (screen.width <= 500) ? 116 : 204;
 
+/**
+ * Specifies the position of the vertical split bar. Default is 204 or 120 for
+ * screen height <= 500px.
+ */
+EditorUi.prototype.foothsplitPosition = (screen.height <= 500) ? 796 : 204;
 /**
  * Specifies if animations are allowed in <executeLayout>. Default is true.
  */
@@ -2710,6 +2717,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	}
 	
 	var effHsplitPosition = Math.max(0, Math.min(this.hsplitPosition, w - this.splitSize - 20));
+    var efffootHsplitPosition = Math.max(0, Math.min(this.foothsplitPosition, h - this.splitSize - 20));
 
 	var tmp = 0;
 	
@@ -2755,6 +2763,33 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	this.hsplit.style.top = this.sidebarContainer.style.top;
 	this.hsplit.style.bottom = (this.footerHeight + off) + 'px';
 	this.hsplit.style.left = effHsplitPosition + 'px';
+
+    var sidebarHeight = Math.max(0, h - this.footerHeight - this.menubarHeight );
+    this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + 'px';
+    this.footwallContainer.style.height = efffootHsplitPosition + 'px' ;
+    this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - effHsplitPosition - this.splitSize - fw) + 'px' : w + 'px';
+    this.footwallContainer.style.width = this.diagramContainer.style.width;
+    this.footwallContainer.style.left = effHsplitPosition + 9 + 'px';
+    this.footwallContainer.style.right = this.diagramContainer.style.width;
+    // this.footwallContainer.style.top = this.diagramContainer.style.height;
+    this.footwallContainer.style.bottom = this.footerHeight + 'px';
+    this.footwallContainer.style.position = 'absolute';
+    this.footwallContainer.style.backgroundColor = 'whiteSmoke';
+    // this.footwallContainer.style.padding = '30px';
+    this.foothsplit.style.left = this.footwallContainer.style.left;
+    this.foothsplit.style.right = this.formatContainer.style.width;
+    this.foothsplit.style.position = "absolute";
+    this.foothsplit.style.cursor = 'row-resize';
+    this.foothsplit.style.width = this.diagramContainer.style.width;
+    this.foothsplit.style.bottom = efffootHsplitPosition + this.footerHeight + 'px';
+    this.foothsplit.style.backgroundColor = "#d9d9d9";
+
+    var diagramHeight = Math.max(0, h - this.footerHeight - this.menubarHeight - this.toolbarHeight) - efffootHsplitPosition;
+    this.diagramContainer.style.height = diagramHeight - this.splitSize  + this.toolbarHeight + 'px';
+    this.hsplit.style.height = this.sidebarContainer.style.height;
+    this.formatContainer.style.borderLeft = '1px solid #E0E0E0';
+
+
 	
 	if (this.tabContainer != null)
 	{
@@ -2765,13 +2800,14 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	{
 		this.menubarContainer.style.width = w + 'px';
 		this.toolbarContainer.style.width = this.menubarContainer.style.width;
-		var sidebarHeight = Math.max(0, h - this.footerHeight - this.menubarHeight - this.toolbarHeight);
-		this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + 'px';
-		this.formatContainer.style.height = sidebarHeight + 'px';
-		this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - effHsplitPosition - this.splitSize - fw) + 'px' : w + 'px';
-		this.footerContainer.style.width = this.menubarContainer.style.width;
-		var diagramHeight = Math.max(0, h - this.footerHeight - this.menubarHeight - this.toolbarHeight);
-		
+
+        this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + 'px';
+        this.formatContainer.style.height = sidebarHeight + 'px';
+        this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - effHsplitPosition - this.splitSize - fw) + 'px' : w + 'px';
+        this.footerContainer.style.width = this.menubarContainer.style.width;
+
+        var diagramHeight = Math.max(0, h - this.footerHeight - this.menubarHeight);
+
 		if (this.tabContainer != null)
 		{
 			this.tabContainer.style.width = this.diagramContainer.style.width;
@@ -2780,7 +2816,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 		}
 		
 		this.diagramContainer.style.height = diagramHeight + 'px';
-		this.hsplit.style.height = diagramHeight + 'px';
+        this.hsplit.style.height = this.sidebarContainer.style.height;
 	}
 	else
 	{
@@ -2828,7 +2864,12 @@ EditorUi.prototype.createDivs = function()
 	this.sidebarContainer = this.createDiv('geSidebarContainer');
 	this.formatContainer = this.createDiv('geSidebarContainer');
 	this.diagramContainer = this.createDiv('geDiagramContainer');
-	this.footerContainer = this.createDiv('geFooterContainer');
+
+    this.footwallContainer = this.createDiv('geFootwallContainer');
+    this.foothsplit = this.createDiv('gefootHsplit');
+    this.foothsplit.setAttribute('title', mxResources.get('collapseExpand'));
+    this.footerContainer = this.createDiv('geFooterContainer');
+
 	this.hsplit = this.createDiv('geHsplit');
 	this.hsplit.setAttribute('title', mxResources.get('collapseExpand'));
 
@@ -2839,6 +2880,9 @@ EditorUi.prototype.createDivs = function()
 	// PPPPP
 	this.toolbarContainer.style.left = '30%';
 	this.toolbarContainer.style.right = '0px';
+
+    this.footwallContainer.style.bottom = '0px';
+
 	this.sidebarContainer.style.left = '0px';
 	this.formatContainer.style.right = '0px';
 	this.formatContainer.style.zIndex = '1';
@@ -2847,8 +2891,10 @@ EditorUi.prototype.createDivs = function()
 	this.footerContainer.style.right = '0px';
 	this.footerContainer.style.bottom = '0px';
 	this.footerContainer.style.zIndex = mxPopupMenu.prototype.zIndex - 2;
-	this.hsplit.style.width = this.splitSize + 'px';
-	
+
+    this.foothsplit.style.height = this.splitSize + 'px';
+    this.hsplit.style.width = this.splitSize + 'px';
+
 	// Only vertical scrollbars, no background in format sidebar
 	this.formatContainer.style.backgroundColor = 'whiteSmoke';
 	this.formatContainer.style.overflowX = 'hidden';
@@ -2950,6 +2996,215 @@ EditorUi.prototype.createUi = function()
 		this.container.appendChild(this.toolbarContainer);
 	}
 
+    //Create footwall
+    this.footwall=  this.createFootwall(this.createDiv('geFootwall'));
+    if (this.footwall != null)
+    {
+        this.footwallContainer.appendChild(this.footwall.container);
+        this.container.appendChild(this.footwallContainer);
+
+
+        var div = document.createElement('div');
+        div.id = 'textBoard';
+        div.style.height = '100%';
+        div.style.width = '100%';
+        div.style.backgroundColor = '#f5f5f5';
+        this.footwallContainer.appendChild(div);
+
+        var tabDiv = document.createElement('div');
+        tabDiv.id = 'tabDiv';
+        tabDiv.style.height = '28px';
+        tabDiv.style.width = '100%';
+        tabDiv.style.backgroundColor = '#adc4e4';
+        div.appendChild(tabDiv);
+
+        var conDiv = document.createElement('div');
+        conDiv.style.position = 'absolute';
+        conDiv.id = 'conDiv';
+        conDiv.style.width = '96%';
+        conDiv.style.left = '1%';
+        conDiv.style.height = '88%';
+        conDiv.style.border = '0px';
+        div.appendChild(conDiv);
+
+        var changeXml = document.createElement('div');
+        changeXml.id = 'xmlEdit';
+        changeXml.style.width = '32px';
+        changeXml.style.height = '17px';
+        changeXml.style.lineheight = '17px';
+        changeXml.style.fontSize = '9pt';
+        changeXml.style.textAlign = 'center';
+        changeXml.style.marginTop = '6px';
+        changeXml.style.marginLeft = '20px';
+        changeXml.style.cursor = 'pointer';
+        changeXml.innerHTML = 'XML';
+        changeXml.style.float = 'left';
+        changeXml.style.backgroundColor = '#adc4e4';
+        changeXml.style.borderLeft = '1px solid #7A9DAD';
+        changeXml.style.borderTop = '1px solid #7A9DAD';
+        changeXml.style.borderRight = '1px solid #7A9DAD';
+        tabDiv.appendChild(changeXml);
+
+        var changeJson = document.createElement('div');
+        changeJson.id = 'jsonEdit';
+        changeJson.style.width = '32px';
+        changeJson.style.height = '17px';
+        changeJson.style.lineheight = '17px';
+        changeJson.style.fontSize = '9pt';
+        changeJson.style.textAlign = 'center';
+        changeJson.style.marginTop = '6px';
+        changeJson.style.cursor = 'pointer';
+        changeJson.innerHTML = 'JSON';
+        changeJson.style.float = 'left';
+        changeJson.style.backgroundColor = '#7A9DAD';
+        changeJson.style.borderTop = '1px solid #7A9DAD';
+        changeJson.style.borderRight = '1px solid #7A9DAD';
+        tabDiv.appendChild(changeJson);
+
+		/*var textarea = document.createElement('textarea');
+		 textarea.style.display = 'none';
+		 window.onload=function(){
+		 var graphXml = this.editor.getGraphXml(), tValue;
+		 tValue = mxUtils.getPrettyXml(graphXml);
+		 textarea.value = tValue;
+		 conDiv.appendChild(textarea);
+		 alert(textarea.value);
+		 CodeMirror.fromTextArea(textarea, {
+		 lineNumbers: true,
+		 smartIndent: true,
+		 mode:'xml'
+		 });
+		 };*/
+
+
+        var textarea='';
+        var gXml = this.editor;
+        var divX = document.getElementById('xmlEdit');
+        mxEvent.addListener(divX, 'click', mxUtils.bind(this, function(){
+            var clearX = document.getElementById('conDiv');
+            clearX.innerHTML = "";
+            textarea = document.createElement('textarea');
+            var graphXml = gXml.getGraphXml(this), tValue;
+            tValue = mxUtils.getPrettyXml(graphXml);
+            textarea.value = tValue;
+            conDiv.appendChild(textarea);
+            changeXml.style.backgroundColor = '#adc4e4';
+            changeJson.style.backgroundColor = '#7A9DAD';
+            changeJson.style.borderBottom = '3px solid white';
+            changeJson.style.borderBottom = '0px';
+
+            var code = CodeMirror.fromTextArea(textarea, {
+                lineNumbers: true,
+                smartIndent: true,
+                mode: 'xml'
+            });
+            code.on('change', function () {
+                textarea.value = code.getValue()
+            });
+        }));
+
+
+        var divJ = document.getElementById('jsonEdit');
+        mxEvent.addListener(divJ, 'click', mxUtils.bind(this, function()
+        {
+            var clearX = document.getElementById('conDiv');
+            clearX.innerHTML = "";
+            textarea = document.createElement('textarea');
+            var graphXml = gXml.getGraphXml(this), tValue;
+            var xmlDoc = mxUtils.parseXml(mxUtils.getXml(graphXml));
+            tValue = CodeTranslator.xml2json(xmlDoc, "  ");
+            textarea.value = tValue;
+            conDiv.appendChild(textarea);
+            changeXml.style.backgroundColor = '#7A9DAD';
+            changeJson.style.backgroundColor = '#adc4e4';
+            changeXml.style.borderBottom = '3px solid white';
+            changeXml.style.borderBottom = '0px';
+
+            var code = CodeMirror.fromTextArea(textarea, {
+                lineNumbers: true,
+                smartIndent: true,
+                mode:'javascript'
+            });
+            code.on('change', function () {
+                textarea.value = code.getValue()
+            });
+        }));
+
+
+
+        var select = document.createElement('select');
+        select.style.width = '180px';
+        select.className = 'geBtn';
+        select.style.height = '20px';
+        select.style.marginLeft = '40px';
+        select.style.float = 'left';
+        select.style.marginTop = '4px';
+
+        var replaceOption = document.createElement('option');
+        replaceOption.setAttribute('value', 'replace');
+        mxUtils.write(replaceOption, mxResources.get('replaceExistingDrawing'));
+        select.appendChild(replaceOption);
+
+        var importOption = document.createElement('option');
+        importOption.setAttribute('value', 'import');
+        mxUtils.write(importOption, mxResources.get('addToExistingDrawing'));
+        select.appendChild(importOption);
+        tabDiv.appendChild(select);
+
+        var okBtn = mxUtils.button(mxResources.get('ok'), mxUtils.bind(this, function()
+        {
+            // Removes all illegal control characters before parsing
+            var data = this.editor.graph.zapGremlins(mxUtils.trim(textarea.value));
+            var error = null;
+
+            if (select.value == 'replace') {
+                this.editor.graph.model.beginUpdate();
+                try {
+                    this.editor.setGraphXml(mxUtils.parseXml(data).documentElement);
+
+                }
+                catch (e) {
+                    error = e;
+                }
+                finally {
+                    this.editor.graph.model.endUpdate();
+                }
+            }
+            else if (select.value == 'import') {
+                this.editor.graph.model.beginUpdate();
+                try {
+                    var doc = mxUtils.parseXml(data);
+                    var model = new mxGraphModel();
+                    var codec = new mxCodec(doc);
+                    codec.decode(doc.documentElement, model);
+
+                    var children = model.getChildren(model.getChildAt(model.getRoot(), 0));
+                    this.editor.graph.setSelectionCells(this.editor.graph.importCells(children));
+
+                }
+                catch (e) {
+                    error = e;
+                }
+                finally {
+                    this.editor.graph.model.endUpdate();
+                }
+            }
+
+            if (error != null) {
+                mxUtils.alert(error.message);
+            }
+        }));
+        okBtn.className = 'gePrimaryBtn';
+        okBtn.style.cursor = 'pointer';
+        okBtn.style.width = '50px';
+        okBtn.style.height = '18px';
+        okBtn.style.marginTop = '5px';
+        okBtn.style.lineheight = '20px';
+        okBtn.style.float = 'left';
+        okBtn.style.marginLeft = '15px';
+        tabDiv.appendChild(okBtn);
+    }
+
 	// HSplit
 	if (this.sidebar != null)
 	{
@@ -2961,6 +3216,16 @@ EditorUi.prototype.createUi = function()
 			this.refresh();
 		}));
 	}
+
+    if(this.footwall != null){
+        this.container.appendChild(this.foothsplit);
+
+        this.addSplitHandler2(this.foothsplit,true,0,mxUtils.bind(this,function(value)
+        {
+            this.foothsplitPosition = value;
+            this.refresh();
+        }));
+    }
 };
 
 /**
@@ -2988,6 +3253,14 @@ EditorUi.prototype.setStatusText = function(value)
 EditorUi.prototype.createToolbar = function(container)
 {
 	return new Toolbar(this, container);
+};
+
+/**
+ * Creates a new footwall for the given container.
+ */
+EditorUi.prototype.createFootwall = function(container)
+{
+    return new Footwall(this, container);
 };
 
 /**
@@ -3101,7 +3374,89 @@ EditorUi.prototype.addSplitHandler = function(elt, horizontal, dx, onChange)
 	this.destroyFunctions.push(function()
 	{
 		mxEvent.removeGestureListeners(document, null, moveHandler, dropHandler);
-	});	
+	});
+};
+
+/**
+ * Add split handler2
+ */
+EditorUi.prototype.addSplitHandler2 = function(elt, horizontal, dx, onChange)
+{
+    var start = null;
+    var initial = null;
+    var ignoreClick = true;
+    var last = null;
+
+    // Disables built-in pan and zoom in IE10 and later
+    if (mxClient.IS_POINTER)
+    {
+        elt.style.touchAction = 'none';
+    }
+
+    var getValue = mxUtils.bind(this, function()
+    {
+        var result = parseInt(((horizontal) ? elt.style.bottom : elt.style.left));
+
+        // Takes into account hidden footer隐藏掉状态栏的情况
+
+        if (!horizontal)
+        {
+            result = result + dx - this.footerHeight;
+        }
+
+        return result;
+    });
+
+    function moveHandler(evt)
+    {
+        if (start != null)
+        {
+            var pt = new mxPoint(mxEvent.getClientX(evt), mxEvent.getClientY(evt));
+            onChange(Math.max(0, initial + (start.y - pt.y) - dx - 28));
+            mxEvent.consume(evt);
+
+            if (initial != getValue())
+            {
+                ignoreClick = true;
+                last = null;
+            }
+        }
+    };
+
+    function dropHandler(evt)
+    {
+        moveHandler(evt);
+        initial = null;
+        start = null;
+    };
+
+    mxEvent.addGestureListeners(elt, function(evt)
+    {
+        start = new mxPoint(mxEvent.getClientX(evt), mxEvent.getClientY(evt));
+        initial = getValue();
+        ignoreClick = false;
+        mxEvent.consume(evt);
+    });
+
+
+    mxEvent.addListener(elt, 'click', function(evt)
+    {
+        if (!ignoreClick)
+        {
+            var next = (last != null) ? last - dx : 0;
+            last = getValue();
+            // 点击的时候第二次点击高度增加 是因为点击是在这里闯进去新参数
+            onChange(next - 28);
+            mxEvent.consume(evt);
+        }
+    });
+
+    mxEvent.addGestureListeners(document, null, moveHandler, dropHandler);
+
+    this.destroyFunctions.push(function()
+    {
+        mxEvent.removeGestureListeners(document, null, moveHandler, dropHandler);
+    });
 };
 
 /**
@@ -3393,6 +3748,7 @@ EditorUi.prototype.getModelJsonString = function()
             attrs['intrinsic'] = rObj.getAttribute('intrinsic');
             attrs['extended'] = rObj.getAttribute('extended');
             attrs['userFunc'] = rObj.getAttribute('userFunc');
+            attrs['image'] = rObj.getAttribute('image');
         }
         if(Object.keys(attrs).length == 0)
         {
@@ -3403,6 +3759,9 @@ EditorUi.prototype.getModelJsonString = function()
         var attribute = {};
         for(var i in attrs)
         {
+        	if(i == 'image') {
+        		continue;
+			}
             attribute[i] = JSON.parse(attrs[i]);
             var atts = JSON.parse(attrs[i]);
             for(var j in atts)
@@ -4148,7 +4507,13 @@ EditorUi.prototype.destroy = function()
 		this.toolbar.destroy();
 		this.toolbar = null;
 	}
-	
+
+    if (this.footwall != null)
+    {
+        this.footwall.destroy();
+        this.footwall = null;
+    }
+
 	if (this.sidebar != null)
 	{
 		this.sidebar.destroy();
@@ -4207,10 +4572,10 @@ EditorUi.prototype.destroy = function()
 		this.destroyFunctions = null;
 	}
 	
-	var c = [this.menubarContainer, this.toolbarContainer, this.sidebarContainer,
-	         this.formatContainer, this.diagramContainer, this.footerContainer,
-	         this.chromelessToolbar, this.hsplit, this.sidebarFooterContainer,
-	         this.layersDialog];
+    var c = [this.menubarContainer, this.toolbarContainer,this.footwallContainer, this.sidebarContainer,
+        this.formatContainer, this.diagramContainer, this.footerContainer,
+        this.chromelessToolbar, this.hsplit, this.sidebarFooterContainer,
+        this.layersDialog];
 	
 	for (var i = 0; i < c.length; i++)
 	{

@@ -2683,12 +2683,24 @@ var LocalImgDialog = function(editorUi, btnLabel, fn)
 	{
 		editorUi.hideDialog();
 		if(imgInput.files.length > 0){
-			var img = new Image();
 			var reader = new FileReader();
-			reader.onload = function(e){
+			reader.onload = function(e) {
+                var img = new Image();
 				img.src = e.target.result;
-				fn(img.src.replace(';base64',''), img.width, img.height);
-			}
+				var url = BASE_URL + SAVE_IMG;
+				var params = 'data=' + encodeURIComponent(img.src);
+				var path;
+				mxUtils.post(url, params, mxUtils.bind(this, function (req) {
+					var result = JSON.parse(req.getText());
+					if (result.status == 0) {
+						var path = UPLOADIMAGE_PATH + '/' + result.data.url;
+						fn(path, img.width, img.height);
+					}
+					else {
+						mxUtils.alert(result.data.msg);
+					}
+				}));
+			};
 			reader.readAsDataURL(imgInput.files[0]);
 		}
 	});
