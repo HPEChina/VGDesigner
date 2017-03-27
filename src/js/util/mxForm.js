@@ -214,7 +214,6 @@ mxForm.prototype.addListAttributeElements = function(arr)
         var td = document.createElement('td');
         mxUtils.write(td, arr[e]);
         td.setAttribute('title', mxResources.get(e) + ":" + arr[e]);
-        td.style.border = '1px solid black';
         td.style.overflow = 'hidden';
         td.style.width = '80px';
         td.style.minWidth = '50px';
