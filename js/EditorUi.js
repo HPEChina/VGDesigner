@@ -2071,7 +2071,7 @@ EditorUi.prototype.addChromelessClickHandler = function()
  */
 EditorUi.prototype.toggleFormatPanel = function(forceHide)
 {
-	this.formatWidth = (forceHide || this.formatWidth > 0) ? 0 : 240;
+	this.formatWidth = (forceHide || this.formatWidth > 0) ? 0 : 300;
 	this.formatContainer.style.display = (forceHide || this.formatWidth > 0) ? '' : 'none';
 	this.refresh();
 	this.format.refresh();
@@ -2730,10 +2730,10 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 		tmp += this.menubarHeight;
 	}
 
-	if (tmp > 0 && !mxClient.IS_QUIRKS)
-	{
-		tmp += 1;
-	}
+	//if (tmp > 0 && !mxClient.IS_QUIRKS)
+	//{
+	//	tmp += 1;
+	//}
 	
 	var sidebarFooterHeight = 0;
 	
@@ -2893,7 +2893,7 @@ EditorUi.prototype.createDivs = function()
     this.hsplit.style.width = this.splitSize + 'px';
 
 	// Only vertical scrollbars, no background in format sidebar
-	this.formatContainer.style.backgroundColor = 'whiteSmoke';
+	this.formatContainer.style.backgroundColor = '#FFF';
 	this.formatContainer.style.overflowX = 'hidden';
 	this.formatContainer.style.overflowY = 'auto';
 	this.formatContainer.style.fontSize = '12px';
