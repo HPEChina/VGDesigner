@@ -536,8 +536,8 @@ Format.prototype.createAttributePanel = function()
     img.style.top = '4px';
     img.style.cursor = 'pointer';
     img.style.opacity = 0.5;
-    img.className = 'icon-24 icon-right-arrow'
-    label.appendChild(img)
+    img.className = 'icon-24 icon-right-arrow';
+    label.appendChild(img);
 
     mxEvent.addListener(img, 'click', function()
     {
