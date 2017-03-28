@@ -1015,12 +1015,18 @@ Sidebar.prototype.getModelClassRecords = function(url, params) {
 			}
 			var tmp = queryArr.join(' || ');
             tmp = '(' + tmp + ') ';
+            queryArr = [];
 			if(this.editorUi.interfaceParams.designLibraryId != ''){
-                tmp += ' && d.designLibraryId=="' + this.editorUi.interfaceParams.designLibraryId + '"';
+                queryArr.push('(d.designLibraryId=="' + this.editorUi.interfaceParams.designLibraryId + '" || d.designLibraryId=="")');
 			}
             if(this.editorUi.interfaceParams.author != ''){
-                tmp += ' && d.author=="' + this.editorUi.interfaceParams.author + '"';
+                queryArr.push('(d.author=="' + this.editorUi.interfaceParams.author + '" || d.author=="")');
             }
+            if(queryArr.length > 0) {
+                var tmp1 = queryArr.join(' || ');
+                tmp = tmp + ' && (' + tmp1 + ')';
+			}
+
             tmp += ' || d.class=="general"';
 			if(this.modelClass.length > 0) {
             	//Get model records
@@ -2013,6 +2019,18 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
         mxEvent.addListener(elt, 'mouseup', mxUtils.bind(this,function(evt)
         {
             if(mxEvent.isRightMouseButton(evt)) {
+                this.editorUi.editor.graph.selectAll(null, true);
+				var ret;
+                if(this.editorUi.editor.graph.getSelectionCount() > 0 ){
+                    ret = mxUtils.confirm(mxResources.get('sureNew'));
+                }
+                else {
+                    ret = true;
+                }
+                if(!ret){
+                    return;
+                }
+
                 this.editorUi.editor.graph.model.nextId = 0;
                 this.editorUi.attributeNameIndex = 1;
                 this.editorUi.initInterfaceParams('editModel', uuid);
@@ -2020,6 +2038,10 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
                 window.opener.openFile = new OpenFile();
                 window.opener.openFile.setData(JSON.parse(data.data).xml, data.filename);
                 this.editorUi.openModel();
+
+                var title = 'Edit model: ' + this.editorUi.editor.getOrCreateFilename();
+                document.title = title;
+                this.editorUi.footwall.reset();
             }
         }));
 	}

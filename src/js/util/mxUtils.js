@@ -4245,6 +4245,54 @@ var mxUtils =
 		}
 
 		return uuid.join('');
-	}
+	},
 
+
+    /**
+     * Function: getPrettyJSON
+     *
+     * Returns a pretty jsonString.
+     *
+     * Parameters:
+     *
+     * object - JSon object.
+     */
+	getPrettyJSON: function(json)
+	{
+		var result = [];
+		var tab = '';
+		var str = '';
+		var jsonString = JSON.stringify(json);
+		for( var i=0; i<jsonString.length;i++)
+		{   str = jsonString[i];
+			switch(str)
+			{
+				case '{':
+				case '[':
+					tab = tab + '  ';
+					result.push(str + '\n' + tab);
+					break;
+				case '}':
+				case ']':
+					tab = tab.substr(0, tab.length - 2);
+					if (jsonString[i - 1] != '}' && jsonString[i - 1] != ']') {
+						result.push('\n');
+					}
+					result.push(tab + str);
+					if(i < jsonString.length-1 && jsonString[i+1] != ',')
+					{
+						result.push('\n');
+					}
+					break;
+				case ',':
+					result.push(str + '\n' + tab);
+					break;
+				default:
+					result.push(str);
+					break;
+			}
+		}
+
+    	return result.join('');
+	}
 };
