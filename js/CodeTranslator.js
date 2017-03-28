@@ -343,7 +343,7 @@ var CodeTranslator =
                 // TODO: Should use real JSON parser (in a way that works both in node and browser)
                 var obj;
                 eval("obj = " + jsonString + ";");
-                obj = JSON.parse(jsonString)
+                obj = JSON.parse(jsonString);
                 return obj;
             }
         };
