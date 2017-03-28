@@ -21,7 +21,7 @@ VGDesigner.prototype.editorJsFiles = ['js/Init.js', 'jscolor/jscolor.js', 'sanit
 /**
  * 编辑模式加载的CSS文件名称数组
  */
-VGDesigner.prototype.editorCssFiles = ['styles/grapheditor.css', 'js/codemirror/codemirror.css', 'styles/inspire.css'];
+VGDesigner.prototype.editorCssFiles = ['styles/inspire.css', 'styles/grapheditor.css', 'js/codemirror/codemirror.css'];
 
 /**
  * 监控模式加载的js文件数组

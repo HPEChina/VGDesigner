@@ -309,7 +309,9 @@ Footwall.prototype.init = function()
                 if(this.codeType == 'json') {
                     data = CodeTranslator.json2xml(data);
                 }
-                else if(this.codeType == 'yaml') {}
+                else if(this.codeType == 'yaml') {
+
+                }
                 this.editorUi.editor.setGraphXml(mxUtils.parseXml(data).documentElement);
             }
             catch (e) {
