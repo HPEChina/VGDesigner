@@ -322,6 +322,7 @@ Format.prototype.refresh = function()
 	div.style.color = 'rgb(112, 112, 112)';
 	div.style.textAlign = 'left';
 	div.style.cursor = 'default';
+	div.style.marginLeft = '5px';
 	
 	var label = document.createElement('div');
 	label.style.border = '1px solid #c0c0c0';
@@ -497,11 +498,11 @@ Format.prototype.createAttributePanel = function()
     div.style.position = 'absolute';
     div.style.top = '0';
     div.style.bottom = '0';
-    div.style.backgroundColor = 'rgb(245, 245, 245)';
+    div.style.marginLeft = '5px';
+    div.style.backgroundColor = '#FFF';
 
     var label = document.createElement('div');
-    label.style.border = '1px solid #c0c0c0';
-    label.style.borderWidth = '0px 0px 1px 0px';
+    label.style.borderBottom = '1px solid #d9d9d9';
     label.style.textAlign = 'center';
     label.style.fontWeight = 'bold';
     label.style.overflow = 'hidden';
@@ -509,6 +510,8 @@ Format.prototype.createAttributePanel = function()
     label.style.paddingTop = '8px';
     label.style.height = '25px';
     label.style.width = '100%';
+    label.style.color = '#3a3e55';
+    label.style.fontSize = '14px';
 
     var graph = this.editorUi.editor.graph;
     var cell = graph.getSelectionCell() || graph.getModel().getRoot();
@@ -519,31 +522,23 @@ Format.prototype.createAttributePanel = function()
 	}
 	else if(cell.getStyle() && cell.getStyle().indexOf('group') >= 0) {
         title +=  ' of group';
-        label.style.color = '#006600';
-	}
-	else{
-        label.style.color = 'rgb(112, 112, 112)';
-	}
+    }
     mxUtils.write(label, title);
 
     // Adds button to hide the format panel since
     // people don't seem to find the toolbar button
     // and the menu item in the format menu
-    var img = document.createElement('img');
+    var img = document.createElement('span');
     img.setAttribute('border', '0');
-    img.setAttribute('src', Dialog.prototype.closeImage);
     img.setAttribute('title', mxResources.get('hide'));
     img.style.position = 'absolute';
     img.style.display = 'block';
-    img.style.right = '0px';
-    img.style.top = '8px';
+    img.style.right = '10px';
+    img.style.top = '4px';
     img.style.cursor = 'pointer';
-    img.style.marginTop = '1px';
-    img.style.marginRight = '17px';
-    img.style.border = '1px solid transparent';
-    img.style.padding = '1px';
     img.style.opacity = 0.5;
-    label.appendChild(img)
+    img.className = 'icon-24 icon-right-arrow';
+    label.appendChild(img);
 
     mxEvent.addListener(img, 'click', function()
     {
@@ -730,7 +725,7 @@ BaseFormatPanel.prototype.createPanel = function()
 {
 	var div = document.createElement('div');
 	div.style.padding = '12px 0px 12px 18px';
-	div.style.borderBottom = '1px solid #c0c0c0';
+	div.style.borderBottom = '1px solid #d9d9d9';
 	
 	return div;
 };
@@ -5050,7 +5045,7 @@ AttributePanel.prototype.collapsedImage = function(ui, cell, value)
 
     var form = new mxForm('properties');
     form.table.style.width = '95%';
-    form.table.style.paddingRight = '20px';
+    form.table.className = 'properties table-def'
 
     var tr = document.createElement('tr');
     var td1 = document.createElement('td');
@@ -5381,7 +5376,7 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
 		var ele = [];
 
 		ele['operator'] = document.createElement('select');
-        ele['operator'].style.width = '30%';
+        ele['operator'].style.width = '26%';
         ele['operator'].style.float = 'left';
         for(var i in ui.attributeOperator[dType]) {
             var opt = document.createElement('option');
@@ -5394,13 +5389,13 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
         }
 
         ele['value'] = document.createElement('input');
-        ele['value'].style.width = '30%';
-        ele['value'].style.height = '13px';
+        ele['value'].style.width = '29%';
+        ele['value'].style.height = '15px';
         ele['value'].style.float = 'left';
         ele['value'].value = (value != null) ? value : '';
 
         ele['logic'] = document.createElement('select');
-        ele['logic'].style.width = '30%';
+        ele['logic'].style.width = '35%';
         ele['logic'].style.float = 'left';
         for(var j in ui.attributeLogic) {
             var opt = document.createElement('option');
@@ -5423,22 +5418,28 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
 
         var td1 = document.createElement('td');
         td1.style.paddingTop = '3px';
-        td1.style.display = 'block';
+        td1.style.height = '100px';
+	td1.style.color = '#788da3';
+	td1.style.fontSize = '12px';
+	td1.style.borderTop = '0';
 
         var td2 = document.createElement('td');
-        td2.style.paddingRight = '0';
+        td2.style.borderTop = '0';
         td2.setAttribute('colspan', 2);
 
         var br = document.createElement('br');
 
         var editElement = {};
-        var cancelBtn = mxUtils.button(mxResources.get('cancel'), function()
+        var cancelBtn = mxUtils.button('', function()
         {
             removeEditTr();
         });
-        cancelBtn.className = 'geBtn';
+        cancelBtn.style.display = 'block';
+	cancelBtn.style.opacity = '.5';
+	cancelBtn.title = mxResources.get('cancel');
+        cancelBtn.className = 'icon-24 icon-delete';
 
-        var applyBtn = mxUtils.button(mxResources.get('apply', ['']), function()
+        var applyBtn = mxUtils.button('', function()
         {
             try
             {
@@ -5468,7 +5469,12 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
                 mxUtils.alert(e);
             }
         });
-        applyBtn.className = 'geBtn gePrimaryBtn';
+        applyBtn.style.display = 'block';
+	applyBtn.style.marginBottom = '10px';
+	applyBtn.style.cursor = 'pointer';
+	applyBtn.style.opacity = '.5';
+	applyBtn.title = mxResources.get('save', ['']);
+        applyBtn.className = 'icon-24 icon-tick';
 
         for(var o in attr)
         {
@@ -5485,7 +5491,8 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
 				editElement[o] = document.createElement('input');
                 editElement[o].style.width = '90%';
                 editElement[o].style.height = '15px';
-                editElement[o].style.float = 'left';
+                editElement[o].style.display = 'block';
+                editElement[o].style.marginBottom = '2px';
                 if(ui.interfaceParams.type == 'model' && cell.getId() == '0' &&
 					o == 'name' && (attr[o] == 'name' || attr[o] == 'category' || attr[o] == 'type')){
                     editElement[o].disabled = 'disabled';
@@ -5493,13 +5500,12 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
                 // input.style.marginLeft = '5px';
                 editElement[o].value = attr[o];
                 td2.appendChild(editElement[o]);
-
-                td2.appendChild(br);
             }
             else if(o == 'dataType') {
                 editElement[o] = document.createElement('select');
-                editElement[o].style.width = '90%';
-                editElement[o].style.float = 'left';
+                editElement[o].style.width = '97%';
+                editElement[o].style.display = 'block';
+                editElement[o].style.marginBottom = '2px';
                 for(var i in ui.attributeDataType) {
                     var opt = document.createElement('option');
                     opt.setAttribute('value', ui.attributeDataType[i]);
@@ -5510,7 +5516,6 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
                     }
                 }
                 td2.appendChild(editElement[o]);
-                td2.appendChild(br);
             }
             else if(o == 'value'){
                 editElement['operator'] = [];
@@ -5530,19 +5535,13 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
         editTr.appendChild(td1);
         editTr.appendChild(td2);
 
-        var editTrBut = form.body.insertRow(count + 1);
-        editTrBut.className = type + 'EditAttributes';
         var td3 = document.createElement('td');
-        td3.style.paddingRight = '0';
-        td3.style.padding = '5px 0px'
-        td3.setAttribute('colspan', 3);
-		applyBtn.style.height = '27px';
-		applyBtn.style.marginLeft = '20px';
-        cancelBtn.style.height = '27px';
-		cancelBtn.style.marginLeft = '20px';
+        td3.style.paddingLeft = '5px'
+	td3.style.borderTop = '0';
+        td3.setAttribute('colspan', 2);
         td3.appendChild(applyBtn);
         td3.appendChild(cancelBtn);
-        editTrBut.appendChild(td3);
+        editTr.appendChild(td3);
 
         function updateDTypeSelect() {
         	var dType = editElement['dataType'].value;
@@ -5615,6 +5614,7 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
 		var newProp = document.createElement('div');
 		newProp.style.whiteSpace = 'nowrap';
 		newProp.style.marginTop = '6px';
+	    	newProp.style.textAlign = 'center';
 
 		div.appendChild(newProp);
 
@@ -5635,8 +5635,8 @@ AttributePanel.prototype.createAttrsPanel = function(ui, cell, value, attrs, typ
 
         });
 
-        addBtn.style.marginLeft = '19%';
         addBtn.style.width = '62%';
+	addBtn.className = 'btn-purple';
         newProp.appendChild(addBtn);
 
     }

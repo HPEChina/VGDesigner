@@ -662,11 +662,11 @@ Sidebar.prototype.addSearchPalette = function(expand)
 	if (mxClient.IS_QUIRKS)
 	{
 		input.style.height = '28px';
-		cross.style.top = '-4px';
+		cross.style.top = '2px';
 	}
 	else
 	{
-		cross.style.top = '2px';
+		cross.style.top = '8px';
 	}
 
 	// Needed to block event transparency in IE
