@@ -190,7 +190,8 @@ Footwall.prototype.init = function()
             else if(o == 'yaml') {
                 var xmlDoc = mxUtils.parseXml(mxUtils.getXml(graphXml));
                 tValue = CodeTranslator.xml2json(xmlDoc, "  ");
-                mode = 'javascript';
+                tValue = jsyaml.dump(JSON.parse(tValue));
+                mode = 'yaml';
             }
             else if(o == 'transcode') {
                 okBtn.setAttribute('disabled', 'disabled');
@@ -309,7 +310,11 @@ Footwall.prototype.init = function()
                 if(this.codeType == 'json') {
                     data = CodeTranslator.json2xml(data);
                 }
-                else if(this.codeType == 'yaml') {}
+                else if(this.codeType == 'yaml') {
+                    data = data.replace(/&quot;/g,"'" );
+                    data = JSON.stringify(jsyaml.load(data));
+                    data = CodeTranslator.json2xml(data);
+                }
                 this.editorUi.editor.setGraphXml(mxUtils.parseXml(data).documentElement);
             }
             catch (e) {
