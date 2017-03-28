@@ -330,7 +330,11 @@ Footwall.prototype.init = function()
                 if(this.codeType == 'json') {
                     data = CodeTranslator.json2xml(data);
                 }
-                else if(this.codeType == 'yaml') {}
+                else if(this.codeType == 'yaml') {
+                    data = data.replace(/&quot;/g,"'" );
+                    data = JSON.stringify(jsyaml.load(data));
+                    data = CodeTranslator.json2xml(data);
+                }
                 var doc = mxUtils.parseXml(data);
                 var model = new mxGraphModel();
                 var codec = new mxCodec(doc);

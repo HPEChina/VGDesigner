@@ -16,12 +16,12 @@ var VGDesigner = function(model, container) {
 VGDesigner.prototype.editorJsFiles = ['js/Init.js', 'jscolor/jscolor.js', 'sanitizer/sanitizer.min.js', 'src/js/mxClient.js', 'js/EditorUi.js',
     'js/Editor.js', 'js/Sidebar.js', 'js/Graph.js', 'js/Shapes.js', 'js/Actions.js', 'js/Menus.js', 'js/Format.js','js/Footwall.js',
     'js/Toolbar.js', 'js/Dialogs.js', 'js/FileSaver.js', 'js/CodeTranslator.js', 'js/codemirror/codemirror.js',
-    'js/codemirror/javascript.js', 'js/codemirror/xml.js', 'js/codemirror/yaml.js', 'js/ModelAttribute.js'];
+    'js/codemirror/javascript.js', 'js/codemirror/xml.js', 'js/codemirror/yaml.js', 'js/ModelAttribute.js', 'js/js-yaml.js'];
 
 /**
  * 编辑模式加载的CSS文件名称数组
  */
-VGDesigner.prototype.editorCssFiles = ['styles/grapheditor.css', 'js/codemirror/codemirror.css', 'styles/inspire.css'];
+VGDesigner.prototype.editorCssFiles = ['styles/inspire.css', 'styles/grapheditor.css', 'js/codemirror/codemirror.css'];
 
 /**
  * 监控模式加载的js文件数组

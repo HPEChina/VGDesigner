@@ -5094,14 +5094,6 @@ AttributePanel.prototype.collapsedImage = function(ui, cell, value)
                 		image.src = src;
                         value.setAttribute('image', src);
                         graph.getModel().setValue(cell, value);
-                        // var geo = graph.getCellGeometry(cells[i])
-                        // if (geo != null)
-                        // {
-                        //     geo = geo.clone();
-                        //
-							// geo.width = Math.max(0, geo.width - stepSize);
-                        //     graph.getModel().setGeometry(cells[i], geo);
-                        // }
                     }
                     else {
                         mxUtils.alert(result.data.msg);
