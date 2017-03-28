@@ -5053,7 +5053,7 @@ AttributePanel.prototype.collapsedImage = function(ui, cell, value)
     image.style.maxWidth = '60px';
     image.style.maxHeight = '60px';
     image.style.border = '1px solid white';
-    image.src = value.getAttribute('image') ? value.getAttribute('image') : mxGraph.prototype.collapsedImage.src;
+	image.src = (value.getAttribute('image') && value.getAttribute('image') != 'null') ? value.getAttribute('image') : mxGraph.prototype.collapsedImage.src;
     td1.appendChild(image);
 
     var td0 = document.createElement('td');
