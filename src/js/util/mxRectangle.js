@@ -17,8 +17,8 @@ function mxRectangle(x, y, width, height)
 {
 	mxPoint.call(this, x, y);
 
-	this.width = (width != null) ? width : 0;
-	this.height = (height != null) ? height : 0;
+	this.width = parseInt((width != null) ? width : 0);
+	this.height = parseInt((height != null) ? height : 0);
 };
 
 /**

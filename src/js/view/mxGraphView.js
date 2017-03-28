@@ -2202,7 +2202,7 @@ mxGraphView.prototype.getState = function(cell, create)
 	if (cell != null)
 	{
 		state = this.states.get(cell);
-		
+
 		if (create && (state == null || this.updateStyle) && this.graph.isCellVisible(cell))
 		{
 			if (state == null)
