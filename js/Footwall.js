@@ -313,6 +313,7 @@ Footwall.prototype.init = function()
                 else if(this.codeType == 'yaml') {
                     data = data.replace(/&quot;/g,"'" );
                     data = JSON.stringify(jsyaml.load(data));
+                    data = data.replace(/'/g, '&quot;');
                     data = CodeTranslator.json2xml(data);
                 }
                 this.editorUi.editor.setGraphXml(mxUtils.parseXml(data).documentElement);
@@ -333,6 +334,7 @@ Footwall.prototype.init = function()
                 else if(this.codeType == 'yaml') {
                     data = data.replace(/&quot;/g,"'" );
                     data = JSON.stringify(jsyaml.load(data));
+                    data = data.replace(/'/g, '&quot;');
                     data = CodeTranslator.json2xml(data);
                 }
                 var doc = mxUtils.parseXml(data);
