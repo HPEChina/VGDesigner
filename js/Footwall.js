@@ -65,7 +65,6 @@ Footwall.prototype.init = function()
     this.editorUi.footwallContainer.appendChild(div);
 
     var tabDiv = document.createElement('div');
-    // 3/27
     tabDiv.style.height = '25px';
     tabDiv.style.width = '100%';
     tabDiv.style.backgroundColor = '#b3b3b3';
