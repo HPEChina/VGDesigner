@@ -7,8 +7,6 @@ body{
 	font-size:11pt;
 	border:none;
 	margin:0px;
-	margin:0;
-	padding:0;
 }
 .geMenubarContainer .geItem, .geToolbar .geButton, .geToolbar .geLabel, .geSidebarContainer .geTitle {
 	cursor:pointer !important;
@@ -199,11 +197,12 @@ body{
 	text-decoration:none;
 }
 .geMenubarContainer {
-	background-color:#FFF;
+	background-color:whitesmoke;
 }
 .geMenubar {
 	padding:0px 2px 0px 2px;
 	vertical-align:middle;
+	border-top:1px solid #e0e0e0;
 	-webkit-box-shadow: inset 0 1px 0 0 #fff;
 	-moz-box-shadow: inset 0 1px 0 0 #fff;
 	box-shadow: inset 0 1px 0 0 #fff;
@@ -213,7 +212,7 @@ body{
 	cursor:default;
 }
 .geMenubarContainer .geItem:hover, .geToolbarContainer .geItem:hover {
-	color:#ec8c45;
+	background:#eeeeee;
 }
 .mxDisabled:hover {
 	background:inherit !important;
@@ -231,7 +230,7 @@ body{
 	border:1px solid #d5d5d5 !important;
 }
 .geToolbarContainer {
-	background:#FFF;
+	background:whiteSmoke;
 }
 .geSidebarContainer .geToolbarContainer {
 	background:transparent;
@@ -251,6 +250,7 @@ body{
 
 .geToolbar {
 	padding:1px 0px 0px 6px;
+	border-top:1px solid #e0e0e0;
 	-webkit-box-shadow: inset 0 1px 0 0 #fff;
 	-moz-box-shadow: inset 0 1px 0 0 #fff;
 	box-shadow: inset 0 1px 0 0 #fff;
@@ -334,7 +334,8 @@ div.mxWindow .geButton {
 	overflow:auto;
 }
 .geSidebar {
-	background:#FFF;
+	background:whiteSmoke;
+	border-bottom:1px solid #e5e5e5;
 	padding:5px;
 	_padding:1px;
 	padding-bottom:12px;
@@ -343,17 +344,19 @@ div.mxWindow .geButton {
 .geSidebarContainer .geTitle {
 	display:block;
 	font-size:11pt;
+	border-bottom:1px solid #e5e5e5;
 	font-weight:normal;
 	padding:6px 0px 6px 14px;
 	margin:0px;
 	cursor:default;
+	background:#eeeeee;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	line-height:1.4em;
 }
 .geSidebarContainer .geTitle:hover {
-	color:#ec8c45;
+	background:#e5e5e5;
 }
 .geTitle img {
 	opacity:0.5;
@@ -420,43 +423,35 @@ div.mxWindow .geButton {
 }
 .geHsplit {
 	cursor:col-resize;
-	background-color:#FFF;
+	background-color:#e5e5e5;
 	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHBAMAAADdS/HjAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAHUlEQVQImWMQEGAQFWUQFmYQF2cQEmIQE2MQEQEACy4BF67hpEwAAAAASUVORK5CYII=);
 	_background-image:url('thumb_vertical.png');
-	background-repeat:no-repeat;
-	background-position:center center;
-}
-.gefootHsplit {
-	cursor:row-resize;
-	background-color:#FFF;
-	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAEBAMAAACw6DhOAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAFElEQVQImWNgNVdzYBAUFBRggLMAEzYBy29kEPgAAAAASUVORK5CYII=);
-	_background-image:url('thumb_horz.png');
 	background-repeat:no-repeat;
 	background-position:center center;
 }
 .geVsplit {
 	font-size:1pt;
 	cursor:row-resize;
-	background-color:#FFF;
+	background-color:#e5e5e5;
 	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAEBAMAAACw6DhOAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAFElEQVQImWNgNVdzYBAUFBRggLMAEzYBy29kEPgAAAAASUVORK5CYII=);
 	_background-image:url('thumb_horz.png');
 	background-repeat:no-repeat;
 	background-position:center center;
 }
-.geHsplit:hover, .geVsplit:hover, .gefootHsplit:hover {
-	background-color:#727687;
-}
-.gefootHsplit {
-	cursor:row-resize;
-	background-color:#FFF;
-	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAEBAMAAACw6DhOAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAFElEQVQImWNgNVdzYBAUFBRggLMAEzYBy29kEPgAAAAASUVORK5CYII=);
-	_background-image:url('thumb_horz.png');
-	background-repeat:no-repeat;
-	background-position:center center;
-}
-.geHsplit:hover,.gefootHsplit:hover, .geVsplit:hover {
+.geHsplit:hover, .geVsplit:hover {
 	background-color:#d5d5d5;
 }
+/*XXXXX*/
+.gefootHsplit {
+	cursor:row-resize;
+	background-color:#e5e5e5;
+	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAEBAMAAACw6DhOAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAFElEQVQImWNgNVdzYBAUFBRggLMAEzYBy29kEPgAAAAASUVORK5CYII=);
+	_background-image:url('thumb_horz.png');
+	background-repeat:no-repeat;
+	background-position:center center;
+}
+
+
 .geDialog {
 	position:absolute;
 	background:white;

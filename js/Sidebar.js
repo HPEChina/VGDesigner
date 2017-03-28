@@ -1015,12 +1015,18 @@ Sidebar.prototype.getModelClassRecords = function(url, params) {
 			}
 			var tmp = queryArr.join(' || ');
             tmp = '(' + tmp + ') ';
+            queryArr = [];
 			if(this.editorUi.interfaceParams.designLibraryId != ''){
-                tmp += ' && d.designLibraryId=="' + this.editorUi.interfaceParams.designLibraryId + '"';
+                queryArr.push('(d.designLibraryId=="' + this.editorUi.interfaceParams.designLibraryId + '" || d.designLibraryId=="")');
 			}
             if(this.editorUi.interfaceParams.author != ''){
-                tmp += ' && d.author=="' + this.editorUi.interfaceParams.author + '"';
+                queryArr.push('(d.author=="' + this.editorUi.interfaceParams.author + '" || d.author=="")');
             }
+            if(queryArr.length > 0) {
+                var tmp1 = queryArr.join(' || ');
+                tmp = tmp + ' && (' + tmp1 + ')';
+			}
+
             tmp += ' || d.class=="general"';
 			if(this.modelClass.length > 0) {
             	//Get model records

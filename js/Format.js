@@ -518,8 +518,9 @@ Format.prototype.createAttributePanel = function()
     var title = mxResources.get('attribute');
     if(cell.getId() == '0'){
     	title +=  ' of ' + this.editorUi.interfaceParams.type;
-    }
-    else if(cell.getStyle() == 'group') {
+    	label.style.color = '#0000c6';
+	}
+	else if(cell.getStyle() && cell.getStyle().indexOf('group') >= 0) {
         title +=  ' of group';
     }
     mxUtils.write(label, title);
@@ -5017,7 +5018,7 @@ var AttributePanel = function(format, editorUi, container, cell)
         this.createAttrsPanel(editorUi, cell, value, tObj[o], o, allNames);
 	}
 
-	if(cell.getStyle() == 'group' || (cell.getId() == '0' && editorUi.interfaceParams.type == 'model')) {
+	if((cell.getStyle() && cell.getStyle().indexOf('group')) >= 0 || (cell.getId() == '0' && editorUi.interfaceParams.type == 'model')) {
         this.collapsedImage(editorUi, cell, value)
     }
 };
@@ -5093,6 +5094,14 @@ AttributePanel.prototype.collapsedImage = function(ui, cell, value)
                 		image.src = src;
                         value.setAttribute('image', src);
                         graph.getModel().setValue(cell, value);
+                        // var geo = graph.getCellGeometry(cells[i])
+                        // if (geo != null)
+                        // {
+                        //     geo = geo.clone();
+                        //
+							// geo.width = Math.max(0, geo.width - stepSize);
+                        //     graph.getModel().setGeometry(cells[i], geo);
+                        // }
                     }
                     else {
                         mxUtils.alert(result.data.msg);

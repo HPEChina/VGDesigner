@@ -913,6 +913,7 @@ EditorUi = function(editor, container, lightbox, interfaceParams)
    	this.editor.resetGraph();
    	this.init();
    	this.open();
+
 };
 
 // Extends mxEventSource
@@ -1131,6 +1132,11 @@ EditorUi.prototype.init = function()
 	if (this.format != null)
 	{
 		this.format.init();
+	}
+
+	if (this.footwall != null)
+	{
+		this.footwall.reset();
 	}
 };
 
@@ -2763,10 +2769,12 @@ EditorUi.prototype.refresh = function(sizeDidChange)
     var sidebarHeight = Math.max(0, h - this.footerHeight - this.menubarHeight );
     this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + 'px';
     this.footwallContainer.style.height = efffootHsplitPosition + 'px' ;
-    this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - effHsplitPosition - this.splitSize - fw) + 'px' : w + 'px';
+    // 3/24
+    this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - this.sidebarContainer.style.width - this.splitSize  - fw) + 'px' : w  + 'px';
     this.footwallContainer.style.width = this.diagramContainer.style.width;
-    this.footwallContainer.style.left = effHsplitPosition + 9 + 'px';
-    this.footwallContainer.style.right = this.diagramContainer.style.width;
+    // 3/27
+    this.footwallContainer.style.left = effHsplitPosition + this.splitSize + 'px';
+    this.footwallContainer.style.right = this.formatContainer.style.width;
     // this.footwallContainer.style.top = this.diagramContainer.style.height;
     this.footwallContainer.style.bottom = this.footerHeight + 'px';
     this.footwallContainer.style.position = 'absolute';
@@ -2800,7 +2808,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 
         this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + 'px';
         this.formatContainer.style.height = sidebarHeight + 'px';
-        this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - effHsplitPosition - this.splitSize - fw) + 'px' : w + 'px';
+        this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - effHsplitPosition - this.splitSize  - fw) + 'px' : w + 'px';
         this.footerContainer.style.width = this.menubarContainer.style.width;
 
         var diagramHeight = Math.max(0, h - this.footerHeight - this.menubarHeight);
