@@ -2198,7 +2198,8 @@ EditorUi.prototype.openModel = function()
                     this.editor.undoManager.clear();
 
                     this.editor.graph.selectAll(null, true);
-                    this.editor.graph.setSelectionCells(this.editor.graph.ungroupCells());
+					this.editor.graph.setSelectionCells(this.editor.graph.ungroupCells());
+
                     if (filename != null)
                     {
                         this.editor.setFilename(filename);
@@ -3552,7 +3553,7 @@ EditorUi.prototype.getModelJsonString = function()
             attrs['intrinsic'] = rObj.getAttribute('intrinsic');
             attrs['extended'] = rObj.getAttribute('extended');
             attrs['userFunc'] = rObj.getAttribute('userFunc');
-            attrs['image'] = rObj.getAttribute('image');
+            attrs['image'] = rObj.getAttribute('image') ? rObj.getAttribute('image') : '';
         }
         if(Object.keys(attrs).length == 0)
         {
@@ -3604,12 +3605,15 @@ EditorUi.prototype.getModelJsonString = function()
         //组合
 		//检查所有图元是否已经组合, ==1组合，>1否
 		var num = graph.getSelectionCell().parent.children.length;
+		var select = graph.getSelectionCell();
 		var group = null;
-        if(num > 1 || (num == 1 && graph.getSelectionCell().style != 'group' )) {
-            var group = graph.groupCells(null, 0);
+		// var groupFlag = false;
+        if(num > 1 || (num == 1 && select.getStyle() && select.getStyle().indexOf('group') < 0)) {
+            group = graph.groupCells(null, 0);
             graph.setSelectionCell(group);
 		}
 		else {
+        	// groupFlag = true;
         	group = graph.getSelectionCell();
 		}
 
@@ -3640,6 +3644,7 @@ EditorUi.prototype.getModelJsonString = function()
 
         ret['json'] = JSON.stringify(entry);
         ret['statu'] = true;
+        // ret['groupFlag'] = groupFlag;
         return ret;
     }
     else {
@@ -3701,6 +3706,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             var type = res['type'];
             var description = res['description'];
             var codetype = 'xml';
+            // var groupFlag = res['groupFlag'];
 
             params = 'filename=' + name;
             params += '&codetype=' + codetype;
@@ -3719,7 +3725,6 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             params += '&designLibraryId=' + this.interfaceParams.designLibraryId;
             params += '&author=' + this.interfaceParams.author;
             params += '&from=' + this.interfaceParams.from;
-
 		}
 		else
 		{
@@ -3731,6 +3736,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             params += '&id=' + this.interfaceParams.id;
             params += '&designLibraryId=' + this.interfaceParams.designLibraryId;
             params += '&author=' + this.interfaceParams.author;
+            params += '&from=' + this.interfaceParams.from;
 		}
 
 
