@@ -1916,41 +1916,48 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 				Math.floor((height - bounds.height * s) / 2 / s - bounds.y));
 	}
 	
-	var node = null;
+	var value = this.graph.getModel().getValue(cells[0]);
+	var img_src = value.getAttribute('image');
+	if (img_src) {
+		var image = document.createElement('img');
+		image.style.maxWidth = '40px';
+		image.style.maxHeight = '40px';
+		image.src = img_src;
+		parent.appendChild(image);
+
+	} else {
+		var node = null;
 	
-	// For supporting HTML labels in IE9 standards mode the container is cloned instead
-	if (this.graph.dialect == mxConstants.DIALECT_SVG && !mxClient.NO_FO)
-	{
-		node = this.graph.view.getCanvas().ownerSVGElement.cloneNode(true);
+		// For supporting HTML labels in IE9 standards mode the container is cloned instead
+		if (this.graph.dialect == mxConstants.DIALECT_SVG && !mxClient.NO_FO) {
+			node = this.graph.view.getCanvas().ownerSVGElement.cloneNode(true);
+		}
+		// LATER: Check if deep clone can be used for quirks if container in DOM
+		else {
+			node = this.graph.container.cloneNode(false);
+			node.innerHTML = this.graph.container.innerHTML;
+		}
+	
+		this.graph.getModel().clear();
+		mxClient.NO_FO = fo;
+	
+		// Catch-all event handling
+		if (mxClient.IS_IE6) {
+			parent.style.backgroundImage = 'url(' + this.editorUi.editor.transparentImage + ')';
+		}
+	
+		node.style.position = 'relative';
+		node.style.overflow = 'hidden';
+		node.style.cursor = 'move';
+		node.style.left = this.thumbBorder + 'px';
+		node.style.top = this.thumbBorder + 'px';
+		node.style.width = width + 'px';
+		node.style.height = height + 'px';
+		node.style.visibility = '';
+		node.style.minWidth = '';
+		node.style.minHeight = '';
+		parent.appendChild(node);
 	}
-	// LATER: Check if deep clone can be used for quirks if container in DOM
-	else
-	{
-		node = this.graph.container.cloneNode(false);
-		node.innerHTML = this.graph.container.innerHTML;
-	}
-	
-	this.graph.getModel().clear();
-	mxClient.NO_FO = fo;
-	
-	// Catch-all event handling
-	if (mxClient.IS_IE6)
-	{
-		parent.style.backgroundImage = 'url(' + this.editorUi.editor.transparentImage + ')';
-	}
-	
-	node.style.position = 'relative';
-	node.style.overflow = 'hidden';
-	node.style.cursor = 'move';
-	node.style.left = this.thumbBorder + 'px';
-	node.style.top = this.thumbBorder + 'px';
-	node.style.width = width + 'px';
-	node.style.height = height + 'px';
-	node.style.visibility = '';
-	node.style.minWidth = '';
-	node.style.minHeight = '';
-	
-	parent.appendChild(node);
 	
 	// Adds title for sidebar entries
 	if (this.sidebarTitles && title != null && showTitle != false)
@@ -2079,7 +2086,6 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 			}
 		}));
 	}
-	
 	return elt;
 };
 Sidebar.prototype.createItem1 = function(cells, title, showLabel, showTitle, width, height, allowCellsInserted)
@@ -3330,6 +3336,7 @@ Sidebar.prototype.itemClicked = function(cells, ds, evt, elt)
 			this.editorUi.hoverIcons.update(graph.view.getState(graph.getSelectionCell()));
 		}
 	}
+	graph.foldCells(true)//折叠
 };
 
 /**
