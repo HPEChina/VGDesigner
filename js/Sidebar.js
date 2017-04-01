@@ -967,6 +967,34 @@ Sidebar.prototype.addGeneralPalette = function(modelData, id, expand, saveFlag)
     }//update by wang,jianhui
     this.addPaletteFunctions(id, this.modelClass[id]||modelData[0].description || modelData[0].class, (expand != null) ? expand : true, fns);
 };
+// 330
+Sidebar.prototype.addGeneralPaletteOne = function(modelData, id, expand, saveFlag)
+{
+    var fns = [];
+    for(var i in modelData) {
+        //if operator == edit and id != null and id==modelData[i].id then open model
+        if (!saveFlag && this.editorUi.interfaceParams.id && this.editorUi.interfaceParams.id == modelData[i].id && this.editorUi.interfaceParams.operator == 'edit') {
+            window.opener = {};
+            window.opener.openFile = new OpenFile();
+            window.opener.openFile.setData(JSON.parse(modelData[i].data).xml, modelData[i].filename);
+            this.editorUi.openModel();
+        }
+        var prop = modelData[i].property;
+        // var attr = modelData[i].attribute;
+        var attr = modelData[i];
+
+        if(prop.type.toLowerCase() == 'edge') {
+            fns.push(this.createEdgeTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title));
+        }//update by wang,jianhui
+        else if (modelData[i].data) {
+            fns.push(this.createVertexTemplateFromXML(attr, id));
+        }
+        else {
+            fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
+        }
+    }//update by wang,jianhui
+    this.addPaletteFunctionsOne(id, this.modelClass[id]||modelData[0].description || modelData[0].class, (expand != null) ? expand : true, fns);
+};
 
 Sidebar.prototype.createVertexTemplateFromXML = function(attr, id) {
 	var data = attr.data;
@@ -1062,20 +1090,42 @@ Sidebar.prototype.getModelAndAddPalette = function(url, params) {
         	for(var key in arr){
 				switch(key) {
 					case 'general':
-                        this.addGeneralPalette(arr[key], key);
+                        this.addGeneralPaletteOne(arr[key], key,false);
+                        var modelTitle = this.createSecondTitle('Model');
+                        this.container.appendChild(modelTitle);
+
                         break;
-					default:
+                    default:
                         this.addGeneralPalette(arr[key], key, false);
-						break;
+                        break;
 				}
             }
         }
         else {
             mxUtils.alert(result.data.msg);
         }
+        // 330
+        var secondTitle = document.getElementsByClassName('second')[0];
+        var title = document.getElementsByClassName('two');
+        var cellDiv = document.getElementsByClassName('third');
+        // 330
+        mxEvent.addListener(secondTitle, 'click', mxUtils.bind(this, function () {
+
+            for(i = 0; i < title.length;i++){
+                if (title[i].style.display != 'none') {
+                    title[i].style.display = 'none';
+                    cellDiv[i].style.display = 'none';
+                    secondTitle.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
+                }
+                else {
+                    title[i].style.display = 'block';
+                    cellDiv[i].style.display = 'none';
+                    secondTitle.style.backgroundImage = 'url(\'' + this.expandedImage + '\')';
+                }}
+        }));
+
     }));
 };
-
 /**
  * Adds the general palette to the sidebar.
  */
@@ -1887,6 +1937,33 @@ Sidebar.prototype.createTitle = function(label)
 	mxUtils.write(elt, label);
 
 	return elt;
+};
+/**
+ *Creates First Title.
+ */
+Sidebar.prototype.createFirstTitle = function(name)
+{
+    var elt = document.createElement('a');
+    elt.setAttribute('href', 'javascript:void(0);');
+    elt.setAttribute('title', mxResources.get('sidebarTooltip'));
+    elt.className = 'geFirstTitle';
+    elt.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
+    elt.style.backgroundRepeat = 'no-repeat';
+    elt.style.backgroundPosition = '0% 50%';
+    mxUtils.write(elt, name);
+    return elt;
+};
+Sidebar.prototype.createSecondTitle = function(name)
+{
+    var elt = document.createElement('a');
+    elt.setAttribute('href', 'javascript:void(0);');
+    elt.setAttribute('title', mxResources.get('sidebarTooltip'));
+    elt.className = 'geFirstTitle second';
+    elt.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
+    elt.style.backgroundRepeat = 'no-repeat';
+    elt.style.backgroundPosition = '0% 50%';
+    mxUtils.write(elt, name);
+    return elt;
 };
 
 /**
@@ -3478,68 +3555,149 @@ Sidebar.prototype.addPaletteFunctions = function(id, title, expanded, fns)
 		}
 	}));
 };
+// 330
+Sidebar.prototype.addPaletteFunctionsOne = function(id, title, expanded, fns)
+{
+    this.addPaletteOne(id, id, expanded, mxUtils.bind(this, function(content)
+    {
+        for (var i = 0; i < fns.length; i++)
+        {
+            content.appendChild(fns[i](content));
+        }
+    }));
+};
 
-/**
- * Adds the given palette.
- */
+// 330 all
 Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
 {
-	if (this[id]) {
-		if (!this[id].style.display||this[id].style.display == 'none') {
-			this[id+title].click();
-		}
-		onInit(this[id]);
-		return this[id];
-	}
-	var elt = this.createTitle(title);
-	this.container.appendChild(elt);
-	
-	var div = document.createElement('div');
-	div.className = 'geSidebar';
-	
-	// Disables built-in pan and zoom in IE10 and later
-	if (mxClient.IS_POINTER)
-	{
-		div.style.touchAction = 'none';
-	}
-	
-	// Shows tooltip if mouse over background
-	mxEvent.addListener(div, 'mousemove', mxUtils.bind(this, function(evt)
-	{
-		if (mxEvent.getSource(evt) == div)
-		{
-			div.setAttribute('title', mxResources.get('sidebarTooltip'));
-		}
-		else
-		{
-			div.removeAttribute('title');
-		}
-	}));
+    if (this[id]) {
+        if (!this[id].style.display||this[id].style.display == 'none') {
+            this[id+title].click();
+        }
+        onInit(this[id]);
+        return this[id];
+    }
+    // 327
+    var ccc = document.createElement('div');
+    ccc.className = 'two';
+    ccc.style.display = 'none';
+    this.container.appendChild(ccc);
+    var elt = this.createTitle(title);
+    ccc.appendChild(elt);
 
-	if (expanded)
-	{
-		onInit(div);
-		onInit = null;
-	}
-	else
-	{
-		div.style.display = 'none';
-	}
-	
+    var div = document.createElement('div');
+    div.className = 'geSidebar third';
+
+    // Disables built-in pan and zoom in IE10 and later
+    if (mxClient.IS_POINTER)
+    {
+        div.style.touchAction = 'none';
+    }
+
+    // Shows tooltip if mouse over background
+    mxEvent.addListener(div, 'mousemove', mxUtils.bind(this, function(evt)
+    {
+        if (mxEvent.getSource(evt) == div)
+        {
+            div.setAttribute('title', mxResources.get('sidebarTooltip'));
+        }
+        else
+        {
+            div.removeAttribute('title');
+        }
+    }));
+
+    if (expanded)
+    {
+        onInit(div);
+        onInit = null;
+    }
+    else
+    {
+        div.style.display = 'none';
+    }
+
     this.addFoldingHandler(elt, div, onInit);
-	
-	var outer = document.createElement('div');
+
+
+    var outer = document.createElement('div');
     outer.appendChild(div);
     this.container.appendChild(outer);
-    
+
     // Keeps references to the DOM nodes
     if (id != null)
     {
-    	this.palettes[id] = [elt, outer];
+        this.palettes[id] = [elt, outer];
     }
     this[id]=div;
-	this[id+title]=elt;
+    this[id+title]=elt;
     return div;
+
+};
+
+// 330 all
+Sidebar.prototype.addPaletteOne = function(id, title, expanded, onInit)
+{
+    if (this[id]) {
+        if (!this[id].style.display||this[id].style.display == 'none') {
+            this[id+title].click();
+        }
+        onInit(this[id]);
+        return this[id];
+    }
+    var elt = this.createFirstTitle(title);
+    this.container.appendChild(elt);
+
+    var div = document.createElement('div');
+    div.className = 'geSidebar';
+
+    // Disables built-in pan and zoom in IE10 and later
+    if (mxClient.IS_POINTER)
+    {
+        div.style.touchAction = 'none';
+    }
+
+    // Shows tooltip if mouse over background
+    mxEvent.addListener(div, 'mousemove', mxUtils.bind(this, function(evt)
+    {
+        if (mxEvent.getSource(evt) == div)
+        {
+            div.setAttribute('title', mxResources.get('sidebarTooltip'));
+        }
+        else
+        {
+            div.removeAttribute('title');
+        }
+    }));
+
+    if (expanded)
+    {
+        onInit(div);
+        onInit = null;
+    }
+    else
+    {
+        div.style.display = 'none';
+    }
+// 330
+    this.addFoldingHandlerOne(elt, div, onInit);
+// 330
+	/* var modelT = document.getElementsByClassName('geFirstTitle');
+	 this.hideSecond(modelT,twoDiv);*/
+
+    var outer = document.createElement('div');
+    outer.appendChild(div);
+    this.container.appendChild(outer);
+
+    // Keeps references to the DOM nodes
+    if (id != null)
+    {
+        this.palettes[id] = [elt, outer];
+    }
+    this[id]=div;
+    this[id+title]=elt;
+    return div;
+
 };
 
 /**
@@ -3552,8 +3710,9 @@ Sidebar.prototype.addFoldingHandler = function(title, content, funct)
 	// Avoids mixed content warning in IE6-8
 	if (!mxClient.IS_IE || document.documentMode >= 8)
 	{
+		// 330
 		title.style.backgroundImage = (content.style.display == 'none') ?
-			'url(\'' + this.collapsedImage + '\')' : 'url(\'' + this.expandedImage + '\')';
+			'url()' : 'url()';
 	}
 	
 	title.style.backgroundRepeat = 'no-repeat';
@@ -3595,16 +3754,79 @@ Sidebar.prototype.addFoldingHandler = function(title, content, funct)
 				content.style.display = 'block';
 			}
 			
-			title.style.backgroundImage = 'url(\'' + this.expandedImage + '\')';
+			// title.style.backgroundImage = 'url(\'' + this.expandedImage + '\')';
 		}
 		else
 		{
-			title.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
+			// title.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
 			content.style.display = 'none';
 		}
 		
 		mxEvent.consume(evt);
 	}));
+};
+
+// 330
+Sidebar.prototype.addFoldingHandlerOne = function(title, content, funct)
+{
+    var initialized = false;
+
+    // Avoids mixed content warning in IE6-8
+    if (!mxClient.IS_IE || document.documentMode >= 8)
+    {
+        title.style.backgroundImage = (content.style.display == 'none') ?
+            'url(\'' + this.collapsedImage + '\')' : 'url(\'' + this.expandedImage + '\')';
+    }
+
+    title.style.backgroundRepeat = 'no-repeat';
+    title.style.backgroundPosition = '0% 50%';
+
+    mxEvent.addListener(title, 'click', mxUtils.bind(this, function(evt)
+    {
+        if (content.style.display == 'none')
+        {
+            if (!initialized)
+            {
+                initialized = true;
+
+                if (funct != null)
+                {
+                    // Wait cursor does not show up on Mac
+                    title.style.cursor = 'wait';
+                    var prev = title.innerHTML;
+                    title.innerHTML = mxResources.get('loading') + '...';
+
+                    window.setTimeout(function()
+                    {
+                        var fo = mxClient.NO_FO;
+                        mxClient.NO_FO = Editor.prototype.originalNoForeignObject;
+                        funct(content);
+                        mxClient.NO_FO = fo;
+                        content.style.display = 'block';
+                        title.style.cursor = '';
+                        title.innerHTML = prev;
+                    }, 0);
+                }
+                else
+                {
+                    content.style.display = 'block';
+                }
+            }
+            else
+            {
+                content.style.display = 'block';
+            }
+
+            // title.style.backgroundImage = 'url(\'' + this.expandedImage + '\')';
+        }
+        else
+        {
+            // title.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
+            content.style.display = 'none';
+        }
+
+        mxEvent.consume(evt);
+    }));
 };
 
 /**
