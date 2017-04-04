@@ -2884,7 +2884,8 @@ EditorUi.prototype.createDivs = function()
 	this.menubarContainer.style.left = '0px';
 	this.menubarContainer.style.right = '0px';
 	// PPPPP
-	this.toolbarContainer.style.left = '30%';
+	this.toolbarContainer.style.position = 'absolute';
+	this.toolbarContainer.style.left = '60px';
 	this.toolbarContainer.style.right = '0px';
 
     this.footwallContainer.style.bottom = '0px';

@@ -3817,11 +3817,11 @@ Sidebar.prototype.addFoldingHandlerOne = function(title, content, funct)
                 content.style.display = 'block';
             }
 
-            // title.style.backgroundImage = 'url(\'' + this.expandedImage + '\')';
+            title.style.backgroundImage = 'url(\'' + this.expandedImage + '\')';
         }
         else
         {
-            // title.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
+            title.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
             content.style.display = 'none';
         }
 

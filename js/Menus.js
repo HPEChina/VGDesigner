@@ -1127,6 +1127,7 @@ Menubar.prototype.addMenu = function(label, funct,menus)
 	imgDiv.className = 'geMenuImage ge'+ menus;
 	elt.appendChild(imgDiv);
 	elt.setAttribute('href', 'javascript:void(0);');
+	elt.style.padding = '4px 2px 4px 6px';
 	elt.className = 'geItem';
 	mxUtils.write(elt, label);
 
