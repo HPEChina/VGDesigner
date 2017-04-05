@@ -31,7 +31,7 @@ Menus.prototype.defaultFontSize = '12';
  * Sets the default menu items.
  */
 //Menus.prototype.defaultMenuItems = ['file', 'edit', 'view', 'arrange', 'extras', 'help'];
-Menus.prototype.defaultMenuItems = ['file', 'edit', 'view', 'arrange', 'extras'];
+Menus.prototype.defaultMenuItems = ['file', 'arrange'];
 
 /**
  * Sets the default font family array.
@@ -1058,11 +1058,14 @@ Menus.prototype.createMenubar = function(container)
 	var menubar = new Menubar(this.editorUi, container);
 	var menus = this.defaultMenuItems;
 	
+	// 4.1
 	for (var i = 0; i < menus.length; i++)
 	{
 		(function(menu)
 		{
-			var elt = menubar.addMenu(mxResources.get(menus[i]), menu.funct);
+			// 4.1
+			var menuT = '';
+			var elt = menubar.addMenu(menuT,menu.funct,menus[i]);
 			
 			if (elt != null)
 			{
@@ -1116,10 +1119,15 @@ Menubar.prototype.hideMenu = function()
 /**
  * Adds a submenu to this menubar.
  */
-Menubar.prototype.addMenu = function(label, funct)
+Menubar.prototype.addMenu = function(label, funct,menus)
 {
+	// 4.1
 	var elt = document.createElement('a');
+	var imgDiv = document.createElement('div');
+	imgDiv.className = 'geMenuImage ge'+ menus;
+	elt.appendChild(imgDiv);
 	elt.setAttribute('href', 'javascript:void(0);');
+	elt.style.padding = '4px 2px 4px 6px';
 	elt.className = 'geItem';
 	mxUtils.write(elt, label);
 

@@ -952,7 +952,7 @@ EditorUi.prototype.toolbarHeight = 34;
 /**
  * Specifies the height of the footer. Default is 28.
  */
-EditorUi.prototype.footerHeight = 10;
+EditorUi.prototype.footerHeight = 28;
 
 /**
  * Specifies the height of the optional sidebarFooterContainer. Default is 34.
@@ -2884,7 +2884,8 @@ EditorUi.prototype.createDivs = function()
 	this.menubarContainer.style.left = '0px';
 	this.menubarContainer.style.right = '0px';
 	// PPPPP
-	this.toolbarContainer.style.left = '30%';
+	this.toolbarContainer.style.position = 'absolute';
+	this.toolbarContainer.style.left = '60px';
 	this.toolbarContainer.style.right = '0px';
 
     this.footwallContainer.style.bottom = '0px';
@@ -3626,6 +3627,7 @@ EditorUi.prototype.getModelJsonString = function()
         group.setValue(obj);
 
 //update by wang,jianhui--start
+		graph.foldCells(false)//展开
 		var xml = this.editor.getGraphXml(this);
 		var bounds=xml.getElementsByTagName("mxGeometry")[0];
 		bounds.setAttribute("x",0);
@@ -3633,6 +3635,7 @@ EditorUi.prototype.getModelJsonString = function()
 		bounds.width=bounds.getAttribute("width");
 		bounds.height=bounds.getAttribute("height");
 		xml = mxUtils.getXml(xml);
+		graph.foldCells(true)//折叠
 //update by wang,jianhui--end
 
         //解组
