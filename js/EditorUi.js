@@ -3726,7 +3726,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             params += '&attribute=' + JSON.stringify(res['attribute']);
             params += '&id=' + this.interfaceParams.id;
             params += '&designLibraryId=' + this.interfaceParams.designLibraryId;
-            params += '&author=' + this.interfaceParams.author;
+            params += '&author=' + this.interfaceParams.user||this.interfaceParams.author;
             params += '&from=' + this.interfaceParams.from;
 		}
 		else
@@ -3738,7 +3738,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue);
             params += '&id=' + this.interfaceParams.id;
             params += '&designLibraryId=' + this.interfaceParams.designLibraryId;
-            params += '&author=' + this.interfaceParams.author;
+            params += '&author=' + this.interfaceParams.user||this.interfaceParams.author;
             params += '&from=' + this.interfaceParams.from;
 		}
 
