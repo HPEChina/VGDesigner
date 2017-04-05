@@ -944,6 +944,7 @@ Sidebar.prototype.addGeneralPalette = function(modelData, id, expand, saveFlag)
 {
     var fns = [];
     for(var i in modelData) {
+		if(!modelData[i].property)continue;
     	//if operator == edit and id != null and id==modelData[i].id then open model
 		if (!saveFlag && this.editorUi.interfaceParams.id && this.editorUi.interfaceParams.id == modelData[i].id && this.editorUi.interfaceParams.operator == 'edit') {
 			window.opener = {};
