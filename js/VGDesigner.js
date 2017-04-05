@@ -70,6 +70,38 @@ VGDesigner.prototype.init = function(interfaceParams)
         }
         else if(ui.interfaceParams.operator == 'edit') {
             title = 'Edit ' + ui.interfaceParams.type;
+            if(ui.interfaceParams.type == 'topo'){
+                var url = BASE_URL + VIEWER_COLLECTION + GET_URL;
+                var params = 'id=' + ui.interfaceParams.id;
+                mxUtils.post(url, params, mxUtils.bind(this, function (req) {
+                    var result = JSON.parse(req.getText());
+                    var data = result.data[0];
+                    var editor = ui.editor;
+                    window.openFile = new OpenFile(function()
+                    {
+                        window.openFile = null;
+                    });
+                    window.openFile.setConsumer(mxUtils.bind(this, function(xml, filename)
+                    {
+                        try
+                        {
+                            var doc = mxUtils.parseXml(xml);
+                            var model = new mxGraphModel();
+                            var codec = new mxCodec(doc);
+                            codec.decode(doc.documentElement, model);
+                            
+                            var children = model.getChildren(model.getChildAt(model.getRoot(), 0));
+                            editor.graph.setSelectionCells(editor.graph.importCells(children));
+                        }
+                        catch (e)
+                        {
+                            mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
+                        }
+                    }));
+                    var xml = window.parent.CodeTranslator.json2xml(data.data);
+                    window.parent.openFile.setData(xml, data.filename);
+                }));
+            }
         }
         document.title = title;
 
