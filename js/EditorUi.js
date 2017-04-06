@@ -2202,9 +2202,10 @@ EditorUi.prototype.openModel = function()
                     this.editor.setModified(false);
                     this.editor.undoManager.clear();
 
-                    this.editor.graph.selectAll(null, true);
-					this.editor.graph.setSelectionCells(this.editor.graph.ungroupCells());
-
+                    var graph = this.editor.graph;
+                    graph.selectAll(null, false);
+					graph.setSelectionCells(graph.ungroupCells());
+                    graph.clearSelection();
                     if (filename != null)
                     {
                         this.editor.setFilename(filename);

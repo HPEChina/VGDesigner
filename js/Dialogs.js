@@ -1953,7 +1953,9 @@ var ExportDialog = function(editorUi) {
                     outValue = CodeTranslator.xml2json(xmlDoc, '  ');
                 }
                 else if(format == 'yaml') {
-                    //Todo: yaml format display
+                    var xmlDoc = mxUtils.parseXml(mxUtils.getXml(graphXml));
+                    outValue = CodeTranslator.xml2json(xmlDoc, "  ");
+                    outValue = jsyaml.dump(JSON.parse(outValue));
                 }
                 var blob = new Blob([outValue], {type: "text/plain;charset=utf-8"});
                 fileSaveAs(blob, name);
@@ -1985,8 +1987,64 @@ var ExportDialog = function(editorUi) {
                 var svgWidth = parseInt(svg.getAttribute('width'));
                 var svgHeight = parseInt(svg.getAttribute('height'));
                 var embededImages = svg.querySelectorAll('image');
-                // 由 nodeList 转为 array
+
+				// 由 nodeList 转为 array
                 embededImages = Array.prototype.slice.call(embededImages);
+
+                //获取模型折叠图片
+                graph.selectAll(null, false);
+				var cells = graph.getSelectionCells();
+                graph.clearSelection();
+				var tmpArr = [];
+				var leftTopPoint = {};
+				for(var a in cells) {
+					var style = cells[a].getStyle();
+					var pId = cells[a].parent.id;
+                    var geo = cells[a].geometry;
+                    if(pId == '1' && cells[a].vertex == '1') {
+                        //获取左上角坐标
+                        if(!leftTopPoint.x || (leftTopPoint.x && geo.x < leftTopPoint.x)) {
+                            leftTopPoint.x = geo.x;
+                        }
+                        if(!leftTopPoint.y || (leftTopPoint.y && geo.y < leftTopPoint.y)) {
+                            leftTopPoint.y = geo.y;
+                        }
+					}
+
+					if(style.indexOf('group') >= 0 && style.indexOf('collapsible=1') >= 0) {
+                        var collapsed = cells[a].collapsed;
+                        var colImageSrc;
+                        var iX = geo.x;
+                        var iY = geo.y;
+                        var iW, iH;
+                        if(collapsed) {
+                            colImageSrc = cells[a].value.getAttribute('image');
+                            iW = graph.view.getState(cells[a]).width;
+                            iH = graph.view.getState(cells[a]).height;
+						}
+						else {
+                            colImageSrc = mxGraph.prototype.expandedImage.src;
+                            iX += 5;
+                            iY += 5;
+                            iW = mxGraph.prototype.expandedImage.width;
+                            iH = mxGraph.prototype.expandedImage.height;
+						}
+						var ele = document.createElement('img');
+                        ele.setAttribute('x', iX);
+                        ele.setAttribute('y', iY);
+                        ele.setAttribute('width', iW);
+                        ele.setAttribute('height', iH);
+                        ele.setAttribute('xlink:href', colImageSrc);
+                        tmpArr.push(ele);
+                        ele.remove();
+					}
+				}
+				for(var t in tmpArr) {
+                    tmpArr[t].setAttribute('x', parseInt(tmpArr[t].getAttribute('x')) - leftTopPoint.x);
+                    tmpArr[t].setAttribute('y', parseInt(tmpArr[t].getAttribute('y')) - leftTopPoint.y);
+                    embededImages.push(tmpArr[t]);
+				}
+
                 editorUi.hideDialog();
                 // 加载底层的图
                 loadImage(svgUrl).then(function(img) {
@@ -2157,6 +2215,11 @@ ExportDialog.showXmlOption = true;
  * Global switches for the export dialog.
  */
 ExportDialog.showJsonOption = true;
+
+/**
+ * Global switches for the export dialog.
+ */
+ExportDialog.showYamlOption = true;
 
 /**
  * Hook for getting the export format. Returns null for the default
