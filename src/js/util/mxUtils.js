@@ -1379,7 +1379,7 @@ var mxUtils =
 	 */
 	load: function(url)
 	{
-		var req = new mxXmlRequest(url, null, 'GET', false);
+		var req = new mxXmlRequest(url, null, 'GET', false);//[Deprecation] Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user's experience.
 		req.send();
 		
 		return req;

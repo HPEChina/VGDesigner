@@ -945,8 +945,9 @@ Sidebar.prototype.addOtherPalette = function(modelData, id, expand, saveFlag)
         else {
             fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
         }
-    }//update by wang,jianhui
-    this.addPaletteFunctions(id, this.modelClass[id]||modelData[0].description || modelData[0].class, (expand != null) ? expand : true, fns);
+    }
+	var modelClassTitle=this.modelClass[id]||modelData[0].description || modelData[0].class
+	if(modelClassTitle) this.addPaletteFunctions(id, modelClassTitle, (expand != null) ? expand : true, fns);
 };
 // 330
 Sidebar.prototype.addGeneralPalette = function(modelData, id, expand, saveFlag)
@@ -966,15 +967,16 @@ Sidebar.prototype.addGeneralPalette = function(modelData, id, expand, saveFlag)
 
         if(prop.type.toLowerCase() == 'edge') {
             fns.push(this.createEdgeTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title));
-        }//update by wang,jianhui
+        }
         else if (modelData[i].data) {
             fns.push(this.createVertexTemplateFromXML(attr, id));
         }
         else {
             fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
         }
-    }//update by wang,jianhui
-    this.addPaletteFunctionsOne(id, this.modelClass[id]||modelData[0].description || modelData[0].class, (expand != null) ? expand : true, fns);
+    }
+	var modelClassTitle=this.modelClass[id]||modelData[0].description || modelData[0].class
+	if(modelClassTitle) this.addPaletteFunctionsOne(id, modelClassTitle, (expand != null) ? expand : true, fns);
 };
 
 Sidebar.prototype.createVertexTemplateFromXML = function(attr, id) {
@@ -1182,18 +1184,15 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 				Math.floor((height - bounds.height * s) / 2 / s - bounds.y));
 	}
 	
-	var value = this.graph.getModel().getValue(cells[0]);
-	var img_src = value.getAttribute('image');
-	if (img_src) {
-		var image = document.createElement('img');
-		image.style.maxWidth = '40px';
-		image.style.maxHeight = '40px';
-		image.src = img_src;
-		parent.appendChild(image);
+	var img_src = this.graph.getModel().getValue(cells[0]).getAttribute('image');
+	var node = null;
 
-	} else {
-		var node = null;
-	
+	if (img_src) {
+		node = document.createElement('img');
+		// image.style.maxWidth = '40px';
+		// image.style.maxHeight = '40px';
+		node.src = img_src;
+	} else
 		// For supporting HTML labels in IE9 standards mode the container is cloned instead
 		if (this.graph.dialect == mxConstants.DIALECT_SVG && !mxClient.NO_FO) {
 			node = this.graph.view.getCanvas().ownerSVGElement.cloneNode(true);
@@ -1222,8 +1221,8 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 		node.style.visibility = '';
 		node.style.minWidth = '';
 		node.style.minHeight = '';
+
 		parent.appendChild(node);
-	}
 	
 	// Adds title for sidebar entries
 	if (this.sidebarTitles && title != null && showTitle != false)
