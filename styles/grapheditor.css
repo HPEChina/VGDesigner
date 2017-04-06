@@ -211,6 +211,21 @@ body{
 .geMenubarContainer .geItem, .geToolbar .geItem {
 	padding:6px 8px 6px 8px;
 	cursor:default;
+	border:1px solid transparent;
+}
+.geMenubarContainer .geItem{
+	position: relative;
+	float: left;
+	width: 30px;
+	height: 20px;
+	padding: 2px 2px 4px 2px;
+	margin: 2px;
+}
+.geMenubarContainer .geItem:hover{
+	border: 1px solid black;
+	border-radius: 2px;
+	opacity: 1;
+	filter: none !important;
 }
 .geMenubarContainer .geItem:hover, .geToolbarContainer .geItem:hover {
 	color:#ec8c45;
