@@ -30,7 +30,11 @@
 				    if(format == 'json')
                     {
                         value = window.parent.CodeTranslator.json2xml(value);
-
+                    }
+                    if(format == 'yaml')
+                    {
+                        value = JSON.stringify(window.parent.jsyaml.load(value));
+                        value = window.parent.CodeTranslator.json2xml(value);
                     }
 					window.parent.openFile.setData(value, filename);
 				};

@@ -8556,8 +8556,8 @@ mxGraph.prototype.getFoldingImage = function(state)
 		            var start = img.lastIndexOf('_');
 		            var end = img.lastIndexOf('.');
 		            var str = img.slice(start + 1, end);
-		            w = str.split('x')[0];
-		            h = str.split('x')[1];
+		            w = parseInt(str.split('x')[0]);
+		            h = parseInt(str.split('x')[1]);
                     var maxW = 80, maxH = 80;
                     if( w > maxW || h > maxH ) {
                         if(w/h > maxW/maxH) {

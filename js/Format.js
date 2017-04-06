@@ -5094,6 +5094,7 @@ AttributePanel.prototype.collapsedImage = function(ui, cell, value)
                 		image.src = src;
                         value.setAttribute('image', src);
                         graph.getModel().setValue(cell, value);
+                        var state = graph.view.getState(cell);
                     }
                     else {
                         mxUtils.alert(result.data.msg);
