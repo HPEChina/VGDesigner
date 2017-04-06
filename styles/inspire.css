@@ -1,5 +1,5 @@
 @charset "UTF-8";
-html { font-size: 62.5%; height: 100%; }
+html { font-size: 62.5%;}
 
 body { margin: 0; padding: 0; background: #fff; background: #d6cebf; background-attachment: fixed; background-repeat: no-repeat; background-size: cover; -moz-background-size: cover; -webkit-background-size: cover; font: 16px/1.618 "Myriad","Arial","方正兰亭黑","Microsoft YaHei","宋体"; font-size: 1.4rem; color: #3a3e55; min-width: 1440px; height: 100%; line-height: 16px;}
 
