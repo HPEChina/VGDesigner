@@ -1172,8 +1172,7 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 				Math.floor((height - bounds.height * s) / 2 / s - bounds.y));
 	}
 	
-	var value = this.graph.getModel().getValue(cells[0]);
-	var img_src = value.getAttribute('image');
+	var img_src = this.graph.getModel().getValue(cells[0]).getAttribute('image');
 	var node = null;
 
 	if (img_src) {
@@ -1210,6 +1209,7 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 		node.style.visibility = '';
 		node.style.minWidth = '';
 		node.style.minHeight = '';
+		
 		parent.appendChild(node);
 	
 	// Adds title for sidebar entries
