@@ -1174,16 +1174,14 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 	
 	var value = this.graph.getModel().getValue(cells[0]);
 	var img_src = value.getAttribute('image');
-	if (img_src) {
-		var image = document.createElement('img');
-		image.style.maxWidth = '40px';
-		image.style.maxHeight = '40px';
-		image.src = img_src;
-		parent.appendChild(image);
+	var node = null;
 
-	} else {
-		var node = null;
-	
+	if (img_src) {
+		node = document.createElement('img');
+		// image.style.maxWidth = '40px';
+		// image.style.maxHeight = '40px';
+		node.src = img_src;
+	} else
 		// For supporting HTML labels in IE9 standards mode the container is cloned instead
 		if (this.graph.dialect == mxConstants.DIALECT_SVG && !mxClient.NO_FO) {
 			node = this.graph.view.getCanvas().ownerSVGElement.cloneNode(true);
@@ -1213,7 +1211,6 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 		node.style.minWidth = '';
 		node.style.minHeight = '';
 		parent.appendChild(node);
-	}
 	
 	// Adds title for sidebar entries
 	if (this.sidebarTitles && title != null && showTitle != false)
