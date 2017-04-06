@@ -2967,7 +2967,7 @@ Sidebar.prototype.addFoldingHandlerOne = function(title, content, funct)
     }
 
     title.style.backgroundRepeat = 'no-repeat';
-    title.style.backgroundPosition = '5px 50%';
+    title.style.backgroundPosition = '0% 50%';
 
     mxEvent.addListener(title, 'click', mxUtils.bind(this, function(evt)
     {
