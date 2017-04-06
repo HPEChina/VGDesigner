@@ -86,12 +86,9 @@ VGDesigner.prototype.init = function(interfaceParams)
                         try
                         {
                             var doc = mxUtils.parseXml(xml);
-                            var model = new mxGraphModel();
+                            var model = editor.graph.getModel();
                             var codec = new mxCodec(doc);
                             codec.decode(doc.documentElement, model);
-                            
-                            var children = model.getChildren(model.getChildAt(model.getRoot(), 0));
-                            editor.graph.setSelectionCells(editor.graph.importCells(children));
                         }
                         catch (e)
                         {
