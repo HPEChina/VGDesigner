@@ -303,7 +303,7 @@ div.mxWindow .geButton {
 	margin: -1px 2px 2px 2px;
 	padding: 1px 2px 2px 1px;
 }
-.geToolbarContainer .geLabel {
+.geToolbarContainer .geLabel,.geMenubarContainer .geLabel {
 	float:left;
 	margin:2px;
 	cursor:pointer;
@@ -312,13 +312,13 @@ div.mxWindow .geButton {
 	opacity:0.6;
 	filter:alpha(opacity=60);
 }
-.geToolbarContainer .geLabel:hover {
+.geToolbarContainer .geLabel:hover,.geMenubarContainer .geLabel:hover {
 	border:1px solid gray;
 	border-radius:2px;
 	opacity:0.9;
 	filter:alpha(opacity=90) !important;
 }
-.geToolbarContainer .geLabel:active {
+.geToolbarContainer .geLabel:active,.geMenubarContainer .geLabel:active {
 	border:1px solid black;
 	opacity:1;
 	filter:none !important;
@@ -459,6 +459,7 @@ div.mxWindow .geButton {
 	_background-image:url('thumb_vertical.png');
 	background-repeat:no-repeat;
 	background-position:center center;
+	border-top: 1px solid #e5e5e5;
 }
 .gefootHsplit {
 	cursor:row-resize;
