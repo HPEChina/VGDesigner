@@ -282,7 +282,6 @@ Footwall.prototype.init = function()
 
     var select = document.createElement('select');
     select.style.width = '180px';
-    select.className = 'geBtn';
     select.style.height = '20px';
     select.style.marginLeft = '40px';
     select.style.float = 'left';
@@ -360,13 +359,11 @@ Footwall.prototype.init = function()
             mxUtils.alert(error.message);
         }
     }));
-    okBtn.className = 'gePrimaryBtn';
-    okBtn.style.cursor = 'pointer';
+    okBtn.className = 'btn-purple';
     okBtn.style.width = '50px';
     okBtn.style.height = '18px';
     // 3/27
     okBtn.style.marginTop = '4px';
-    okBtn.style.lineheight = '20px';
     okBtn.style.float = 'left';
     okBtn.style.marginLeft = '15px';
     tabDiv.appendChild(okBtn);

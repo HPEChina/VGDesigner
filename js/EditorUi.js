@@ -969,6 +969,11 @@ EditorUi.prototype.editButtonLink = null;
  * screen widths <= 500px.
  */
 EditorUi.prototype.hsplitPosition = (screen.width <= 500) ? 116 : 204;
+/**
+ * Specifies the position of the horizontal split bar. Default is 204 or 120 for
+ * screen widths <= 500px.
+ */
+EditorUi.prototype.fsplitPosition = (screen.width <= 500) ? 116 : 300;
 
 /**
  * Specifies the position of the vertical split bar. Default is 204 or 120 for
@@ -2728,6 +2733,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	
 	var effHsplitPosition = Math.max(0, Math.min(this.hsplitPosition, w - this.splitSize - 20));
     var efffootHsplitPosition = Math.max(0, Math.min(this.foothsplitPosition, h - this.splitSize - 20));
+	var efffsplitPosition = Math.max(0, Math.min(this.fsplitPosition, w - this.splitSize - 20));
 
 	var tmp = 0;
 	
@@ -2757,7 +2763,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	this.sidebarContainer.style.top = tmp + 'px';
 	this.sidebarContainer.style.width = effHsplitPosition + 'px';
 	this.formatContainer.style.top = tmp + 'px';
-	this.formatContainer.style.width = fw + 'px';
+	this.formatContainer.style.width = efffsplitPosition + 'px';
 	this.formatContainer.style.display = (this.format != null) ? '' : 'none';
 	
 	this.diagramContainer.style.left = (this.hsplit.parentNode != null) ? (effHsplitPosition + this.splitSize) + 'px' : '0px';
@@ -2766,12 +2772,16 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	this.hsplit.style.top = this.sidebarContainer.style.top;
 	this.hsplit.style.bottom = (this.footerHeight + off) + 'px';
 	this.hsplit.style.left = effHsplitPosition + 'px';
+	this.fsplit.style.position = 'absolute';
+	this.fsplit.style.top = this.sidebarContainer.style.top;
+    this.fsplit.style.bottom = (this.footerHeight + off) + 'px';
+    this.fsplit.style.right = efffsplitPosition + 'px';
 
     var sidebarHeight = Math.max(0, h - this.footerHeight - this.menubarHeight );
-    this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + 'px';
+    this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + this.splitSize + 'px';
     this.footwallContainer.style.height = efffootHsplitPosition + 'px' ;
     // 3/24
-    this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - this.sidebarContainer.style.width - this.splitSize  - fw) + 'px' : w  + 'px';
+    this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - this.sidebarContainer.style.width - this.splitSize - fw) + 'px' : w  + 'px';
     this.footwallContainer.style.width = this.diagramContainer.style.width;
     // 3/27
     this.footwallContainer.style.left = effHsplitPosition + this.splitSize + 'px';
@@ -2782,7 +2792,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
     this.footwallContainer.style.backgroundColor = 'whiteSmoke';
 
     this.foothsplit.style.left = this.footwallContainer.style.left;
-    this.foothsplit.style.right = this.formatContainer.style.width;
+    this.foothsplit.style.right = this.footwallContainer.style.right;
     this.foothsplit.style.position = "absolute";
     this.foothsplit.style.cursor = 'row-resize';
     this.foothsplit.style.width = this.diagramContainer.style.width;
@@ -2793,6 +2803,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 
     this.diagramContainer.style.height = diagramHeight - this.splitSize  + this.toolbarHeight + 'px';
     this.hsplit.style.height = this.sidebarContainer.style.height;
+	this.fsplit.style.height = this.sidebarContainer.style.height;
     this.formatContainer.style.borderLeft = '1px solid #E0E0E0';
 
 
@@ -2823,6 +2834,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 		
 		this.diagramContainer.style.height = diagramHeight + 'px';
         this.hsplit.style.height = this.sidebarContainer.style.height;
+		this.fsplit.style.height = this.sidebarContainer.style.height;
 	}
 	else
 	{
@@ -2831,7 +2843,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 			this.footerContainer.style.bottom = off + 'px';
 		}
 		
-		this.diagramContainer.style.right = fw + 'px';
+		this.diagramContainer.style.right = efffsplitPosition + this.splitSize + 'px';
 		var th = 0;
 		
 		if (this.tabContainer != null)
@@ -2878,6 +2890,9 @@ EditorUi.prototype.createDivs = function()
 
 	this.hsplit = this.createDiv('geHsplit');
 	this.hsplit.setAttribute('title', mxResources.get('collapseExpand'));
+	this.fsplit = this.createDiv('geFsplit');
+    this.fsplit = this.createDiv('geFsplit');
+    this.fsplit.setAttribute('title', mxResources.get('collapseExpand'));
 
 	// Sets static style for containers
 	this.menubarContainer.style.top = '0px';
@@ -2885,7 +2900,7 @@ EditorUi.prototype.createDivs = function()
 	this.menubarContainer.style.right = '0px';
 	// PPPPP
 	this.toolbarContainer.style.position = 'absolute';
-	this.toolbarContainer.style.left = '60px';
+	this.toolbarContainer.style.left = '80px';
 	this.toolbarContainer.style.right = '0px';
 
     this.footwallContainer.style.bottom = '0px';
@@ -2901,6 +2916,7 @@ EditorUi.prototype.createDivs = function()
 
     this.foothsplit.style.height = this.splitSize + 'px';
     this.hsplit.style.width = this.splitSize + 'px';
+	this.fsplit.style.width = this.splitSize + 'px';
 
 	// Only vertical scrollbars, no background in format sidebar
 	this.formatContainer.style.backgroundColor = '#FFF';
@@ -3029,6 +3045,16 @@ EditorUi.prototype.createUi = function()
         this.addSplitHandler2(this.foothsplit,true,0,mxUtils.bind(this,function(value)
         {
             this.foothsplitPosition = value;
+            this.refresh();
+        }));
+    }
+	//fsplit
+	if(this.format != null){
+        this.container.appendChild(this.fsplit);
+
+        this.addfSplitHandler(this.fsplit,true,0,mxUtils.bind(this,function(value)
+        {
+            this.fsplitPosition = value;
             this.refresh();
         }));
     }
