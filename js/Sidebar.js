@@ -116,6 +116,16 @@ Sidebar.prototype.init = function()
 Sidebar.prototype.collapsedImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/collapsed.gif' : 'data:image/gif;base64,R0lGODlhDQANAIABAJmZmf///yH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozNUQyRTJFNjZGNUYxMUU1QjZEOThCNDYxMDQ2MzNCQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozNUQyRTJFNzZGNUYxMUU1QjZEOThCNDYxMDQ2MzNCQiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjFERjc3MEUxNkY1RjExRTVCNkQ5OEI0NjEwNDYzM0JCIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjFERjc3MEUyNkY1RjExRTVCNkQ5OEI0NjEwNDYzM0JCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Af/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M/OzczLysnIx8bFxMPCwcC/vr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ+enZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcG9ubWxramloZ2ZlZGNiYWBfXl1cW1pZWFdWVVRTUlFQT05NTEtKSUhHRkVEQ0JBQD8+PTw7Ojk4NzY1NDMyMTAvLi0sKyopKCcmJSQjIiEgHx4dHBsaGRgXFhUUExIREA8ODQwLCgkIBwYFBAMCAQAAIfkEAQAAAQAsAAAAAA0ADQAAAhSMj6lrwAjcC1GyahV+dcZJgeIIFgA7';
 
 /**
+ *second add image
+ */
+Sidebar.prototype.addCollapsedImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/collapsed.gif' : 'data:image/gif;base64,R0lGODlhCQAJAPcAAAAAABAICHuUrXuctYSMlISUnISUpYSUrYScrYyUnIyUpYycpZScnJScpaXG3q3G1q3G3rW1vbW9xrW9zsbGzsbO3sbW3s7Oztbe3tbe597e3t7e597n7+fn7+/v7+/3/+////f39/f//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////ywAAAAACQAJAAAIUgAdCDBQoAADAgseCADBUIRDEAYMgPggAkCIDx8QKMA4AsCIEBwKEKgIIAAAABgMMNjgwYNFDRYMEOCAQQOACxQqFFBQQUIEnz8NPIhINOKDgAAAOw==';
+
+/**
+ *second sub image
+ */
+Sidebar.prototype.subExpandedImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/expanded.gif' : 'data:image/gif;base64,R0lGODlhCQAJAPcAAAAAAHuUrXuctYSMlISUnISUpYSUrYScpYScrYSctYyUnIyUpZScnJScpaXG3q21va29xq3G1q3G3rW9xr3GzsbGxsbOzsbO1sbO3sbW1s7W1tbe597e3t7n597v9+fn3ufv9+fv/+f3/+/v7+/v9+/39+////f37/f39/f/////9////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////ywAAAAACQAJAAAIUwAdBChAoMGAAQQiJBBhwkSKhyYKIBCRAgSKFSk8EASRYsUJFCM0KkgBoGTJDQUYkBjB8kOHCwUGbOCgoQKHCjAXYIAwYcKDCRAKRChAlCDRCAEBADs=';
+
+/**
  * Sets the default font size.
  */
 Sidebar.prototype.expandedImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/expanded.gif' : 'data:image/gif;base64,R0lGODlhDQANAIABAJmZmf///yH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoxREY3NzBERjZGNUYxMUU1QjZEOThCNDYxMDQ2MzNCQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoxREY3NzBFMDZGNUYxMUU1QjZEOThCNDYxMDQ2MzNCQiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjFERjc3MERENkY1RjExRTVCNkQ5OEI0NjEwNDYzM0JCIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjFERjc3MERFNkY1RjExRTVCNkQ5OEI0NjEwNDYzM0JCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Af/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M/OzczLysnIx8bFxMPCwcC/vr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ+enZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcG9ubWxramloZ2ZlZGNiYWBfXl1cW1pZWFdWVVRTUlFQT05NTEtKSUhHRkVEQ0JBQD8+PTw7Ojk4NzY1NDMyMTAvLi0sKyopKCcmJSQjIiEgHx4dHBsaGRgXFhUUExIREA8ODQwLCgkIBwYFBAMCAQAAIfkEAQAAAQAsAAAAAA0ADQAAAhGMj6nL3QAjVHIu6azbvPtWAAA7';
@@ -914,6 +924,7 @@ Sidebar.prototype.addOtherPalette = function(modelData, id, expand, saveFlag)
 {
     var fns = [];
     for(var i in modelData) {
+		if(!modelData[i].property)continue;
     	//if operator == edit and id != null and id==modelData[i].id then open model
 		if (!saveFlag && this.editorUi.interfaceParams.id && this.editorUi.interfaceParams.id == modelData[i].id && this.editorUi.interfaceParams.operator == 'edit') {
 			window.opener = {};
@@ -934,8 +945,9 @@ Sidebar.prototype.addOtherPalette = function(modelData, id, expand, saveFlag)
         else {
             fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
         }
-    }//update by wang,jianhui
-    this.addPaletteFunctions(id, this.modelClass[id]||modelData[0].description || modelData[0].class, (expand != null) ? expand : true, fns);
+    }
+	var modelClassTitle=this.modelClass[id]||modelData[0].description || modelData[0].class
+	if(modelClassTitle) this.addPaletteFunctions(id, modelClassTitle, (expand != null) ? expand : true, fns);
 };
 // 330
 Sidebar.prototype.addGeneralPalette = function(modelData, id, expand, saveFlag)
@@ -955,15 +967,16 @@ Sidebar.prototype.addGeneralPalette = function(modelData, id, expand, saveFlag)
 
         if(prop.type.toLowerCase() == 'edge') {
             fns.push(this.createEdgeTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title));
-        }//update by wang,jianhui
+        }
         else if (modelData[i].data) {
             fns.push(this.createVertexTemplateFromXML(attr, id));
         }
         else {
             fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
         }
-    }//update by wang,jianhui
-    this.addPaletteFunctionsOne(id, this.modelClass[id]||modelData[0].description || modelData[0].class, (expand != null) ? expand : true, fns);
+    }
+	var modelClassTitle=this.modelClass[id]||modelData[0].description || modelData[0].class
+	if(modelClassTitle) this.addPaletteFunctionsOne(id, modelClassTitle, (expand != null) ? expand : true, fns);
 };
 
 Sidebar.prototype.createVertexTemplateFromXML = function(attr, id) {
@@ -1171,18 +1184,15 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 				Math.floor((height - bounds.height * s) / 2 / s - bounds.y));
 	}
 	
-	var value = this.graph.getModel().getValue(cells[0]);
-	var img_src = value.getAttribute('image');
-	if (img_src) {
-		var image = document.createElement('img');
-		image.style.maxWidth = '40px';
-		image.style.maxHeight = '40px';
-		image.src = img_src;
-		parent.appendChild(image);
+	var img_src = this.graph.getModel().getValue(cells[0]).getAttribute('image');
+	var node = null;
 
-	} else {
-		var node = null;
-	
+	if (img_src) {
+		node = document.createElement('img');
+		// image.style.maxWidth = '40px';
+		// image.style.maxHeight = '40px';
+		node.src = img_src;
+	} else
 		// For supporting HTML labels in IE9 standards mode the container is cloned instead
 		if (this.graph.dialect == mxConstants.DIALECT_SVG && !mxClient.NO_FO) {
 			node = this.graph.view.getCanvas().ownerSVGElement.cloneNode(true);
@@ -1211,8 +1221,8 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 		node.style.visibility = '';
 		node.style.minWidth = '';
 		node.style.minHeight = '';
+
 		parent.appendChild(node);
-	}
 	
 	// Adds title for sidebar entries
 	if (this.sidebarTitles && title != null && showTitle != false)
@@ -2073,7 +2083,7 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 			
 			if (currentStyleTarget != null && activeArrow == styleTarget)
 			{
-				this.previewElement.style.display = (graph.model.isEdge(currentStyleTarget.cell)) ? 'none' : '';
+				this.previewElement.style.display = (graph.model.isEdge(currentStyleTarget.cell)) ? 'block' : 'none';
 				
 				this.previewElement.style.left = currentStyleTarget.x + 'px';
 				this.previewElement.style.top = currentStyleTarget.y + 'px';
@@ -2758,7 +2768,7 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
     // 327
     var ccc = document.createElement('div');
     ccc.className = 'two';
-    ccc.style.display = 'none';
+    ccc.style.display = 'block';
     this.container.appendChild(ccc);
     var elt = this.createTitle(title);
     ccc.appendChild(elt);
@@ -2890,7 +2900,7 @@ Sidebar.prototype.addFoldingHandler = function(title, content, funct)
 	{
 		// 330
 		title.style.backgroundImage = (content.style.display == 'none') ?
-			'url()' : 'url()';
+			'url(\'' + this.addCollapsedImage + '\')' : 'url(\'' + this.subExpandedImage + '\')';
 	}
 	
 	title.style.backgroundRepeat = 'no-repeat';
@@ -2932,11 +2942,11 @@ Sidebar.prototype.addFoldingHandler = function(title, content, funct)
 				content.style.display = 'block';
 			}
 			
-			// title.style.backgroundImage = 'url(\'' + this.expandedImage + '\')';
+			title.style.backgroundImage = 'url(\'' + this.subExpandedImage + '\')';
 		}
 		else
 		{
-			// title.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
+			title.style.backgroundImage = 'url(\'' + this.addCollapsedImage + '\')';
 			content.style.display = 'none';
 		}
 		

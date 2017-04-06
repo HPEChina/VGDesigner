@@ -969,6 +969,11 @@ EditorUi.prototype.editButtonLink = null;
  * screen widths <= 500px.
  */
 EditorUi.prototype.hsplitPosition = (screen.width <= 500) ? 116 : 204;
+/**
+ * Specifies the position of the horizontal split bar. Default is 204 or 120 for
+ * screen widths <= 500px.
+ */
+EditorUi.prototype.fsplitPosition = (screen.width <= 500) ? 116 : 300;
 
 /**
  * Specifies the position of the vertical split bar. Default is 204 or 120 for
@@ -1031,7 +1036,7 @@ EditorUi.prototype.initInterfaceParams = function(type, id)
         this.interfaceParams.model = this.interfaceParams.model || 'editor';
         this.interfaceParams.designLibraryId = this.interfaceParams.designLibraryId || '';		//产品线id
         this.interfaceParams.id = this.interfaceParams.id || '';		//图形id
-        this.interfaceParams.author = this.interfaceParams.author || '';	//用户标示
+        this.interfaceParams.author = this.interfaceParams.author || this.interfaceParams.user || '';	//用户标示
         this.interfaceParams.from = this.interfaceParams.from || '';		//调用系统的名称
 	}
 	else if(type == 'new') {
@@ -2729,6 +2734,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	
 	var effHsplitPosition = Math.max(0, Math.min(this.hsplitPosition, w - this.splitSize - 20));
     var efffootHsplitPosition = Math.max(0, Math.min(this.foothsplitPosition, h - this.splitSize - 20));
+	var efffsplitPosition = Math.max(0, Math.min(this.fsplitPosition, w - this.splitSize - 20));
 
 	var tmp = 0;
 	
@@ -2758,7 +2764,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	this.sidebarContainer.style.top = tmp + 'px';
 	this.sidebarContainer.style.width = effHsplitPosition + 'px';
 	this.formatContainer.style.top = tmp + 'px';
-	this.formatContainer.style.width = fw + 'px';
+	this.formatContainer.style.width = efffsplitPosition + 'px';
 	this.formatContainer.style.display = (this.format != null) ? '' : 'none';
 	
 	this.diagramContainer.style.left = (this.hsplit.parentNode != null) ? (effHsplitPosition + this.splitSize) + 'px' : '0px';
@@ -2767,12 +2773,17 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	this.hsplit.style.top = this.sidebarContainer.style.top;
 	this.hsplit.style.bottom = (this.footerHeight + off) + 'px';
 	this.hsplit.style.left = effHsplitPosition + 'px';
+	this.fsplit.style.position = 'absolute';
+    this.fsplit.style.zIndex = '9';
+	this.fsplit.style.top = this.sidebarContainer.style.top;
+    this.fsplit.style.bottom = (this.footerHeight + off) + 'px';
+    this.fsplit.style.right = efffsplitPosition + 'px';
 
     var sidebarHeight = Math.max(0, h - this.footerHeight - this.menubarHeight );
-    this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + 'px';
+    this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + this.splitSize + 'px';
     this.footwallContainer.style.height = efffootHsplitPosition + 'px' ;
     // 3/24
-    this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - this.sidebarContainer.style.width - this.splitSize  - fw) + 'px' : w  + 'px';
+    this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - this.sidebarContainer.style.width - this.splitSize - fw) + 'px' : w  + 'px';
     this.footwallContainer.style.width = this.diagramContainer.style.width;
     // 3/27
     this.footwallContainer.style.left = effHsplitPosition + this.splitSize + 'px';
@@ -2783,7 +2794,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
     this.footwallContainer.style.backgroundColor = 'whiteSmoke';
 
     this.foothsplit.style.left = this.footwallContainer.style.left;
-    this.foothsplit.style.right = this.formatContainer.style.width;
+    this.foothsplit.style.right = this.footwallContainer.style.right;
     this.foothsplit.style.position = "absolute";
     this.foothsplit.style.cursor = 'row-resize';
     this.foothsplit.style.width = this.diagramContainer.style.width;
@@ -2794,6 +2805,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 
     this.diagramContainer.style.height = diagramHeight - this.splitSize  + this.toolbarHeight + 'px';
     this.hsplit.style.height = this.sidebarContainer.style.height;
+	this.fsplit.style.height = this.sidebarContainer.style.height;
     this.formatContainer.style.borderLeft = '1px solid #E0E0E0';
 
 
@@ -2824,6 +2836,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 		
 		this.diagramContainer.style.height = diagramHeight + 'px';
         this.hsplit.style.height = this.sidebarContainer.style.height;
+		this.fsplit.style.height = this.sidebarContainer.style.height;
 	}
 	else
 	{
@@ -2832,7 +2845,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 			this.footerContainer.style.bottom = off + 'px';
 		}
 		
-		this.diagramContainer.style.right = fw + 'px';
+		this.diagramContainer.style.right = efffsplitPosition + this.splitSize + 'px';
 		var th = 0;
 		
 		if (this.tabContainer != null)
@@ -2879,6 +2892,9 @@ EditorUi.prototype.createDivs = function()
 
 	this.hsplit = this.createDiv('geHsplit');
 	this.hsplit.setAttribute('title', mxResources.get('collapseExpand'));
+	this.fsplit = this.createDiv('geFsplit');
+    this.fsplit = this.createDiv('geFsplit');
+    this.fsplit.setAttribute('title', mxResources.get('collapseExpand'));
 
 	// Sets static style for containers
 	this.menubarContainer.style.top = '0px';
@@ -2886,7 +2902,7 @@ EditorUi.prototype.createDivs = function()
 	this.menubarContainer.style.right = '0px';
 	// PPPPP
 	this.toolbarContainer.style.position = 'absolute';
-	this.toolbarContainer.style.left = '60px';
+	this.toolbarContainer.style.left = '85px';
 	this.toolbarContainer.style.right = '0px';
 
     this.footwallContainer.style.bottom = '0px';
@@ -2902,6 +2918,7 @@ EditorUi.prototype.createDivs = function()
 
     this.foothsplit.style.height = this.splitSize + 'px';
     this.hsplit.style.width = this.splitSize + 'px';
+	this.fsplit.style.width = this.splitSize + 'px';
 
 	// Only vertical scrollbars, no background in format sidebar
 	this.formatContainer.style.backgroundColor = '#FFF';
@@ -3030,6 +3047,16 @@ EditorUi.prototype.createUi = function()
         this.addSplitHandler2(this.foothsplit,true,0,mxUtils.bind(this,function(value)
         {
             this.foothsplitPosition = value;
+            this.refresh();
+        }));
+    }
+	//fsplit
+	if(this.format != null){
+        this.container.appendChild(this.fsplit);
+
+        this.addfSplitHandler(this.fsplit,true,0,mxUtils.bind(this,function(value)
+        {
+            this.fsplitPosition = value;
             this.refresh();
         }));
     }
@@ -3264,6 +3291,86 @@ EditorUi.prototype.addSplitHandler2 = function(elt, horizontal, dx, onChange)
     {
         mxEvent.removeGestureListeners(document, null, moveHandler, dropHandler);
     });
+};
+
+/**
+ * Add fsplit handler
+ */
+// 4/5
+EditorUi.prototype.addfSplitHandler = function(elt, horizontal, dx, onChange)
+{
+    var start = null;
+    var initial = null;
+    var ignoreClick = true;
+    var last = null;
+
+    // Disables built-in pan and zoom in IE10 and later
+    if (mxClient.IS_POINTER)
+    {
+        elt.style.touchAction = 'none';
+    }
+
+    var getValue = mxUtils.bind(this, function()
+    {
+        var result = parseInt(((horizontal) ? elt.style.right : elt.style.bottom));
+
+        // Takes into account hidden footer
+        if (!horizontal)
+        {
+            result = result + dx - this.footerHeight;
+        }
+
+        return result;
+    });
+
+	/* function moveHandler(evt)
+	 {
+	 if (start != null)
+	 {
+	 var pt = new mxPoint(mxEvent.getClientX(evt), mxEvent.getClientY(evt));
+	 onChange(Math.max(0, initial + ((horizontal) ? (pt.x - start.x) : (start.y - pt.y)) - dx));
+	 mxEvent.consume(evt);
+
+	 if (initial != getValue())
+	 {
+	 ignoreClick = true;
+	 last = null;
+	 }
+	 }
+	 };*/
+
+	/*function dropHandler(evt)
+	 {
+	 moveHandler(evt);
+	 initial = null;
+	 start = null;
+	 };*/
+
+    mxEvent.addGestureListeners(elt, function(evt)
+    {
+        start = new mxPoint(mxEvent.getClientX(evt), mxEvent.getClientY(evt));
+        initial = getValue();
+        ignoreClick = false;
+        mxEvent.consume(evt);
+    });
+
+    mxEvent.addListener(elt, 'click', function(evt)
+    {
+        if (!ignoreClick)
+        {
+            var next = (last != null) ? last - dx : 0;
+            last = getValue();
+            onChange(next);
+            mxEvent.consume(evt);
+        }
+    });
+
+    // mxEvent.addGestureListeners(document, null, moveHandler, dropHandler);
+
+    // this.destroyFunctions.push(function()
+    // {
+    //     mxEvent.removeGestureListeners(document, null, moveHandler, dropHandler);
+    // });
 };
 
 /**
@@ -3677,7 +3784,8 @@ EditorUi.prototype.showModel = function (params,outValue, saveFlag) {
 	}
 	query['id'] = this.interfaceParams.id;
 	query.data = outValue;
-	this.sidebar.addGeneralPalette([query], query.class, null,saveFlag)
+	// 4/67
+	this.sidebar.addOtherPalette([query], query.class, null,saveFlag)
 }
 
 /**

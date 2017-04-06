@@ -1,7 +1,7 @@
 @charset "UTF-8";
-html { font-size: 62.5%; height: 100%; }
+html { font-size: 62.5%;}
 
-body { margin: 0; padding: 0; background: #fff; background: #d6cebf; background-attachment: fixed; background-repeat: no-repeat; background-size: cover; -moz-background-size: cover; -webkit-background-size: cover; font: 16px/1.618 "Myriad","Arial","方正兰亭黑","Microsoft YaHei","宋体"; font-size: 1.4rem; color: #3a3e55; min-width: 1440px; height: 100%; line-height: 16px;}
+body { margin: 0; padding: 0; background: #fff; background-attachment: fixed; background-repeat: no-repeat; background-size: cover; -moz-background-size: cover; -webkit-background-size: cover; font: 16px/1.618 "Myriad","Arial","方正兰亭黑","Microsoft YaHei","宋体"; font-size: 1.4rem; color: #3a3e55; min-width: 1440px; height: 100%; line-height: 16px;}
 
 td, p, div, a, form, header, section, footer { margin: 0; padding: 0; }
 
@@ -224,7 +224,7 @@ a.white-link:hover { color: #ec8c45; }
 
 .white-link a:hover { color: #ec8c45; }
 
-.btn-gray, a.btn-gray { min-width: 100px; padding: 0 25px; line-height: 25px; height: 25px; border: 1px #788da3 solid; background: #788da3; color: #fff; border-radius: 16px; font-size: 14px; cursor: pointer; display: inline-block; text-align: center; }
+.btn-gray, a.btn-gray { height: 25px; border: 1px #788da3 solid; background: #788da3; color: #fff; border-radius: 16px; font-size: 14px; cursor: pointer; display: inline-block; text-align: center; }
 .btn-gray:hover, a.btn-gray:hover { background: #859ab0; border-color: #859ab0; }
 .btn-gray:active, a.btn-gray:active { background: #627a93; border-color: #627a93; }
 .btn-gray.current, a.btn-gray.current { border-color: #4d6a88; }
@@ -232,7 +232,7 @@ a.white-link:hover { color: #ec8c45; }
 .btn-gray > span, a.btn-gray > span { display: inline-block; vertical-align: middle; }
 .btn-gray > span:first-child, a.btn-gray > span:first-child { margin-right: 10px; }
 
-.btn-purple, a.btn-purple { min-width: 100px; padding: 0 25px; line-height: 25px; height: 25px; border: 1px #8b2f81 solid; background: #8b2f81; color: #fff; border-radius: 16px; font-size: 14px; cursor: pointer; display: inline-block; text-align: center; }
+.btn-purple, a.btn-purple { height: 25px; border: 1px #8b2f81 solid; background: #8b2f81; color: #fff; border-radius: 16px; font-size: 14px; cursor: pointer; display: inline-block; text-align: center; }
 .btn-purple:hover, a.btn-purple:hover { background: #9f3995; border-color: #9f3995; }
 .btn-purple:active, a.btn-purple:active { background: #791e70; border-color: #791e70; }
 .btn-purple.current, a.btn-purple.current { border-color: #6c1263; }

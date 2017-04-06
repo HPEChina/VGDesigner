@@ -195,57 +195,60 @@ Footwall.prototype.init = function()
             }
             else if(o == 'transcode') {
                 okBtn.setAttribute('disabled', 'disabled');
-                var jsonTs = {};
-                if ( this.editorUi.interfaceParams.type == 'model') {
-                    var value = gXml.graph.getModel().getRoot().value;
-                    if (value != null) {
-                        var intrinsic = JSON.parse(value.getAttribute('intrinsic'));
-                        var extended = JSON.parse(value.getAttribute('extended'));
-                        // var userfunc = JSON.parse(value.getAttribute('userFunc'));
-                        var name = '', value = '', desc = '', type = '';
-                        if (intrinsic.length > 0) {
-                            for (var i in intrinsic) {
-                                name = intrinsic[i].name;
-                                value = intrinsic[i].value[0];
-                                jsonTs[name] = value;
-                            }
-                            jsonTs.productLine = this.editorUi.interfaceParams.designLibraryId;
-                            jsonTs.author = this.editorUi.interfaceParams.author;
-                        }
-                        if (extended.length > 0) {
-                            if (jsonTs.properties == null) {
-                                jsonTs.properties = [];
-                            }
-                            for (var j in extended) {
-                                var obj = {};
-                                name = extended[j].name;
-                                type = extended[j].dataType;
-                                value = extended[j].value[0];
-                                desc = extended[j].description;
-                                obj.name = name;
-                                obj.type = type;
-                                obj.defaultValue = value;
-                                obj.description = desc;
-                                jsonTs.properties.push(obj);
-                            }
-                        }
-                        // if (userfunc.length > 0) {
-                        //     if (jsonTs.properties == null) {
-                        //         jsonTs.properties = [];
-                        //     }
-                        //     for (var j in extended) {
-                        //         var obj = {};
-                        //         name = userfunc[j].name;
-                        //         value = userfunc[j].value[0];
-                        //         desc = userfunc[j].description;
-                        //         obj.attribute = name;
-                        //         obj.value = value;
-                        //         obj.description = desc;
-                        //         jsonTs.properties.push(obj);
-                        //     }
-                        // }
-                    }
-                }
+                // var jsonTs = {};
+                // if ( this.editorUi.interfaceParams.type == 'model') {
+                //     var value = gXml.graph.getModel().getRoot().value;
+                //     if (value != null) {
+                //         var intrinsic = JSON.parse(value.getAttribute('intrinsic'));
+                //         var extended = JSON.parse(value.getAttribute('extended'));
+                //         // var userfunc = JSON.parse(value.getAttribute('userFunc'));
+                //         var name = '', value = '', desc = '', type = '';
+                //         if (intrinsic.length > 0) {
+                //             for (var i in intrinsic) {
+                //                 name = intrinsic[i].name;
+                //                 value = intrinsic[i].value[0];
+                //                 jsonTs[name] = value;
+                //             }
+                //             jsonTs.productLine = this.editorUi.interfaceParams.designLibraryId;
+                //             jsonTs.author = this.editorUi.interfaceParams.author;
+                //         }
+                //         if (extended.length > 0) {
+                //             if (jsonTs.properties == null) {
+                //                 jsonTs.properties = [];
+                //             }
+                //             for (var j in extended) {
+                //                 var obj = {};
+                //                 name = extended[j].name;
+                //                 type = extended[j].dataType;
+                //                 value = extended[j].value[0];
+                //                 desc = extended[j].description;
+                //                 obj.name = name;
+                //                 obj.type = type;
+                //                 obj.defaultValue = value;
+                //                 obj.description = desc;
+                //                 jsonTs.properties.push(obj);
+                //             }
+                //         }
+                //         // if (userfunc.length > 0) {
+                //         //     if (jsonTs.properties == null) {
+                //         //         jsonTs.properties = [];
+                //         //     }
+                //         //     for (var j in extended) {
+                //         //         var obj = {};
+                //         //         name = userfunc[j].name;
+                //         //         value = userfunc[j].value[0];
+                //         //         desc = userfunc[j].description;
+                //         //         obj.attribute = name;
+                //         //         obj.value = value;
+                //         //         obj.description = desc;
+                //         //         jsonTs.properties.push(obj);
+                //         //     }
+                //         // }
+                //     }
+                // }
+                var xmlDoc = mxUtils.parseXml(mxUtils.getXml(graphXml));
+                var graphJSONData = CodeTranslator.xml2json(xmlDoc, "  ");
+                var jsonTs = graph2data(JSON.parse(graphJSONData).mxGraphModel.root, this.editorUi.interfaceParams);
                 tValue = mxUtils.getPrettyJSON(jsonTs);
                 mode = 'javascript';
             }
@@ -279,7 +282,6 @@ Footwall.prototype.init = function()
 
     var select = document.createElement('select');
     select.style.width = '180px';
-    select.className = 'geBtn';
     select.style.height = '20px';
     select.style.marginLeft = '40px';
     select.style.float = 'left';
@@ -357,13 +359,11 @@ Footwall.prototype.init = function()
             mxUtils.alert(error.message);
         }
     }));
-    okBtn.className = 'gePrimaryBtn';
-    okBtn.style.cursor = 'pointer';
+    okBtn.className = 'btn-purple';
     okBtn.style.width = '50px';
     okBtn.style.height = '18px';
     // 3/27
     okBtn.style.marginTop = '4px';
-    okBtn.style.lineheight = '20px';
     okBtn.style.float = 'left';
     okBtn.style.marginLeft = '15px';
     tabDiv.appendChild(okBtn);

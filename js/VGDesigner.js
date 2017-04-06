@@ -16,7 +16,7 @@ var VGDesigner = function(model, container) {
 VGDesigner.prototype.editorJsFiles = ['js/Init.js', 'jscolor/jscolor.js', 'sanitizer/sanitizer.min.js', 'src/js/mxClient.js', 'js/EditorUi.js',
     'js/Editor.js', 'js/Sidebar.js', 'js/Graph.js', 'js/Shapes.js', 'js/Actions.js', 'js/Menus.js', 'js/Format.js','js/Footwall.js',
     'js/Toolbar.js', 'js/Dialogs.js', 'js/FileSaver.js', 'js/CodeTranslator.js', 'js/codemirror/codemirror.js',
-    'js/codemirror/javascript.js', 'js/codemirror/xml.js', 'js/codemirror/yaml.js', 'js/ModelAttribute.js', 'js/js-yaml.js'];
+    'js/codemirror/javascript.js', 'js/codemirror/xml.js', 'js/codemirror/yaml.js', 'js/ModelAttribute.js', 'js/js-yaml.js', 'js/js2data.js'];
 
 /**
  * 编辑模式加载的CSS文件名称数组
@@ -70,6 +70,35 @@ VGDesigner.prototype.init = function(interfaceParams)
         }
         else if(ui.interfaceParams.operator == 'edit') {
             title = 'Edit ' + ui.interfaceParams.type;
+            if(ui.interfaceParams.type == 'topo'){
+                var url = BASE_URL + VIEWER_COLLECTION + GET_URL;
+                var params = 'id=' + ui.interfaceParams.id;
+                mxUtils.post(url, params, mxUtils.bind(this, function (req) {
+                    var result = JSON.parse(req.getText());
+                    var data = result.data[0];
+                    var editor = ui.editor;
+                    window.openFile = new OpenFile(function()
+                    {
+                        window.openFile = null;
+                    });
+                    window.openFile.setConsumer(mxUtils.bind(this, function(xml, filename)
+                    {
+                        try
+                        {
+                            var doc = mxUtils.parseXml(xml);
+                            var model = editor.graph.getModel();
+                            var codec = new mxCodec(doc);
+                            codec.decode(doc.documentElement, model);
+                        }
+                        catch (e)
+                        {
+                            mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
+                        }
+                    }));
+                    var xml = window.parent.CodeTranslator.json2xml(data.data);
+                    window.parent.openFile.setData(xml, data.filename);
+                }));
+            }
         }
         document.title = title;
 
