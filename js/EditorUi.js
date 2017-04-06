@@ -2773,6 +2773,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	this.hsplit.style.bottom = (this.footerHeight + off) + 'px';
 	this.hsplit.style.left = effHsplitPosition + 'px';
 	this.fsplit.style.position = 'absolute';
+    this.fsplit.style.zIndex = '9';
 	this.fsplit.style.top = this.sidebarContainer.style.top;
     this.fsplit.style.bottom = (this.footerHeight + off) + 'px';
     this.fsplit.style.right = efffsplitPosition + 'px';
@@ -2900,7 +2901,7 @@ EditorUi.prototype.createDivs = function()
 	this.menubarContainer.style.right = '0px';
 	// PPPPP
 	this.toolbarContainer.style.position = 'absolute';
-	this.toolbarContainer.style.left = '80px';
+	this.toolbarContainer.style.left = '85px';
 	this.toolbarContainer.style.right = '0px';
 
     this.footwallContainer.style.bottom = '0px';
@@ -3289,6 +3290,86 @@ EditorUi.prototype.addSplitHandler2 = function(elt, horizontal, dx, onChange)
     {
         mxEvent.removeGestureListeners(document, null, moveHandler, dropHandler);
     });
+};
+
+/**
+ * Add fsplit handler
+ */
+// 4/5
+EditorUi.prototype.addfSplitHandler = function(elt, horizontal, dx, onChange)
+{
+    var start = null;
+    var initial = null;
+    var ignoreClick = true;
+    var last = null;
+
+    // Disables built-in pan and zoom in IE10 and later
+    if (mxClient.IS_POINTER)
+    {
+        elt.style.touchAction = 'none';
+    }
+
+    var getValue = mxUtils.bind(this, function()
+    {
+        var result = parseInt(((horizontal) ? elt.style.right : elt.style.bottom));
+
+        // Takes into account hidden footer
+        if (!horizontal)
+        {
+            result = result + dx - this.footerHeight;
+        }
+
+        return result;
+    });
+
+	/* function moveHandler(evt)
+	 {
+	 if (start != null)
+	 {
+	 var pt = new mxPoint(mxEvent.getClientX(evt), mxEvent.getClientY(evt));
+	 onChange(Math.max(0, initial + ((horizontal) ? (pt.x - start.x) : (start.y - pt.y)) - dx));
+	 mxEvent.consume(evt);
+
+	 if (initial != getValue())
+	 {
+	 ignoreClick = true;
+	 last = null;
+	 }
+	 }
+	 };*/
+
+	/*function dropHandler(evt)
+	 {
+	 moveHandler(evt);
+	 initial = null;
+	 start = null;
+	 };*/
+
+    mxEvent.addGestureListeners(elt, function(evt)
+    {
+        start = new mxPoint(mxEvent.getClientX(evt), mxEvent.getClientY(evt));
+        initial = getValue();
+        ignoreClick = false;
+        mxEvent.consume(evt);
+    });
+
+    mxEvent.addListener(elt, 'click', function(evt)
+    {
+        if (!ignoreClick)
+        {
+            var next = (last != null) ? last - dx : 0;
+            last = getValue();
+            onChange(next);
+            mxEvent.consume(evt);
+        }
+    });
+
+    // mxEvent.addGestureListeners(document, null, moveHandler, dropHandler);
+
+    // this.destroyFunctions.push(function()
+    // {
+    //     mxEvent.removeGestureListeners(document, null, moveHandler, dropHandler);
+    // });
 };
 
 /**
