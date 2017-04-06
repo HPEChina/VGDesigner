@@ -3783,7 +3783,8 @@ EditorUi.prototype.showModel = function (params,outValue, saveFlag) {
 	}
 	query['id'] = this.interfaceParams.id;
 	query.data = outValue;
-	this.sidebar.addGeneralPalette([query], query.class, null,saveFlag)
+	// 4/67
+	this.sidebar.addOtherPalette([query], query.class, null,saveFlag)
 }
 
 /**
