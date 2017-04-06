@@ -1140,18 +1140,20 @@ Menubar.prototype.addMenu = function(label, funct,menus)
 	elt.style.opacity = '0.6';
 	var imgDiv = document.createElement('div');
 	imgDiv.className = 'geMenuImage ge'+ menus;
-	var dropImage = document.createElement('img');
-	dropImage.src=Menubar.prototype.dropdownImage;
-	dropImage.className = 'dropImage';
-    dropImage.style.position = 'absolute';
-    dropImage.style.top = '7px';
-    dropImage.style.left = '22px';
 	elt.appendChild(imgDiv);
-    elt.appendChild(dropImage);
+        var img = document.createElement('img');
+	img.src = 'images/dropdown.gif';
+	img.style.position = 'absolute';
+	img.style.right = '0';
+	img.style.top = '6px';
+	elt.appendChild(img);
 	elt.setAttribute('href', 'javascript:void(0);');
-	elt.className = 'geItem';
+	elt.style.padding = '1px 5px 3px 1px';
+	elt.style.position = 'relative';
+	elt.style.width = '30px';
+	elt.className = 'geLabel';
 	// 4/5
-    this.initElement(elt, menus);
+        this.initElement(elt, menus);
 
 	this.addMenuHandler(elt, funct);
 	this.container.appendChild(elt);
