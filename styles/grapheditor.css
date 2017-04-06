@@ -461,6 +461,14 @@ div.mxWindow .geButton {
 	background-position:center center;
 	border-top: 1px solid #e5e5e5;
 }
+.geFsplit {
+	cursor:col-resize;
+	background-color:#FFF;
+	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHBAMAAADdS/HjAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAHUlEQVQImWMQEGAQFWUQFmYQF2cQEmIQE2MQEQEACy4BF67hpEwAAAAASUVORK5CYII=);
+	_background-image:url('thumb_vertical.png');
+	background-repeat:no-repeat;
+	background-position:center center;
+}
 .gefootHsplit {
 	cursor:row-resize;
 	background-color:#FFF;
@@ -478,7 +486,7 @@ div.mxWindow .geButton {
 	background-repeat:no-repeat;
 	background-position:center center;
 }
-.geHsplit:hover, .geVsplit:hover, .gefootHsplit:hover {
+.geHsplit:hover, .geVsplit:hover, .gefootHsplit:hover, .geVsplit:hover{
 	background-color:#727687;
 }
 .gefootHsplit {
