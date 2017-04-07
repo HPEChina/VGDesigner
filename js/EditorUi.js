@@ -1036,7 +1036,7 @@ EditorUi.prototype.initInterfaceParams = function(type, id)
         this.interfaceParams.model = this.interfaceParams.model || 'editor';
         this.interfaceParams.designLibraryId = this.interfaceParams.designLibraryId || '';		//产品线id
         this.interfaceParams.id = this.interfaceParams.id || '';		//图形id
-        this.interfaceParams.author = this.interfaceParams.author || '';	//用户标示
+        this.interfaceParams.author = this.interfaceParams.author || this.interfaceParams.user || '';	//用户标示
         this.interfaceParams.from = this.interfaceParams.from || '';		//调用系统的名称
 	}
 	else if(type == 'new') {
@@ -2202,9 +2202,10 @@ EditorUi.prototype.openModel = function()
                     this.editor.setModified(false);
                     this.editor.undoManager.clear();
 
-                    this.editor.graph.selectAll(null, true);
-					this.editor.graph.setSelectionCells(this.editor.graph.ungroupCells());
-
+                    var graph = this.editor.graph;
+                    graph.selectAll(null, false);
+					graph.setSelectionCells(graph.ungroupCells());
+                    graph.clearSelection();
                     if (filename != null)
                     {
                         this.editor.setFilename(filename);
@@ -3834,7 +3835,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             params += '&attribute=' + JSON.stringify(res['attribute']);
             params += '&id=' + this.interfaceParams.id;
             params += '&designLibraryId=' + this.interfaceParams.designLibraryId;
-            params += '&author=' + this.interfaceParams.user||this.interfaceParams.author;
+            params += '&author=' + this.interfaceParams.author;
             params += '&from=' + this.interfaceParams.from;
 		}
 		else
@@ -3846,7 +3847,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue);
             params += '&id=' + this.interfaceParams.id;
             params += '&designLibraryId=' + this.interfaceParams.designLibraryId;
-            params += '&author=' + this.interfaceParams.user||this.interfaceParams.author;
+            params += '&author=' + this.interfaceParams.author;
             params += '&from=' + this.interfaceParams.from;
 		}
 
