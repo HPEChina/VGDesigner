@@ -2809,7 +2809,7 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
     // 327
     var ccc = document.createElement('div');
     ccc.className = 'two';
-    ccc.style.display = 'block';
+    ccc.style.display = 'none';
     this.container.appendChild(ccc);
     var elt = this.createTitle(title);
     ccc.appendChild(elt);
