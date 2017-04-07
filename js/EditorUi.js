@@ -3556,21 +3556,21 @@ EditorUi.prototype.extractGraphModelFromEvent = function(evt)
 EditorUi.prototype.saveFile = function(forceDialog)
 {
 	var cellection = (this.interfaceParams.type == 'model') ? MODEL_COLLECTION : VIEWER_COLLECTION;
+	var action = SAVE_ACTION;
+	if(this.interfaceParams.operator != null &&	this.interfaceParams.operator == 'edit')
+	{
+        action = UPDATE_ACTION;
+	}
 
 	if ((!forceDialog && this.editor.filename != null) || this.interfaceParams.type == 'model')
 	{
-		var action = UPDATE_ACTION;
-		if(this.interfaceParams.operator != null &&	this.interfaceParams.operator == 'new')
-		{
-            action = SAVE_ACTION;
-		}
 		this.saveDB(this.editor.getOrCreateJsonFilename(), cellection, action);
 	}
 	else
 	{
 		var dlg = new FilenameDialog(this, this.editor.getOrCreateJsonFilename(), mxResources.get('save'), mxUtils.bind(this, function(name)
 		{
-			this.saveDB(name, cellection, SAVE_ACTION);
+			this.saveDB(name, cellection, action);
 		}), null, mxUtils.bind(this, function(name)
 		{
 			if (name != null && name.length > 0)
