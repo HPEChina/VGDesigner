@@ -3785,7 +3785,9 @@ EditorUi.prototype.showModel = function (params,outValue, saveFlag) {
 	query['id'] = this.interfaceParams.id;
 	query.data = outValue;
 	// 4/67
-	this.sidebar.addOtherPalette([query], query.class, null,saveFlag)
+	// this.sidebar.addOtherPalette([query], query.class, null,saveFlag)
+	// 4/7
+	this.sidebar.addOtherNewPalette([query], query.class, null,saveFlag)
 }
 
 /**
