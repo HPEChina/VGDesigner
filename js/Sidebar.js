@@ -949,6 +949,36 @@ Sidebar.prototype.addOtherPalette = function(modelData, id, expand, saveFlag)
 	var modelClassTitle=this.modelClass[id]||modelData[0].description || modelData[0].class
 	if(modelClassTitle) this.addPaletteFunctions(id, modelClassTitle, (expand != null) ? expand : true, fns);
 };
+// 4/7
+Sidebar.prototype.addOtherNewPalette = function(modelData, id, expand, saveFlag)
+{
+    var fns = [];
+    for(var i in modelData) {
+        if(!modelData[i].property)continue;
+        //if operator == edit and id != null and id==modelData[i].id then open model
+        if (!saveFlag && this.editorUi.interfaceParams.id && this.editorUi.interfaceParams.id == modelData[i].id && this.editorUi.interfaceParams.operator == 'edit') {
+            window.opener = {};
+            window.opener.openFile = new OpenFile();
+            window.opener.openFile.setData(JSON.parse(modelData[i].data).xml, modelData[i].filename);
+            this.editorUi.openModel();
+        }
+        var prop = modelData[i].property;
+        // var attr = modelData[i].attribute;
+        var attr = modelData[i];
+
+        if(prop.type.toLowerCase() == 'edge') {
+            fns.push(this.createEdgeTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title));
+        }//update by wang,jianhui
+        else if (modelData[i].data) {
+            fns.push(this.createVertexTemplateFromXML(attr, id));
+        }
+        else {
+            fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
+        }
+    }
+    var modelClassTitle=this.modelClass[id]||modelData[0].description || modelData[0].class
+    if(modelClassTitle) this.addOtherPaletteFunctions(id, modelClassTitle, (expand != null) ? expand : true, fns);
+};
 // 330
 Sidebar.prototype.addGeneralPalette = function(modelData, id, expand, saveFlag)
 {
@@ -2743,6 +2773,17 @@ Sidebar.prototype.addPaletteFunctions = function(id, title, expanded, fns)
 		}
 	}));
 };
+// 4/7
+Sidebar.prototype.addOtherPaletteFunctions = function(id, title, expanded, fns)
+{
+    this.addOtherNPalette(id, id, expanded, mxUtils.bind(this, function(content)
+    {
+        for (var i = 0; i < fns.length; i++)
+        {
+            content.appendChild(fns[i](content));
+        }
+    }));
+};
 // 330
 Sidebar.prototype.addPaletteFunctionsOne = function(id, title, expanded, fns)
 {
@@ -2775,6 +2816,82 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
 
     var div = document.createElement('div');
     div.className = 'geSidebar third';
+
+    // Disables built-in pan and zoom in IE10 and later
+    if (mxClient.IS_POINTER)
+    {
+        div.style.touchAction = 'none';
+    }
+
+    // Shows tooltip if mouse over background
+    mxEvent.addListener(div, 'mousemove', mxUtils.bind(this, function(evt)
+    {
+        if (mxEvent.getSource(evt) == div)
+        {
+            div.setAttribute('title', mxResources.get('sidebarTooltip'));
+        }
+        else
+        {
+            div.removeAttribute('title');
+        }
+    }));
+
+    if (expanded)
+    {
+        onInit(div);
+        onInit = null;
+    }
+    else
+    {
+        div.style.display = 'none';
+    }
+
+    this.addFoldingHandler(elt, div, onInit);
+
+
+    var outer = document.createElement('div');
+    outer.appendChild(div);
+    this.container.appendChild(outer);
+
+    // Keeps references to the DOM nodes
+    if (id != null)
+    {
+        this.palettes[id] = [elt, outer];
+    }
+    this[id]=div;
+    this[id+title]=elt;
+    return div;
+
+};
+// 4/7
+Sidebar.prototype.addOtherNPalette = function(id, title, expanded, onInit)
+{
+    if (this[id]) {
+        if (!this[id].style.display||this[id].style.display == 'none') {
+            this[id+title].click();
+        }
+        onInit(this[id]);
+        return this[id];
+    }
+    // 327
+    var ccc = document.createElement('div');
+    ccc.className = 'two';
+    var readyTitle = document.getElementsByClassName('two');
+    if(readyTitle[0].style.display != 'none') {
+        ccc.style.display = 'block';
+    }else{
+        ccc.style.display = 'none';
+	};
+    this.container.appendChild(ccc);
+    var elt = this.createTitle(title);
+    ccc.appendChild(elt);
+
+    var div = document.createElement('div');
+    div.className = 'geSidebar third';
+    div.style.display = 'none';
+    // if(readyTitle[0].style.display = 'none') {
+    //     ccc.style.display = 'block';
+    // }
 
     // Disables built-in pan and zoom in IE10 and later
     if (mxClient.IS_POINTER)
