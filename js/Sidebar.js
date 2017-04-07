@@ -1217,7 +1217,7 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 	var img_src = this.graph.getModel().getValue(cells[0]).getAttribute('image');
 	var node = null;
 
-	if (img_src) {
+	if (img_src && img_src != 'null' && img_src != 'undefined') {
 		node = document.createElement('img');
 		// image.style.maxWidth = '40px';
 		// image.style.maxHeight = '40px';
