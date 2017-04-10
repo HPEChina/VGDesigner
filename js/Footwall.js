@@ -84,7 +84,7 @@ Footwall.prototype.init = function()
     conDiv.style.left = '1%';
     // 3/27
     conDiv.style.top = '28px';
-    conDiv.style.height = (this.editorUi.foothsplitPosition - 28) + 'px';
+    conDiv.style.height = 'calc(100% - 28px)';
     conDiv.style.border = '0px';
     // conDiv.style.marginBottom = '16px';
     div.appendChild(conDiv);
