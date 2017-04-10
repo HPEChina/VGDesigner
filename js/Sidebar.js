@@ -1217,7 +1217,7 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 	var img_src = this.graph.getModel().getValue(cells[0]).getAttribute('image');
 	var node = null;
 
-	if (img_src) {
+	if (img_src && img_src != 'null' && img_src != 'undefined') {
 		node = document.createElement('img');
 		// image.style.maxWidth = '40px';
 		// image.style.maxHeight = '40px';
@@ -2809,7 +2809,7 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
     // 327
     var ccc = document.createElement('div');
     ccc.className = 'two';
-    ccc.style.display = 'block';
+    ccc.style.display = 'none';
     this.container.appendChild(ccc);
     var elt = this.createTitle(title);
     ccc.appendChild(elt);
