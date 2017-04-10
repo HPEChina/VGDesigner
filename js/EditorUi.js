@@ -952,7 +952,7 @@ EditorUi.prototype.toolbarHeight = 34;
 /**
  * Specifies the height of the footer. Default is 28.
  */
-EditorUi.prototype.footerHeight = 28;
+EditorUi.prototype.footerHeight = 0;
 
 /**
  * Specifies the height of the optional sidebarFooterContainer. Default is 34.
@@ -2780,14 +2780,14 @@ EditorUi.prototype.refresh = function(sizeDidChange)
     this.fsplit.style.right = efffsplitPosition + 'px';
 
     var sidebarHeight = Math.max(0, h - this.footerHeight - this.menubarHeight );
-    this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + this.splitSize + 'px';
+    // this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + this.splitSize + 'px';
     this.footwallContainer.style.height = efffootHsplitPosition + 'px' ;
     // 3/24
     this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - this.sidebarContainer.style.width - this.splitSize - fw) + 'px' : w  + 'px';
     this.footwallContainer.style.width = this.diagramContainer.style.width;
     // 3/27
     this.footwallContainer.style.left = effHsplitPosition + this.splitSize + 'px';
-    this.footwallContainer.style.right = this.formatContainer.style.width;
+    this.footwallContainer.style.right = efffsplitPosition + this.splitSize + 'px';
     // this.footwallContainer.style.top = this.diagramContainer.style.height;
     this.footwallContainer.style.bottom = this.footerHeight + 'px';
     this.footwallContainer.style.position = 'absolute';
