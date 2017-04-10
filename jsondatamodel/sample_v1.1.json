@@ -1,0 +1,499 @@
+{
+  "environment": {
+    "properties": {
+      "envType": "topology",                                    //环境类型
+      "uuid": "abb018bfee394da794e7858de7da045e",               //id
+      "designLibraryId": "fe3bcdac76264eeb8c84cf116f9bac23",    //产品线id
+      "author": "hwx433007",                                    //作者
+      "from": "lcm"                                             //接口系统名称
+    },
+    "nodes": [                                                  //网元节点
+      {
+        "id": "2",                                              //网元id
+        "properties": [
+          {
+            "name": "name",
+            "description": "name",
+            "dataType": "string",
+            "value": [
+              "Server"
+            ],
+            "operator": [
+              "=="
+            ],
+            "logic": [
+              "none"
+            ]
+          },
+          {
+            "name": "category",
+            "description": "category",
+            "dataType": "string",
+            "value": [
+              "Server"
+            ],
+            "operator": [
+              "=="
+            ],
+            "logic": [
+              "none"
+            ]
+          },
+          {
+            "name": "type",
+            "description": "type",
+            "dataType": "string",
+            "value": [
+              "Server"
+            ],
+            "operator": [
+              "=="
+            ],
+            "logic": [
+              "none"
+            ]
+          },
+          {
+            "name": "OS",
+            "description": "OS",
+            "dataType": "string",
+            "operator": [                                       //操作符
+              "==",
+              "=="
+            ],
+            "value": [
+              "linux",
+              "aix"
+            ],
+            "logic": [                                          //逻辑操作符
+              "or",
+              "none"
+            ]
+          },
+          {
+            "name": "slot",
+            "description": "",
+            "dataType": "number",
+            "operator": [
+              ">=",
+              "<="
+            ],
+            "value": [
+              "2",
+              "8"
+            ],
+            "logic": [
+              "and",
+              "none"
+            ]
+          }
+        ],                                    //网元属性
+        "nodes": [                                              //网元内嵌的子网元
+          {
+            "id": "3",
+            "properties": [
+              {
+                "name": "name",
+                "description": "name",
+                "dataType": "string",
+                "value": [
+                  "Board01"
+                ],
+                "operator": [
+                  "=="
+                ],
+                "logic": [
+                  "none"
+                ]
+              },
+              {
+                "name": "category",
+                "description": "category",
+                "dataType": "string",
+                "value": [
+                  "Common"
+                ],
+                "operator": [
+                  "=="
+                ],
+                "logic": [
+                  "none"
+                ]
+              },
+              {
+                "name": "type",
+                "description": "type",
+                "dataType": "string",
+                "value": [
+                  "Board"
+                ],
+                "operator": [
+                  "=="
+                ],
+                "logic": [
+                  "none"
+                ]
+              },
+              {
+                "name": "slot",
+                "description": "",
+                "dataType": "string",
+                "operator": [
+                  "=="
+                ],
+                "value": [
+                  "1/4"
+                ],
+                "logic": [
+                  "none"
+                ]
+              }
+            ],
+            "nodes":[
+              {
+                "id": "5",
+                "properties": [
+                  {
+                    "name": "name",
+                    "description": "name",
+                    "dataType": "string",
+                    "value": [
+                      "Port0_1"
+                    ],
+                    "operator": [
+                      "=="
+                    ],
+                    "logic": [
+                      "none"
+                    ]
+                  },
+                  {
+                    "name": "category",
+                    "description": "category",
+                    "dataType": "string",
+                    "value": [
+                      "Port"
+                    ],
+                    "operator": [
+                      "=="
+                    ],
+                    "logic": [
+                      "none"
+                    ]
+                  },
+                  {
+                    "name": "type",
+                    "description": "type",
+                    "dataType": "string",
+                    "value": [
+                      "Port"
+                    ],
+                    "operator": [
+                      "=="
+                    ],
+                    "logic": [
+                      "none"
+                    ]
+                  },
+                  {
+                    "name": "IP",
+                    "description": "IP",
+                    "dataType": "string",
+                    "operator": [
+                      "=="
+                    ],
+                    "value": [
+                      "127.0.0.100"
+                    ],
+                    "logic": [
+                      "none"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "properties": [
+              {
+                "name": "name",
+                "description": "name",
+                "dataType": "string",
+                "value": [
+                  "Board02"
+                ],
+                "operator": [
+                  "=="
+                ],
+                "logic": [
+                  "none"
+                ]
+              },
+              {
+                "name": "category",
+                "description": "category",
+                "dataType": "string",
+                "value": [
+                  "Common"
+                ],
+                "operator": [
+                  "=="
+                ],
+                "logic": [
+                  "none"
+                ]
+              },
+              {
+                "name": "type",
+                "description": "type",
+                "dataType": "string",
+                "value": [
+                  "Board"
+                ],
+                "operator": [
+                  "=="
+                ],
+                "logic": [
+                  "none"
+                ]
+              },
+              {
+                "name": "slot",
+                "description": "",
+                "dataType": "string",
+                "operator": [
+                  "=="
+                ],
+                "value": [
+                  "2/4"
+                ],
+                "logic": [
+                  "none"
+                ]
+              }
+            ],
+            "nodes": [
+              {
+                "id": "6",
+                "properties": [
+                  {
+                    "name": "name",
+                    "description": "name",
+                    "dataType": "string",
+                    "value": [
+                      "Port0_2"
+                    ],
+                    "operator": [
+                      "=="
+                    ],
+                    "logic": [
+                      "none"
+                    ]
+                  },
+                  {
+                    "name": "category",
+                    "description": "category",
+                    "dataType": "string",
+                    "value": [
+                      "Port"
+                    ],
+                    "operator": [
+                      "=="
+                    ],
+                    "logic": [
+                      "none"
+                    ]
+                  },
+                  {
+                    "name": "type",
+                    "description": "type",
+                    "dataType": "string",
+                    "value": [
+                      "Port"
+                    ],
+                    "operator": [
+                      "=="
+                    ],
+                    "logic": [
+                      "none"
+                    ]
+                  },
+                  {
+                    "name": "IP",
+                    "description": "IP",
+                    "dataType": "string",
+                    "operator": [
+                      "=="
+                    ],
+                    "value": [
+                      "127.0.0.101"
+                    ],
+                    "logic": [
+                      "none"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "7",
+        "properties": [
+          {
+            "name": "name",
+            "description": "name",
+            "dataType": "string",
+            "value": [
+              "Switch"
+            ],
+            "operator": [
+              "=="
+            ],
+            "logic": [
+              "none"
+            ]
+          },
+          {
+            "name": "category",
+            "description": "category",
+            "dataType": "string",
+            "value": [
+              "Switch"
+            ],
+            "operator": [
+              "=="
+            ],
+            "logic": [
+              "none"
+            ]
+          },
+          {
+            "name": "type",
+            "description": "type",
+            "dataType": "string",
+            "value": [
+              "ONS6800"
+            ],
+            "operator": [
+              "=="
+            ],
+            "logic": [
+              "none"
+            ]
+          }
+        ],
+        "nodes": [
+          {
+            "id": "8",
+            "properties": [
+              {
+                "name": "name",
+                "description": "name",
+                "dataType": "string",
+                "value": [
+                  "Port0_0"
+                ],
+                "operator": [
+                  "=="
+                ],
+                "logic": [
+                  "none"
+                ]
+              },
+              {
+                "name": "category",
+                "description": "category",
+                "dataType": "string",
+                "value": [
+                  "Port"
+                ],
+                "operator": [
+                  "=="
+                ],
+                "logic": [
+                  "none"
+                ]
+              },
+              {
+                "name": "type",
+                "description": "type",
+                "dataType": "string",
+                "value": [
+                  "Port"
+                ],
+                "operator": [
+                  "=="
+                ],
+                "logic": [
+                  "none"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "9",
+            "properties": [
+              {
+                "name": "name",
+                "description": "name",
+                "dataType": "string",
+                "value": [
+                  "Port0_1"
+                ],
+                "operator": [
+                  "=="
+                ],
+                "logic": [
+                  "none"
+                ]
+              },
+              {
+                "name": "category",
+                "description": "category",
+                "dataType": "string",
+                "value": [
+                  "Port"
+                ],
+                "operator": [
+                  "=="
+                ],
+                "logic": [
+                  "none"
+                ]
+              },
+              {
+                "name": "type",
+                "description": "type",
+                "dataType": "string",
+                "value": [
+                  "Port"
+                ],
+                "operator": [
+                  "=="
+                ],
+                "logic": [
+                  "none"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "topology": [                                               //网元间拓扑关系
+      {
+        "id":"10",
+        "source":"5",
+        "target":"8"
+      },
+      {
+        "id":"11",
+        "source":"6",
+        "target":"9"
+      }
+    ]
+  }
+}
