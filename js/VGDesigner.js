@@ -95,8 +95,8 @@ VGDesigner.prototype.init = function(interfaceParams)
                             mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
                         }
                     }));
-                    var xml = window.parent.CodeTranslator.json2xml(data.data);
-                    window.parent.openFile.setData(xml, data.filename);
+                    var xml = CodeTranslator.json2xml(data.data);
+                    window.openFile.setData(xml, data.filename);
                 }));
             }
         }
