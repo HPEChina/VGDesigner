@@ -468,6 +468,8 @@ div.mxWindow .geButton {
 	_background-image:url('thumb_vertical.png');
 	background-repeat:no-repeat;
 	background-position:center center;
+	border-left: 1px solid #e5e5e5;
+	border-top: 1px solid #e5e5e5;
 }
 .gefootHsplit {
 	cursor:row-resize;
@@ -486,8 +488,8 @@ div.mxWindow .geButton {
 	background-repeat:no-repeat;
 	background-position:center center;
 }
-.geHsplit:hover, .geVsplit:hover, .gefootHsplit:hover, .geVsplit:hover{
-	background-color:#727687;
+.geHsplit:hover, .geVsplit:hover, .gefootHsplit:hover, .geVsplit:hover, .geFsplit:hover{
+	background-color:#d5d5d5;
 }
 .gefootHsplit {
 	cursor:row-resize;
@@ -496,9 +498,6 @@ div.mxWindow .geButton {
 	_background-image:url('thumb_horz.png');
 	background-repeat:no-repeat;
 	background-position:center center;
-}
-.geHsplit:hover,.gefootHsplit:hover, .geVsplit:hover {
-	background-color:#d5d5d5;
 }
 .geDialog {
 	position:absolute;
