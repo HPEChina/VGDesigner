@@ -1116,6 +1116,7 @@ Sidebar.prototype.getModelAndAddPalette = function(url, params) {
         var secondTitle = document.getElementsByClassName('second')[0];
         var title = document.getElementsByClassName('two');
         var cellDiv = document.getElementsByClassName('third');
+        var getitle = document.getElementsByClassName('geTitle');
         // 330
         mxEvent.addListener(secondTitle, 'click', mxUtils.bind(this, function () {
 
@@ -1127,6 +1128,7 @@ Sidebar.prototype.getModelAndAddPalette = function(url, params) {
                 }
                 else {
                     title[i].style.display = 'block';
+                    getitle[i].style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
                     cellDiv[i].style.display = 'none';
                     secondTitle.style.backgroundImage = 'url(\'' + this.expandedImage + '\')';
                 }}

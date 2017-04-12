@@ -454,7 +454,7 @@ div.mxWindow .geButton {
 }
 .geHsplit {
 	cursor:col-resize;
-	background-color:#FFF;
+	background-color: #f6f6f6;
 	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHBAMAAADdS/HjAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAHUlEQVQImWMQEGAQFWUQFmYQF2cQEmIQE2MQEQEACy4BF67hpEwAAAAASUVORK5CYII=);
 	_background-image:url('thumb_vertical.png');
 	background-repeat:no-repeat;
@@ -463,7 +463,7 @@ div.mxWindow .geButton {
 }
 .geFsplit {
 	cursor:col-resize;
-	background-color:#FFF;
+	background-color: #f6f6f6;
 	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHBAMAAADdS/HjAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAHUlEQVQImWMQEGAQFWUQFmYQF2cQEmIQE2MQEQEACy4BF67hpEwAAAAASUVORK5CYII=);
 	_background-image:url('thumb_vertical.png');
 	background-repeat:no-repeat;
@@ -473,7 +473,7 @@ div.mxWindow .geButton {
 }
 .gefootHsplit {
 	cursor:row-resize;
-	background-color:#FFF;
+	background-color: #f6f6f6;
 	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAEBAMAAACw6DhOAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAFElEQVQImWNgNVdzYBAUFBRggLMAEzYBy29kEPgAAAAASUVORK5CYII=);
 	_background-image:url('thumb_horz.png');
 	background-repeat:no-repeat;
@@ -482,22 +482,14 @@ div.mxWindow .geButton {
 .geVsplit {
 	font-size:1pt;
 	cursor:row-resize;
-	background-color:#FFF;
+	background-color: #f6f6f6;
 	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAEBAMAAACw6DhOAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAFElEQVQImWNgNVdzYBAUFBRggLMAEzYBy29kEPgAAAAASUVORK5CYII=);
 	_background-image:url('thumb_horz.png');
 	background-repeat:no-repeat;
 	background-position:center center;
 }
 .geHsplit:hover, .geVsplit:hover, .gefootHsplit:hover, .geVsplit:hover, .geFsplit:hover{
-	background-color:#d5d5d5;
-}
-.gefootHsplit {
-	cursor:row-resize;
-	background-color:#FFF;
-	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAEBAMAAACw6DhOAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAFElEQVQImWNgNVdzYBAUFBRggLMAEzYBy29kEPgAAAAASUVORK5CYII=);
-	_background-image:url('thumb_horz.png');
-	background-repeat:no-repeat;
-	background-position:center center;
+	background-color: #dadada;
 }
 .geDialog {
 	position:absolute;
