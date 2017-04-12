@@ -927,7 +927,7 @@ EditorUi.compactUi = true;
 /**
  * Specifies the size of the split bar.
  */
-EditorUi.prototype.splitSize = (mxClient.IS_TOUCH || mxClient.IS_POINTER) ? 12 : 8;
+EditorUi.prototype.splitSize = (mxClient.IS_TOUCH || mxClient.IS_POINTER) ? 8 : 6;
 
 /**
  * Specifies the height of the menubar. Default is 34.
@@ -2796,10 +2796,9 @@ EditorUi.prototype.refresh = function(sizeDidChange)
     this.foothsplit.style.left = this.footwallContainer.style.left;
     this.foothsplit.style.right = this.footwallContainer.style.right;
     this.foothsplit.style.position = "absolute";
-    this.foothsplit.style.cursor = 'row-resize';
     this.foothsplit.style.width = this.diagramContainer.style.width;
     this.foothsplit.style.bottom = efffootHsplitPosition + this.footerHeight + 'px';
-    this.foothsplit.style.backgroundColor = "#d9d9d9";
+
 
     var diagramHeight = Math.max(0, h - this.footerHeight - this.menubarHeight - this.toolbarHeight) - efffootHsplitPosition;
 
