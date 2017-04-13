@@ -3867,11 +3867,13 @@ EditorUi.prototype.saveDB = function(name, collection, action)
 					}
 					if(this.interfaceParams.type == 'model'){
 						this.showModel(params, outValue, true);
-						window.parent.loadProductUnitNode(this.interfaceParams.designLibraryId);
+						if(window.parent.loadProductUnitNode)
+							window.parent.loadProductUnitNode(this.interfaceParams.designLibraryId);
 					}
 							
 					else{
-						window.parent.loadProductTopoNode(this.interfaceParams.designLibraryId);
+						if(window.parent.loadProductTopoNode)
+							window.parent.loadProductTopoNode(this.interfaceParams.designLibraryId);
 					}
                 }
                 else {
