@@ -2733,7 +2733,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	}
 	
 	var effHsplitPosition = Math.max(0, Math.min(this.hsplitPosition, w - this.splitSize - 20));
-    var efffootHsplitPosition = Math.max(0, Math.min(this.foothsplitPosition, h - this.splitSize - 20));
+    var efffootHsplitPosition = Math.max(0, Math.min(this.foothsplitPosition, h - this.splitSize - 20 - 14));
 	var efffsplitPosition = Math.max(0, Math.min(this.fsplitPosition, w - this.splitSize - 20));
 
 	var tmp = 0;
