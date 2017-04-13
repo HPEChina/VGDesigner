@@ -2869,7 +2869,7 @@ Sidebar.prototype.addOtherNPalette = function(id, title, expanded, onInit)
     var ccc = document.createElement('div');
     ccc.className = 'two';
     var readyTitle = document.getElementsByClassName('two');
-    if(readyTitle[0].style.display != 'none') {
+    if(readyTitle[0] && readyTitle[0].style.display != 'none') {
         ccc.style.display = 'block';
     }else{
         ccc.style.display = 'none';
