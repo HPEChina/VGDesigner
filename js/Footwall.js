@@ -83,7 +83,7 @@ Footwall.prototype.init = function()
     conDiv.style.width = '99%';
     conDiv.style.left = '1%';
     // 3/27
-    conDiv.style.top = '28px';
+    conDiv.style.top = '26px';
     conDiv.style.height = 'calc(100% - 28px)';
     conDiv.style.border = '0px';
     // conDiv.style.marginBottom = '16px';
