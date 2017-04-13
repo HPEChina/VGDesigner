@@ -67,13 +67,13 @@ Footwall.prototype.init = function()
     var tabDiv = document.createElement('div');
     tabDiv.style.height = '25px';
     tabDiv.style.width = '100%';
-    tabDiv.style.backgroundColor = '#b3b3b3';
+    tabDiv.style.backgroundColor = '#ffffff';
     div.appendChild(tabDiv);
 
     var intervalDiv = document.createElement('div');
-    intervalDiv.style.height = '3px';
+    intervalDiv.style.height = '1px';
     intervalDiv.style.width = '100%';
-    intervalDiv.style.backgroundColor = '#d9d9d9';
+    intervalDiv.style.backgroundColor = '#cccccc';
     div.appendChild(intervalDiv);
 
     var conDiv = document.createElement('div');
@@ -91,75 +91,26 @@ Footwall.prototype.init = function()
 
 
     var changeXml = document.createElement('div');
-    changeXml.style.width = 'auto';
-    changeXml.style.height = '22px';
-    changeXml.style.lineHeight = '22px';
-    changeXml.style.fontSize = '9pt';
-    changeXml.style.textAlign = 'center';
-    // 3/27
-    changeXml.style.marginTop = '2px';
-    changeXml.style.padding = '0 5px';
-    changeXml.style.marginLeft = '20px';
-    changeXml.style.cursor = 'pointer';
+    changeXml.className = 'gecodeTab codeSelected';
     changeXml.innerHTML = 'XML';
-    changeXml.style.float = 'left';
-    changeXml.style.backgroundColor = '#d9d9d9';
-    changeXml.style.borderLeft = '1px solid #868686';
-    changeXml.style.borderTop = '1px solid #868686';
-    changeXml.style.borderRight = '1px solid #868686';
     tabDiv.appendChild(changeXml);
     this.codeChange.xml = changeXml;
 
     var changeJson = document.createElement('div');
-    changeJson.style.width = 'auto';
-    changeJson.style.height = '22px';
-    changeJson.style.padding = '0 5px';
-    changeJson.style.lineHeight = '22px';
-    changeJson.style.fontSize = '9pt';
-    changeJson.style.textAlign = 'center';
-    // 3/27
-    changeJson.style.marginTop = '2px';
-    changeJson.style.cursor = 'pointer';
+    changeJson.className = 'gecodeTab';
     changeJson.innerHTML = 'JSON';
-    changeJson.style.float = 'left';
-    changeJson.style.backgroundColor = '#b3b3b3';
-    changeJson.style.borderTop = '1px solid #868686';
-    changeJson.style.borderRight = '1px solid #868686';
     tabDiv.appendChild(changeJson);
     this.codeChange.json = changeJson;
 
     var changeYaml = document.createElement('div');
-    changeYaml.style.width = 'auto';
-    changeYaml.style.height = '22px';
-    changeYaml.style.padding = '0 5px';
-    changeYaml.style.lineHeight = '22px';
-    changeYaml.style.fontSize = '9pt';
-    changeYaml.style.textAlign = 'center';
-    changeYaml.style.marginTop = '2px';
-    changeYaml.style.cursor = 'pointer';
+    changeYaml.className = 'gecodeTab';
     changeYaml.innerHTML = 'YAML';
-    changeYaml.style.float = 'left';
-    changeYaml.style.backgroundColor = '#b3b3b3';
-    changeYaml.style.borderTop = '1px solid #868686';
-    changeYaml.style.borderRight = '1px solid #868686';
     tabDiv.appendChild(changeYaml);
     this.codeChange.yaml = changeYaml;
 
     var transcodeJson = document.createElement('div');
-    transcodeJson.style.width = 'auto';
-    transcodeJson.style.height = '22px';
-    transcodeJson.style.padding = '0 5px';
-    transcodeJson.style.lineHeight = '22px';
-    transcodeJson.style.fontSize = '9pt';
-    transcodeJson.style.textAlign = 'center';
-    // 3/27
-    transcodeJson.style.marginTop = '2px';
-    transcodeJson.style.cursor = 'pointer';
+    transcodeJson.className = 'gecodeTab';
     transcodeJson.innerHTML = 'Transcode(Json)';
-    transcodeJson.style.float = 'left';
-    transcodeJson.style.backgroundColor = '#b3b3b3';
-    transcodeJson.style.borderTop = '1px solid #868686';
-    transcodeJson.style.borderRight = '1px solid #868686';
     tabDiv.appendChild(transcodeJson);
     this.codeChange.transcode = transcodeJson;
 
@@ -255,11 +206,10 @@ Footwall.prototype.init = function()
 
             this.textarea.value = tValue.replace(/&quot;/ig, "'");
 
-            this.codeChange[o].style.backgroundColor = '#d9d9d9';
+            this.codeChange[o].className = 'gecodeTab codeSelected';
             for(var k in this.codeChange) {
                 if(k != o) {
-                    this.codeChange[k].style.backgroundColor = '#b3b3b3';
-                    this.codeChange[k].style.borderBottom = '0px';
+                    this.codeChange[k].className = 'gecodeTab';
                 }
             }
 

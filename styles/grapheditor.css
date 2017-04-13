@@ -715,7 +715,9 @@ div.mxWindow .geButton {
 }
 .gefile{  background-position: 0 -6041px;  }
 .gearrange{  background-position: 0 -6088px;  }
-
+.gecodeTab { height: 20px;line-height: 20px;font-size: 9pt;margin-top: 2px;margin-left: 20px;padding: 0 5px;cursor: pointer;float: left;}
+.gecodeTab:hover{ color: #ec8c45;border-bottom: 4px solid #ec8c45;}
+.codeSelected {border-bottom: 4px solid #3a3e55;font-weight: bold;}
 
 html div.mxRubberband {
 	border-color:#0000DD;

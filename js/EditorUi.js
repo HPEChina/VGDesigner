@@ -3865,7 +3865,14 @@ EditorUi.prototype.saveDB = function(name, collection, action)
                         this.interfaceParams.operator = 'edit';
                         this.interfaceParams.id = result.data.id;
 					}
-					if (this.interfaceParams.type == 'model') this.showModel(params, outValue, true);
+					if(this.interfaceParams.type == 'model'){
+						this.showModel(params, outValue, true);
+						window.parent.loadProductUnitNode(this.interfaceParams.designLibraryId);
+					}
+							
+					else{
+						window.parent.loadProductTopoNode(this.interfaceParams.designLibraryId);
+					}
                 }
                 else {
                     mxUtils.alert(result.data.msg);
