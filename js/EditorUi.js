@@ -3865,6 +3865,8 @@ EditorUi.prototype.saveDB = function(name, collection, action)
                         this.interfaceParams.operator = 'edit';
                         this.interfaceParams.id = result.data.id;
 					}
+					// document.domain='huawei.com';//一级域名相同，解决跨域
+
 					if(this.interfaceParams.type == 'model'){
 						this.showModel(params, outValue, true);
 						if(window.parent.loadProductUnitNode)
