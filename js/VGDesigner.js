@@ -76,27 +76,29 @@ VGDesigner.prototype.init = function(interfaceParams)
                 mxUtils.post(url, params, mxUtils.bind(this, function (req) {
                     var result = JSON.parse(req.getText());
                     var data = result.data[0];
-                    var editor = ui.editor;
-                    window.openFile = new OpenFile(function()
-                    {
-                        window.openFile = null;
-                    });
-                    window.openFile.setConsumer(mxUtils.bind(this, function(xml, filename)
-                    {
-                        try
+                    if(data){
+                        var editor = ui.editor;
+                        window.openFile = new OpenFile(function()
                         {
-                            var doc = mxUtils.parseXml(xml);
-                            var model = editor.graph.getModel();
-                            var codec = new mxCodec(doc);
-                            codec.decode(doc.documentElement, model);
-                        }
-                        catch (e)
+                            window.openFile = null;
+                        });
+                        window.openFile.setConsumer(mxUtils.bind(this, function(xml, filename)
                         {
-                            mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
-                        }
-                    }));
-                    var xml = CodeTranslator.json2xml(data.data);
-                    window.openFile.setData(xml, data.filename);
+                            try
+                            {
+                                var doc = mxUtils.parseXml(xml);
+                                var model = editor.graph.getModel();
+                                var codec = new mxCodec(doc);
+                                codec.decode(doc.documentElement, model);
+                            }
+                            catch (e)
+                            {
+                                mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
+                            }
+                        }));
+                        var xml = CodeTranslator.json2xml(data.data);
+                        window.openFile.setData(xml, data.filename);
+                    }
                 }));
             }
         }

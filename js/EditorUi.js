@@ -927,7 +927,7 @@ EditorUi.compactUi = true;
 /**
  * Specifies the size of the split bar.
  */
-EditorUi.prototype.splitSize = (mxClient.IS_TOUCH || mxClient.IS_POINTER) ? 12 : 8;
+EditorUi.prototype.splitSize = (mxClient.IS_TOUCH || mxClient.IS_POINTER) ? 8 : 6;
 
 /**
  * Specifies the height of the menubar. Default is 34.
@@ -2733,7 +2733,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	}
 	
 	var effHsplitPosition = Math.max(0, Math.min(this.hsplitPosition, w - this.splitSize - 20));
-    var efffootHsplitPosition = Math.max(0, Math.min(this.foothsplitPosition, h - this.splitSize - 20));
+    var efffootHsplitPosition = Math.max(0, Math.min(this.foothsplitPosition, h - this.splitSize - 20 - 14));
 	var efffsplitPosition = Math.max(0, Math.min(this.fsplitPosition, w - this.splitSize - 20));
 
 	var tmp = 0;
@@ -2788,7 +2788,6 @@ EditorUi.prototype.refresh = function(sizeDidChange)
     // 3/27
     this.footwallContainer.style.left = effHsplitPosition + this.splitSize + 'px';
     this.footwallContainer.style.right = efffsplitPosition + this.splitSize + 'px';
-    // this.footwallContainer.style.top = this.diagramContainer.style.height;
     this.footwallContainer.style.bottom = this.footerHeight + 'px';
     this.footwallContainer.style.position = 'absolute';
     this.footwallContainer.style.backgroundColor = 'whiteSmoke';
@@ -2796,10 +2795,9 @@ EditorUi.prototype.refresh = function(sizeDidChange)
     this.foothsplit.style.left = this.footwallContainer.style.left;
     this.foothsplit.style.right = this.footwallContainer.style.right;
     this.foothsplit.style.position = "absolute";
-    this.foothsplit.style.cursor = 'row-resize';
     this.foothsplit.style.width = this.diagramContainer.style.width;
     this.foothsplit.style.bottom = efffootHsplitPosition + this.footerHeight + 'px';
-    this.foothsplit.style.backgroundColor = "#d9d9d9";
+
 
     var diagramHeight = Math.max(0, h - this.footerHeight - this.menubarHeight - this.toolbarHeight) - efffootHsplitPosition;
 
@@ -3867,7 +3865,18 @@ EditorUi.prototype.saveDB = function(name, collection, action)
                         this.interfaceParams.operator = 'edit';
                         this.interfaceParams.id = result.data.id;
 					}
-					if (this.interfaceParams.type == 'model') this.showModel(params, outValue, true);
+					// document.domain='huawei.com';//一级域名相同，解决跨域
+
+					if(this.interfaceParams.type == 'model'){
+						this.showModel(params, outValue, true);
+						if(window.parent.loadProductUnitNode)
+							window.parent.loadProductUnitNode(this.interfaceParams.designLibraryId);
+					}
+							
+					else{
+						if(window.parent.loadProductTopoNode)
+							window.parent.loadProductTopoNode(this.interfaceParams.designLibraryId);
+					}
                 }
                 else {
                     mxUtils.alert(result.data.msg);
