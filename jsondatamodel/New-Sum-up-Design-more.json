@@ -1,0 +1,116 @@
+{
+  "properties":
+  {
+    "name": "sample-topo.json",
+    "id": "32uuid",
+    "type": "topo",
+    "auto-apply-resource": true,
+    "auto-apply-contributor": "jade"
+  },
+
+  "resources":
+  [
+    {
+      "properties":
+      {
+        "id": "uuid_ospv3",
+        "name": "ospv3",
+        "typeCategory": "server",
+        "os": "Linux 2.4"
+      },
+
+      "operand":
+      {
+        "operands":
+        [
+          {
+            "key": "typeName",
+            "value": "OSP_5800_V3",
+            "operator": "==//默认",
+            "composeType": "single//没有子条件时，可以省略",
+            "operands":
+            [
+
+            ]
+          },
+
+          {
+            "key": "vender",
+            "value": "Huawei"
+          }
+        ],
+
+        "composeType": "and",
+        "businessType": "reserve//可选，用户自定义"
+      },
+
+      "resources":
+      [
+        {
+          "properties":
+          {
+            "id": "uuid_ospv3_port1//嵌套子资源,端口",
+            "name": "ospv3_port1",
+            "typeName": "port",
+            "portType": "eth"
+          }
+        }
+      ]
+    },
+
+    {
+      "properties":
+      {
+        "id": "uuid_atca2",
+        "name": "ATCA2",
+        "typeCategory": "server",
+        "os": "Linux 2.4"
+      },
+
+      "operand":
+      {
+        "operands":
+        [
+          {
+            "key": "vender",
+            "value": "Huawei"
+          },
+          {
+            "key": "version",
+            "value": "V6R10C30",
+            "operator":"contains"
+          }
+        ]
+      },
+
+      "resources":
+      [
+        {
+          "properties":
+          {
+            "id": "uuid_atca2_port1//嵌套子资源,端口",
+            "name": "atca2_port1",
+            "typeName": "port",
+            "portType": "eth"
+          }
+        }
+      ]
+    }
+  ],
+
+  "relations":
+  [
+    {
+      "properties":
+      {
+        "id": "uuid",
+        "name": "link_eth1",
+        "type": "link",
+        "sourceId": "uuid_ospv3_port1",
+        "targetId": "uuid_atca2_port1:在环境业务，端口才连线",
+        "sourceDevId": "uuid_ospv3",
+        "targetDevId": "uuid_atca2:端口在设备上，有id便于查找对应设备"
+      }
+    }
+  ]
+}
