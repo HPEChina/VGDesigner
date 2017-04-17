@@ -1,0 +1,254 @@
+{
+  "properties": {
+    "name":"sample-topo.json//名称",
+    "type": "topology//类型：model/topology/physics",
+    "id": "abb018bfee394da794e7858de7da045e",
+    "designLibraryId": "fe3bcdac76264eeb8c84cf116f9bac23//产品线id",
+    "author": "hwx433007//作者",
+    "from": "lcm//接口系统名称",
+    "auto-apply-resource": true,
+    "auto-apply-contributor": "jade",
+    "userdefine":"xxx//其它用户自定义属性"
+  },
+  "resources": [
+    {
+      "properties": {
+        "id": "2",
+        "name": "Server01",
+        "category": "Server"
+      },
+      "operand": {
+        "operands": [
+          {
+            "operands": [
+              {
+                "key": "os",
+                "value": "linux",
+                "operator": "==",
+                "composeType": "single"
+              },
+              {
+                "key": "os",
+                "value": "aix",
+                "operator": "==",
+                "composeType": "single"
+              }
+            ],
+            "composeType": "or",
+            "businessType": "reserve//可选，用户自定义"
+          },
+          {
+            "key": "disk",
+            "value": "500",
+            "operator": ">="
+          },
+          {
+            "key": "status",
+            "value": "closed",
+            "operator": "!="
+          },
+          {
+            "key": "version",
+            "value": "V6R1",
+            "operator": "contains//包含"
+          },
+          {
+            "key": "storageVersion",
+            "value": "Storage V6",
+            "operator": "starts//开头匹配"
+          },
+          {
+            "key": "slotNumber",
+            "value": "[2,8)",
+            "operator": "between//区间"
+          },
+          {
+            "key": "type",
+            "value": "OSP_5800_V3,OSP_5800_V4",
+            "operator": "in//枚举"
+          },
+          {
+            "key": "caption",
+            "value": "Server(.*)",
+            "operator": "regex//正则"
+          },
+          {
+            "key": "vender",
+            "value": "Huawei//默认为=="
+          }
+        ],
+        "composeType": "and",
+        "businessType": "reserve//可选，用户自定义"
+      },
+      "resources": [
+        {
+          "properties": {
+            "id": "3",
+            "name": "Board01",
+            "category": "Common",
+            "type": "Board"
+          },
+          "operand": {
+            "operands": [
+              {
+                "key": "slotId",
+                "value": "01"
+              }
+            ]
+          },
+          "resources": [
+            {
+              "properties": {
+                "id": "5",
+                "name": "Port0_1",
+                "category": "Port",
+                "type": "Port_En"
+              },
+              "operand": {
+                "operands": [
+                  {
+                    "key": "ip",
+                    "value": "[0-9]+(?:\\.[0-9]+){3}",
+                    "operator": "regex"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "properties": {
+            "id": "4",
+            "name": "Board02",
+            "category": "Common",
+            "type": "Board"
+          },
+          "operand": {
+            "operands": [
+              {
+                "key": "slotId",
+                "value": "02"
+              }
+            ]
+          },
+          "resources": [
+            {
+              "properties": {
+                "id": "6",
+                "name": "Port0_2",
+                "category": "Port",
+                "type": "Port_En"
+              },
+              "operand": {
+                "operands": [
+                  {
+                    "key": "ip",
+                    "value": "[0-9]+(?:\.[0-9]+){3}",
+                    "operator": "regex"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "properties": {
+        "id": "7",
+        "name": "Switch01",
+        "category": "Switch"
+      },
+      "operand": {
+        "operands": [
+          {
+            "operands": [
+              {
+                "key": "type",
+                "value": "ONS6600",
+                "operator": "==",
+                "composeType": "single"
+              },
+              {
+                "key": "type",
+                "value": "ONS6800",
+                "operator": "==",
+                "composeType": "single"
+              }
+            ],
+            "composeType": "or",
+            "businessType": "reserve"
+          },
+          {
+            "key": "vender",
+            "value": "Huawei"
+          }
+        ],
+        "composeType": "and",
+        "businessType": "reserve//可选，用户自定义"
+      },
+      "resources": [
+        {
+          "properties": {
+            "id": "8",
+            "name": "Port1_1",
+            "category": "Port",
+            "type": "Port_En"
+          },
+          "operand": {
+            "operands": [
+              {
+                "key": "ip",
+                "value": "[0-9]+(?:\.[0-9]+){3}",
+                "operator": "regex"
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "id": "9",
+            "name": "Port1_2",
+            "category": "Port",
+            "type": "Port_En"
+          },
+          "operand": {
+            "operands": [
+              {
+                "key": "ip",
+                "value": "[0-9]+(?:\.[0-9]+){3}",
+                "operator": "regex"
+              }
+            ]
+          }
+        }
+      ]
+    }
+    ],
+  "relations": [
+    {
+      "properties": {
+        "id": "10",
+        "name": "link_eth1",
+        "type": "link",
+        "sourceId": "5",
+        "targetId": "8",
+        "sourceDevId": "2",
+        "targetDevId": "7"
+      },
+      "relations":[]
+    },
+    {
+      "properties": {
+        "id": "11",
+        "name": "link_eth2",
+        "type": "link",
+        "sourceId": "6",
+        "targetId": "9",
+        "sourceDevId": "2",
+        "targetDevId": "7"
+      },
+      "relations":[]
+    }
+  ]
+}
