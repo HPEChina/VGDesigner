@@ -4397,7 +4397,7 @@ EditorUi.prototype.createKeyHandler = function(editor)
 		keyHandler.bindAction(81, true, 'connectionPoints', true); // Ctrl+Shift+Q
 		keyHandler.bindAction(86, true, 'paste'); // Ctrl+V
 		keyHandler.bindAction(71, true, 'group'); // Ctrl+G
-		keyHandler.bindAction(77, true, 'editData'); // Ctrl+M
+		// keyHandler.bindAction(77, true, 'editData'); // Ctrl+M
 		keyHandler.bindAction(71, true, 'grid', true); // Ctrl+Shift+G
 		keyHandler.bindAction(73, true, 'italic'); // Ctrl+I
 		keyHandler.bindAction(76, true, 'lockUnlock'); // Ctrl+L
