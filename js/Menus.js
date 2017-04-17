@@ -1190,7 +1190,7 @@ Menubar.prototype.addMenuHandler = function(elt, funct)
 				// 弹出菜单栏菜单
 				var offset = mxUtils.getOffset(elt);
 				// menu.popup(offset.x, offset.y + elt.offsetHeight, null, evt);
-                menu.popup(elt.offsetLeft, elt.offsetHeight, null, evt);
+                menu.popup(elt.offsetLeft, (elt.offsetHeight+2), null, evt);
 				this.editorUi.setCurrentMenu(menu, elt);
 			}
 			
