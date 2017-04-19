@@ -199,7 +199,7 @@ Footwall.prototype.init = function()
                 // }
                 var xmlDoc = mxUtils.parseXml(mxUtils.getXml(graphXml));
                 var graphJSONData = CodeTranslator.xml2json(xmlDoc, "  ");
-                var jsonTs = graph2data(JSON.parse(graphJSONData).mxGraphModel.root, this.editorUi.interfaceParams);
+                var jsonTs = js2data(JSON.parse(graphJSONData).mxGraphModel.root, this.editorUi.interfaceParams);
                 tValue = mxUtils.getPrettyJSON(jsonTs);
                 mode = 'javascript';
             }

@@ -1,6 +1,6 @@
-function js2data(json, envType) {
+function js2data(json, interfaceParams) {
     /*
-    画图规则:parent在前,edge在后(先定义后使用)
+    画图规则:parent在前,child在后(先定义后使用)
     */
     var relations = [], resources = {}, resourcesID = [], properties = {}
     for (var i = 0; i < json.length; i++) {
@@ -41,14 +41,14 @@ function js2data(json, envType) {
             }
             operands = { operands: operands }
             if (currentId === '0') {
-                if (envType !== 'model') {
+                if (interfaceParams.type !== 'model') {
                     properties = resources_properties
                     continue
                 }
                 properties = { name: resources_properties.name }
             }
         } else if (item['mxCell@edge']) {//添加连线
-            if (envType !== 'model') {
+            if (interfaceParams.type !== 'model') {
                 relations.push({
                     properties: {
                         id: currentId,
@@ -61,7 +61,7 @@ function js2data(json, envType) {
                 })
             }
             continue
-        } else if (currentId === '0' && envType !== 'model') continue
+        } else if (currentId === '0' && interfaceParams.type !== 'model') continue
         resourcesID.push(currentId)
         resources[currentId] = {
             properties: resources_properties || { id: currentId },
@@ -70,12 +70,36 @@ function js2data(json, envType) {
             parent: key_ == 'object' ? item['object']['mxCell@parent'] : item['mxCell@parent']
         }
     }
-    for (var r in relations) {
-        relations[r].properties.sourceDevId = findDevice(resources, relations[r].properties.sourceId)
-        relations[r].properties.targetDevId = findDevice(resources, relations[r].properties.targetId)
-    }
+    relations.map(function (relation) {
+        var ids = findDevice(resources, relation.properties.sourceId, relation.properties.targetId)
+        relation.properties.sourceDevId = ids.sid
+        relation.properties.targetDevId = ids.tid
+        return relation
+    })
     resources = { properties: properties, resources: list2tree(resources, resourcesID) }
-    if (envType !== 'model') resources.relations = relations
+
+    if (interfaceParams.type !== 'model') {
+        resources.relations = relations
+        resources.properties = {
+            name: interfaceParams.name || '',
+            type: 'topology',
+            id: interfaceParams.id,
+            designLibraryId: interfaceParams.designLibraryId,
+            author: interfaceParams.user || interfaceParams.author,
+            from: interfaceParams.from,
+            userdefine: resources.properties
+        }
+    } else {
+        resources.properties = {
+            name: resources.properties.name,
+            type: 'model',
+            id: interfaceParams.id,
+            productLine: interfaceParams.designLibraryId,
+            author: interfaceParams.user || interfaceParams.author,
+            from: interfaceParams.from
+        }
+    }
+
     return resources
 }
 function getOperand(prop) {
@@ -99,7 +123,7 @@ function getOperand(prop) {
             value: values[i],
             operator: operator[i]
         })
-        if (operand.composeType != composeType[i]) {
+        if (operand.composeType != composeType[i] && composeType[i] !== 'none') {
             operand = {
                 operands: [operand],
                 composeType: composeType[i]
@@ -108,16 +132,25 @@ function getOperand(prop) {
     }
     return operand
 }
-function findDevice(resources, id) {
-    console.log(resources, id)
-    for (var parent = resources[id].parent; parent !== '1'; parent = resources[id].parent) {
-        id = parent
+function findDevice(resources, sid, tid) {
+    console.log(resources, sid, tid)
+    var sparent = resources[sid].parent,
+        tparent = resources[tid].parent
+    while (sparent !== '1' || tparent !== '1') {
+        if (sparent !== '1') {
+            sid = sparent
+            sparent = resources[sid].parent
+        }
+        if (tparent !== '1') {
+            tid = tparent
+            tparent = resources[tid].parent
+        }
     }
-    return id
+    return { sid: sid, tid: tid }
 }
 function list2tree(resources, ids) {//生成嵌套结构
-    for (var i = ids.length - 1; i > -1; i--) {
-        var id = ids[i]
+    while (ids.length) {
+        var id = ids.pop()
         var parentId = resources[id].parent
         delete resources[id].parent
         if (parentId === '1') parentId = '0'
@@ -135,31 +168,10 @@ function obj_values(obj) {
     }
     return arr
 }
-function graph2data(graph, interfaceParams) {
-    var data = js2data(graph, interfaceParams.type)
-    if (interfaceParams.type === 'model') {
-        data.properties = {
-            name: data.properties.name,
-            type: 'model',
-            id: interfaceParams.id,
-            productLine: interfaceParams.designLibraryId,
-            author: interfaceParams.user || interfaceParams.author,
-            from: interfaceParams.from
-        }
-    } else {
-        data.properties = {
-            name: data.properties.name,
-            type: 'topology',
-            id: interfaceParams.id,
-            designLibraryId: interfaceParams.designLibraryId,
-            author: interfaceParams.user || interfaceParams.author,
-            from: interfaceParams.from,
-            userdefine: data.properties
-        }
-    }
-    return data
-}
 if (typeof module !== 'undefined')
     module.exports = {
-        js2data: js2data
+        js2data: js2data,
+        getOperand: getOperand,
+        findDevice: findDevice,
+        list2tree: list2tree
     }
