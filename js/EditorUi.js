@@ -3844,7 +3844,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             var outValue = mxUtils.getXml(graphXml);
             var xmlDoc = mxUtils.parseXml(outValue);
             outValue = CodeTranslator.xml2json(xmlDoc);
-            params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue);
+            params = 'filename=' + name+'&codetype=json&data=' + encodeURIComponent(outValue);
             params += '&id=' + this.interfaceParams.id;
             params += '&designLibraryId=' + this.interfaceParams.designLibraryId;
             params += '&author=' + this.interfaceParams.author;

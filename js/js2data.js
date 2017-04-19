@@ -1,88 +1,132 @@
-function js2data(json) {
-    var nodes = { edge: [] },
-        properties = {
-            target: 'string',
-            source: 'string',
-            style: 'string',
-            id: 'string',
-            parent: 'string',
-            intrinsic: 'object',
-            extended: 'object',
-            userFunc: 'object'
-        }
+function js2data(json, envType) {
+    /*
+    画图规则:parent在前,edge在后(先定义后使用)
+    */
+    var relations = [], resources = {}, resourcesID = [], properties = {}
     for (var i = 0; i < json.length; i++) {
-        var item = json[i]
-        var key_ = item.object ? 'object' : 'mxCell'
-        var currentId = item[key_ + '@id']
-        var parentId = item[key_ + '@parent']
-        if (currentId === '0' || currentId === '1') continue
-        if (parentId === '0' || parentId === '1') {
-            delete item[key_ + '@parent'] //parent==0 父节点为画板,parent==1 父节点为空节点
-            parentId = 0
-        }
-        if (item[key_ + '@edge']) {
-            nodes.edge.push({ properties: [{ property: [] }] })
-            for (var key in properties)
-                if (item[key_ + '@' + key])
-                    nodes.edge[nodes.edge.length - 1].properties[0].property.push({
-                        "$": {
-                            "name": key,
-                            "value": item[key_ + '@' + key]
-                        }
-                    })
-            continue
-        }
-        if (!nodes[currentId]) nodes[currentId] = { properties: [{ property: [] }] } //新建node
-        for (var key in properties)
-            if (item[key_ + '@' + key])
-                nodes[currentId].properties[0].property.push({
-                    "$": {
-                        "name": key,
-                        "value": item[key_ + '@' + key]
+        var item = json[i],
+            key_ = item.object ? 'object' : 'mxCell',
+            currentId = item[key_ + '@id']
+        if (currentId == '1') continue
+        if (key_ == 'object') {//获取模型属性
+            var resources_properties = { id: currentId },
+                operands = [],
+                property = item['object@intrinsic']
+            if (property) {
+                property = JSON.parse(property.replace(/&quot;/ig, '"'))
+                for (var j = 0; j < property.length; j++) {
+                    var prop = property[j]
+                    if (prop.operator.toString() === '==' && prop.logic.toString() === 'none') {
+                        resources_properties[prop.name] = prop.value[0]
+                    } else {
+                        operands.push(getOperand(prop))
                     }
+                }
+            }
+            property = item['object@extended']
+            if (property) {
+                property = JSON.parse(property.replace(/&quot;/ig, '"'))
+                for (j = 0; j < property.length; j++) {
+                    var prop = property[j]
+                    operands.push(getOperand(prop))
+                }
+            }
+            property = item['object@userFunc']
+            if (property) {
+                property = JSON.parse(property.replace(/&quot;/ig, '"'))
+                for (j = 0; j < property.length; j++) {
+                    var prop = property[j]
+                    operands.push(getOperand(prop))
+                }
+            }
+            operands = { operands: operands }
+            if (currentId === '0') {
+                if (envType !== 'model') {
+                    properties = resources_properties
+                    continue
+                }
+                properties = { name: resources_properties.name }
+            }
+        } else if (item['mxCell@edge']) {//添加连线
+            if (envType !== 'model') {
+                relations.push({
+                    properties: {
+                        id: currentId,
+                        name: item['mxCell@name'] || '',
+                        type: item['mxCell@type'] || '',
+                        sourceId: item['mxCell@source'],
+                        targetId: item['mxCell@target']
+                    },
+                    relations: []
                 })
-        if (key_ == 'object') parentId = parentId || item[key_]['mxCell@parent']
-        if (parentId && parentId !== '0' && parentId !== '1') {
-            nodes[currentId].parent = parentId
-            if (!nodes[parentId]) nodes[parentId] = { properties: [{ property: [] }] } //新建node
-            if (!nodes[parentId].nodes) nodes[parentId].nodes = [{ node: [] }]
+            }
+            continue
+        } else if (currentId === '0' && envType !== 'model') continue
+        resourcesID.push(currentId)
+        resources[currentId] = {
+            properties: resources_properties || { id: currentId },
+            operand: operands,
+            resources: [],
+            parent: key_ == 'object' ? item['object']['mxCell@parent'] : item['mxCell@parent']
         }
     }
-    return nodes
+    for (var r in relations) {
+        relations[r].properties.sourceDevId = findDevice(resources, relations[r].properties.sourceId)
+        relations[r].properties.targetDevId = findDevice(resources, relations[r].properties.targetId)
+    }
+    resources = { properties: properties, resources: list2tree(resources, resourcesID) }
+    if (envType !== 'model') resources.relations = relations
+    return resources
 }
-/*
-模型节点排序,v4.0
-*/
-function graphNodeSort(nodes) {
-    var keys = Object.keys(nodes)
-    for (var index = 0; index < keys.length; index++) {
-        var parentKey = nodes[keys[index]].parent
-        if (parentKey) {
-            var parentIndex = keys.indexOf(parentKey)
-            if (index > parentIndex) {
-                keys.push(keys.splice(parentIndex, 1)[0])
-                // keys.splice(index+1, 0, keys.splice(parentIndex, 1)[0]);
-                index--;
+function getOperand(prop) {
+    var key = prop.name,
+        values = prop.value,
+        operator = prop.operator,
+        composeType = prop.logic,
+        operand = {
+            key: key,
+            value: values[0],
+            operator: operator[0]
+        }
+    if (composeType.toString() === 'none') return operand
+    operand = {
+        operands: [operand],
+        composeType: composeType[0]
+    }
+    for (var i = 1; i < composeType.length; i++) {
+        operand.operands.push({
+            key: key,
+            value: values[i],
+            operator: operator[i]
+        })
+        if (operand.composeType != composeType[i]) {
+            operand = {
+                operands: [operand],
+                composeType: composeType[i]
             }
         }
     }
-    return keys
+    return operand
 }
-function list2tree(nodes, keys) {
-    for (var i = 0; i < keys.length; i++) {
-        var key = keys[i]
-        var parentId = nodes[key].parent
-        if (parentId) {
-            delete nodes[key].parent
-            if (!nodes[parentId]) {
-                console.error('graphNodeSort排序错误')
-                continue
-            }
-            nodes[parentId].nodes[0].node.push(nodes[key])
-            delete nodes[key]
+function findDevice(resources, id) {
+    console.log(resources, id)
+    for (var parent = resources[id].parent; parent !== '1'; parent = resources[id].parent) {
+        id = parent
+    }
+    return id
+}
+function list2tree(resources, ids) {//生成嵌套结构
+    for (var i = ids.length - 1; i > -1; i--) {
+        var id = ids[i]
+        var parentId = resources[id].parent
+        delete resources[id].parent
+        if (parentId === '1') parentId = '0'
+        if (parentId && resources[parentId]) {
+            resources[parentId].resources.push(resources[id])
+            delete resources[id]
         }
     }
-    return nodes
+    return obj_values(resources)
 }
 function obj_values(obj) {
     var arr = []
@@ -92,49 +136,30 @@ function obj_values(obj) {
     return arr
 }
 function graph2data(graph, interfaceParams) {
-    var nodes = js2data(graph)
-    var edge = nodes.edge
-    delete nodes.edge
-    var keys = graphNodeSort(nodes)
-    nodes = list2tree(nodes, keys)
+    var data = js2data(graph, interfaceParams.type)
     if (interfaceParams.type === 'model') {
-        nodes = {
-            environment: {
-                properties: [{
-                    property: [{ "$": { "name": 'envType', "value": 'model' } },
-                    { "$": { "name": 'uuid', "value": interfaceParams.id } },
-                    { "$": { "name": 'productLine', "value": interfaceParams.designLibraryId } },
-                    { "$": { "name": 'author', "value": interfaceParams.user || interfaceParams.author } },
-                    { "$": { "name": 'intrinsic', "value": graph[0]['object@intrinsic'] } },
-                    { "$": { "name": 'extended', "value": graph[0]['object@extended'] } },
-                    { "$": { "name": 'userFunc', "value": graph[0]['object@userFunc'] } }]
-                }],
-                nodes: [{ node: obj_values(nodes) }]
-            }
+        data.properties = {
+            name: data.properties.name,
+            type: 'model',
+            id: interfaceParams.id,
+            productLine: interfaceParams.designLibraryId,
+            author: interfaceParams.user || interfaceParams.author,
+            from: interfaceParams.from
         }
     } else {
-        nodes = {
-            environment: {
-                properties: [{
-                    property: [{ "$": { "name": 'envType', "value": 'topology' } },
-                    { "$": { "name": 'uuid', "value": interfaceParams.id } },
-                    { "$": { "name": 'designLibraryId', "value": interfaceParams.designLibraryId } },
-                    { "$": { "name": 'author', "value": interfaceParams.user || interfaceParams.author } },
-                    { "$": { "name": 'intrinsic', "value": graph[0]['object@intrinsic'] } },
-                    { "$": { "name": 'extended', "value": graph[0]['object@extended'] } },
-                    { "$": { "name": 'userFunc', "value": graph[0]['object@userFunc'] } }]
-                }],
-                nodes: [{ node: obj_values(nodes) }],
-                topology: [{ edge: edge }]
-            }
+        data.properties = {
+            name: data.properties.name,
+            type: 'topology',
+            id: interfaceParams.id,
+            designLibraryId: interfaceParams.designLibraryId,
+            author: interfaceParams.user || interfaceParams.author,
+            from: interfaceParams.from,
+            userdefine: data.properties
         }
     }
-    return nodes
+    return data
 }
 if (typeof module !== 'undefined')
     module.exports = {
-        js2data: js2data,
-        graphNodeSort: graphNodeSort,
-        list2tree: list2tree,
-        obj_values: obj_values
+        js2data: js2data
     }
