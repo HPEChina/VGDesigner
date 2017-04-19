@@ -94,13 +94,16 @@ function js2data(json, envType) {
         relation.properties.sourceDevId = ids.sid
         relation.properties.targetDevId = ids.tid
         return relation
-    }) 
-    console.timeEnd('convert')
-    return {
+    })
+    resources = {
         properties: properties,
-        resources: list2tree(resources, resourcesID),
-        relations: relations
+        resources: list2tree(resources, resourcesID)
     }
+    if (envType !== 'model') {
+        resources.relations = relations
+    }
+    console.timeEnd('convert')
+    return resources
 }
 function getOperand(prop) {
     var key = prop.name,
