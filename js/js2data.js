@@ -1,105 +1,106 @@
-function js2data(json, interfaceParams) {
-    /*
-    画图规则:parent在前,child在后(先定义后使用)
-    */
+/*
+画图规则:parent在前,child在后(先定义后使用)
+*/
+function js2data(json, envType) {
     var relations = [], resources = {}, resourcesID = [], properties = {}
-    for (var i = 0; i < json.length; i++) {
-        var item = json[i],
-            key_ = item.object ? 'object' : 'mxCell',
-            currentId = item[key_ + '@id']
-        if (currentId == '1') continue
-        if (key_ == 'object') {//获取模型属性
-            var resources_properties = { id: currentId },
-                operands = [],
-                property = item['object@intrinsic']
-            if (property) {
-                property = JSON.parse(property.replace(/&quot;/ig, '"'))
-                for (var j = 0; j < property.length; j++) {
-                    var prop = property[j]
-                    if (prop.operator.toString() === '==' && prop.logic.toString() === 'none') {
-                        resources_properties[prop.name] = prop.value[0]
-                    } else {
-                        operands.push(getOperand(prop))
-                    }
-                }
-            }
-            property = item['object@extended']
-            if (property) {
-                property = JSON.parse(property.replace(/&quot;/ig, '"'))
-                for (j = 0; j < property.length; j++) {
-                    var prop = property[j]
+    function getAttrs(modelID, model) {
+        var resources_properties = { id: modelID },
+            operands = [],
+            property = model['object@intrinsic']
+        if (property) {
+            property = JSON.parse(property.replace(/&quot;/ig, '"'))
+            property.forEach(function (prop) {
+                if (prop.operator.toString() === '==' && prop.logic.toString() === 'none') {
+                    resources_properties[prop.name] = prop.value[0]
+                } else {
                     operands.push(getOperand(prop))
                 }
+            })
+        }
+        if (modelID === '0') {
+            if (envType !== 'model') {
+                properties = resources_properties
+                return //topo忽略底板,只保留底板静态属性
             }
-            property = item['object@userFunc']
-            if (property) {
-                property = JSON.parse(property.replace(/&quot;/ig, '"'))
-                for (j = 0; j < property.length; j++) {
-                    var prop = property[j]
-                    operands.push(getOperand(prop))
-                }
-            }
-            operands = { operands: operands }
-            if (currentId === '0') {
-                if (interfaceParams.type !== 'model') {
-                    properties = resources_properties
-                    continue
-                }
-                properties = { name: resources_properties.name }
-            }
-        } else if (item['mxCell@edge']) {//添加连线
-            if (interfaceParams.type !== 'model') {
-                relations.push({
-                    properties: {
-                        id: currentId,
-                        name: item['mxCell@name'] || '',
-                        type: item['mxCell@type'] || '',
-                        sourceId: item['mxCell@source'],
-                        targetId: item['mxCell@target']
-                    },
-                    relations: []
-                })
-            }
-            continue
-        } else if (currentId === '0' && interfaceParams.type !== 'model') continue
-        resourcesID.push(currentId)
-        resources[currentId] = {
-            properties: resources_properties || { id: currentId },
-            operand: operands,
+            properties = { name: resources_properties.name }//取底板name属性做为model name
+        }
+        property = model['object@extended']
+        if (property) {
+            property = JSON.parse(property.replace(/&quot;/ig, '"'))
+            property.forEach(function (prop) {
+                operands.push(getOperand(prop))
+            })
+        }
+        property = model['object@userFunc']
+        if (property) {
+            property = JSON.parse(property.replace(/&quot;/ig, '"'))
+            property.forEach(function (prop) {
+                operands.push(getOperand(prop))
+            })
+        }
+        resourcesID.push(modelID)
+        resources[modelID] = {
+            properties: resources_properties,
+            operand: { operands: operands },
             resources: [],
-            parent: key_ == 'object' ? item['object']['mxCell@parent'] : item['mxCell@parent']
+            parent: model['object']['mxCell@parent']
         }
     }
+    function getEdge(modelID, model) {
+        if (envType !== 'model') {
+            relations.push({
+                properties: {
+                    id: modelID,
+                    name: model['mxCell@name'] || '',
+                    type: model['mxCell@type'] || '',
+                    sourceId: model['mxCell@source'],
+                    targetId: model['mxCell@target']
+                },
+                relations: []
+            })
+        }
+    }
+    console.time('convert')
+    while (json.length) {
+        var model = json.shift(),
+            _key = model.object ? 'object' : 'mxCell',
+            modelID = model[_key + '@id']
+
+        if (modelID == '1') continue //忽略id=1
+
+        if (_key == 'object') {//有属性,获取
+            getAttrs(modelID, model)
+            continue
+        }
+
+        if (modelID === '0' && envType !== 'model') continue //topo忽略无属性的底板
+
+        if (model['mxCell@edge']) {//是连线
+            getEdge(modelID, model)
+            continue
+        }
+
+        //无属性的模型
+        resourcesID.push(modelID)
+        resources[modelID] = {
+            properties: { id: modelID },
+            resources: [],
+            parent: model['mxCell@parent']
+        }
+
+    }//end while
     relations.map(function (relation) {
         var ids = findDevice(resources, relation.properties.sourceId, relation.properties.targetId)
         relation.properties.sourceDevId = ids.sid
         relation.properties.targetDevId = ids.tid
         return relation
     })
-    resources = { properties: properties, resources: list2tree(resources, resourcesID) }
-
-    if (interfaceParams.type !== 'model') {
-        resources.relations = relations
-        resources.properties = {
-            name: interfaceParams.name || '',
-            type: 'topology',
-            id: interfaceParams.id,
-            designLibraryId: interfaceParams.designLibraryId,
-            author: interfaceParams.user || interfaceParams.author,
-            from: interfaceParams.from,
-            userdefine: resources.properties
-        }
-    } else {
-        resources.properties = {
-            name: resources.properties.name,
-            type: 'model',
-            id: interfaceParams.id,
-            productLine: interfaceParams.designLibraryId,
-            author: interfaceParams.user || interfaceParams.author,
-            from: interfaceParams.from
-        }
+    resources = {
+        properties: properties,
+        resources: list2tree(resources, resourcesID),
+        relations: relations
     }
-
+    console.timeEnd('convert')
     return resources
 }
 function getOperand(prop) {
@@ -112,28 +113,26 @@ function getOperand(prop) {
             value: values[0],
             operator: operator[0]
         }
-    if (composeType.toString() === 'none') return operand
-    operand = {
-        operands: [operand],
-        composeType: composeType[0]
-    }
-    for (var i = 1; i < composeType.length; i++) {
-        operand.operands.push({
-            key: key,
-            value: values[i],
-            operator: operator[i]
-        })
-        if (operand.composeType != composeType[i] && composeType[i] !== 'none') {
+    for (var i = 0; composeType[i] !== 'none'; i++) {
+        if (operand.composeType != composeType[i]) {
             operand = {
-                operands: [operand],
+                operands: [operand, {
+                    key: key,
+                    value: values[i + 1],
+                    operator: operator[i + 1]
+                }],
                 composeType: composeType[i]
             }
-        }
+        } else
+            operand.operands.push({
+                key: key,
+                value: values[i + 1],
+                operator: operator[i + 1]
+            })
     }
     return operand
 }
 function findDevice(resources, sid, tid) {
-    console.log(resources, sid, tid)
     var sparent = resources[sid].parent,
         tparent = resources[tid].parent
     while (sparent !== '1' || tparent !== '1') {
