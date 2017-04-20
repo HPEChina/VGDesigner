@@ -61,7 +61,7 @@ Footwall.prototype.init = function()
     div.id = 'textBoard';
     div.style.height = '100%';
     div.style.width = '100%';
-    div.style.backgroundColor = '#f5f5f5';
+    div.style.backgroundColor = '#ebebeb';
     this.editorUi.footwallContainer.appendChild(div);
 
     var tabDiv = document.createElement('div');

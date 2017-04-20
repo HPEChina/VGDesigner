@@ -360,7 +360,7 @@ div.mxWindow .geButton {
 	display:block;
 	font-size:11pt;
 	font-weight:normal;
-	padding:6px 0px 6px 20px;
+	padding:6px 0px 6px 30px;
 	margin:0px;
 	cursor:default;
 	white-space:nowrap;
@@ -369,7 +369,7 @@ div.mxWindow .geButton {
 	line-height:1.4em;
 }
 .geSidebarContainer .geTitle:hover {
-	color:#ec8c45;
+	color:#f95f5b;
 }
 .geTitle img {
 	opacity:0.5;
@@ -384,9 +384,8 @@ div.mxWindow .geButton {
 .geFirstTitle {
 	display:block;
 	font-size:11pt;
-	border-bottom:1px solid #e5e5e5;
 	font-weight:normal;
-	padding:6px 0px 6px 14px;
+	padding:6px 0px 6px 26px;
 	margin:0px;
 	background:#ddd;
 	white-space:nowrap;
@@ -395,7 +394,7 @@ div.mxWindow .geButton {
 	line-height:1.4em;
 }
 .geSidebarContainer .geFirstTitle:hover {
-	background:#d5d5d5;
+	color:#f95f5b;
 }
 
 .geSidebar .geItem {
@@ -426,7 +425,6 @@ div.mxWindow .geButton {
 }
 .geFooterContainer {
 	background:#e5e5e5;
-	border-top:1px solid #c0c0c0;
 }
 .geFooterContainer a {
 	font-size:14px;
