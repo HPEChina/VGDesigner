@@ -3665,8 +3665,9 @@ EditorUi.prototype.save = function(name)
 
 EditorUi.prototype.getModelJsonString = function()
 {
-    var graph = this.editor.graph;
-    graph.selectAll(null, true);
+	var tocollapse = this.actions.get('collapse').isEnabled()
+	var graph = this.editor.graph;
+	graph.selectAll(null, true);
     if (!graph.isSelectionEmpty()) {
         //获取自定义的属性
         var ret = {};
@@ -3749,9 +3750,8 @@ EditorUi.prototype.getModelJsonString = function()
         group.setValue(obj);
 
 		//update by wang,jianhui--start
-		graph.foldCells(false)//展开
-		if (!this.actions.get('collapse').isEnabled())
-			this.actions.get('collapsible').funct()
+		if (!tocollapse) this.actions.get('collapsible').funct()
+		else graph.foldCells(false)//展开
 		var xml = this.editor.getGraphXml(this);
 		var bounds = xml.getElementsByTagName("mxGeometry")[0];
 		bounds.setAttribute("x", 0);

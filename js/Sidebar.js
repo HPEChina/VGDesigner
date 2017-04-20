@@ -1361,7 +1361,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	}
 	var img_src = this.editorUi.editor.graph.getModel().getValue(cells[0]).getAttribute('image');
 	if (img_src && img_src != 'null' && img_src != 'undefined')
-		createImgThumb(img_src)
+		createImgThumb.bind(this)(img_src)
 	else
 		this.createThumb(cells, this.thumbWidth, this.thumbHeight, elt, title, showLabel, showTitle, width, height);
 
