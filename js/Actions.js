@@ -48,12 +48,6 @@ Actions.prototype.init = function()
         ui.footwall.reset();
 
         var cell = graph.getModel().getRoot();
-        var attriDiv = document.getElementById('attributePanel');
-        if(attriDiv){
-            attriDiv.parentNode.removeChild(attriDiv);
-        }
-		attriDiv = ui.format.createAttributePanel();
-		ui.format.container.appendChild(attriDiv);
         var value = graph.getModel().getValue(cell);
         if (!mxUtils.isNode(value))
         {
@@ -67,7 +61,8 @@ Actions.prototype.init = function()
 			value.setAttribute(o,  JSON.stringify(ui.initAttributes[o]));
 		}
 		value.setAttribute('image', mxGraph.prototype.collapsedImage.src);
-		ui.format.panels.push(new AttributePanel(ui.format, ui, attriDiv, cell));
+		ui.format.refresh();
+
         var title = 'Create new ' + ui.interfaceParams.type;
         document.title = title;
 
@@ -211,7 +206,7 @@ Actions.prototype.init = function()
 			}
 		}
 	};
-	
+
 	this.addAction('delete', function()
 	{
 		deleteCells(false);
@@ -232,6 +227,7 @@ Actions.prototype.init = function()
 	this.addAction('selectEdges', function() { graph.selectEdges(); }, null, null, 'Ctrl+Shift+E');
 	this.addAction('selectAll', function() { graph.selectAll(null, true); }, null, null, 'Ctrl+A');
 	this.addAction('selectNone', function() { graph.clearSelection(); }, null, null, 'Ctrl+Shift+A');
+	// 4/17
 	this.addAction('lockUnlock', function()
 	{
 		if (!graph.isSelectionEmpty())
@@ -246,6 +242,14 @@ Actions.prototype.init = function()
 				graph.toggleCellStyles(mxConstants.STYLE_DELETABLE, defaultValue);
 				graph.toggleCellStyles(mxConstants.STYLE_EDITABLE, defaultValue);
 				graph.toggleCellStyles('connectable', defaultValue);
+// 4/17
+                var unlock = document.getElementsByClassName('geSprite-lockunlock')[0];
+                if (defaultValue == '1')
+                {
+                    unlock.style.backgroundPosition = '0 -6179px';
+                }else{
+                    unlock.style.backgroundPosition = '0 -6226px';
+                }
 			}
 			finally
 			{
@@ -290,20 +294,20 @@ Actions.prototype.init = function()
 	// Adds action
 	this.addAction('editData...', function()
 	{
-        var cell = graph.getSelectionCell() || graph.getModel().getRoot();
-		if (cell != null)
-		{
-            var attriDiv = document.getElementById('attributePanel');
-            if(attriDiv){
-                attriDiv.style.display = '';
-            }
-            else{
-                attriDiv = ui.format.createAttributePanel();
-
-                ui.format.container.appendChild(attriDiv);
-                ui.format.panels.push(new AttributePanel(ui.format, ui, attriDiv, cell));
-            }
-		}
+        // var cell = graph.getSelectionCell() || graph.getModel().getRoot();
+		// if (cell != null)
+		// {
+         //    var attriDiv = document.getElementById('attributePanel');
+         //    if(attriDiv){
+         //        attriDiv.style.display = '';
+         //    }
+         //    else{
+         //        attriDiv = ui.format.createAttributePanel();
+        //
+         //        ui.format.container.appendChild(attriDiv);
+         //        ui.format.panels.push(new AttributePanel(ui.format, ui, attriDiv, cell));
+         //    }
+		// }
 
 		//原有的dialog编辑数据
 		// var cell = graph.getSelectionCell() || graph.getModel().getRoot();
