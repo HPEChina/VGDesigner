@@ -211,7 +211,7 @@ Actions.prototype.init = function()
 			}
 		}
 	};
-	
+
 	this.addAction('delete', function()
 	{
 		deleteCells(false);
@@ -232,6 +232,7 @@ Actions.prototype.init = function()
 	this.addAction('selectEdges', function() { graph.selectEdges(); }, null, null, 'Ctrl+Shift+E');
 	this.addAction('selectAll', function() { graph.selectAll(null, true); }, null, null, 'Ctrl+A');
 	this.addAction('selectNone', function() { graph.clearSelection(); }, null, null, 'Ctrl+Shift+A');
+	// 4/17
 	this.addAction('lockUnlock', function()
 	{
 		if (!graph.isSelectionEmpty())
@@ -246,6 +247,14 @@ Actions.prototype.init = function()
 				graph.toggleCellStyles(mxConstants.STYLE_DELETABLE, defaultValue);
 				graph.toggleCellStyles(mxConstants.STYLE_EDITABLE, defaultValue);
 				graph.toggleCellStyles('connectable', defaultValue);
+// 4/17
+                var unlock = document.getElementsByClassName('geSprite-lockunlock')[0];
+                if (defaultValue == '1')
+                {
+                    unlock.style.backgroundPosition = '0 -6179px';
+                }else{
+                    unlock.style.backgroundPosition = '0 -6226px';
+                }
 			}
 			finally
 			{

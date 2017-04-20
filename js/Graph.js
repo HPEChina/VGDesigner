@@ -833,12 +833,12 @@ Graph = function(container, model, renderHint, stylesheet, themes)
 		this.updateMouseEvent = function(me)
 		{
 			me = graphUpdateMouseEvent.apply(this, arguments);
-			
+
 			if (this.isCellLocked(me.getCell()))
 			{
 				me.state = null;
 			}
-			
+
 			return me;
 		};
 	}
@@ -2351,7 +2351,7 @@ HoverIcons.prototype.init = function()
 	this.graph.click = mxUtils.bind(this, function(me)
 	{
 		graphClick.apply(this.graph, arguments);
-		
+
 		if (this.currentState != null && !this.graph.isCellSelected(this.currentState.cell) &&
 			mxEvent.isTouchEvent(me.getEvent()) && !this.graph.model.isVertex(me.getCell()))
 		{
