@@ -2866,7 +2866,7 @@ Sidebar.prototype.addOtherNPalette = function(id, title, expanded, onInit)
 		}
 		onInit(this[id]);
 		return this[id];
-    }
+	}
     // 327
     var ccc = document.createElement('div');
     ccc.className = 'two';
