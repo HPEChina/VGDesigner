@@ -198,6 +198,7 @@ Menus.prototype.init = function()
 		menu.addItem(mxResources.get('horizontalFlow'), null, mxUtils.bind(this, function()
 		{
 			var layout = new mxHierarchicalLayout(graph, mxConstants.DIRECTION_WEST);
+			layout.filterChildFlag = true;
     		this.editorUi.executeLayout(function()
     		{
     			var selectionCells = graph.getSelectionCells();
@@ -207,6 +208,7 @@ Menus.prototype.init = function()
 		menu.addItem(mxResources.get('verticalFlow'), null, mxUtils.bind(this, function()
 		{
 			var layout = new mxHierarchicalLayout(graph, mxConstants.DIRECTION_NORTH);
+            layout.filterChildFlag = true;
     		this.editorUi.executeLayout(function()
     		{
     			var selectionCells = graph.getSelectionCells();
