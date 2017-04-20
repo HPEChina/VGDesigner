@@ -3748,19 +3748,20 @@ EditorUi.prototype.getModelJsonString = function()
         }
         group.setValue(obj);
 
-//update by wang,jianhui--start
-		this.actions.get('collapsible').funct()
+		//update by wang,jianhui--start
 		graph.foldCells(false)//展开
+		if (!this.actions.get('collapse').isEnabled())
+			this.actions.get('collapsible').funct()
 		var xml = this.editor.getGraphXml(this);
-		var bounds=xml.getElementsByTagName("mxGeometry")[0];
-		bounds.setAttribute("x",0);
-		bounds.setAttribute("y",0);
-		bounds.width=bounds.getAttribute("width");
+		var bounds = xml.getElementsByTagName("mxGeometry")[0];
+		bounds.setAttribute("x", 0);
+		bounds.setAttribute("y", 0);
+		bounds.width = bounds.getAttribute("width");
 		bounds.height = bounds.getAttribute("height");
 		xml = mxUtils.getXml(xml);
 		graph.foldCells(true)//折叠
-//update by wang,jianhui--end
-
+		//update by wang,jianhui--end
+		
         //解组
         if(num > 1) {
             graph.setSelectionCells(graph.ungroupCells());
