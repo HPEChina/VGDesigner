@@ -69,6 +69,14 @@ function mxGraphHierarchyModel(layout, vertices, roots, parent, tightenToSource)
 				var realEdge = realEdges[0];
 				var targetCell = layout.getVisibleTerminal(
 						realEdge, false);
+				//判断targetCell是否是children里的cell
+				if(layout.filterChildFlag) {
+					var index = mxUtils.indexOfNestedArray(vertices, targetCell, 'children');
+					if(index >= 0) {
+                        targetCell = vertices[index];
+					}
+				}
+
 				var internalTargetCell = this.vertexMapper.get(targetCell);
 
 				if (internalVertices[i] == internalTargetCell)

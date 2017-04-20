@@ -355,6 +355,33 @@ var mxUtils =
 		return -1;
 	},
 
+    /**
+	 * Returns the index of obj in array or -1 if the array does not contain
+     * the given object.
+	 *
+     * @param arr - Array to check for the given obj.
+     * @param obj - Object to find in the given array.
+     * @param key:下维数组的key
+	 *
+     * @returns {number}
+     */
+    indexOfNestedArray: function(array, obj, key) {				//多维数组判断是否存在某值
+		for(var i = 0;i < array.length;i++) {
+			if(array[i][key] instanceof Array) {					//判断是否为多维数组
+				var ret = this.indexOfNestedArray(array[i][key], obj, key);
+				if(ret >= 0) {
+					return i;
+				}
+			}
+			else{
+				if(array[i] == obj) {
+					return i;									//存在
+				}
+			}
+		}
+		return -1;												//不存在
+	},
+
 	/**
 	 * Function: forEach
 	 * 

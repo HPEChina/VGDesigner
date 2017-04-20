@@ -5151,6 +5151,8 @@ mxGraph.prototype.updateAlternateBounds = function(cell, geo, willCollapse)
 		var state = this.view.getState(cell);
 		var style = (state != null) ? state.style : this.getCellStyle(cell);
 
+        var image = this.getFoldingImage(state);
+
 		if (geo.alternateBounds == null)
 		{
 			var bounds = geo;
@@ -5172,7 +5174,7 @@ mxGraph.prototype.updateAlternateBounds = function(cell, geo, willCollapse)
 				}
 			}
 			
-			geo.alternateBounds = new mxRectangle(0, 0, bounds.width, bounds.height);
+			geo.alternateBounds = new mxRectangle(0, 0, image.width, image.height);
 		}
 		
 		if (geo.alternateBounds != null)

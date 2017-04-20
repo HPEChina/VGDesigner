@@ -187,6 +187,13 @@ mxHierarchicalLayout.prototype.edgesTargetTermCache = null;
 mxHierarchicalLayout.prototype.edgeStyle = mxHierarchicalEdgeStyle.POLYLINE;
 
 /**
+ * Variable: filterChildFlag
+ *
+ * 是否过滤子节点的标志
+ */
+mxHierarchicalLayout.prototype.filterChildFlag = false;
+
+/**
  * Function: getModel
  * 
  * Returns the internal <mxGraphHierarchyModel> for this layout algorithm.
@@ -322,6 +329,8 @@ mxHierarchicalLayout.prototype.findRoots = function(parent, vertices)
 		{
 			var cell = vertices[i];
 
+            var childCount = model.getChildCount(cell);
+
 			if (model.isVertex(cell) && this.graph.isCellVisible(cell))
 			{
 				var conns = this.getEdges(cell);
@@ -332,7 +341,7 @@ mxHierarchicalLayout.prototype.findRoots = function(parent, vertices)
 				{
 					var src = this.getVisibleTerminal(conns[k], true);
 
-					if (src == cell)
+					if (src == cell || (this.filterChildFlag && childCount > 0 && mxUtils.indexOfNestedArray(cell.children, src, 'children') >= 0) )
 					{
 						fanOut++;
 					}
@@ -377,33 +386,15 @@ mxHierarchicalLayout.prototype.findRoots = function(parent, vertices)
  */
 mxHierarchicalLayout.prototype.getEdges = function(cell)
 {
-	var cachedEdges = this.edgesCache.get(cell);
-	
-	if (cachedEdges != null)
-	{
-		return cachedEdges;
-	}
+	// var cachedEdges = this.edgesCache.get(cell);
+	//
+	// if (cachedEdges != null)
+	// {
+	// 	return cachedEdges;
+	// }
 
-	var model = this.graph.model;
-	var edges = [];
-	var isCollapsed = this.graph.isCellCollapsed(cell);
-	var childCount = model.getChildCount(cell);
+    var edges = this.getAllEdges(cell);
 
-	for (var i = 0; i < childCount; i++)
-	{
-		var child = model.getChildAt(cell, i);
-
-		if (this.isPort(child))
-		{
-			edges = edges.concat(model.getEdges(child, true, true));
-		}
-		else if (isCollapsed || !this.graph.isCellVisible(child))
-		{
-			edges = edges.concat(model.getEdges(child, true, true));
-		}
-	}
-
-	edges = edges.concat(model.getEdges(cell, true, true));
 	var result = [];
 	
 	for (var i = 0; i < edges.length; i++)
@@ -411,8 +402,8 @@ mxHierarchicalLayout.prototype.getEdges = function(cell)
 		var source = this.getVisibleTerminal(edges[i], true);
 		var target = this.getVisibleTerminal(edges[i], false);
 		
-		if ((source == target) || ((source != target) && ((target == cell && (this.parent == null || this.graph.isValidAncestor(source, this.parent, this.traverseAncestors))) ||
-			(source == cell && (this.parent == null ||
+		if ((source == target) || ((source != target) && (((target == cell || (this.filterChildFlag && cell.children && mxUtils.indexOfNestedArray(cell.children, target, 'children') >= 0)) && (this.parent == null || this.graph.isValidAncestor(source, this.parent, this.traverseAncestors))) ||
+			((source == cell || ( this.filterChildFlag && cell.children && mxUtils.indexOfNestedArray(cell.children, source, 'children') >= 0)) && (this.parent == null ||
 					this.graph.isValidAncestor(target, this.parent, this.traverseAncestors))))))
 		{
 			result.push(edges[i]);
@@ -422,6 +413,23 @@ mxHierarchicalLayout.prototype.getEdges = function(cell)
 	this.edgesCache.put(cell, result);
 
 	return result;
+};
+
+/**
+ * 获取cell中所有的edge,包括各级children
+ * @param cell - <mxCell> whose edges should be returned, include edges of children.
+ */
+mxHierarchicalLayout.prototype.getAllEdges = function(cell)
+{
+    var result = [];
+    var model = this.graph.model;
+    var childCount = model.getChildCount(cell);
+    for (var i = 0; i < childCount; i++) {
+        var child = model.getChildAt(cell, i);
+        result = result.concat(this.getAllEdges(child));
+	}
+    result = result.concat(model.getEdges(cell, true, true));
+    return result;
 };
 
 /**
@@ -495,12 +503,13 @@ mxHierarchicalLayout.prototype.run = function(parent)
 		var filledVertexSetEmpty = true;
 
 		// Poor man's isSetEmpty
+        var vertexCells = [];
 		for (var key in filledVertexSet)
 		{
 			if (filledVertexSet[key] != null)
 			{
 				filledVertexSetEmpty = false;
-				break;
+                vertexCells.push(filledVertexSet[key]);
 			}
 		}
 
@@ -511,7 +520,7 @@ mxHierarchicalLayout.prototype.run = function(parent)
 			// If the candidate root is an unconnected group cell, remove it from
 			// the layout. We may need a custom set that holds such groups and forces
 			// them to be processed for resizing and/or moving.
-			
+
 
 			for (var i = 0; i < candidateRoots.length; i++)
 			{
@@ -519,7 +528,7 @@ mxHierarchicalLayout.prototype.run = function(parent)
 				hierarchyVertices.push(vertexSet);
 
 				this.traverse(candidateRoots[i], true, null, allVertexSet, vertexSet,
-						hierarchyVertices, filledVertexSet);
+						hierarchyVertices, filledVertexSet, vertexCells);
 			}
 
 			for (var i = 0; i < candidateRoots.length; i++)
@@ -585,6 +594,9 @@ mxHierarchicalLayout.prototype.run = function(parent)
  * Function: filterDescendants
  * 
  * Creates an array of descendant cells
+ *
+ * @param cell
+ * @param result
  */
 mxHierarchicalLayout.prototype.filterDescendants = function(cell, result)
 {
@@ -608,7 +620,16 @@ mxHierarchicalLayout.prototype.filterDescendants = function(cell, result)
 			// in the traversal mechanisms
 			if (!this.isPort(child))
 			{
-				this.filterDescendants(child, result);
+				if(!this.filterChildFlag) {
+                    this.filterDescendants(child, result);
+				}
+				else {
+                    if (model.isVertex(child) && child != this.parent && this.graph.isCellVisible(child))
+                    {
+                        result[mxObjectIdentity.get(child)] = child;
+                    }
+				}
+
 			}
 		}
 	}
@@ -659,7 +680,11 @@ mxHierarchicalLayout.prototype.getEdgesBetween = function(source, target, direct
 		var src = this.getVisibleTerminal(edges[i], true);
 		var trg = this.getVisibleTerminal(edges[i], false);
 
-		if ((src == source && trg == target) || (!directed && src == target && trg == source))
+		if (((src == source || (this.filterChildFlag && source.children && mxUtils.indexOfNestedArray(source.children, src, 'children') >= 0))
+			&& (trg == target || (this.filterChildFlag && target.children && mxUtils.indexOfNestedArray(target.children, trg, 'children') >= 0)))
+			|| (!directed &&
+			(src == target || (this.filterChildFlag && target.children && mxUtils.indexOfNestedArray(target.children, src, 'children') >= 0))
+			&& (trg == source || (this.filterChildFlag && source.children && mxUtils.indexOfNestedArray(source.children, trg, 'children') >= 0))))
 		{
 			result.push(edges[i]);
 		}
@@ -685,7 +710,7 @@ mxHierarchicalLayout.prototype.getEdgesBetween = function(source, target, direct
  * allVertices - Array of cell paths for the visited cells.
  */
 mxHierarchicalLayout.prototype.traverse = function(vertex, directed, edge, allVertices, currentComp,
-											hierarchyVertices, filledVertexSet)
+											hierarchyVertices, filledVertexSet, vertexCells)
 {
 	if (vertex != null && allVertices != null)
 	{
@@ -713,10 +738,12 @@ mxHierarchicalLayout.prototype.traverse = function(vertex, directed, edge, allVe
 
 			var edges = this.getEdges(vertex);
 			var edgeIsSource = [];
-
+			var model = this.graph.model;
+            var childCount = model.getChildCount(vertex);
 			for (var i = 0; i < edges.length; i++)
 			{
-				edgeIsSource[i] = (this.getVisibleTerminal(edges[i], true) == vertex);
+				var tmp = this.getVisibleTerminal(edges[i], true);
+				edgeIsSource[i] = (tmp == vertex) || (this.filterChildFlag && childCount > 0 && mxUtils.indexOfNestedArray(vertex.children, tmp, 'children') >= 0);
 			}
 
 			for (var i = 0; i < edges.length; i++)
@@ -724,7 +751,13 @@ mxHierarchicalLayout.prototype.traverse = function(vertex, directed, edge, allVe
 				if (!directed || edgeIsSource[i])
 				{
 					var next = this.getVisibleTerminal(edges[i], !edgeIsSource[i]);
-					
+					//判断next是否是在图元的子集中
+					if (this.filterChildFlag) {
+                        var index = mxUtils.indexOfNestedArray(vertexCells, next, 'children');
+                        if(index >= 0) {
+                        	next = vertexCells[index];
+						}
+					}
 					// Check whether there are more edges incoming from the target vertex than outgoing
 					// The hierarchical model treats bi-directional parallel edges as being sourced
 					// from the more "sourced" terminal. If the directions are equal in number, the direction
@@ -761,7 +794,7 @@ mxHierarchicalLayout.prototype.traverse = function(vertex, directed, edge, allVe
 					{
 						currentComp = this.traverse(next, directed, edges[i], allVertices,
 							currentComp, hierarchyVertices,
-							filledVertexSet);
+							filledVertexSet, vertexCells);
 					}
 				}
 			}
