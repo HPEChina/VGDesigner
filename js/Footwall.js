@@ -199,7 +199,27 @@ Footwall.prototype.init = function()
                 // }
                 var xmlDoc = mxUtils.parseXml(mxUtils.getXml(graphXml));
                 var graphJSONData = CodeTranslator.xml2json(xmlDoc, "  ");
-                var jsonTs = graph2data(JSON.parse(graphJSONData).mxGraphModel.root, this.editorUi.interfaceParams);
+
+                var jsonTs = js2data(
+                    JSON.parse(graphJSONData).mxGraphModel.root,
+                    this.editorUi.interfaceParams.type
+                );
+                var resprop=jsonTs.properties
+                jsonTs.properties={}
+                jsonTs.properties.id = this.editorUi.interfaceParams.id;
+                jsonTs.properties.author = this.editorUi.interfaceParams.user || this.editorUi.interfaceParams.author;
+                jsonTs.properties.from = this.editorUi.interfaceParams.from;
+                if (this.editorUi.interfaceParams.type !== 'model') {//topo
+                        jsonTs.properties.name= this.editorUi.editor.getOrCreateJsonFilename()||'';
+                        jsonTs.properties.type= 'topology';
+                        jsonTs.properties.designLibraryId= this.editorUi.interfaceParams.designLibraryId;
+                        jsonTs.properties.userdefine= resprop;
+                } else {//model
+                        jsonTs.properties.name= resprop;
+                        jsonTs.properties.type= 'model';
+                        jsonTs.properties.productLine= this.editorUi.interfaceParams.designLibraryId;
+                }
+                    
                 tValue = mxUtils.getPrettyJSON(jsonTs);
                 mode = 'javascript';
             }
