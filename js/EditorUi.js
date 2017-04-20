@@ -2082,10 +2082,17 @@ EditorUi.prototype.addChromelessClickHandler = function()
  */
 EditorUi.prototype.toggleFormatPanel = function(forceHide)
 {
-	this.formatWidth = (forceHide || this.formatWidth > 0) ? 0 : 300;
-	this.formatContainer.style.display = (forceHide || this.formatWidth > 0) ? '' : 'none';
-	this.refresh();
-	this.format.refresh();
+	// 4/18
+	// this.formatWidth = (this.formatWidth > 0) ? 0 : 300;
+	// this.formatContainer.style.display = (forceHide || this.formatWidth > 0) ? '' : 'none';
+    this.refresh(null,true);
+    this.format.refresh(null,true);
+    /*var fw = (this.format != null) ? this.formatWidth : 0;
+    this.formatContainer.style.width = fw + 'px';
+    this.fsplit.style.right = fw + 'px';
+    this.diagramContainer.style.right = fw + this.splitSize  + 'px';
+    this.footwallContainer.style.right = fw + this.splitSize  + 'px';*/
+
 	this.fireEvent(new mxEventObject('formatWidthChanged'));
 };
 
@@ -2620,7 +2627,15 @@ EditorUi.prototype.updateActionStates = function()
 	var edgeSelected = false;
 
 	var cells = graph.getSelectionCells();
-	
+// 4/19
+    var unlock = document.getElementsByClassName('geSprite-lockunlock')[0];
+    var defaultValue = graph.isCellMovable(graph.getSelectionCell()) ? 1 : 0;
+    if(defaultValue == '1'){
+        unlock.style.backgroundPosition = '0 -6226px';
+    }else{
+        unlock.style.backgroundPosition = '0 -6179px';
+    }
+
 	if (cells != null)
 	{
     	for (var i = 0; i < cells.length; i++)
@@ -2707,9 +2722,10 @@ EditorUi.prototype.updateActionStates = function()
 /**
  * Refreshes the viewport.
  */
-EditorUi.prototype.refresh = function(sizeDidChange)
+EditorUi.prototype.refresh = function(sizeDidChange,didChange)
 {
 	sizeDidChange = (sizeDidChange != null) ? sizeDidChange : true;
+    didChange = (didChange = null) ? didChange : null;
 	
 	var quirks = mxClient.IS_IE && (document.documentMode == null || document.documentMode == 5);
 	var w = this.container.clientWidth;
@@ -2764,7 +2780,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	this.sidebarContainer.style.top = tmp + 'px';
 	this.sidebarContainer.style.width = effHsplitPosition + 'px';
 	this.formatContainer.style.top = tmp + 'px';
-	this.formatContainer.style.width = efffsplitPosition + 'px';
+	this.formatContainer.style.width = (didChange = null) ? fw + 'px':efffsplitPosition + 'px';
 	this.formatContainer.style.display = (this.format != null) ? '' : 'none';
 	
 	this.diagramContainer.style.left = (this.hsplit.parentNode != null) ? (effHsplitPosition + this.splitSize) + 'px' : '0px';
@@ -2777,7 +2793,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
     this.fsplit.style.zIndex = '9';
 	this.fsplit.style.top = this.sidebarContainer.style.top;
     this.fsplit.style.bottom = (this.footerHeight + off) + 'px';
-    this.fsplit.style.right = efffsplitPosition + 'px';
+    this.fsplit.style.right = (didChange = null) ? fw + 'px':efffsplitPosition + 'px';
 
     var sidebarHeight = Math.max(0, h - this.footerHeight - this.menubarHeight );
     // this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + this.splitSize + 'px';
@@ -2787,7 +2803,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
     this.footwallContainer.style.width = this.diagramContainer.style.width;
     // 3/27
     this.footwallContainer.style.left = effHsplitPosition + this.splitSize + 'px';
-    this.footwallContainer.style.right = efffsplitPosition + this.splitSize + 'px';
+    this.footwallContainer.style.right =(didChange = null) ? fw + this.splitSize + 'px':efffsplitPosition + this.splitSize + 'px';
     this.footwallContainer.style.bottom = this.footerHeight + 'px';
     this.footwallContainer.style.position = 'absolute';
     this.footwallContainer.style.backgroundColor = 'whiteSmoke';
@@ -2842,8 +2858,8 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 		{
 			this.footerContainer.style.bottom = off + 'px';
 		}
-		
-		this.diagramContainer.style.right = efffsplitPosition + this.splitSize + 'px';
+
+		this.diagramContainer.style.right = (didChange = null) ? fw + 'px':efffsplitPosition + this.splitSize + 'px';
 		var th = 0;
 		
 		if (this.tabContainer != null)
@@ -3055,7 +3071,7 @@ EditorUi.prototype.createUi = function()
         this.addfSplitHandler(this.fsplit,true,0,mxUtils.bind(this,function(value)
         {
             this.fsplitPosition = value;
-            this.refresh();
+            this.refresh(null,null);
         }));
     }
 };
@@ -3733,13 +3749,14 @@ EditorUi.prototype.getModelJsonString = function()
         group.setValue(obj);
 
 //update by wang,jianhui--start
+		this.actions.get('collapsible').funct()
 		graph.foldCells(false)//展开
 		var xml = this.editor.getGraphXml(this);
 		var bounds=xml.getElementsByTagName("mxGeometry")[0];
 		bounds.setAttribute("x",0);
 		bounds.setAttribute("y",0);
 		bounds.width=bounds.getAttribute("width");
-		bounds.height=bounds.getAttribute("height");
+		bounds.height = bounds.getAttribute("height");
 		xml = mxUtils.getXml(xml);
 		graph.foldCells(true)//折叠
 //update by wang,jianhui--end
@@ -3844,7 +3861,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             var outValue = mxUtils.getXml(graphXml);
             var xmlDoc = mxUtils.parseXml(outValue);
             outValue = CodeTranslator.xml2json(xmlDoc);
-            params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue);
+            params = 'filename=' + name+'&codetype=json&data=' + encodeURIComponent(outValue);
             params += '&id=' + this.interfaceParams.id;
             params += '&designLibraryId=' + this.interfaceParams.designLibraryId;
             params += '&author=' + this.interfaceParams.author;

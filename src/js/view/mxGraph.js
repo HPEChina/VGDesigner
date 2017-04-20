@@ -3385,7 +3385,7 @@ mxGraph.prototype.toggleCellStyles = function(key, defaultValue, cells)
 			this.setCellStyles(key, value, cells);
 		}
 	}
-	
+
 	return value;
 };
 

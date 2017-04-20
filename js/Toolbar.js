@@ -113,6 +113,8 @@ Toolbar.prototype.init = function()
 	{
 		var elts = this.addItems(['-', 'delete']);
 		elts[1].setAttribute('title', mxResources.get('delete') + ' (' + this.editorUi.actions.get('delete').shortcut + ')');
+		// 4/17
+        this.addItems(['-', 'lockUnlock']);
 	}
 	
 	if (sw >= 550)
@@ -724,7 +726,6 @@ Toolbar.prototype.addItem = function(sprite, key, c, ignoreDisabled)
 	if (action != null)
 	{
 		elt = this.addButton(sprite, action.label, action.funct, c);
-
 		if (!ignoreDisabled)
 		{
 			elt.setEnabled(action.enabled);
@@ -774,18 +775,22 @@ Toolbar.prototype.initElement = function(elt, tooltip)
 Toolbar.prototype.addEnabledState = function(elt)
 {
 	var classname = elt.className;
-	
+
 	elt.setEnabled = function(value)
 	{
 		elt.enabled = value;
-		
+
 		if (value)
 		{
+			// 4/18
 			elt.className = classname;
 		}
 		else
 		{
 			elt.className = classname + ' mxDisabled';
+			// 4/18
+            var unlock = document.getElementsByClassName('geSprite-lockunlock')[0];
+            unlock.style.backgroundPosition = '0 -6226px';
 		}
 	};
 	
