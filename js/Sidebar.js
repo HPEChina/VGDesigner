@@ -2793,7 +2793,7 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
 {
     if (this[id]) {
         if (!this[id].style.display||this[id].style.display == 'none') {
-            this[id+title].click();
+            if(this[id+'_'+title])this[id+'_'+title].click();
         }
         onInit(this[id]);
         return this[id];
@@ -2851,19 +2851,21 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
         this.palettes[id] = [elt, outer];
     }
     this[id]=div;
-    this[id+title]=elt;
+    this[id+'_'+title]=elt;
     return div;
 
 };
 // 4/7
 Sidebar.prototype.addOtherNPalette = function(id, title, expanded, onInit)
 {
-    if (this[id]) {
-        if (!this[id].style.display||this[id].style.display == 'none') {
-            this[id+title].click();
-        }
-        onInit(this[id]);
-        return this[id];
+	if (this[id]) {
+		if (!this[id].style.display || this[id].style.display == 'none') {
+			//左侧兰展开显示更新的模型
+			document.getElementsByClassName('second')[0].click();
+			if (this[id + '_' + title]) this[id + '_' + title].click();
+		}
+		onInit(this[id]);
+		return this[id];
     }
     // 327
     var ccc = document.createElement('div');
@@ -2927,7 +2929,7 @@ Sidebar.prototype.addOtherNPalette = function(id, title, expanded, onInit)
         this.palettes[id] = [elt, outer];
     }
     this[id]=div;
-    this[id+title]=elt;
+    this[id+'_'+title]=elt;
     return div;
 
 };
@@ -2937,7 +2939,7 @@ Sidebar.prototype.addPaletteOne = function(id, title, expanded, onInit)
 {
     if (this[id]) {
         if (!this[id].style.display||this[id].style.display == 'none') {
-            this[id+title].click();
+            if(this[id+'_'+title])this[id+'_'+title].click();
         }
         onInit(this[id]);
         return this[id];
@@ -2992,7 +2994,7 @@ Sidebar.prototype.addPaletteOne = function(id, title, expanded, onInit)
         this.palettes[id] = [elt, outer];
     }
     this[id]=div;
-    this[id+title]=elt;
+    this[id+'_'+title]=elt;
     return div;
 
 };
