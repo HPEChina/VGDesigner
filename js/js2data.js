@@ -4,7 +4,7 @@
 function js2data(json, envType) {
     var relations = [], resources = {}, resourcesID = [], userdefine = null
     function getAttrs(modelID, model) {//获取属性面板数据
-        var resources_properties = { id: modelID },
+        var resources_properties = {},
             operands = [],
             property = model['object@intrinsic']
         if (property) {
@@ -20,7 +20,7 @@ function js2data(json, envType) {
         if (modelID === '0') {
             if (envType !== 'model') {
                 userdefine = resources_properties
-                return //topo忽略底板,只保留底板静态属性
+                return //topo忽略底板,只保留底板静态属性作为topo属性,忽略id
             }
         }
         property = model['object@extended']
@@ -38,6 +38,7 @@ function js2data(json, envType) {
             })
         }
         resourcesID.push(modelID)
+        resources_properties.id = modelID
         resources[modelID] = {
             properties: resources_properties,
             operand: { operands: operands },
