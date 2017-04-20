@@ -1339,10 +1339,34 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
             }
         }));
 	}
+	function createImgThumb(img_src) {
+		var w, h;
+		var start = img_src.lastIndexOf('_');
+		var end = img_src.lastIndexOf('.');
+		var str = img_src.slice(start + 1, end);
+		var width = parseInt(str.split('x')[0]);
+		var height = parseInt(str.split('x')[1]);
+		var maxW = 80, maxH = 80;
+		if (width > maxW || height > maxH) {
+			if (width / height > maxW / maxH) {
+				h = Math.floor(height * maxW / width);
+				w = maxW;
+			}
+			else {
+				w = Math.floor(width * maxH / height);
+				h = maxH;
+			}
+		}
+		this.createThumb(cells, w, h, elt, title, showLabel, showTitle, width, height);
+	}
+	var img_src = this.editorUi.editor.graph.getModel().getValue(cells[0]).getAttribute('image');
+	if (img_src && img_src != 'null' && img_src != 'undefined')
+		createImgThumb.bind(this)(img_src)
+	else
+		this.createThumb(cells, this.thumbWidth, this.thumbHeight, elt, title, showLabel, showTitle, width, height);
 
-	this.createThumb(cells, this.thumbWidth, this.thumbHeight, elt, title, showLabel, showTitle, width, height);
 	var bounds = new mxRectangle(0, 0, width, height);
-	
+
 	if (cells.length > 1 || cells[0].vertex)
 	{
 		var ds = this.createDragSource(elt, this.createDropHandler(cells, true, allowCellsInserted,
@@ -2866,7 +2890,7 @@ Sidebar.prototype.addOtherNPalette = function(id, title, expanded, onInit)
 		}
 		onInit(this[id]);
 		return this[id];
-    }
+	}
     // 327
     var ccc = document.createElement('div');
     ccc.className = 'two';

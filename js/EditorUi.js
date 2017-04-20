@@ -3665,8 +3665,9 @@ EditorUi.prototype.save = function(name)
 
 EditorUi.prototype.getModelJsonString = function()
 {
-    var graph = this.editor.graph;
-    graph.selectAll(null, true);
+	var tocollapse = this.actions.get('collapse').isEnabled()
+	var graph = this.editor.graph;
+	graph.selectAll(null, true);
     if (!graph.isSelectionEmpty()) {
         //获取自定义的属性
         var ret = {};
@@ -3748,19 +3749,19 @@ EditorUi.prototype.getModelJsonString = function()
         }
         group.setValue(obj);
 
-//update by wang,jianhui--start
-		this.actions.get('collapsible').funct()
-		graph.foldCells(false)//展开
+		//update by wang,jianhui--start
+		if (!tocollapse) this.actions.get('collapsible').funct()
+		else graph.foldCells(false)//展开
 		var xml = this.editor.getGraphXml(this);
-		var bounds=xml.getElementsByTagName("mxGeometry")[0];
-		bounds.setAttribute("x",0);
-		bounds.setAttribute("y",0);
-		bounds.width=bounds.getAttribute("width");
+		var bounds = xml.getElementsByTagName("mxGeometry")[0];
+		bounds.setAttribute("x", 0);
+		bounds.setAttribute("y", 0);
+		bounds.width = bounds.getAttribute("width");
 		bounds.height = bounds.getAttribute("height");
 		xml = mxUtils.getXml(xml);
 		graph.foldCells(true)//折叠
-//update by wang,jianhui--end
-
+		//update by wang,jianhui--end
+		
         //解组
         if(num > 1) {
             graph.setSelectionCells(graph.ungroupCells());
