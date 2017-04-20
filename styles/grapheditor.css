@@ -360,7 +360,9 @@ div.mxWindow .geButton {
 	display:block;
 	font-size:11pt;
 	font-weight:normal;
-	padding: 6px 0 6px 26px;
+	padding:6px 0px 6px 30px;
+	margin:0px;
+	cursor:default;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
@@ -383,7 +385,9 @@ div.mxWindow .geButton {
 	display:block;
 	font-size:11pt;
 	font-weight:normal;
-	padding: 6px 0 6px 20px;
+	padding:6px 0px 6px 26px;
+	margin:0px;
+	background:#ddd;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;

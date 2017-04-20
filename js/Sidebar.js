@@ -1162,7 +1162,7 @@ Sidebar.prototype.createFirstTitle = function(name)
     elt.className = 'geFirstTitle';
     elt.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
     elt.style.backgroundRepeat = 'no-repeat';
-    elt.style.backgroundPosition = '0% 50%';
+    elt.style.backgroundPosition = '5px 50%';
     mxUtils.write(elt, name);
     return elt;
 };
@@ -1174,7 +1174,7 @@ Sidebar.prototype.createSecondTitle = function(name)
     elt.className = 'geFirstTitle second';
     elt.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
     elt.style.backgroundRepeat = 'no-repeat';
-    elt.style.backgroundPosition = '0% 50%';
+    elt.style.backgroundPosition = '5px 50%';
     mxUtils.write(elt, name);
     return elt;
 };
@@ -3015,7 +3015,7 @@ Sidebar.prototype.addFoldingHandler = function(title, content, funct)
 	}
 	
 	title.style.backgroundRepeat = 'no-repeat';
-	title.style.backgroundPosition = '7px 50%';
+	title.style.backgroundPosition = '10px 50%';
 
 	mxEvent.addListener(title, 'click', mxUtils.bind(this, function(evt)
 	{
@@ -3078,7 +3078,7 @@ Sidebar.prototype.addFoldingHandlerOne = function(title, content, funct)
     }
 
     title.style.backgroundRepeat = 'no-repeat';
-    title.style.backgroundPosition = '0% 50%';
+    title.style.backgroundPosition = '5px 50%';
 
     mxEvent.addListener(title, 'click', mxUtils.bind(this, function(evt)
     {
