@@ -2,7 +2,7 @@
 
 .CodeMirror {
   /* Set height, width, borders, and global font properties here */
-  font-family: monospace;
+  font-family: "Consolas",Georgia,Serif;
   height: 100%;
   width:100%;
   color: black;
@@ -27,7 +27,7 @@
 
 .CodeMirror-gutters {
   border-right: 1px solid #ddd;
-  background-color: #f7f7f7;
+  background-color: #ebebeb;
   white-space: nowrap;
 }
 .CodeMirror-linenumbers {}
@@ -114,7 +114,7 @@
 .cm-strikethrough {text-decoration: line-through;}
 
 .cm-s-default .cm-keyword {color: #708;}
-.cm-s-default .cm-atom {color: #219;}
+.cm-s-default .cm-atom {color: #31708f;}
 .cm-s-default .cm-number {color: #164;}
 .cm-s-default .cm-def {color: #00f;}
 .cm-s-default .cm-variable,
@@ -124,14 +124,14 @@
 .cm-s-default .cm-variable-2 {color: #05a;}
 .cm-s-default .cm-variable-3 {color: #085;}
 .cm-s-default .cm-comment {color: #a50;}
-.cm-s-default .cm-string {color: #a11;}
+.cm-s-default .cm-string {color: #a94442;}
 .cm-s-default .cm-string-2 {color: #f50;}
 .cm-s-default .cm-meta {color: #555;}
 .cm-s-default .cm-qualifier {color: #555;}
 .cm-s-default .cm-builtin {color: #30a;}
 .cm-s-default .cm-bracket {color: #997;}
 .cm-s-default .cm-tag {color: #170;}
-.cm-s-default .cm-attribute {color: #00c;}
+.cm-s-default .cm-attribute {color: #337ab7;}
 .cm-s-default .cm-hr {color: #999;}
 .cm-s-default .cm-link {color: #00c;}
 
