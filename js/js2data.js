@@ -2,8 +2,8 @@
 画图规则:parent在前,child在后(先定义后使用)
 */
 function js2data(json, envType) {
-    var relations = [], resources = {}, resourcesID = [], properties = {}
-    function getAttrs(modelID, model) {
+    var relations = [], resources = {}, resourcesID = [], userdefine = null
+    function getAttrs(modelID, model) {//获取属性面板数据
         var resources_properties = { id: modelID },
             operands = [],
             property = model['object@intrinsic']
@@ -19,10 +19,9 @@ function js2data(json, envType) {
         }
         if (modelID === '0') {
             if (envType !== 'model') {
-                properties = resources_properties
+                userdefine = resources_properties
                 return //topo忽略底板,只保留底板静态属性
             }
-            properties = { name: resources_properties.name }//取底板name属性做为model name
         }
         property = model['object@extended']
         if (property) {
@@ -95,15 +94,18 @@ function js2data(json, envType) {
         relation.properties.targetDevId = ids.tid
         return relation
     })
-    resources = {
-        properties: properties,
+    if (envType !== 'model') {//topo
+        return {
+            properties: userdefine,
+            resources: list2tree(resources, resourcesID),
+            relations: relations
+        }
+    }
+    //model
+    return {
+        properties: resources['0'].properties.name,//底板name属性做为model name
         resources: list2tree(resources, resourcesID)
     }
-    if (envType !== 'model') {
-        resources.relations = relations
-    }
-    console.timeEnd('convert')
-    return resources
 }
 function getOperand(prop) {
     var key = prop.name,
@@ -169,10 +171,9 @@ function obj_values(obj) {
     }
     return arr
 }
-if (typeof module !== 'undefined')
+if (typeof module !== 'undefined')//供node解析xml图复用
     module.exports = {
         js2data: js2data,
         getOperand: getOperand,
-        findDevice: findDevice,
         list2tree: list2tree
     }

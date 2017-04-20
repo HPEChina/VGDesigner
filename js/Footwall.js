@@ -215,7 +215,7 @@ Footwall.prototype.init = function()
                         jsonTs.properties.designLibraryId= this.editorUi.interfaceParams.designLibraryId;
                         jsonTs.properties.userdefine= resprop;
                 } else {//model
-                        jsonTs.properties.name= resprop.name;
+                        jsonTs.properties.name= resprop;
                         jsonTs.properties.type= 'model';
                         jsonTs.properties.productLine= this.editorUi.interfaceParams.designLibraryId;
                 }
