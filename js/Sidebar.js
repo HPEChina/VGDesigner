@@ -1346,7 +1346,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 		var str = img_src.slice(start + 1, end);
 		var width = parseInt(str.split('x')[0]);
 		var height = parseInt(str.split('x')[1]);
-		var maxW = 80, maxH = 80;
+		var maxW = this.thumbWidth, maxH = this.thumbHeight;
 		if (width > maxW || height > maxH) {
 			if (width / height > maxW / maxH) {
 				h = Math.floor(height * maxW / width);
