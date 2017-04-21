@@ -2628,13 +2628,15 @@ EditorUi.prototype.updateActionStates = function()
 
 	var cells = graph.getSelectionCells();
 // 4/19
-    var unlock = document.getElementsByClassName('geSprite-lockunlock')[0];
-    var defaultValue = graph.isCellMovable(graph.getSelectionCell()) ? 1 : 0;
-    if(defaultValue == '1'){
-        unlock.style.backgroundPosition = '0 -6226px';
-    }else{
-        unlock.style.backgroundPosition = '0 -6179px';
-    }
+    	var unlock = document.getElementsByClassName('geSprite-lockunlock')[0];
+	if (unlock) {
+		var defaultValue = graph.isCellMovable(graph.getSelectionCell()) ? 1 : 0;
+		if (defaultValue == '1') {
+			unlock.style.backgroundPosition = '0 -6226px';
+		} else {
+			unlock.style.backgroundPosition = '0 -6179px';
+		}
+	}
 
 	if (cells != null)
 	{
