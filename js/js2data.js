@@ -104,7 +104,7 @@ function js2data(json, envType) {
     }
     //model
     return {
-        properties: resources['0'].properties.name,//底板name属性做为model name
+        properties: resources['0'] ? resources['0'].properties.name : '',//底板name属性做为model name,err:有属性无模型时root节点是对象而非数组
         resources: list2tree(resources, resourcesID)
     }
 }
