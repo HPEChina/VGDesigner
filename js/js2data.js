@@ -8,7 +8,7 @@ function js2data(json, envType) {
             operands = [],
             property = model['object@intrinsic']
         if (property) {
-            property = JSON.parse(property.replace(/&quot;/ig, '"'))
+            property = JSON.parse(property)
             if (envType !== 'model' && modelID === '0') {
                 //topo忽略底板,只保留底板静态属性作为topo属性,忽略id
                 return property.forEach(function (prop) {
@@ -27,14 +27,14 @@ function js2data(json, envType) {
         }
         property = model['object@extended']
         if (property) {
-            property = JSON.parse(property.replace(/&quot;/ig, '"'))
+            property = JSON.parse(property)
             property.forEach(function (prop) {
                 operands.push(getOperand(prop))
             })
         }
         property = model['object@userFunc']
         if (property) {
-            property = JSON.parse(property.replace(/&quot;/ig, '"'))
+            property = JSON.parse(property)
             property.forEach(function (prop) {
                 operands.push(getOperand(prop))
             })
