@@ -218,72 +218,27 @@ Menus.prototype.init = function()
 		menu.addSeparator(parent);
 		menu.addItem(mxResources.get('horizontalTree'), null, mxUtils.bind(this, function()
 		{
-			var tmp = graph.getSelectionCell();
-			var roots = null;
+			var layout = new mxCompactTreeLayout(graph, true);
+			layout.edgeRouting = false;
+			layout.levelDistance = 30;
+			layout.filterChildFlag = true;
 
-			if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
+			this.editorUi.executeLayout(function()
 			{
-				if (graph.getModel().getEdgeCount(tmp) == 0)
-				{
-					roots = graph.findTreeRoots(graph.getDefaultParent());
-				}
-			}
-			else
-			{
-				roots = graph.findTreeRoots(tmp);
-			}
-
-			if (roots != null && roots.length > 0)
-			{
-				tmp = roots[0];
-			}
-
-			if (tmp != null)
-			{
-				var layout = new mxCompactTreeLayout(graph, true);
-				layout.edgeRouting = false;
-				layout.levelDistance = 30;
-
-				this.editorUi.executeLayout(function()
-	    		{
-					layout.execute(graph.getDefaultParent(), tmp);
-	    		}, true);
-			}
+				layout.execute(graph.getDefaultParent());
+			}, true);
 		}), parent);
 		menu.addItem(mxResources.get('verticalTree'), null, mxUtils.bind(this, function()
 		{
-			var tmp = graph.getSelectionCell();
-			var roots = null;
+			var layout = new mxCompactTreeLayout(graph, false);
+			layout.edgeRouting = false;
+			layout.levelDistance = 30;
+            layout.filterChildFlag = true;
 
-			if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
+			this.editorUi.executeLayout(function()
 			{
-				if (graph.getModel().getEdgeCount(tmp) == 0)
-				{
-					roots = graph.findTreeRoots(graph.getDefaultParent());
-				}
-			}
-			else
-			{
-				roots = graph.findTreeRoots(tmp);
-			}
-
-			if (roots != null && roots.length > 0)
-			{
-				tmp = roots[0];
-			}
-
-			if (tmp != null)
-			{
-
-				var layout = new mxCompactTreeLayout(graph, false);
-				layout.edgeRouting = false;
-				layout.levelDistance = 30;
-
-				this.editorUi.executeLayout(function()
-	    		{
-					layout.execute(graph.getDefaultParent(), tmp);
-	    		}, true);
-			}
+				layout.execute(graph.getDefaultParent());
+			}, true);
 		}), parent);
 		menu.addItem(mxResources.get('radialTree'), null, mxUtils.bind(this, function()
 		{
