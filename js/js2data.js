@@ -2,13 +2,21 @@
 画图规则:parent在前,child在后(先定义后使用)
 */
 function js2data(json, envType) {
-    var relations = [], resources = {}, resourcesID = [], userdefine = null
+    var relations = [], resources = {}, resourcesID = [], properties = { name: '', id: '', type: '', author: '', from: '' }
     function getAttrs(modelID, model) {//获取属性面板数据
         var resources_properties = {},
             operands = [],
             property = model['object@intrinsic']
         if (property) {
-            property = JSON.parse(property.replace(/&quot;/ig, '"'))
+            property = JSON.parse(property)
+            if (envType !== 'model' && modelID === '0') {
+                //topo忽略底板,只保留底板静态属性作为topo属性,忽略id
+                return property.forEach(function (prop) {
+                    if (prop.operator.toString() === '==' && prop.logic.toString() === 'none') {
+                        properties[prop.name] = prop.value[0]
+                    }
+                })
+            }
             property.forEach(function (prop) {
                 if (prop.operator.toString() === '==' && prop.logic.toString() === 'none') {
                     resources_properties[prop.name] = prop.value[0]
@@ -17,22 +25,16 @@ function js2data(json, envType) {
                 }
             })
         }
-        if (modelID === '0') {
-            if (envType !== 'model') {
-                userdefine = resources_properties
-                return //topo忽略底板,只保留底板静态属性作为topo属性,忽略id
-            }
-        }
         property = model['object@extended']
         if (property) {
-            property = JSON.parse(property.replace(/&quot;/ig, '"'))
+            property = JSON.parse(property)
             property.forEach(function (prop) {
                 operands.push(getOperand(prop))
             })
         }
         property = model['object@userFunc']
         if (property) {
-            property = JSON.parse(property.replace(/&quot;/ig, '"'))
+            property = JSON.parse(property)
             property.forEach(function (prop) {
                 operands.push(getOperand(prop))
             })
@@ -97,14 +99,14 @@ function js2data(json, envType) {
     })
     if (envType !== 'model') {//topo
         return {
-            properties: userdefine,
+            properties: properties,
             resources: list2tree(resources, resourcesID),
             relations: relations
         }
     }
     //model
     return {
-        properties: resources['0'] ? resources['0'].properties.name : '',//底板name属性做为model name,err:有属性无模型时root节点是对象而非数组
+        properties: { name: resources['0'] ? resources['0'].properties.name : '' },//底板name属性做为model name,err:有属性无模型时root节点是对象而非数组
         resources: list2tree(resources, resourcesID)
     }
 }
