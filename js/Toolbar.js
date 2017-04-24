@@ -789,8 +789,8 @@ Toolbar.prototype.addEnabledState = function(elt)
 		{
 			elt.className = classname + ' mxDisabled';
 			// 4/18
-            var unlock = document.getElementsByClassName('geSprite-lockunlock')[0];
-            unlock.style.backgroundPosition = '0 -6226px';
+            		var unlock = document.getElementsByClassName('geSprite-lockunlock')[0];
+            		if (unlock) unlock.style.backgroundPosition = '0 -6226px';
 		}
 	};
 	

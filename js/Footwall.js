@@ -136,11 +136,23 @@ Footwall.prototype.init = function()
             else if(o == 'json') {
                 var xmlDoc = mxUtils.parseXml(mxUtils.getXml(graphXml));
                 tValue = CodeTranslator.xml2json(xmlDoc, "  ");
+                tValue = tValue.replace(/\\&quot;/g, '\\\\\\"')
+                    .replace(/&amp;/g, "&")
+                    .replace(/&lt;/g, "<")
+                    .replace(/&gt;/g, ">")
+                    .replace(/&#39;/g, "\'")
+                    .replace(/&quot;/g, '\\"')
                 mode = 'javascript';
             }
             else if(o == 'yaml') {
                 var xmlDoc = mxUtils.parseXml(mxUtils.getXml(graphXml));
                 tValue = CodeTranslator.xml2json(xmlDoc, "  ");
+                tValue = tValue.replace(/\\&quot;/g, '\\\\\\"')
+                    .replace(/&amp;/g, "&")
+                    .replace(/&lt;/g, "<")
+                    .replace(/&gt;/g, ">")
+                    .replace(/&#39;/g, "\'")
+                    .replace(/&quot;/g, '\\"')
                 tValue = jsyaml.dump(JSON.parse(tValue));
                 mode = 'yaml';
             }
@@ -198,24 +210,24 @@ Footwall.prototype.init = function()
                 //     }
                 // }
                 var xmlDoc = mxUtils.parseXml(mxUtils.getXml(graphXml));
-                var graphJSONData = CodeTranslator.xml2json(xmlDoc, "  ");
-
+                var graphJSONData = CodeTranslator.xml2json(xmlDoc, "  ")
+                    .replace(/\\&quot;/g, '\\\\\\"')
+                    .replace(/&amp;/g, "&")
+                    .replace(/&lt;/g, "<")
+                    .replace(/&gt;/g, ">")
+                    .replace(/&#39;/g, "\'")
+                    .replace(/&quot;/g, '\\"')
                 var jsonTs = js2data(
                     JSON.parse(graphJSONData).mxGraphModel.root,
                     this.editorUi.interfaceParams.type
                 );
-                var resprop=jsonTs.properties
-                jsonTs.properties={}
                 jsonTs.properties.id = this.editorUi.interfaceParams.id;
                 jsonTs.properties.author = this.editorUi.interfaceParams.user || this.editorUi.interfaceParams.author;
                 jsonTs.properties.from = this.editorUi.interfaceParams.from;
                 if (this.editorUi.interfaceParams.type !== 'model') {//topo
-                        jsonTs.properties.name= this.editorUi.editor.getOrCreateJsonFilename()||'';
                         jsonTs.properties.type= 'topology';
                         jsonTs.properties.designLibraryId= this.editorUi.interfaceParams.designLibraryId;
-                        jsonTs.properties.userdefine= resprop;
                 } else {//model
-                        jsonTs.properties.name= resprop;
                         jsonTs.properties.type= 'model';
                         jsonTs.properties.productLine= this.editorUi.interfaceParams.designLibraryId;
                 }
@@ -273,21 +285,29 @@ Footwall.prototype.init = function()
     {
         // Removes all illegal control characters before parsing
         var data = this.editorUi.editor.graph.zapGremlins(mxUtils.trim(this.textarea.value));
-        data = data.replace(/'/g, '&quot;');
         var error = null;
 
         if (select.value == 'replace') {
             this.editorUi.editor.graph.model.beginUpdate();
             try {
-                if(this.codeType == 'json') {
+                if (this.codeType == 'json') {
+                    data = data.replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/\'/g, "&#39;")
+                        .replace(/\\"/g, '&quot;')
                     data = CodeTranslator.json2xml(data);
                 }
                 else if(this.codeType == 'yaml') {
-                    data = data.replace(/&quot;/g,"'" );
                     data = JSON.stringify(jsyaml.load(data));
-                    data = data.replace(/'/g, '&quot;');
+                    data = data.replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/\'/g, "&#39;")
+                        .replace(/\\"/g, '&quot;')
                     data = CodeTranslator.json2xml(data);
                 }
+                data = data.replace(/'/g, '&quot;');
                 this.editorUi.editor.setGraphXml(mxUtils.parseXml(data).documentElement);
             }
             catch (e) {
@@ -301,14 +321,23 @@ Footwall.prototype.init = function()
             this.editorUi.editor.graph.model.beginUpdate();
             try {
                 if(this.codeType == 'json') {
+                    data = data.replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/\'/g, "&#39;")
+                        .replace(/\\"/g, '&quot;')
                     data = CodeTranslator.json2xml(data);
                 }
                 else if(this.codeType == 'yaml') {
-                    data = data.replace(/&quot;/g,"'" );
                     data = JSON.stringify(jsyaml.load(data));
-                    data = data.replace(/'/g, '&quot;');
+                    data = data.replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/\'/g, "&#39;")
+                        .replace(/\\"/g, '&quot;')
                     data = CodeTranslator.json2xml(data);
                 }
+                data = data.replace(/'/g, '&quot;');
                 var doc = mxUtils.parseXml(data);
                 var model = new mxGraphModel();
                 var codec = new mxCodec(doc);

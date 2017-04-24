@@ -2628,13 +2628,15 @@ EditorUi.prototype.updateActionStates = function()
 
 	var cells = graph.getSelectionCells();
 // 4/19
-    var unlock = document.getElementsByClassName('geSprite-lockunlock')[0];
-    var defaultValue = graph.isCellMovable(graph.getSelectionCell()) ? 1 : 0;
-    if(defaultValue == '1'){
-        unlock.style.backgroundPosition = '0 -6226px';
-    }else{
-        unlock.style.backgroundPosition = '0 -6179px';
-    }
+    	var unlock = document.getElementsByClassName('geSprite-lockunlock')[0];
+	if (unlock) {
+		var defaultValue = graph.isCellMovable(graph.getSelectionCell()) ? 1 : 0;
+		if (defaultValue == '1') {
+			unlock.style.backgroundPosition = '0 -6226px';
+		} else {
+			unlock.style.backgroundPosition = '0 -6179px';
+		}
+	}
 
 	if (cells != null)
 	{
@@ -3665,8 +3667,8 @@ EditorUi.prototype.save = function(name)
 
 EditorUi.prototype.getModelJsonString = function()
 {
-    var graph = this.editor.graph;
-    graph.selectAll(null, true);
+	var graph = this.editor.graph;
+	graph.selectAll(null, true);
     if (!graph.isSelectionEmpty()) {
         //获取自定义的属性
         var ret = {};
@@ -3738,6 +3740,7 @@ EditorUi.prototype.getModelJsonString = function()
 		else {
         	// groupFlag = true;
         	group = graph.getSelectionCell();
+			graph.foldCells(false)//展开组
 		}
 
         var doc = mxUtils.createXmlDocument();
@@ -3748,19 +3751,18 @@ EditorUi.prototype.getModelJsonString = function()
         }
         group.setValue(obj);
 
-//update by wang,jianhui--start
-		this.actions.get('collapsible').funct()
-		graph.foldCells(false)//展开
+		//update by wang,jianhui--start
+		if(!this.actions.get('collapse').isEnabled()) this.actions.get('collapsible').funct()
 		var xml = this.editor.getGraphXml(this);
-		var bounds=xml.getElementsByTagName("mxGeometry")[0];
-		bounds.setAttribute("x",0);
-		bounds.setAttribute("y",0);
-		bounds.width=bounds.getAttribute("width");
+		var bounds = xml.getElementsByTagName("mxGeometry")[0];
+		bounds.setAttribute("x", 0);
+		bounds.setAttribute("y", 0);
+		bounds.width = bounds.getAttribute("width");
 		bounds.height = bounds.getAttribute("height");
 		xml = mxUtils.getXml(xml);
 		graph.foldCells(true)//折叠
-//update by wang,jianhui--end
-
+		//update by wang,jianhui--end
+		
         //解组
         if(num > 1) {
             graph.setSelectionCells(graph.ungroupCells());
