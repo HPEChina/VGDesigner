@@ -473,7 +473,7 @@ mxHierarchicalLayout.prototype.getVisibleTerminal = function(edge, source)
 		{
 			terminal = this.graph.model.getParent(terminal);
 		}
-		
+
 		terminalCache.put(edge, terminal);
 	}
 
