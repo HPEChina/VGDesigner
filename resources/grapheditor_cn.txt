@@ -333,3 +333,4 @@ writingDirection=书写方向
 zoom=显示比例
 zoomIn=放大
 zoomOut=缩小
+selectThumbnail=选择缩略图

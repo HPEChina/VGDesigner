@@ -308,3 +308,4 @@ writingDirection=Textrichtung
 zoom=Zoom
 zoomIn=Hineinzoomen
 zoomOut=Herauszoomen
+selectThumbnail=Select Thumbnail

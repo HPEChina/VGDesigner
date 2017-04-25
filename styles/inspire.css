@@ -329,9 +329,9 @@ textarea:disabled { border-color: #d9d9d9; background: #f3f3f3; color: #d9d9d9; 
 .radio { display: inline-block; vertical-align: top; }
 .radio input { width: 0; height: 0; opacity: 0; overflow: hidden; }
 .radio > span { padding-left: 21px; line-height: 16px; position: relative; }
-.radio > span:after { position: absolute; top: 0; left: 0; content: ""; width: 14px; height: 14px; border: 1px #a1a3ae solid; border-radius: 50%; }
+.radio > span:after { position: absolute; top: 0; left: 0; content: ""; width: 13px; height: 13px; border: 1px #a1a3ae solid; border-radius: 50%; }
 .radio > span:hover:after { border-color: #65697b; }
-.radio input:checked + span:before { position: absolute; top: 5px; left: 5px; content: ""; width: 6px; height: 6px; background: #3a3e55; border-radius: 50%; }
+.radio input:checked + span:before { position: absolute; top: 5px; left: 5px; content: ""; width: 5px; height: 5px; background: #3a3e55; border-radius: 50%; }
 .radio input:disabled + span:after { border-color: #c2c2ca; }
 .radio input:disabled + span:before { background: #c2c2ca; }
 
@@ -358,7 +358,7 @@ textarea:disabled { border-color: #d9d9d9; background: #f3f3f3; color: #d9d9d9; 
 .table-def th > span.arrow.arrow-down:after { position: absolute; top: 11px; left: 0px; content: ""; width: 0; height: 0; border: 6px transparent solid; border-bottom: none; border-top: 7px #788da3 solid; }
 .table-def th > span.arrow.arrow-def:before { position: absolute; top: 6px; left: 0px; content: ""; width: 0; height: 0; border: 6px transparent solid; border-top: none; border-bottom: 7px #788da3 solid; }
 .table-def th > span.arrow.arrow-def:after { position: absolute; top: 14px; left: 0px; content: ""; width: 0; height: 0; border: 6px transparent solid; border-bottom: none; border-top: 7px #788da3 solid; }
-.table-def td { border-top: 1px #d9d9d9 dotted; font-size: 14px; height: 35px; }
+.table-def td { font-size: 14px; height: 35px; }
 
 .prompt { height: 28px; line-height: 28px; font-size: 12px; padding: 0 10px; background: #fff; border-radius: 3px; box-shadow: 0 0 3px rgba(0, 0, 0, 0.2); position: absolute; }
 .prompt:before { position: absolute; top: 28px; left: 25px; content: ""; width: 0; height: 0; border-right: 12px transparent solid; border-top: 12px rgba(0, 0, 0, 0.1) solid; }
