@@ -5019,6 +5019,10 @@ mxGraph.prototype.cellsToggled = function(cells, show)
  */
 mxGraph.prototype.foldCells = function(collapse, recurse, cells, checkFoldable, evt)
 {
+	if(!collapse){
+		this.orderCells(false);
+		this.orderCells(false,this.getAllEdges(this.getSelectionCells()));
+	}
 	recurse = (recurse != null) ? recurse : false;
 	
 	if (cells == null)
