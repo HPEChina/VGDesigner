@@ -5110,7 +5110,7 @@ AttributePanel.prototype.collapsedImage = function(cell, value)
 
     var form = new mxForm('properties');
     form.table.style.width = '95%';
-    form.table.className = 'properties table-def'
+    form.table.className = 'properties table-def';
 
     var tr = document.createElement('tr');
     var td1 = document.createElement('td');
@@ -5162,7 +5162,12 @@ AttributePanel.prototype.collapsedImage = function(cell, value)
                         var src = UPLOADIMAGE_PATH + '/' + result.data.url;
                 		image.src = src;
                         value.setAttribute('image', src);
-                        graph.getModel().setValue(cell, value);
+                        var model = graph.getModel();
+                        model.setValue(cell, value);
+                        if(graph.isCellCollapsed(cell)) {
+                            graph.foldCells(false);
+                            graph.foldCells(true);
+						}
                     }
                     else {
                         mxUtils.alert(result.data.msg);
