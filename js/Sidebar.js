@@ -1188,6 +1188,11 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 	var fo = mxClient.NO_FO;
 	mxClient.NO_FO = Editor.prototype.originalNoForeignObject;
 	
+	var img_src = this.graph.getModel().getValue(cells[0]).getAttribute('image'),img_left,img_top;
+	if (img_src) {
+		img_left = (40 - width) / 2
+		img_top = (40 - height) / 2
+	} else
 	// Paints faster by using the known width and height
 	if (false && realWidth != null && realHeight != null)
 	{
@@ -1206,7 +1211,6 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 				Math.floor((height - bounds.height * s) / 2 / s - bounds.y));
 	}
 	
-	var img_src = this.graph.getModel().getValue(cells[0]).getAttribute('image');
 	var node = null;
 
 	if (img_src && img_src != 'null' && img_src != 'undefined') {
@@ -1236,8 +1240,8 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 		node.style.position = 'relative';
 		node.style.overflow = 'hidden';
 		node.style.cursor = 'move';
-		node.style.left = this.thumbBorder + 'px';
-		node.style.top = this.thumbBorder + 'px';
+		node.style.left = (img_left||this.thumbBorder) + 'px';
+		node.style.top = (img_top||this.thumbBorder) + 'px';
 		node.style.width = width + 'px';
 		node.style.height = height + 'px';
 		node.style.visibility = '';
