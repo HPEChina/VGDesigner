@@ -493,25 +493,25 @@ mxHierarchicalLayout.prototype.run = function(parent)
 	// Separate out unconnected hierarchies
 	var hierarchyVertices = [];
 	var allVertexSet = [];
+    var filledVertexSet = Object();
+    this.filterDescendants(parent, filledVertexSet);
+
+    var filledVertexSetEmpty = true;
+
+    // Poor man's isSetEmpty
+    var vertexCells = [];
+    for (var key in filledVertexSet)
+    {
+        if (filledVertexSet[key] != null)
+        {
+            filledVertexSetEmpty = false;
+            vertexCells.push(filledVertexSet[key]);
+        }
+    }
 
 	if (this.roots == null && parent != null)
 	{
-		var filledVertexSet = Object();
-		this.filterDescendants(parent, filledVertexSet);
-
 		this.roots = [];
-		var filledVertexSetEmpty = true;
-
-		// Poor man's isSetEmpty
-        var vertexCells = [];
-		for (var key in filledVertexSet)
-		{
-			if (filledVertexSet[key] != null)
-			{
-				filledVertexSetEmpty = false;
-                vertexCells.push(filledVertexSet[key]);
-			}
-		}
 
 		while (!filledVertexSetEmpty)
 		{
@@ -559,7 +559,7 @@ mxHierarchicalLayout.prototype.run = function(parent)
 			hierarchyVertices.push(vertexSet);
 
 			this.traverse(this.roots[i], true, null, allVertexSet, vertexSet,
-					hierarchyVertices, null);
+					hierarchyVertices, null, vertexCells);
 		}
 	}
 
@@ -752,7 +752,7 @@ mxHierarchicalLayout.prototype.traverse = function(vertex, directed, edge, allVe
 				{
 					var next = this.getVisibleTerminal(edges[i], !edgeIsSource[i]);
 					//判断next是否是在图元的子集中
-					if (this.filterChildFlag) {
+					if (this.filterChildFlag & vertexCells != null) {
                         var index = mxUtils.indexOfNestedArray(vertexCells, next, 'children');
                         if(index >= 0) {
                         	next = vertexCells[index];

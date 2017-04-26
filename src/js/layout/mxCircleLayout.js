@@ -93,6 +93,14 @@ mxCircleLayout.prototype.execute = function(parent)
 {
 	var model = this.graph.getModel();
 
+    var cells = [];
+    var tmp = this.graph.getSelectionCells();
+    if(tmp.length > 0) {
+        cells = this.graph.getCellsForGroup(tmp);
+    }
+    else {
+        cells = this.graph.getChildVertices(parent);
+    }
 	// Moves the vertices to build a circle. Makes sure the
 	// radius is large enough for the vertices to not
 	// overlap
@@ -105,11 +113,11 @@ mxCircleLayout.prototype.execute = function(parent)
 		var top = null;
 		var left = null;
 		var vertices = [];
-		var childCount = model.getChildCount(parent);
+		// var childCount = model.getChildCount(parent);
 		
-		for (var i = 0; i < childCount; i++)
+		for (var i = 0; i < cells.length; i++)
 		{
-			var cell = model.getChildAt(parent, i);
+			var cell = cells[i];
 			
 			if (!this.isVertexIgnored(cell))
 			{
