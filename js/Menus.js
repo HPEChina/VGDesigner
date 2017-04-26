@@ -242,68 +242,34 @@ Menus.prototype.init = function()
 		}), parent);
 		menu.addItem(mxResources.get('radialTree'), null, mxUtils.bind(this, function()
 		{
-			var tmp = graph.getSelectionCell();
-			var roots = null;
-
-			if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
+			var layout = new mxRadialTreeLayout(graph, false);
+			layout.levelDistance = 60;
+			layout.autoRadius = true;
+			layout.filterChildFlag = true;
+			this.editorUi.executeLayout(function()
 			{
-				if (graph.getModel().getEdgeCount(tmp) == 0)
-				{
-					roots = graph.findTreeRoots(graph.getDefaultParent());
-				}
-			}
-			else
-			{
-				roots = graph.findTreeRoots(tmp);
-			}
+				layout.execute(graph.getDefaultParent());
 
-			if (roots != null && roots.length > 0)
-			{
-				tmp = roots[0];
-			}
-
-			if (tmp != null)
-			{
-				var layout = new mxRadialTreeLayout(graph, false);
-				layout.levelDistance = 60;
-				layout.autoRadius = true;
-
-	    		this.editorUi.executeLayout(function()
-	    		{
-	    			layout.execute(graph.getDefaultParent(), tmp);
-
-	    			if (!graph.isSelectionEmpty())
-	    			{
-		    			tmp = graph.getModel().getParent(tmp);
-
-		    			if (graph.getModel().isVertex(tmp))
-		    			{
-		    				graph.updateGroupBounds([tmp], graph.gridSize * 2, true);
-		    			}
-	    			}
-	    		}, true);
-			}
+				// if (!graph.isSelectionEmpty())
+				// {
+				 //    var tmp = graph.getSelectionCell();
+				// 	tmp = graph.getModel().getParent(tmp);
+				//
+				// 	if (graph.getModel().isVertex(tmp))
+				// 	{
+				// 		graph.updateGroupBounds([tmp], graph.gridSize * 2 , true);
+				// 	}
+				// }
+			}, true);
 		}), parent);
 		menu.addSeparator(parent);
 		menu.addItem(mxResources.get('organic'), null, mxUtils.bind(this, function()
 		{
 			var layout = new mxFastOrganicLayout(graph);
-
+			layout.filterChildFlag = true;
     		this.editorUi.executeLayout(function()
     		{
-    			var tmp = graph.getSelectionCell();
-
-    			if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
-    			{
-    				tmp = graph.getDefaultParent();
-    			}
-
-    			layout.execute(tmp);
-
-    			if (graph.getModel().isVertex(tmp))
-    			{
-    				graph.updateGroupBounds([tmp], graph.gridSize * 2, true);
-    			}
+                layout.execute(graph.getDefaultParent());
     		}, true);
 		}), parent);
 		menu.addItem(mxResources.get('circle'), null, mxUtils.bind(this, function()
@@ -311,19 +277,7 @@ Menus.prototype.init = function()
 			var layout = new mxCircleLayout(graph);
     		this.editorUi.executeLayout(function()
     		{
-    			var tmp = graph.getSelectionCell();
-
-    			if (tmp == null || graph.getModel().getChildCount(tmp) == 0)
-    			{
-    				tmp = graph.getDefaultParent();
-    			}
-
-    			layout.execute(tmp);
-
-    			if (graph.getModel().isVertex(tmp))
-    			{
-    				graph.updateGroupBounds([tmp], graph.gridSize * 2, true);
-    			}
+                layout.execute(graph.getDefaultParent());
     		}, true);
 		}), parent);
 	})));

@@ -499,15 +499,14 @@ mxCompactTreeLayout.prototype.execute = function(parent, root)
         var tmp = graph.getSelectionCell();
         var filledVertexSet = Object();
         var roots = null;
-        if (tmp == null || model.getChildCount(tmp) == 0)
+        this.filterDescendants(parent, filledVertexSet);
+        if (tmp == null)
         {
-        	this.filterDescendants(parent, filledVertexSet);
         	roots = this.findRoots(parent, filledVertexSet);
         }
         else
         {
-           this.filterDescendants(tmp, filledVertexSet);
-           roots = this.findRoots(tmp, filledVertexSet);
+            roots = [tmp];
         }
         var vertexCells = [];
         for (var key in filledVertexSet) {
@@ -795,7 +794,7 @@ mxCompactTreeLayout.prototype.dfs = function(cell, parent, vertexCells)
 				var state = view.getState(edge);
 				var target = (state != null) ? state.getVisibleTerminal(this.invert) : view.getVisibleTerminal(edge, this.invert);
                 //判断next是否是在图元的子集中
-                if (this.filterChildFlag) {
+                if (this.filterChildFlag && vertexCells != null) {
                     var index = mxUtils.indexOfNestedArray(vertexCells, target, 'children');
                     if(index >= 0) {
                         target = vertexCells[index];

@@ -25,7 +25,7 @@ Actions.prototype.init = function()
 	};
 
 	// File actions
-	this.addAction('new...', function()
+	this.addAction('new...', mxUtils.bind(this, function()
 	{
         ui.editor.graph.selectAll(null, true);
         var ret;
@@ -65,11 +65,10 @@ Actions.prototype.init = function()
 
         var title = 'Create new ' + ui.interfaceParams.type;
         document.title = title;
-
+        this.get('resetView').funct();
 		// window.open(ui.getUrl());
 
-	}
-	,null,null,null,this.editorUi.interfaceParams.type
+	}),null,null,null,this.editorUi.interfaceParams.type
 	);
     this.addAction('open...', function()
 	{
