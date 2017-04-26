@@ -3758,7 +3758,7 @@ EditorUi.prototype.getModelJsonString = function()
         group.setValue(obj);
 
 		//update by wang,jianhui--start
-		if(!this.actions.get('collapse').isEnabled()) this.actions.get('collapsible').funct()
+		if(!this.actions.get('collapse').isEnabled()) this.actions.get('collapsible').funct();
 		var xml = this.editor.getGraphXml(this);
 		var bounds = xml.getElementsByTagName("mxGeometry")[0];
 		bounds.setAttribute("x", 0);

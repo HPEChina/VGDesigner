@@ -194,6 +194,13 @@ mxFastOrganicLayout.prototype.indices;
 mxFastOrganicLayout.prototype.allowedToRun = true;
 
 /**
+ * Variable: filterChildFlag
+ *
+ * 是否过滤子节点的标志
+ */
+mxFastOrganicLayout.prototype.filterChildFlag = false;
+
+/**
  * Function: isVertexIgnored
  * 
  * Returns a boolean indicating if the given <mxCell> should be ignored as a
@@ -205,8 +212,109 @@ mxFastOrganicLayout.prototype.allowedToRun = true;
  */
 mxFastOrganicLayout.prototype.isVertexIgnored = function(vertex)
 {
-	return mxGraphLayout.prototype.isVertexIgnored.apply(this, arguments) ||
-		this.graph.getConnections(vertex).length == 0;
+    return mxGraphLayout.prototype.isVertexIgnored.apply(this, arguments) ||
+        (!this.filterChildFlag && this.graph.getConnections(vertex).length == 0) ||
+        (this.filterChildFlag && this.getEdges(vertex) == 0);
+};
+
+/**
+ * Function: getEdges
+ *
+ * Returns the connected edges for the given cell.
+ *
+ * Parameters:
+ *
+ * cell - <mxCell> whose edges should be returned.
+ */
+mxFastOrganicLayout.prototype.getEdges = function(cell)
+{
+    var edges = this.getAllEdges(cell);
+
+    var result = [];
+
+    for (var i = 0; i < edges.length; i++)
+    {
+        var source = this.getVisibleTerminal(edges[i], true);
+        var target = this.getVisibleTerminal(edges[i], false);
+
+        if ((source == target) || ((source != target) && (((target == cell || (this.filterChildFlag && cell.children && mxUtils.indexOfNestedArray(cell.children, target, 'children') >= 0)) && (this.parent == null || this.graph.isValidAncestor(source, this.parent, true))) ||
+            ((source == cell || ( this.filterChildFlag && cell.children && mxUtils.indexOfNestedArray(cell.children, source, 'children') >= 0)) && (this.parent == null ||
+            this.graph.isValidAncestor(target, this.parent, true))))))
+        {
+            result.push(edges[i]);
+        }
+    }
+
+    return result;
+};
+
+/**
+ * 获取cell中所有的edge,包括各级children
+ * @param cell - <mxCell> whose edges should be returned, include edges of children.
+ */
+mxFastOrganicLayout.prototype.getAllEdges = function(cell)
+{
+    var result = [];
+    var model = this.graph.model;
+    var childCount = model.getChildCount(cell);
+    for (var i = 0; i < childCount; i++) {
+        var child = model.getChildAt(cell, i);
+        result = result.concat(this.getAllEdges(child));
+    }
+    result = result.concat(model.getEdges(cell, true, true));
+    return result;
+};
+
+/**
+ * Function: getVisibleTerminal
+ *
+ * Helper function to return visible terminal for edge allowing for ports
+ *
+ * Parameters:
+ *
+ * edge - <mxCell> whose edges should be returned.
+ * source - Boolean that specifies whether the source or target terminal is to be returned
+ */
+mxFastOrganicLayout.prototype.getVisibleTerminal = function(edge, source)
+{
+    var state = this.graph.view.getState(edge);
+
+    var terminal = (state != null) ? state.getVisibleTerminal(source) : this.graph.view.getVisibleTerminal(edge, source);
+
+    if (terminal == null)
+    {
+        terminal = (state != null) ? state.getVisibleTerminal(source) : this.graph.view.getVisibleTerminal(edge, source);
+    }
+
+    if (terminal != null)
+    {
+        if (this.isPort(terminal))
+        {
+            terminal = this.graph.model.getParent(terminal);
+        }
+    }
+
+    return terminal;
+};
+
+/**
+ * Function: isPort
+ *
+ * Returns true if the given cell is a "port", that is, when connecting to
+ * it, its parent is the connecting vertex in terms of graph traversal
+ *
+ * Parameters:
+ *
+ * cell - <mxCell> that represents the port.
+ */
+mxFastOrganicLayout.prototype.isPort = function(cell)
+{
+    if (cell.geometry.relative)
+    {
+        return true;
+    }
+
+    return false;
 };
 
 /**
@@ -219,8 +327,15 @@ mxFastOrganicLayout.prototype.execute = function(parent)
 {
 	var model = this.graph.getModel();
 	this.vertexArray = [];
-	var cells = this.graph.getChildVertices(parent);
-	
+	var cells = null;
+	var tmp = this.graph.getSelectionCells();
+	if(tmp.length > 0) {
+        cells = this.graph.getCellsForGroup(tmp);
+	}
+	else {
+        cells = this.graph.getChildVertices(parent);
+	}
+
 	for (var i = 0; i < cells.length; i++)
 	{
 		if (!this.isVertexIgnored(cells[i]))
@@ -293,8 +408,23 @@ mxFastOrganicLayout.prototype.execute = function(parent)
 			// Get lists of neighbours to all vertices, translate the cells
 			// obtained in indices into vertexArray and store as an array
 			// against the orginial cell index
-			var edges = this.graph.getConnections(this.vertexArray[i], parent);
-			var cells = this.graph.getOpposites(edges, this.vertexArray[i]);
+			// var edges = this.graph.getConnections(this.vertexArray[i], parent);
+			var edges = this.getEdges(this.vertexArray[i]);
+            // var Cells = this.graph.getOpposites(edges, this.vertexArray[i]);
+            var cells = [];
+			for(var k in edges) {
+                var src = this.getVisibleTerminal(edges[k], true);
+                var inx = mxUtils.indexOfNestedArray(this.vertexArray, src, 'children');
+                if(inx >= 0 && this.vertexArray[inx] != this.vertexArray[i]) {
+                    cells.push(this.vertexArray[inx]);
+				}
+                var trg = this.getVisibleTerminal(edges[k], false);
+                inx = mxUtils.indexOfNestedArray(this.vertexArray, trg, 'children');
+                if(inx >= 0 && this.vertexArray[inx] != this.vertexArray[i]) {
+                    cells.push(this.vertexArray[inx]);
+                }
+			}
+
 			this.neighbours[i] = [];
 
 			for (var j = 0; j < cells.length; j++)

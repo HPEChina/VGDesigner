@@ -367,6 +367,9 @@ var mxUtils =
      */
     indexOfNestedArray: function(array, obj, key) {				//多维数组判断是否存在某值
 		for(var i = 0;i < array.length;i++) {
+			if(array[i] == obj) {
+				return i;
+			}
 			if(array[i][key] instanceof Array) {					//判断是否为多维数组
 				var ret = this.indexOfNestedArray(array[i][key], obj, key);
 				if(ret >= 0) {
