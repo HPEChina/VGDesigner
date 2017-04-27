@@ -5074,14 +5074,14 @@ AttributePanel.prototype.init = function()
             }
         }
     }
-    if(Object.keys(tObj).length < 3)
+    if(Object.keys(tObj).length < 2)
     {
         tObj['intrinsic'] = (tObj['intrinsic'] != null) ? tObj['intrinsic'] : [];
         tObj['extended'] = (tObj['extended'] != null) ? tObj['extended'] : [];
-        tObj['userFunc'] = (tObj['userFunc'] != null) ? tObj['userFunc'] : [];
+        // tObj['userFunc'] = (tObj['userFunc'] != null) ? tObj['userFunc'] : [];
     }
     for( var o in tObj){
-        this.createAttrsPanel(cell, value, tObj[o], o, allNames);
+		this.createAttrsPanel(cell, value, tObj[o], o, allNames);
     }
 
     if((cell.getStyle() && cell.getStyle().indexOf('group')) >= 0 || (cell.getId() == '0' && editorUi.interfaceParams.type == 'model')) {
@@ -5411,12 +5411,17 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
         data['description'] = attr.description;
         var value = [];
         for(var i in attr.value){
-        	value.push(attr.operator[i] + attr.value[i] + ((attr.logic[i] != null　&& attr.logic[i] != 'none') ? (' ' + attr.logic[i]) : ''));
+        	if(type == 'intrinsic') {
+        		value.push(attr.value[i]);
+			}
+			else {
+                value.push(attr.operator[i] + attr.value[i] + ((attr.logic[i] != null　&& attr.logic[i] != 'none') ? (' ' + attr.logic[i]) : ''));
+			}
 		}
 		data['value'] = value.join(' ');
 
         names[index] = name;
-        var ele = form.addListAttributeElements(data);
+        var ele = form.addListAttributeElements(data, type);
         arrAttr[index] = attr;
         addEditButton(ele, attr);
         var rootFlag = (cell.getId() == '0') ? true : false;
@@ -5440,40 +5445,44 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
     //添加查询条件
     function addAttributeCondition(dType, operator, value, logic)
 	{
-		dType = dType || 'string';
-		var ele = [];
+        var ele = [];
+		if(type != 'intrinsic') {
+            dType = dType || 'string';
 
-		ele['operator'] = document.createElement('select');
-        ele['operator'].style.width = '26%';
-        ele['operator'].style.float = 'left';
-        for(var i in ui.attributeOperator[dType]) {
-            var opt = document.createElement('option');
-            opt.setAttribute('value', ui.attributeOperator[dType][i]);
-            mxUtils.write(opt, ui.attributeOperator[dType][i]);
-            ele['operator'].appendChild(opt);
-			if (operator == ui.attributeOperator[dType][i]) {
-				opt.setAttribute('selected', 'true');
-			}
-        }
+            ele['operator'] = document.createElement('select');
+            ele['operator'].style.width = '26%';
+            ele['operator'].style.float = 'left';
+            for(var i in ui.attributeOperator[dType]) {
+                var opt = document.createElement('option');
+                opt.setAttribute('value', ui.attributeOperator[dType][i]);
+                mxUtils.write(opt, ui.attributeOperator[dType][i]);
+                ele['operator'].appendChild(opt);
+                if (operator == ui.attributeOperator[dType][i]) {
+                    opt.setAttribute('selected', 'true');
+                }
+            }
+		}
 
         ele['value'] = document.createElement('input');
-        ele['value'].style.width = '29%';
+        ele['value'].style.width = (type == 'intrinsic') ? '90%' : '29%';
         ele['value'].style.height = '15px';
         ele['value'].style.float = 'left';
         ele['value'].value = (value != null) ? value : '';
 
-        ele['logic'] = document.createElement('select');
-        ele['logic'].style.width = '35%';
-        ele['logic'].style.float = 'left';
-        for(var j in ui.attributeLogic) {
-            var opt = document.createElement('option');
-            opt.setAttribute('value', ui.attributeLogic[j]);
-            mxUtils.write(opt, ui.attributeLogic[j]);
-            ele['logic'].appendChild(opt);
-            if(logic == ui.attributeLogic[j]){
-                opt.setAttribute('selected', 'true');
+        if(type != 'intrinsic') {
+            ele['logic'] = document.createElement('select');
+            ele['logic'].style.width = '35%';
+            ele['logic'].style.float = 'left';
+            for(var j in ui.attributeLogic) {
+                var opt = document.createElement('option');
+                opt.setAttribute('value', ui.attributeLogic[j]);
+                mxUtils.write(opt, ui.attributeLogic[j]);
+                ele['logic'].appendChild(opt);
+                if(logic == ui.attributeLogic[j]){
+                    opt.setAttribute('selected', 'true');
+                }
             }
-        }
+		}
 
         return ele;
 	}
@@ -5486,10 +5495,10 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
 
         var td1 = document.createElement('td');
         td1.style.paddingTop = '3px';
-        td1.style.height = '100px';
-	td1.style.color = '#788da3';
-	td1.style.fontSize = '12px';
-	td1.style.borderTop = '0';
+        // td1.style.height = '100px';
+		td1.style.color = '#788da3';
+		td1.style.fontSize = '12px';
+		td1.style.borderTop = '0';
 
         var td2 = document.createElement('td');
         td2.style.borderTop = '0';
@@ -5503,8 +5512,8 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
             removeEditTr();
         });
         cancelBtn.style.display = 'block';
-	cancelBtn.style.opacity = '.5';
-	cancelBtn.title = mxResources.get('cancel');
+		cancelBtn.style.opacity = '.5';
+		cancelBtn.title = mxResources.get('cancel');
         cancelBtn.className = 'icon-24 icon-delete';
 
         var applyBtn = mxUtils.button('', function()
@@ -5519,16 +5528,25 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
                 var editTr = form.body.getElementsByClassName(type + 'EditAttributes');
 				//将修改的属性内容更新到表格
 				names[index] = arrAttr[index].name;
-                editTr[0].previousSibling.childNodes[0].innerText = arrAttr[index].name;
-                editTr[0].previousSibling.childNodes[0].setAttribute('title', mxResources.get('name') + ":" + arrAttr[index].name);
-                editTr[0].previousSibling.childNodes[1].innerText = arrAttr[index].description;
-                editTr[0].previousSibling.childNodes[1].setAttribute('title', mxResources.get('description') + ":" + arrAttr[index].description);
-                var arr = [];
-                for(var i in arrAttr[index].value){
-                    arr.push(arrAttr[index].operator[i] + arrAttr[index].value[i] + ((arrAttr[index].logic[i] != null　&& arrAttr[index].logic[i] != 'none') ? (' ' + arrAttr[index].logic[i]) : ''));
-                }
-                editTr[0].previousSibling.childNodes[2].innerText = arr.join(' ');
-                editTr[0].previousSibling.childNodes[2].setAttribute('title', mxResources.get('value') + ":" + arr.join(' '));
+				if(type == 'intrinsic') {
+                    editTr[0].previousSibling.childNodes[0].innerText = arrAttr[index].name;
+                    editTr[0].previousSibling.childNodes[0].setAttribute('title',  "Key:" + arrAttr[index].name);
+                    editTr[0].previousSibling.childNodes[1].innerText = arrAttr[index].value[0];
+                    editTr[0].previousSibling.childNodes[1].setAttribute('title', mxResources.get('value') + ":" + arrAttr[index].value[0]);
+				}
+				else {
+                    editTr[0].previousSibling.childNodes[0].innerText = arrAttr[index].name;
+                    editTr[0].previousSibling.childNodes[0].setAttribute('title', mxResources.get('name') + ":" + arrAttr[index].name);
+                    editTr[0].previousSibling.childNodes[1].innerText = arrAttr[index].description;
+                    editTr[0].previousSibling.childNodes[1].setAttribute('title', mxResources.get('description') + ":" + arrAttr[index].description);
+                    var arr = [];
+                    for(var i in arrAttr[index].value){
+                        arr.push(arrAttr[index].operator[i] + arrAttr[index].value[i] + ((arrAttr[index].logic[i] != null　&& arrAttr[index].logic[i] != 'none') ? (' ' + arrAttr[index].logic[i]) : ''));
+                    }
+                    editTr[0].previousSibling.childNodes[2].innerText = arr.join(' ');
+                    editTr[0].previousSibling.childNodes[2].setAttribute('title', mxResources.get('value') + ":" + arr.join(' '));
+				}
+
 				// 关闭属性编辑的tr
                 removeEditTr();
             }
@@ -5538,15 +5556,15 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
             }
         });
         applyBtn.style.display = 'block';
-	applyBtn.style.marginBottom = '10px';
-	applyBtn.style.cursor = 'pointer';
-	applyBtn.style.opacity = '.5';
-	applyBtn.title = mxResources.get('save', ['']);
+		applyBtn.style.marginBottom = '10px';
+		applyBtn.style.cursor = 'pointer';
+		applyBtn.style.opacity = '.5';
+		applyBtn.title = mxResources.get('save', ['']);
         applyBtn.className = 'icon-24 icon-tick';
 
         for(var o in attr)
         {
-            if( o == 'operator' || o == 'logic') {
+            if( o == 'operator' || o == 'logic' || (type == 'intrinsic' && (o == 'description' || o =='dataType' ))) {
                 continue;
             }
             var div = document.createElement('div');
@@ -5605,7 +5623,7 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
 
         var td3 = document.createElement('td');
         td3.style.paddingLeft = '5px'
-	td3.style.borderTop = '0';
+		td3.style.borderTop = '0';
         td3.setAttribute('colspan', 2);
         td3.appendChild(applyBtn);
         td3.appendChild(cancelBtn);
@@ -5628,7 +5646,9 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
 
         };
         //监听属性编辑中的数据类型的change事件
-        mxEvent.addListener(editElement['dataType'], 'change', updateDTypeSelect);
+		if(editElement['dataType'] != null) {
+            mxEvent.addListener(editElement['dataType'], 'change', updateDTypeSelect);
+		}
 
         function updateLogicSelect() {
         	var len = parseInt(editElement['logic'].length);
@@ -5681,7 +5701,7 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
     {
 		var newProp = document.createElement('div');
 		newProp.style.whiteSpace = 'nowrap';
-		newProp.style.marginTop = '6px';
+		newProp.style.marginTop = '16px';
 	    	newProp.style.textAlign = 'center';
 
 		div.appendChild(newProp);
@@ -5704,7 +5724,7 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
         });
 
         addBtn.style.width = '62%';
-	addBtn.className = 'btn-purple';
+		addBtn.className = 'btn-purple';
         newProp.appendChild(addBtn);
 
     }
