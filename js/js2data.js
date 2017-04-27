@@ -7,33 +7,20 @@ function js2data(json, envType) {
         var resources_properties = {},
             operands = [],
             property = model['object@intrinsic']
-        if (property) {
+        if (property) {//静态属性
             property = JSON.parse(property)
             if (envType !== 'model' && modelID === '0') {
                 //topo忽略底板,只保留底板静态属性作为topo属性,忽略id
                 return property.forEach(function (prop) {
-                    if (prop.operator.toString() === '==' && prop.logic.toString() === 'none') {
-                        properties[prop.name] = prop.value[0]
-                    }
+                    properties[prop.name] = prop.value[0]
                 })
             }
             property.forEach(function (prop) {
-                if (prop.operator.toString() === '==' && prop.logic.toString() === 'none') {
-                    resources_properties[prop.name] = prop.value[0]
-                } else {
-                    operands.push(getOperand(prop))
-                }
+                resources_properties[prop.name] = prop.value[0]
             })
         }
         property = model['object@extended']
-        if (property) {
-            property = JSON.parse(property)
-            property.forEach(function (prop) {
-                operands.push(getOperand(prop))
-            })
-        }
-        property = model['object@userFunc']
-        if (property) {
+        if (property) {//动态属性
             property = JSON.parse(property)
             property.forEach(function (prop) {
                 operands.push(getOperand(prop))
