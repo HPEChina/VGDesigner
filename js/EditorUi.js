@@ -1172,27 +1172,27 @@ EditorUi.prototype.setInitAttributes = function()
 	var arr = [];
     if(type == 'model') {
         arr['intrinsic'] = [
-            { "name": "name", "description": "name", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "category", "description": "category", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "type", "description": "type", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] }
+            { "name": "name", "description": "", "dataType": "", "value": [""], "operator":[''], 'logic':[""] },
+            { "name": "category", "description": "", "dataType": "", "value": [""], "operator":[''], 'logic':[""] },
+            { "name": "type", "description": "", "dataType": "", "value": [""], "operator":[''], 'logic':[""] }
         ];
         arr['extended'] = [];
-        arr['userFunc'] = [];
+        // arr['userFunc'] = [];
     }
     else if(type == 'topology') {
         arr['intrinsic'] = [];
         arr['extended'] = [];
-        arr['userFunc'] = [];
+        // arr['userFunc'] = [];
     }
     else if(type == 'environment') {
         arr['intrinsic'] = [];
         arr['extended'] = [];
-        arr['userFunc'] = [];
+        // arr['userFunc'] = [];
     }
     else {
         arr['intrinsic'] = [];
         arr['extended'] = [];
-        arr['userFunc'] = [];
+        // arr['userFunc'] = [];
 	}
 
     this.initAttributes = arr;

@@ -5185,7 +5185,11 @@ mxGraph.prototype.updateAlternateBounds = function(cell, geo, willCollapse)
 		{
 			geo.alternateBounds.x = geo.x;
 			geo.alternateBounds.y = geo.y;
-			
+			if(willCollapse) {
+                geo.alternateBounds.width = image.width;
+                geo.alternateBounds.height = image.height;
+            }
+
 			var alpha = mxUtils.toRadians(style[mxConstants.STYLE_ROTATION] || 0);
 			
 			if (alpha != 0)
