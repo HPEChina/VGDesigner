@@ -3683,7 +3683,7 @@ EditorUi.prototype.getModelJsonString = function()
         if(rObj != undefined) {
             attrs['intrinsic'] = rObj.getAttribute('intrinsic');
             attrs['extended'] = rObj.getAttribute('extended');
-            attrs['userFunc'] = rObj.getAttribute('userFunc');
+            // attrs['userFunc'] = rObj.getAttribute('userFunc');
             attrs['image'] = rObj.getAttribute('image') ? rObj.getAttribute('image') : '';
         }
         if(Object.keys(attrs).length == 0)
