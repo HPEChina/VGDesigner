@@ -206,16 +206,25 @@ mxForm.prototype.addField = function(name, input)
 /**
  * Function: add elementes about datatype == string
  */
-mxForm.prototype.addListAttributeElements = function(arr)
+mxForm.prototype.addListAttributeElements = function(arr, type)
 {
     var tr = document.createElement('tr');
+
     for(var e in arr)
 	{
+        var title = mxResources.get(e);
+        if(e == 'name') {title = 'Key';}
+		var width = '80px';
+        if(type == 'intrinsic') {
+        	width = '100px';
+            if(e == 'description') {continue;}
+		}
+
         var td = document.createElement('td');
         mxUtils.write(td, arr[e]);
-        td.setAttribute('title', mxResources.get(e) + ":" + arr[e]);
+        td.setAttribute('title', title + ":" + arr[e]);
         td.style.overflow = 'hidden';
-        td.style.width = '80px';
+        td.style.width = width;
         td.style.minWidth = '50px';
         td.style.maxWidth = '90px';
 
