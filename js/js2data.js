@@ -49,7 +49,6 @@ function js2data(json, envType) {
             })
         }
     }
-    console.time('convert')
     while (json.length) {
         var model = json.shift(),
             _key = model.object ? 'object' : 'mxCell',
