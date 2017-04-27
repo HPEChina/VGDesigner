@@ -5080,6 +5080,10 @@ AttributePanel.prototype.init = function()
         tObj['extended'] = (tObj['extended'] != null) ? tObj['extended'] : [];
         // tObj['userFunc'] = (tObj['userFunc'] != null) ? tObj['userFunc'] : [];
     }
+    //拓扑图最外层不需要动态属性
+    if(tObj['extended'] && editorUi.interfaceParams.type != 'model' && cell.getId() == '0') {
+    	delete tObj['extended'];
+	}
     for( var o in tObj){
 		this.createAttrsPanel(cell, value, tObj[o], o, allNames);
     }
