@@ -3758,7 +3758,7 @@ EditorUi.prototype.getModelJsonString = function()
         group.setValue(obj);
 
 		//update by wang,jianhui--start
-		if(!this.actions.get('collapse').isEnabled()) this.actions.get('collapsible').funct();
+		if(attrs['image'] && !this.actions.get('collapse').isEnabled()) this.actions.get('collapsible').funct();
 		var xml = this.editor.getGraphXml(this);
 		var bounds = xml.getElementsByTagName("mxGeometry")[0];
 		bounds.setAttribute("x", 0);
@@ -3766,7 +3766,7 @@ EditorUi.prototype.getModelJsonString = function()
 		bounds.width = bounds.getAttribute("width");
 		bounds.height = bounds.getAttribute("height");
 		xml = mxUtils.getXml(xml);
-		graph.foldCells(true)//折叠
+		if(attrs['image']) graph.foldCells(true)//折叠
 		//update by wang,jianhui--end
 		
         //解组
