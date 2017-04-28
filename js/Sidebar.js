@@ -233,6 +233,11 @@ Sidebar.prototype.modelList = ['general', 'Model'];
 Sidebar.prototype.searchFlag = false;
 
 /**
+ * Save model Flag
+ */
+Sidebar.prototype.saveModelFlag = false;
+
+/**
  * Adds all palettes to the sidebar.
  */
 Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel)
@@ -947,15 +952,15 @@ Sidebar.prototype.addOtherNewPalette = function(modelData, id, expand, saveFlag)
             this.editorUi.openModel();
         }
         var prop = modelData[i].property;
-        // var attr = modelData[i].attribute;
         var attr = modelData[i];
 
         if(prop.type.toLowerCase() == 'edge') {
             fns.push(this.createEdgeTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title));
         }//update by wang,jianhui
         else if (attr.data) {
+        	this.saveModelFlag = true;
             fns.push(this.createVertexTemplateFromXMLEntry(attr, id));
-            // fns.push(this.createVertexTemplateFromXML(attr, id));
+            this.saveModelFlag = false;
         }
         else {
             fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
@@ -1281,11 +1286,11 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
     if(!this.searchFlag) {
         if(uuid != ''){
             elt = document.getElementsByClassName(uuid);
+            for(var k = elt.length - 1; k >= 0; k--)
+            {
+                elt[k].parentNode.removeChild(elt[k]);
+            }
         }
-        for(var k = elt.length - 1; k >= 0; k--)
-		{
-            elt[k].parentNode.removeChild(elt[k]);
-		}
 	}
 
 	// else{
