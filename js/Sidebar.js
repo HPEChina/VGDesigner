@@ -1280,7 +1280,6 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
     var elt = null;
     if(!this.searchFlag) {
         if(uuid != ''){
-            // elt = document.getElementById(uuid);
             elt = document.getElementsByClassName(uuid);
         }
         for(var k = elt.length - 1; k >= 0; k--)
