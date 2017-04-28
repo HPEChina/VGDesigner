@@ -1324,7 +1324,6 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	if(data) {
         mxEvent.addListener(elt, 'mouseup', mxUtils.bind(this,function(evt)
         {
-        	if(cells) {var i = 0;}
             if(mxEvent.isRightMouseButton(evt)) {
                 this.editorUi.editor.graph.selectAll(null, true);
 				var ret;
