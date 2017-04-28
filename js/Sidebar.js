@@ -727,19 +727,23 @@ Sidebar.prototype.addSearchPalette = function(expand)
 							active = false;
 							page++;
 							center.parentNode.removeChild(center);
-							
+
 							for (var i = 0; i < results.length; i++)
 							{
 								this.searchFlag = true;
-								var elt = results[i](true);
+								var elt = results[i]();
 								this.searchFlag = false;
 
 								// Avoids duplicates in results
-								if (hash[elt.innerHTML] == null)
-								{
-									hash[elt.innerHTML] = '1';
-									div.appendChild(elt);
-								}
+								// if (hash[elt.innerHTML] == null)
+								// {
+								// 	hash[elt.innerHTML] = '1';
+								// 	div.appendChild(elt);
+								// }
+								hash[elt.innerHTML] = elt;
+							}
+							for(var o in hash) {
+								div.appendChild(hash[o]);
 							}
 							
 							if (more)
@@ -960,7 +964,6 @@ Sidebar.prototype.addOtherNewPalette = function(modelData, id, expand, saveFlag)
         else if (attr.data) {
         	this.saveModelFlag = true;
             fns.push(this.createVertexTemplateFromXMLEntry(attr, id));
-            this.saveModelFlag = false;
         }
         else {
             fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
@@ -1283,7 +1286,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 {
     var uuid = cells[0].getUuid();
     var elt = null;
-    if(!this.searchFlag) {
+    if(!this.searchFlag && this.saveModelFlag) {
         if(uuid != ''){
             elt = document.getElementsByClassName(uuid);
             for(var k = elt.length - 1; k >= 0; k--)
@@ -1292,14 +1295,10 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
             }
         }
 	}
+	if(this.saveModelFlag) {this.saveModelFlag = false;}
 
-	// else{
-        elt = document.createElement('a');
-        elt.setAttribute('href', 'javascript:void(0);');
-        // if(uuid != '') {
-        //     elt.setAttribute('id', uuid);
-        // }
-	// }
+	elt = document.createElement('a');
+	elt.setAttribute('href', 'javascript:void(0);');
 
 	var className = 'geItem';
 	if(uuid != '') {
@@ -1325,6 +1324,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	if(data) {
         mxEvent.addListener(elt, 'mouseup', mxUtils.bind(this,function(evt)
         {
+        	if(cells) {var i = 0;}
             if(mxEvent.isRightMouseButton(evt)) {
                 this.editorUi.editor.graph.selectAll(null, true);
 				var ret;
