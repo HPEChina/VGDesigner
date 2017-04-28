@@ -228,6 +228,11 @@ Sidebar.prototype.modelClass = [];
 Sidebar.prototype.modelList = ['general', 'Model'];
 
 /**
+ * Search flag
+ */
+Sidebar.prototype.searchFlag = false;
+
+/**
  * Adds all palettes to the sidebar.
  */
 Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel)
@@ -450,7 +455,7 @@ Sidebar.prototype.addEntry = function(tags, fn)
 		for (var i = 0; i < tmp.length; i++)
 		{
 			// Replaces trailing numbers and special characters
-			tmp[i] = tmp[i].replace(/\.*\d*$/, '');
+			// tmp[i] = tmp[i].replace(/\.*\d*$/, '');
 			
 			if (tmp[i].length > 1)
 			{
@@ -483,49 +488,35 @@ Sidebar.prototype.searchEntries = function(searchTerms, count, page, success, er
 	if (this.taglist != null && searchTerms != null)
 	{
 		var tmp = searchTerms.toLowerCase().split(' ');
-		var dict = new mxDictionary();
 		var max = (page + 1) * count;
 		var results = [];
-		var index = 0;
-		
+
 		for (var i = 0; i < tmp.length; i++)
 		{
 			if (tmp[i].length > 0)
 			{
 				var entry = this.taglist[tmp[i]];
-				var tmpDict = new mxDictionary();
-				
+
 				if (entry != null)
 				{
 					var arr = entry.entries;
-					results = [];
 
 					for (var j = 0; j < arr.length; j++)
 					{
 						var entry = arr[j];
 	
 						// NOTE Array does not contain duplicates
-						if ((index == 0) == (dict.get(entry) == null))
+						if(results.indexOf(entry) < 0) {
+                            results.push(entry);
+						}
+						// if (i == tmp.length - 1 && results.length == max)
+						if(i < tmp.length - 1 && results.length == max)
 						{
-							tmpDict.put(entry, entry);
-							results.push(entry);
-							
-							if (i == tmp.length - 1 && results.length == max)
-							{
-								success(results.slice(page * count, max), max, true);
-								
-								return;
-							}
+							success(results.slice(page * count, max), max, true);
+							return;
 						}
 					}
 				}
-				else
-				{
-					results = [];
-				}
-				
-				dict = tmpDict;
-				index++;
 			}
 		}
 		
@@ -734,13 +725,15 @@ Sidebar.prototype.addSearchPalette = function(expand)
 							
 							for (var i = 0; i < results.length; i++)
 							{
-								var elt = results[i]();
-								
+								this.searchFlag = true;
+								var elt = results[i](true);
+								this.searchFlag = false;
+
 								// Avoids duplicates in results
 								if (hash[elt.innerHTML] == null)
 								{
 									hash[elt.innerHTML] = '1';
-									div.appendChild(results[i]());
+									div.appendChild(elt);
 								}
 							}
 							
@@ -929,11 +922,12 @@ Sidebar.prototype.addOtherPalette = function(modelData, id, expand, saveFlag)
         if(prop.type.toLowerCase() == 'edge') {
             fns.push(this.createEdgeTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title));
         }//update by wang,jianhui
-        else if (modelData[i].data) {
-            fns.push(this.createVertexTemplateFromXML(attr, id));
+        else if (attr.data) {
+            // fns.push(this.createVertexTemplateFromXML(attr, id));
+            fns.push(this.createVertexTemplateFromXMLEntry(attr, id));
         }
         else {
-            fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
+            fns.push(this.createVertexTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
         }
     }
 	var modelClassTitle=this.modelClass[id]||modelData[0].description || modelData[0].class
@@ -959,8 +953,9 @@ Sidebar.prototype.addOtherNewPalette = function(modelData, id, expand, saveFlag)
         if(prop.type.toLowerCase() == 'edge') {
             fns.push(this.createEdgeTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title));
         }//update by wang,jianhui
-        else if (modelData[i].data) {
-            fns.push(this.createVertexTemplateFromXML(attr, id));
+        else if (attr.data) {
+            fns.push(this.createVertexTemplateFromXMLEntry(attr, id));
+            // fns.push(this.createVertexTemplateFromXML(attr, id));
         }
         else {
             fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
@@ -988,8 +983,9 @@ Sidebar.prototype.addGeneralPalette = function(modelData, id, expand, saveFlag)
         if(prop.type.toLowerCase() == 'edge') {
             fns.push(this.createEdgeTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title));
         }
-        else if (modelData[i].data) {
-            fns.push(this.createVertexTemplateFromXML(attr, id));
+        else if (attr.data) {
+        	fns.push(this.createVertexTemplateFromXMLEntry(attr, id));
+            // fns.push(this.createVertexTemplateFromXML(attr, id));
         }
         else {
             fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
@@ -1004,7 +1000,7 @@ Sidebar.prototype.createVertexTemplateFromXML = function(attr, id) {
 	var name = attr.name;
 	var uuid = attr.id;
 	// var graph = this.editorUi.editor.graph;
-    return function () {
+    // return function () {
         var img = JSON.parse(data);
         var doc = mxUtils.parseXml(img.xml);
         var model = new mxGraphModel();
@@ -1023,10 +1019,10 @@ Sidebar.prototype.createVertexTemplateFromXML = function(attr, id) {
             cells[0].setUuid(uuid);
             // value.setAttribute('uuid', uuid);
         }
-        if (cells.length > 0) {
-            return this.createVertexTemplateFromCells(cells, img.w, img.h, name, true, false, false, attr)
-        }
-    }.bind(this);
+        // if (cells.length > 0) {
+		return this.createVertexTemplateFromCells(cells, img.w, img.h, name, true, false, false, attr);
+        // }
+    // }.bind(this);
 };
 
 /**
@@ -1101,7 +1097,7 @@ Sidebar.prototype.getModelAndAddPalette = function(url, params) {
             var arr = [];
             for (var j in obj) {
                 arr.push([j, obj[j]]);
-            };
+            }
             arr.sort(function (a,b) {
                 return a[0].localeCompare(b[0]);
             });
@@ -1282,21 +1278,30 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 {
     var uuid = cells[0].getUuid();
     var elt = null;
-    if(uuid != ''){
-    	elt = document.getElementById(uuid);
+    if(!this.searchFlag) {
+        if(uuid != ''){
+            // elt = document.getElementById(uuid);
+            elt = document.getElementsByClassName(uuid);
+        }
+        for(var k = elt.length - 1; k >= 0; k--)
+		{
+            elt[k].parentNode.removeChild(elt[k]);
+		}
 	}
-	if(elt != null) {
-    	elt.parentNode.removeChild(elt);
-    }
+
 	// else{
         elt = document.createElement('a');
         elt.setAttribute('href', 'javascript:void(0);');
-        if(uuid != '') {
-            elt.setAttribute('id', uuid);
-        }
+        // if(uuid != '') {
+        //     elt.setAttribute('id', uuid);
+        // }
 	// }
 
-	elt.className = 'geItem';
+	var className = 'geItem';
+	if(uuid != '') {
+        className += ' ' + uuid;
+	}
+	elt.className = className;
 	elt.style.overflow = 'hidden';
 	var border = (mxClient.IS_QUIRKS) ? 8 + 2 * this.thumbPadding : 2 * this.thumbBorder;
 	elt.style.width = (this.thumbWidth + border) + 'px';
@@ -2700,6 +2705,25 @@ Sidebar.prototype.createVertexTemplateEntry = function(attr, id, style, width, h
  	{
  		return this.createVertexTemplate(attr, id, style, width, height, value, title, showLabel, showTitle);
  	}));
+};
+
+/**
+ * Creates a drop handler for inserting the given cells.
+ */
+Sidebar.prototype.createVertexTemplateFromXMLEntry = function(attr, id)
+{
+    // var tags = attr.name + ' ' + attr.category + ' ' + attr.type;
+	var array = [];
+	if(attr.property.tags) {array.push(attr.property.tags);}
+    if(attr.property.title) {array.push(attr.property.title);}
+    if(attr.name) {array.push(attr.name);}
+    if(attr.category) {array.push(attr.category);}
+    if(attr.type) {array.push(attr.type);}
+    var tags = array.join(' ');
+    return this.addEntry(tags, mxUtils.bind(this, function()
+    {
+    	return this.createVertexTemplateFromXML(attr, id);
+    }));
 };
 
 /**
