@@ -970,16 +970,30 @@ EditorUi.prototype.editButtonLink = null;
  */
 EditorUi.prototype.hsplitPosition = (screen.width <= 500) ? 116 : 204;
 /**
+ * Init this hsplit's status. True: expanded, false: collapsed
+ */
+EditorUi.prototype.hsplitExpandStatus = false;
+
+/**
  * Specifies the position of the horizontal split bar. Default is 204 or 120 for
  * screen widths <= 500px.
  */
 EditorUi.prototype.fsplitPosition = (screen.width <= 500) ? 116 : 300;
+/**
+ * Init this fsplit's status. True: expanded, false: collapsed
+ */
+EditorUi.prototype.fsplitExpandStatus = true;
 
 /**
  * Specifies the position of the vertical split bar. Default is 204 or 120 for
  * screen height <= 500px.
  */
 EditorUi.prototype.foothsplitPosition = (screen.height <= 500) ? 796 : 204;
+/**
+ * Init this foothsplit's status. True: expanded, false: collapsed
+ */
+EditorUi.prototype.foothsplitExpandStatus = false;
+
 /**
  * Specifies if animations are allowed in <executeLayout>. Default is true.
  */
@@ -3079,7 +3093,7 @@ EditorUi.prototype.createUi = function()
         {
             this.fsplitPosition = value;
             // 属性面板
-            this.refresh(null,null);
+            this.refresh();
         }));
     }
 };
@@ -3162,7 +3176,7 @@ EditorUi.prototype.addSplitHandler = function(elt, horizontal, dx, onChange)
 	var start = null;
 	var initial = null;
 	var ignoreClick = true;
-	var last = null;
+	var last = this.setSplitExpandStatus(this.hsplitExpandStatus, 'this.hsplitPosition');
 
 	// Disables built-in pan and zoom in IE10 and later
 	if (mxClient.IS_POINTER)
@@ -3234,6 +3248,19 @@ EditorUi.prototype.addSplitHandler = function(elt, horizontal, dx, onChange)
 };
 
 /**
+ * Init this split's expanded status
+ * @param expand true:expanded  false:collapsed
+ */
+EditorUi.prototype.setSplitExpandStatus = function(expand, positionName)
+{
+	var ret = null;
+	if(!expand) {
+		ret = eval(positionName);
+        eval(positionName + '= 0');
+	}
+	return ret;
+}
+/**
  * Add split handler2
  */
 EditorUi.prototype.addSplitHandler2 = function(elt, horizontal, dx, onChange)
@@ -3241,7 +3268,7 @@ EditorUi.prototype.addSplitHandler2 = function(elt, horizontal, dx, onChange)
     var start = null;
     var initial = null;
     var ignoreClick = true;
-    var last = null;
+    var last = this.setSplitExpandStatus(this.foothsplitExpandStatus, 'this.foothsplitPosition');
 
     // Disables built-in pan and zoom in IE10 and later
     if (mxClient.IS_POINTER)
@@ -3324,7 +3351,7 @@ EditorUi.prototype.addfSplitHandler = function(elt, horizontal, dx, onChange)
     var start = null;
     var initial = null;
     var ignoreClick = true;
-    var last = null;
+    var last = this.setSplitExpandStatus(this.fsplitExpandStatus, 'this.fsplitPosition');
 
     // Disables built-in pan and zoom in IE10 and later
     if (mxClient.IS_POINTER)
@@ -3345,29 +3372,6 @@ EditorUi.prototype.addfSplitHandler = function(elt, horizontal, dx, onChange)
         return result;
     });
 
-	/* function moveHandler(evt)
-	 {
-	 if (start != null)
-	 {
-	 var pt = new mxPoint(mxEvent.getClientX(evt), mxEvent.getClientY(evt));
-	 onChange(Math.max(0, initial + ((horizontal) ? (pt.x - start.x) : (start.y - pt.y)) - dx));
-	 mxEvent.consume(evt);
-
-	 if (initial != getValue())
-	 {
-	 ignoreClick = true;
-	 last = null;
-	 }
-	 }
-	 };*/
-
-	/*function dropHandler(evt)
-	 {
-	 moveHandler(evt);
-	 initial = null;
-	 start = null;
-	 };*/
-
     mxEvent.addGestureListeners(elt, function(evt)
     {
         start = new mxPoint(mxEvent.getClientX(evt), mxEvent.getClientY(evt));
@@ -3386,13 +3390,6 @@ EditorUi.prototype.addfSplitHandler = function(elt, horizontal, dx, onChange)
             mxEvent.consume(evt);
         }
     });
-
-    // mxEvent.addGestureListeners(document, null, moveHandler, dropHandler);
-
-    // this.destroyFunctions.push(function()
-    // {
-    //     mxEvent.removeGestureListeners(document, null, moveHandler, dropHandler);
-    // });
 };
 
 /**
