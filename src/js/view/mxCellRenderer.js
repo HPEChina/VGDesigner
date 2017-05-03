@@ -1198,7 +1198,15 @@ mxCellRenderer.prototype.redrawControl = function(state, forced)
 	
 	if (state.control != null && image != null)
 	{
-		var bounds = this.getControlBounds(state, image.width, image.height);
+		var w = image.width;
+		var h = image.height;
+		if(state.view.graph.isCellCollapsed(state.cell)) {
+            var geo = state.cell.getGeometry();
+            w = geo.width;
+            h = geo.height;
+		}
+        var bounds = this.getControlBounds(state, w, h);
+
 		var r = (this.legacyControlPosition) ?
 				mxUtils.getValue(state.style, mxConstants.STYLE_ROTATION, 0) :
 				state.shape.getTextRotation();

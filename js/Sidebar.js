@@ -1323,7 +1323,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
     //right mouse up to edit model
 	if(data) {
         mxEvent.addListener(elt, 'mouseup', mxUtils.bind(this,function(evt)
-        {
+		{
             if(mxEvent.isRightMouseButton(evt)) {
                 this.editorUi.editor.graph.selectAll(null, true);
 				var ret;
