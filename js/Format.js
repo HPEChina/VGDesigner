@@ -5199,6 +5199,7 @@ AttributePanel.prototype.collapsedImage = function(cell, value)
                 		image.src = src;
                         value.setAttribute('image', src);
                         var model = graph.getModel();
+                        graph.isUploadImage = true;
                         model.setValue(cell, value);
                         if(graph.isCellCollapsed(cell)) {
                             graph.foldCells(false);
