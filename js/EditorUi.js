@@ -1172,27 +1172,27 @@ EditorUi.prototype.setInitAttributes = function()
 	var arr = [];
     if(type == 'model') {
         arr['intrinsic'] = [
-            { "name": "name", "description": "name", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "category", "description": "category", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] },
-            { "name": "type", "description": "type", "dataType": "string", "value": [""], "operator":['=='], 'logic':["none"] }
+            { "name": "name", "description": "", "dataType": "", "value": [""], "operator":[''], 'logic':[""] },
+            { "name": "category", "description": "", "dataType": "", "value": [""], "operator":[''], 'logic':[""] },
+            { "name": "type", "description": "", "dataType": "", "value": [""], "operator":[''], 'logic':[""] }
         ];
         arr['extended'] = [];
-        arr['userFunc'] = [];
+        // arr['userFunc'] = [];
     }
     else if(type == 'topology') {
         arr['intrinsic'] = [];
         arr['extended'] = [];
-        arr['userFunc'] = [];
+        // arr['userFunc'] = [];
     }
     else if(type == 'environment') {
         arr['intrinsic'] = [];
         arr['extended'] = [];
-        arr['userFunc'] = [];
+        // arr['userFunc'] = [];
     }
     else {
         arr['intrinsic'] = [];
         arr['extended'] = [];
-        arr['userFunc'] = [];
+        // arr['userFunc'] = [];
 	}
 
     this.initAttributes = arr;
@@ -2629,13 +2629,15 @@ EditorUi.prototype.updateActionStates = function()
 
 	var cells = graph.getSelectionCells();
 // 4/19
-    var unlock = document.getElementsByClassName('geSprite-lockunlock')[0];
-    var defaultValue = graph.isCellMovable(graph.getSelectionCell()) ? 1 : 0;
-    if(defaultValue == '1'){
-        unlock.style.backgroundPosition = '0 -6226px';
-    }else{
-        unlock.style.backgroundPosition = '0 -6179px';
-    }
+    	var unlock = document.getElementsByClassName('geSprite-lockunlock')[0];
+	if (unlock) {
+		var defaultValue = graph.isCellMovable(graph.getSelectionCell()) ? 1 : 0;
+		if (defaultValue == '1') {
+			unlock.style.backgroundPosition = '0 -6226px';
+		} else {
+			unlock.style.backgroundPosition = '0 -6179px';
+		}
+	}
 
 	if (cells != null)
 	{
@@ -3671,8 +3673,8 @@ EditorUi.prototype.save = function(name)
 
 EditorUi.prototype.getModelJsonString = function()
 {
-    var graph = this.editor.graph;
-    graph.selectAll(null, true);
+	var graph = this.editor.graph;
+	graph.selectAll(null, true);
     if (!graph.isSelectionEmpty()) {
         //获取自定义的属性
         var ret = {};
@@ -3681,7 +3683,7 @@ EditorUi.prototype.getModelJsonString = function()
         if(rObj != undefined) {
             attrs['intrinsic'] = rObj.getAttribute('intrinsic');
             attrs['extended'] = rObj.getAttribute('extended');
-            attrs['userFunc'] = rObj.getAttribute('userFunc');
+            // attrs['userFunc'] = rObj.getAttribute('userFunc');
             attrs['image'] = rObj.getAttribute('image') ? rObj.getAttribute('image') : '';
         }
         if(Object.keys(attrs).length == 0)
@@ -3744,6 +3746,7 @@ EditorUi.prototype.getModelJsonString = function()
 		else {
         	// groupFlag = true;
         	group = graph.getSelectionCell();
+			graph.foldCells(false)//展开组
 		}
 
         var doc = mxUtils.createXmlDocument();
@@ -3754,18 +3757,18 @@ EditorUi.prototype.getModelJsonString = function()
         }
         group.setValue(obj);
 
-//update by wang,jianhui--start
-		graph.foldCells(false)//展开
+		//update by wang,jianhui--start
+		if(attrs['image'] && !this.actions.get('collapse').isEnabled()) this.actions.get('collapsible').funct();
 		var xml = this.editor.getGraphXml(this);
-		var bounds=xml.getElementsByTagName("mxGeometry")[0];
-		bounds.setAttribute("x",0);
-		bounds.setAttribute("y",0);
-		bounds.width=bounds.getAttribute("width");
-		bounds.height=bounds.getAttribute("height");
+		var bounds = xml.getElementsByTagName("mxGeometry")[0];
+		bounds.setAttribute("x", 0);
+		bounds.setAttribute("y", 0);
+		bounds.width = bounds.getAttribute("width");
+		bounds.height = bounds.getAttribute("height");
 		xml = mxUtils.getXml(xml);
-		graph.foldCells(true)//折叠
-//update by wang,jianhui--end
-
+		if(attrs['image']) graph.foldCells(true)//折叠
+		//update by wang,jianhui--end
+		
         //解组
         if(num > 1) {
             graph.setSelectionCells(graph.ungroupCells());
@@ -3866,7 +3869,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
             var outValue = mxUtils.getXml(graphXml);
             var xmlDoc = mxUtils.parseXml(outValue);
             outValue = CodeTranslator.xml2json(xmlDoc);
-            params = 'filename=' + name+'&type=json&data=' + encodeURIComponent(outValue);
+            params = 'filename=' + name+'&codetype=json&data=' + encodeURIComponent(outValue);
             params += '&id=' + this.interfaceParams.id;
             params += '&designLibraryId=' + this.interfaceParams.designLibraryId;
             params += '&author=' + this.interfaceParams.author;

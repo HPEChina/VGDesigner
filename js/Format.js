@@ -346,23 +346,16 @@ Format.prototype.refresh = function()
 	var graph = ui.editor.graph;
 
 	var div = document.createElement('div');
-	div.style.whiteSpace = 'nowrap';
-	div.style.color = 'rgb(112, 112, 112)';
-	div.style.textAlign = 'left';
-	div.style.cursor = 'default';
-	div.style.marginLeft = '5px';
-
-	var label = document.createElement('div');
-	label.style.border = '1px solid #c0c0c0';
-	label.style.borderWidth = '0px 0px 1px 0px';
-	label.style.textAlign = 'center';
-	label.style.fontWeight = 'bold';
-	label.style.overflow = 'hidden';
-	label.style.display = (mxClient.IS_QUIRKS) ? 'inline' : 'inline-block';
-	label.style.paddingTop = '8px';
-	label.style.height = (mxClient.IS_QUIRKS) ? '34px' : '25px';
-	label.style.width = '100%';
+	div.className = 'formatTabDiv';
 	this.container.appendChild(div);
+	
+	var panel = document.createElement('div');
+	panel.className = 'formatPanel';
+  
+	var label = document.createElement('div');
+	label.className = 'formatTab';
+	label.style.display = (mxClient.IS_QUIRKS) ? 'inline' : 'inline-block';
+	label.style.height = (mxClient.IS_QUIRKS) ? '34px' : '20px';
 
     var containsLabel = null;
     var currentLabel = null;
@@ -385,13 +378,11 @@ Format.prototype.refresh = function()
 
                 if (currentLabel != null)
                 {
-                    currentLabel.style.backgroundColor = '#d7d7d7';
-                    currentLabel.style.borderBottomWidth = '1px';
+                    currentLabel.className = 'formatTab';
                 }
 
                 currentLabel = elt;
-                currentLabel.style.backgroundColor = '';
-                currentLabel.style.borderBottomWidth = '0px';
+                currentLabel.className = 'formatTab codeSelected';
 
                 if (currentPanel != panel)
                 {
@@ -423,20 +414,13 @@ Format.prototype.refresh = function()
 
         var idx = 0;
 
-        label.style.backgroundColor = '#d7d7d7';
-        label.style.borderLeftWidth = '1px';
-        label.style.borderRightWidth = '1px';
-        label.style.width = (containsLabel) ? '50%' : '33%';
         var label1 = label.cloneNode(false);
-
-        // Workaround for ignored background in IE
-        label1.style.backgroundColor = '#d7d7d7';
 
         // Attribute
         mxUtils.write(label, mxResources.get('attribute'));
         div.appendChild(label);
 
-        var attributePanel = div.cloneNode(false);
+        var attributePanel = panel.cloneNode(false);
         attributePanel.style.display = 'none';
         this.panels.push(new AttributePanel(this, ui, attributePanel));
         this.container.appendChild(attributePanel);
@@ -470,7 +454,7 @@ Format.prototype.refresh = function()
         mxUtils.write(label1, mxResources.get('diagram'));
         div.appendChild(label1);
 
-        var diagramPanel = div.cloneNode(false);
+        var diagramPanel = panel.cloneNode(false);
         diagramPanel.style.display = 'none';
         this.panels.push(new DiagramFormatPanel(this, ui, diagramPanel));
         this.container.appendChild(diagramPanel);
@@ -481,7 +465,8 @@ Format.prototype.refresh = function()
 	{
 		mxUtils.write(label, mxResources.get('text'));
 		div.appendChild(label);
-		this.panels.push(new TextFormatPanel(this, ui, div));
+		this.panels.push(new TextFormatPanel(this, ui, panel));
+		this.container.appendChild(panel);
 	}
 	else
 	{
@@ -491,24 +476,15 @@ Format.prototype.refresh = function()
 
 		var idx = 0;
 
-		label.style.backgroundColor = '#d7d7d7';
-		label.style.borderLeftWidth = '1px';
-		label.style.borderRightWidth = '1px';
-        label.style.width = (containsLabel) ? '50%' : '24%';
         var label1 = label.cloneNode(false);
 		var label2 = label1.cloneNode(false);
 		var label3 = label2.cloneNode(false);
-
-		// Workaround for ignored background in IE
-        label1.style.backgroundColor = '#d7d7d7';
-		label2.style.backgroundColor = '#d7d7d7';
-		label3.style.backgroundColor = '#d7d7d7';
 
         // Attribute
         mxUtils.write(label, mxResources.get('attribute'));
         div.appendChild(label);
 
-        var attributePanel = div.cloneNode(false);
+        var attributePanel = panel.cloneNode(false);
         attributePanel.style.display = 'none';
         this.panels.push(new AttributePanel(this, ui, attributePanel));
         this.container.appendChild(attributePanel);
@@ -524,8 +500,7 @@ Format.prototype.refresh = function()
 			label1.style.borderLeftWidth = '0px';
 			mxUtils.write(label1, mxResources.get('style'));
 			div.appendChild(label1);
-
-			var stylePanel = div.cloneNode(false);
+			var stylePanel = panel.cloneNode(false);
 			stylePanel.style.display = 'none';
 			this.panels.push(new StyleFormatPanel(this, ui, stylePanel));
 			this.container.appendChild(stylePanel);
@@ -537,7 +512,7 @@ Format.prototype.refresh = function()
 		mxUtils.write(label2, mxResources.get('text'));
 		div.appendChild(label2);
 
-		var textPanel = div.cloneNode(false);
+		var textPanel = panel.cloneNode(false);
 		textPanel.style.display = 'none';
 		this.panels.push(new TextFormatPanel(this, ui, textPanel));
 		this.container.appendChild(textPanel);
@@ -546,7 +521,7 @@ Format.prototype.refresh = function()
 		mxUtils.write(label3, mxResources.get('arrange'));
 		div.appendChild(label3);
 
-		var arrangePanel = div.cloneNode(false);
+		var arrangePanel = panel.cloneNode(false);
 		arrangePanel.style.display = 'none';
 		this.panels.push(new ArrangePanel(this, ui, arrangePanel));
 		this.container.appendChild(arrangePanel);
@@ -963,6 +938,8 @@ BaseFormatPanel.prototype.createOption = function(label, isCheckedFn, setChecked
 	div.appendChild(cb);
 
 	var span = document.createElement('span');
+	span.style.position = 'relative';
+	span.style.top = '-2px';
 	mxUtils.write(span, label);
 	div.appendChild(span);
 
@@ -1128,6 +1105,8 @@ BaseFormatPanel.prototype.createColorOption = function(label, getColorFn, setCol
 	}
 
 	var span = document.createElement('span');
+	span.style.position = 'relative';
+	span.style.top = '-2px';
 	mxUtils.write(span, label);
 	div.appendChild(span);
 
@@ -1365,7 +1344,7 @@ BaseFormatPanel.prototype.addUnitInput = function(container, unit, right, width,
 	container.appendChild(input);
 
 	var stepper = this.createStepper(input, update, step, null, disableFocus);
-	stepper.style.marginTop = (marginTop - 2) + 'px';
+	stepper.style.marginTop = (marginTop - 3) + 'px';
 	stepper.style.right = right + 'px';
 	container.appendChild(stepper);
 
@@ -1415,7 +1394,7 @@ BaseFormatPanel.prototype.createRelativeOption = function(label, key, width, han
 		mxEvent.consume(evt);
 	};
 
-	var input = this.addUnitInput(div, '%', 20, width, update, 10, -15, handler != null);
+	var input = this.addUnitInput(div, '%', 20, width, update, 10, -16, handler != null);
 
 	if (key != null)
 	{
@@ -1593,6 +1572,8 @@ ArrangePanel.prototype.init = function()
  */
 ArrangePanel.prototype.addLayerOps = function(div)
 {
+	div.style.padding = '10px 0';
+	div.style.textAlign = 'center';
 	var ui = this.editorUi;
 
 	var btn = mxUtils.button(mxResources.get('toFront'), function(evt)
@@ -1601,8 +1582,8 @@ ArrangePanel.prototype.addLayerOps = function(div)
 	})
 
 	btn.setAttribute('title', mxResources.get('toFront') + ' (' + this.editorUi.actions.get('toFront').shortcut + ')');
-	btn.style.width = '40%';
-	btn.style.marginLeft = '9%';
+	btn.style.width = '36%';
+	btn.className = 'btn-purple';
 	div.appendChild(btn);
 
 	var btn = mxUtils.button(mxResources.get('toBack'), function(evt)
@@ -1611,8 +1592,9 @@ ArrangePanel.prototype.addLayerOps = function(div)
 	})
 
 	btn.setAttribute('title', mxResources.get('toBack') + ' (' + this.editorUi.actions.get('toBack').shortcut + ')');
-	btn.style.width = '40%';
-	btn.style.marginLeft = '2%';
+	btn.style.width = '36%';
+	btn.style.marginLeft = '3%';
+	btn.className = 'btn-purple';
 	div.appendChild(btn);
 
 	return div;
@@ -1628,9 +1610,9 @@ ArrangePanel.prototype.addGroupOps = function(div)
 	var cell = graph.getSelectionCell();
 	var ss = this.format.getSelectionState();
 	var count = 0;
-
-	div.style.paddingTop = '8px';
-	div.style.paddingBottom = '6px';
+	
+	div.style.padding = '10px 0';
+	div.style.textAlign = 'center';
 
 	if (graph.getSelectionCount() > 1)
 	{
@@ -1640,9 +1622,9 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		})
 
 		btn.setAttribute('title', mxResources.get('group') + ' (' + this.editorUi.actions.get('group').shortcut + ')');
-		btn.style.width = '82%';
-		btn.style.marginLeft = '9%';
-		btn.style.marginBottom = '2px';
+		btn.style.width = '75%';
+		btn.style.marginBottom = '5px';
+		btn.className = 'btn-purple';
 		div.appendChild(btn);
 		count++;
 	}
@@ -1655,9 +1637,9 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		})
 
 		btn.setAttribute('title', mxResources.get('ungroup') + ' (' + this.editorUi.actions.get('ungroup').shortcut + ')');
-		btn.style.width = '82%';
-		btn.style.marginLeft = '9%'
-		btn.style.marginBottom = '2px';
+		btn.style.width = '75%';
+		btn.style.marginBottom = '5px';
+		btn.className = 'btn-purple';
 		div.appendChild(btn);
 		count++;
 	}
@@ -1676,9 +1658,9 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		})
 
 		btn.setAttribute('title', mxResources.get('removeFromGroup'));
-		btn.style.width = '82%';
-		btn.style.marginLeft = '9%';
-		btn.style.marginBottom = '2px';
+		btn.style.width = '75%';
+		btn.style.marginBottom = '5px';
+		btn.className = 'btn-purple';
 		div.appendChild(btn);
 		count++;
 	}
@@ -1695,9 +1677,9 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		}));
 
 		btn.setAttribute('title', mxResources.get('clearWaypoints'));
-		btn.style.width = '82%';
-		btn.style.marginLeft = '9%'
-		btn.style.marginBottom = '2px';
+		btn.style.width = '75%';
+		btn.style.marginBottom = '5px';
+		btn.className = 'btn-purple';
 		div.appendChild(btn);
 
 		count++;
@@ -1728,9 +1710,9 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		}));
 
 		btn.setAttribute('title', mxResources.get('editLink'));
-		btn.style.width = '82%';
-		btn.style.marginLeft = '9%';
+		btn.style.width = '75%';
 		btn.style.marginBottom = '2px';
+		btn.className = 'btn-purple';
 		div.appendChild(btn);
 		count++;
 	}
@@ -1755,8 +1737,8 @@ ArrangePanel.prototype.addAlign = function(div)
 
 	var stylePanel = document.createElement('div');
 	stylePanel.style.position = 'relative';
-	stylePanel.style.paddingLeft = '0px';
-	stylePanel.style.borderWidth = '0px';
+	stylePanel.style.paddingLeft = '9%';
+	stylePanel.style.borderWidth = '0';
 	stylePanel.className = 'geToolbarContainer';
 
 	if (mxClient.IS_QUIRKS)
@@ -1793,13 +1775,14 @@ ArrangePanel.prototype.addFlip = function(div)
 	var ui = this.editorUi;
 	var editor = ui.editor;
 	var graph = editor.graph;
-	div.style.paddingTop = '6px';
-	div.style.paddingBottom = '10px';
+	div.style.padding = '10px 0';
+	div.style.textAlign = 'center';
 
 	var span = document.createElement('div');
-	span.style.marginTop = '2px';
-	span.style.marginBottom = '8px';
+	span.style.marginBottom = '6px';
+	span.style.marginLeft = '18px';
 	span.style.fontWeight = 'bold';
+	span.style.textAlign = 'left';
 	mxUtils.write(span, mxResources.get('flip'));
 	div.appendChild(span);
 
@@ -1809,8 +1792,8 @@ ArrangePanel.prototype.addFlip = function(div)
 	})
 
 	btn.setAttribute('title', mxResources.get('horizontal'));
-	btn.style.width = '40%';
-	btn.style.marginLeft = '9%';
+	btn.style.width = '36%';
+	btn.className = 'btn-purple';
 	div.appendChild(btn);
 
 	var btn = mxUtils.button(mxResources.get('vertical'), function(evt)
@@ -1819,8 +1802,9 @@ ArrangePanel.prototype.addFlip = function(div)
 	})
 
 	btn.setAttribute('title', mxResources.get('vertical'));
-	btn.style.width = '40%';
-	btn.style.marginLeft = '2%';
+	btn.style.width = '36%';
+	btn.style.marginLeft = '3%';
+	btn.className = 'btn-purple';
 	div.appendChild(btn);
 
 	return div;
@@ -1834,10 +1818,16 @@ ArrangePanel.prototype.addDistribute = function(div)
 	var ui = this.editorUi;
 	var editor = ui.editor;
 	var graph = editor.graph;
-	div.style.paddingTop = '6px';
-	div.style.paddingBottom = '12px';
-
-	div.appendChild(this.createTitle(mxResources.get('distribute')));
+	div.style.padding = '10px 0';
+	div.style.textAlign = 'center';
+	
+	var span = document.createElement('div');
+	span.style.marginBottom = '6px';
+	span.style.marginLeft = '18px';
+	span.style.fontWeight = 'bold';
+	span.style.textAlign = 'left';
+	mxUtils.write(span, mxResources.get('distribute'));
+	div.appendChild(span);
 
 	var btn = mxUtils.button(mxResources.get('horizontal'), function(evt)
 	{
@@ -1845,8 +1835,8 @@ ArrangePanel.prototype.addDistribute = function(div)
 	})
 
 	btn.setAttribute('title', mxResources.get('horizontal'));
-	btn.style.width = '40%';
-	btn.style.marginLeft = '9%';
+	btn.style.width = '36%';
+	btn.className = 'btn-purple';
 	div.appendChild(btn);
 
 	var btn = mxUtils.button(mxResources.get('vertical'), function(evt)
@@ -1855,8 +1845,9 @@ ArrangePanel.prototype.addDistribute = function(div)
 	})
 
 	btn.setAttribute('title', mxResources.get('vertical'));
-	btn.style.width = '40%';
-	btn.style.marginLeft = '2%';
+	btn.style.width = '36%';
+	btn.style.marginLeft = '3%';
+	btn.className = 'btn-purple';
 	div.appendChild(btn);
 
 	return div;
@@ -1897,9 +1888,13 @@ ArrangePanel.prototype.addAngle = function(div)
 
 		btn.setAttribute('title', mxResources.get('turn') + ' (' + this.editorUi.actions.get('turn').shortcut + ')');
 		btn.style.position = 'absolute';
-		btn.style.marginTop = '-2px';
+		btn.style.marginTop = '-4px';
 		btn.style.right = '20px';
-		btn.style.width = '61px';
+		btn.style.width = '56px';
+		btn.style.height = '22px';
+		btn.style.fontSize = '12px';
+		// btn.className = 'btn-gray';
+		btn.className = 'geColorBtn';
 		div.appendChild(btn);
 	}
 
@@ -1948,7 +1943,7 @@ ArrangePanel.prototype.addGeometry = function(container)
 	{
 		widthUpdate.apply(this, arguments);
 	});
-	var height = this.addUnitInput(div, 'pt', 20, 44, function()
+	var height = this.addUnitInput(div, 'pt', 16, 44, function()
 	{
 		heightUpdate.apply(this, arguments);
 	});
@@ -1983,7 +1978,7 @@ ArrangePanel.prototype.addGeometry = function(container)
 
 	div.appendChild(autosizeBtn);
 	this.addLabel(div, mxResources.get('width'), 84);
-	this.addLabel(div, mxResources.get('height'), 20);
+	this.addLabel(div, mxResources.get('height'), 16);
 	mxUtils.br(div);
 
 	var wrapper = document.createElement('div');
@@ -2032,15 +2027,15 @@ ArrangePanel.prototype.addGeometry = function(container)
 	{
 		leftUpdate.apply(this, arguments);
 	});
-	var top = this.addUnitInput(div2, 'pt', 20, 44, function()
+	var top = this.addUnitInput(div2, 'pt', 16, 44, function()
 	{
 		topUpdate.apply(this, arguments);
 	});
 
 	mxUtils.br(div2);
 	this.addLabel(div2, mxResources.get('left'), 84);
-	this.addLabel(div2, mxResources.get('top'), 20);
-
+	this.addLabel(div2, mxResources.get('top'), 16);
+	
 	var listener = mxUtils.bind(this, function(sender, evt, force)
 	{
 		rect = this.format.getSelectionState();
@@ -2650,8 +2645,8 @@ TextFormatPanel.prototype.addFont = function(container)
 
 	var stepper = this.createStepper(input, inputUpdate, 1, 10, true, Menus.prototype.defaultFontSize);
 	stepper.style.display = input.style.display;
-	stepper.style.marginTop = '4px';
-
+	stepper.style.marginTop = '2px';
+	
 	if (!mxClient.IS_QUIRKS)
 	{
 		// PPPPP上下字体大小
@@ -3447,6 +3442,7 @@ StyleFormatPanel.prototype.init = function()
 	this.container.appendChild(opacityPanel);
 	this.container.appendChild(this.addEffects(this.createPanel()));
 	var opsPanel = this.addEditOps(this.createPanel());
+	opsPanel.style.textAlign = 'center';
 
 	if (opsPanel.firstChild != null)
 	{
@@ -3472,10 +3468,11 @@ StyleFormatPanel.prototype.addEditOps = function(div)
 		}));
 
 		btn.setAttribute('title', mxResources.get('editStyle') + ' (' + this.editorUi.actions.get('editStyle').shortcut + ')');
-		btn.style.width = '82%';
-		btn.style.marginLeft = '9%';
-		btn.style.marginBottom = '2px';
 
+		btn.style.width = '75%';
+		btn.style.marginBottom = '5px';
+		btn.className = 'btn-purple';
+		
 		div.appendChild(btn);
 	}
 
@@ -3491,15 +3488,16 @@ StyleFormatPanel.prototype.addEditOps = function(div)
 
 		if (btn == null)
 		{
-			btn2.style.width = '82%';
-			btn2.style.marginLeft = '9%';
+			btn2.style.width = '75%';
+			btn2.className = 'btn-purple';
 		}
 		else
 		{
-			btn.style.marginLeft = '9%';
-			btn.style.width = '40%';
-			btn2.style.width = '40%';
-			btn2.style.marginLeft = '2%';
+			btn.style.width = '36%';
+			btn.className = 'btn-purple';
+			btn2.style.width = '36%';
+			btn2.style.marginLeft = '3%';
+			btn2.className = 'btn-purple';
 		}
 
 		div.appendChild(btn2);
@@ -3801,12 +3799,12 @@ StyleFormatPanel.prototype.addStroke = function(container)
 
 	var stepper = this.createStepper(input, update, 1, 9);
 	stepper.style.display = input.style.display;
-	stepper.style.marginTop = '2px';
+	stepper.style.marginTop = '1px';
 	stylePanel.appendChild(stepper);
 
 	var altStepper = this.createStepper(altInput, altUpdate, 1, 9);
 	altStepper.style.display = altInput.style.display;
-	altStepper.style.marginTop = '2px';
+	altStepper.style.marginTop = '1px';
 	altStylePanel.appendChild(altStepper);
 
 	if (!mxClient.IS_QUIRKS)
@@ -4396,8 +4394,7 @@ StyleFormatPanel.prototype.addEffects = function(div)
  */
 StyleFormatPanel.prototype.addStyleOps = function(div)
 {
-	div.style.paddingTop = '10px';
-	div.style.paddingBottom = '10px';
+	div.style.padding = '10px 0';
 
 	var btn = mxUtils.button(mxResources.get('setAsDefaultStyle'), mxUtils.bind(this, function(evt)
 	{
@@ -4405,8 +4402,8 @@ StyleFormatPanel.prototype.addStyleOps = function(div)
 	}));
 
 	btn.setAttribute('title', mxResources.get('setAsDefaultStyle') + ' (' + this.editorUi.actions.get('setAsDefaultStyle').shortcut + ')');
-	btn.style.width = '82%';
-	btn.style.marginLeft = '9%';
+	btn.style.width = '75%';
+	btn.className = 'btn-purple';
 	div.appendChild(btn);
 
 	return div;
@@ -4679,7 +4676,7 @@ DiagramFormatPanel.prototype.addGridOption = function(container)
 	{
 		input.style.marginTop = '-2px';
 		input.style.right = '84px';
-		stepper.style.marginTop = '-16px';
+		stepper.style.marginTop = '-20px';
 		stepper.style.right = '72px';
 
 		var panel = this.createColorOption(mxResources.get('grid'), function()
@@ -4795,6 +4792,10 @@ DiagramFormatPanel.prototype.addPaperSize = function(div)
 
 	div.appendChild(this.createTitle(mxResources.get('paperSize')));
 
+	var label1 = document.createElement('label');
+	label1.className = 'radio';
+	var label2 = label1.cloneNode(false);
+	
 	var portraitCheckBox = document.createElement('input');
 	portraitCheckBox.setAttribute('name', 'format');
 	portraitCheckBox.setAttribute('type', 'radio');
@@ -4815,21 +4816,23 @@ DiagramFormatPanel.prototype.addPaperSize = function(div)
 	formatDiv.style.height = '24px';
 
 	portraitCheckBox.style.marginRight = '6px';
-	formatDiv.appendChild(portraitCheckBox);
-
+	label1.appendChild(portraitCheckBox);
+	
 	var portraitSpan = document.createElement('span');
 	portraitSpan.style.maxWidth = '100px';
 	mxUtils.write(portraitSpan, mxResources.get('portrait'));
-	formatDiv.appendChild(portraitSpan);
+	label1.appendChild(portraitSpan);
+	formatDiv.appendChild(label1);
 
 	landscapeCheckBox.style.marginLeft = '10px';
 	landscapeCheckBox.style.marginRight = '6px';
-	formatDiv.appendChild(landscapeCheckBox);
+	label2.appendChild(landscapeCheckBox);
 
 	var landscapeSpan = document.createElement('span');
 	landscapeSpan.style.width = '100px';
 	mxUtils.write(landscapeSpan, mxResources.get('landscape'));
-	formatDiv.appendChild(landscapeSpan)
+	label2.appendChild(landscapeSpan);
+	formatDiv.appendChild(label2);
 
 	var customDiv = document.createElement('div');
 	customDiv.style.marginLeft = '4px';
@@ -5015,11 +5018,12 @@ DiagramFormatPanel.prototype.addPaperSize = function(div)
  */
 DiagramFormatPanel.prototype.addStyleOps = function(div)
 {
-	var btn = mxUtils.button(mxResources.get('editData'), mxUtils.bind(this, function(evt)
-	{
-		this.editorUi.actions.get('editData').funct();
-	}));
 
+// 	var btn = mxUtils.button(mxResources.get('editData'), mxUtils.bind(this, function(evt)
+// 	{
+// 		this.editorUi.actions.get('editData').funct();
+// 	}));
+	
 	// btn.setAttribute('title', mxResources.get('editData') + ' (' + this.editorUi.actions.get('editData').shortcut + ')');
 	// btn.style.width = '82%';
 	// btn.style.marginLeft = '9%';
@@ -5034,8 +5038,11 @@ DiagramFormatPanel.prototype.addStyleOps = function(div)
 	}));
 
 	btn.setAttribute('title', mxResources.get('clearDefaultStyle') + ' (' + this.editorUi.actions.get('clearDefaultStyle').shortcut + ')');
-    btn.style.width = '82%';
-    btn.style.marginLeft = '9%';
+    	btn.style.width = '75%';
+	btn.className = 'btn-purple';
+
+	div.style.padding = '10px 0';
+	div.style.textAlign = 'center';
 	div.appendChild(btn);
 
 	return div;
@@ -5096,18 +5103,18 @@ AttributePanel.prototype.init = function()
             }
         }
     }
-    if(Object.keys(tObj).length < 3)
+    if(Object.keys(tObj).length < 2)
     {
         tObj['intrinsic'] = (tObj['intrinsic'] != null) ? tObj['intrinsic'] : [];
         tObj['extended'] = (tObj['extended'] != null) ? tObj['extended'] : [];
-        tObj['userFunc'] = (tObj['userFunc'] != null) ? tObj['userFunc'] : [];
+        // tObj['userFunc'] = (tObj['userFunc'] != null) ? tObj['userFunc'] : [];
     }
-
-    var geformat = document.getElementsByClassName('geSidebarContainer')[1];
-        this.createEnhanced(geformat);
-
+    //拓扑图最外层不需要动态属性
+    if(tObj['extended'] && editorUi.interfaceParams.type != 'model' && cell.getId() == '0') {
+    	delete tObj['extended'];
+	}
     for( var o in tObj){
-        this.createAttrsPanel(cell, value, tObj[o], o, allNames);
+		this.createAttrsPanel(cell, value, tObj[o], o, allNames);
     }
 
     if((cell.getStyle() && cell.getStyle().indexOf('group')) >= 0 || (cell.getId() == '0' && editorUi.interfaceParams.type == 'model')) {
@@ -5136,7 +5143,7 @@ AttributePanel.prototype.collapsedImage = function(cell, value)
 
     var form = new mxForm('properties');
     form.table.style.width = '95%';
-    form.table.className = 'properties table-def'
+    form.table.className = 'properties table-def';
 
     var tr = document.createElement('tr');
     var td1 = document.createElement('td');
@@ -5151,11 +5158,15 @@ AttributePanel.prototype.collapsedImage = function(cell, value)
     td0.style.minWidth = '5px';
 
     var td2 = document.createElement('td');
+	var imgA = document.createElement('a');
+	imgA.className = 'fileA btn-purple';
+	mxUtils.write(imgA, mxResources.get('selectThumbnail'));
     var imgInput = document.createElement('input');
+	imgInput.className = 'fileInput';
     imgInput.setAttribute('type', 'file');
     imgInput.setAttribute('accept', 'image/png,image/jpeg');
-
-    td2.appendChild(imgInput);
+	imgA.appendChild(imgInput);
+    td2.appendChild(imgA);
 
     tr.appendChild(td1);
     tr.appendChild(td0);
@@ -5184,7 +5195,12 @@ AttributePanel.prototype.collapsedImage = function(cell, value)
                         var src = UPLOADIMAGE_PATH + '/' + result.data.url;
                 		image.src = src;
                         value.setAttribute('image', src);
-                        graph.getModel().setValue(cell, value);
+                        var model = graph.getModel();
+                        model.setValue(cell, value);
+                        if(graph.isCellCollapsed(cell)) {
+                            graph.foldCells(false);
+                            graph.foldCells(true);
+						}
                     }
                     else {
                         mxUtils.alert(result.data.msg);
@@ -5434,12 +5450,17 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
         data['description'] = attr.description;
         var value = [];
         for(var i in attr.value){
-        	value.push(attr.operator[i] + attr.value[i] + ((attr.logic[i] != null　&& attr.logic[i] != 'none') ? (' ' + attr.logic[i]) : ''));
+        	if(type == 'intrinsic') {
+        		value.push(attr.value[i]);
+			}
+			else {
+                value.push(attr.operator[i] + attr.value[i] + ((attr.logic[i] != null　&& attr.logic[i] != 'none') ? (' ' + attr.logic[i]) : ''));
+			}
 		}
 		data['value'] = value.join(' ');
 
         names[index] = name;
-        var ele = form.addListAttributeElements(data);
+        var ele = form.addListAttributeElements(data, type);
         arrAttr[index] = attr;
         addEditButton(ele, attr);
         var rootFlag = (cell.getId() == '0') ? true : false;
@@ -5463,40 +5484,44 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
     //添加查询条件
     function addAttributeCondition(dType, operator, value, logic)
 	{
-		dType = dType || 'string';
-		var ele = [];
+        var ele = [];
+		if(type != 'intrinsic') {
+            dType = dType || 'string';
 
-		ele['operator'] = document.createElement('select');
-        ele['operator'].style.width = '26%';
-        ele['operator'].style.float = 'left';
-        for(var i in ui.attributeOperator[dType]) {
-            var opt = document.createElement('option');
-            opt.setAttribute('value', ui.attributeOperator[dType][i]);
-            mxUtils.write(opt, ui.attributeOperator[dType][i]);
-            ele['operator'].appendChild(opt);
-			if (operator == ui.attributeOperator[dType][i]) {
-				opt.setAttribute('selected', 'true');
-			}
-        }
+            ele['operator'] = document.createElement('select');
+            ele['operator'].style.width = '26%';
+            ele['operator'].style.float = 'left';
+            for(var i in ui.attributeOperator[dType]) {
+                var opt = document.createElement('option');
+                opt.setAttribute('value', ui.attributeOperator[dType][i]);
+                mxUtils.write(opt, ui.attributeOperator[dType][i]);
+                ele['operator'].appendChild(opt);
+                if (operator == ui.attributeOperator[dType][i]) {
+                    opt.setAttribute('selected', 'true');
+                }
+            }
+		}
 
         ele['value'] = document.createElement('input');
-        ele['value'].style.width = '29%';
+        ele['value'].style.width = (type == 'intrinsic') ? '90%' : '29%';
         ele['value'].style.height = '15px';
         ele['value'].style.float = 'left';
         ele['value'].value = (value != null) ? value : '';
 
-        ele['logic'] = document.createElement('select');
-        ele['logic'].style.width = '35%';
-        ele['logic'].style.float = 'left';
-        for(var j in ui.attributeLogic) {
-            var opt = document.createElement('option');
-            opt.setAttribute('value', ui.attributeLogic[j]);
-            mxUtils.write(opt, ui.attributeLogic[j]);
-            ele['logic'].appendChild(opt);
-            if(logic == ui.attributeLogic[j]){
-                opt.setAttribute('selected', 'true');
+        if(type != 'intrinsic') {
+            ele['logic'] = document.createElement('select');
+            ele['logic'].style.width = '35%';
+            ele['logic'].style.float = 'left';
+            for(var j in ui.attributeLogic) {
+                var opt = document.createElement('option');
+                opt.setAttribute('value', ui.attributeLogic[j]);
+                mxUtils.write(opt, ui.attributeLogic[j]);
+                ele['logic'].appendChild(opt);
+                if(logic == ui.attributeLogic[j]){
+                    opt.setAttribute('selected', 'true');
+                }
             }
-        }
+		}
 
         return ele;
 	}
@@ -5509,10 +5534,10 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
 
         var td1 = document.createElement('td');
         td1.style.paddingTop = '3px';
-        td1.style.height = '100px';
-	td1.style.color = '#788da3';
-	td1.style.fontSize = '12px';
-	td1.style.borderTop = '0';
+        // td1.style.height = '100px';
+		td1.style.color = '#788da3';
+		td1.style.fontSize = '12px';
+		td1.style.borderTop = '0';
 
         var td2 = document.createElement('td');
         td2.style.borderTop = '0';
@@ -5526,8 +5551,8 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
             removeEditTr();
         });
         cancelBtn.style.display = 'block';
-	cancelBtn.style.opacity = '.5';
-	cancelBtn.title = mxResources.get('cancel');
+		cancelBtn.style.opacity = '.5';
+		cancelBtn.title = mxResources.get('cancel');
         cancelBtn.className = 'icon-24 icon-delete';
 
         var applyBtn = mxUtils.button('', function()
@@ -5542,16 +5567,25 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
                 var editTr = form.body.getElementsByClassName(type + 'EditAttributes');
 				//将修改的属性内容更新到表格
 				names[index] = arrAttr[index].name;
-                editTr[0].previousSibling.childNodes[0].innerText = arrAttr[index].name;
-                editTr[0].previousSibling.childNodes[0].setAttribute('title', mxResources.get('name') + ":" + arrAttr[index].name);
-                editTr[0].previousSibling.childNodes[1].innerText = arrAttr[index].description;
-                editTr[0].previousSibling.childNodes[1].setAttribute('title', mxResources.get('description') + ":" + arrAttr[index].description);
-                var arr = [];
-                for(var i in arrAttr[index].value){
-                    arr.push(arrAttr[index].operator[i] + arrAttr[index].value[i] + ((arrAttr[index].logic[i] != null　&& arrAttr[index].logic[i] != 'none') ? (' ' + arrAttr[index].logic[i]) : ''));
-                }
-                editTr[0].previousSibling.childNodes[2].innerText = arr.join(' ');
-                editTr[0].previousSibling.childNodes[2].setAttribute('title', mxResources.get('value') + ":" + arr.join(' '));
+				if(type == 'intrinsic') {
+                    editTr[0].previousSibling.childNodes[0].innerText = arrAttr[index].name;
+                    editTr[0].previousSibling.childNodes[0].setAttribute('title',  "Key:" + arrAttr[index].name);
+                    editTr[0].previousSibling.childNodes[1].innerText = arrAttr[index].value[0];
+                    editTr[0].previousSibling.childNodes[1].setAttribute('title', mxResources.get('value') + ":" + arrAttr[index].value[0]);
+				}
+				else {
+                    editTr[0].previousSibling.childNodes[0].innerText = arrAttr[index].name;
+                    editTr[0].previousSibling.childNodes[0].setAttribute('title', mxResources.get('name') + ":" + arrAttr[index].name);
+                    editTr[0].previousSibling.childNodes[1].innerText = arrAttr[index].description;
+                    editTr[0].previousSibling.childNodes[1].setAttribute('title', mxResources.get('description') + ":" + arrAttr[index].description);
+                    var arr = [];
+                    for(var i in arrAttr[index].value){
+                        arr.push(arrAttr[index].operator[i] + arrAttr[index].value[i] + ((arrAttr[index].logic[i] != null　&& arrAttr[index].logic[i] != 'none') ? (' ' + arrAttr[index].logic[i]) : ''));
+                    }
+                    editTr[0].previousSibling.childNodes[2].innerText = arr.join(' ');
+                    editTr[0].previousSibling.childNodes[2].setAttribute('title', mxResources.get('value') + ":" + arr.join(' '));
+				}
+
 				// 关闭属性编辑的tr
                 removeEditTr();
             }
@@ -5561,15 +5595,15 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
             }
         });
         applyBtn.style.display = 'block';
-	applyBtn.style.marginBottom = '10px';
-	applyBtn.style.cursor = 'pointer';
-	applyBtn.style.opacity = '.5';
-	applyBtn.title = mxResources.get('save', ['']);
+		applyBtn.style.marginBottom = '10px';
+		applyBtn.style.cursor = 'pointer';
+		applyBtn.style.opacity = '.5';
+		applyBtn.title = mxResources.get('save', ['']);
         applyBtn.className = 'icon-24 icon-tick';
 
         for(var o in attr)
         {
-            if( o == 'operator' || o == 'logic') {
+            if( o == 'operator' || o == 'logic' || (type == 'intrinsic' && (o == 'description' || o =='dataType' ))) {
                 continue;
             }
             var div = document.createElement('div');
@@ -5628,7 +5662,7 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
 
         var td3 = document.createElement('td');
         td3.style.paddingLeft = '5px'
-	td3.style.borderTop = '0';
+		td3.style.borderTop = '0';
         td3.setAttribute('colspan', 2);
         td3.appendChild(applyBtn);
         td3.appendChild(cancelBtn);
@@ -5651,7 +5685,9 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
 
         };
         //监听属性编辑中的数据类型的change事件
-        mxEvent.addListener(editElement['dataType'], 'change', updateDTypeSelect);
+		if(editElement['dataType'] != null) {
+            mxEvent.addListener(editElement['dataType'], 'change', updateDTypeSelect);
+		}
 
         function updateLogicSelect() {
         	var len = parseInt(editElement['logic'].length);
@@ -5704,7 +5740,7 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
     {
 		var newProp = document.createElement('div');
 		newProp.style.whiteSpace = 'nowrap';
-		newProp.style.marginTop = '6px';
+		newProp.style.marginTop = '16px';
 	    	newProp.style.textAlign = 'center';
 
 		div.appendChild(newProp);
@@ -5727,7 +5763,7 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
         });
 
         addBtn.style.width = '62%';
-	addBtn.className = 'btn-purple';
+		addBtn.className = 'btn-purple';
         newProp.appendChild(addBtn);
 
     }

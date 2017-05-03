@@ -222,6 +222,13 @@ mxCompactTreeLayout.prototype.root = null;
 mxCompactTreeLayout.prototype.node = null;
 
 /**
+ * Variable: filterChildFlag
+ *
+ * 是否过滤子节点的标志
+ */
+mxCompactTreeLayout.prototype.filterChildFlag = false;
+
+/**
  * Function: isVertexIgnored
  * 
  * Returns a boolean indicating if the given <mxCell> should be ignored as a
@@ -234,7 +241,226 @@ mxCompactTreeLayout.prototype.node = null;
 mxCompactTreeLayout.prototype.isVertexIgnored = function(vertex)
 {
 	return mxGraphLayout.prototype.isVertexIgnored.apply(this, arguments) ||
-		this.graph.getConnections(vertex).length == 0;
+		(!this.filterChildFlag && this.graph.getConnections(vertex).length == 0) ||
+		(this.filterChildFlag && this.getEdges(vertex) == 0 );
+};
+
+/**
+ * Function: findRoots
+ *
+ * Returns all visible children in the given parent which do not have
+ * incoming edges. If the result is empty then the children with the
+ * maximum difference between incoming and outgoing edges are returned.
+ * This takes into account edges that are being promoted to the given
+ * root due to invisible children or collapsed cells.
+ *
+ * Parameters:
+ *
+ * parent - <mxCell> whose children should be checked.
+ * vertices - array of vertices to limit search to
+ */
+mxCompactTreeLayout.prototype.findRoots = function(parent, vertices)
+{
+    var roots = [];
+
+    if (parent != null && vertices != null)
+    {
+        var model = this.graph.model;
+        var best = null;
+        var maxDiff = -100000;
+
+        for (var i in vertices)
+        {
+            var cell = vertices[i];
+
+            var childCount = model.getChildCount(cell);
+
+            if (model.isVertex(cell) && this.graph.isCellVisible(cell))
+            {
+                var conns = this.getEdges(cell);
+                var fanOut = 0;
+                var fanIn = 0;
+
+                for (var k = 0; k < conns.length; k++)
+                {
+                    var src = this.getVisibleTerminal(conns[k], true);
+
+                    if (src == cell || (this.filterChildFlag && childCount > 0 && mxUtils.indexOfNestedArray(cell.children, src, 'children') >= 0) )
+                    {
+                        fanOut++;
+                    }
+                    else
+                    {
+                        fanIn++;
+                    }
+                }
+
+                if (fanIn == 0 && fanOut > 0)
+                {
+                    roots.push(cell);
+                }
+
+                var diff = fanOut - fanIn;
+
+                if (diff > maxDiff)
+                {
+                    maxDiff = diff;
+                    best = cell;
+                }
+            }
+        }
+
+        if (roots.length == 0 && best != null)
+        {
+            roots.push(best);
+        }
+    }
+
+    return roots;
+};
+
+/**
+ * Function: getEdges
+ *
+ * Returns the connected edges for the given cell.
+ *
+ * Parameters:
+ *
+ * cell - <mxCell> whose edges should be returned.
+ */
+mxCompactTreeLayout.prototype.getEdges = function(cell)
+{
+    var edges = this.getAllEdges(cell);
+
+    var result = [];
+
+    for (var i = 0; i < edges.length; i++)
+    {
+        var source = this.getVisibleTerminal(edges[i], true);
+        var target = this.getVisibleTerminal(edges[i], false);
+
+        if ((source == target) || ((source != target) && (((target == cell || (this.filterChildFlag && cell.children && mxUtils.indexOfNestedArray(cell.children, target, 'children') >= 0)) && (this.parent == null || this.graph.isValidAncestor(source, this.parent, true))) ||
+            ((source == cell || ( this.filterChildFlag && cell.children && mxUtils.indexOfNestedArray(cell.children, source, 'children') >= 0)) && (this.parent == null ||
+            this.graph.isValidAncestor(target, this.parent, true))))))
+        {
+            result.push(edges[i]);
+        }
+    }
+
+    return result;
+};
+
+/**
+ * 获取cell中所有的edge,包括各级children
+ * @param cell - <mxCell> whose edges should be returned, include edges of children.
+ */
+mxCompactTreeLayout.prototype.getAllEdges = function(cell)
+{
+    var result = [];
+    var model = this.graph.model;
+    var childCount = model.getChildCount(cell);
+    for (var i = 0; i < childCount; i++) {
+        var child = model.getChildAt(cell, i);
+        result = result.concat(this.getAllEdges(child));
+    }
+    result = result.concat(model.getEdges(cell, true, true));
+    return result;
+};
+
+/**
+ * Function: getVisibleTerminal
+ *
+ * Helper function to return visible terminal for edge allowing for ports
+ *
+ * Parameters:
+ *
+ * edge - <mxCell> whose edges should be returned.
+ * source - Boolean that specifies whether the source or target terminal is to be returned
+ */
+mxCompactTreeLayout.prototype.getVisibleTerminal = function(edge, source)
+{
+    var state = this.graph.view.getState(edge);
+
+    var terminal = (state != null) ? state.getVisibleTerminal(source) : this.graph.view.getVisibleTerminal(edge, source);
+
+    if (terminal == null)
+    {
+        terminal = (state != null) ? state.getVisibleTerminal(source) : this.graph.view.getVisibleTerminal(edge, source);
+    }
+
+    if (terminal != null)
+    {
+        if (this.isPort(terminal))
+        {
+            terminal = this.graph.model.getParent(terminal);
+        }
+    }
+
+    return terminal;
+};
+
+/**
+ * Function: filterDescendants
+ *
+ * Creates an array of descendant cells
+ *
+ * @param cell
+ * @param result
+ */
+mxCompactTreeLayout.prototype.filterDescendants = function(cell, result)
+{
+    var model = this.graph.model;
+
+    if (model.isVertex(cell) && cell != this.parent && this.graph.isCellVisible(cell))
+    {
+        result[mxObjectIdentity.get(cell)] = cell;
+    }
+
+    if (this.graph.isCellVisible(cell))
+    {
+        var childCount = model.getChildCount(cell);
+
+        for (var i = 0; i < childCount; i++)
+        {
+            var child = model.getChildAt(cell, i);
+
+            // Ignore ports in the layout vertex list, they are dealt with
+            // in the traversal mechanisms
+            if (!this.isPort(child))
+            {
+                if(!this.filterChildFlag) {
+                    this.filterDescendants(child, result);
+                }
+                else {
+                    if (model.isVertex(child) && child != this.parent && this.graph.isCellVisible(child))
+                    {
+                        result[mxObjectIdentity.get(child)] = child;
+                    }
+                }
+
+            }
+        }
+    }
+};
+
+/**
+ * Function: isPort
+ *
+ * Returns true if the given cell is a "port", that is, when connecting to
+ * it, its parent is the connecting vertex in terms of graph traversal
+ *
+ * Parameters:
+ *
+ * cell - <mxCell> that represents the port.
+ */
+mxCompactTreeLayout.prototype.isPort = function(cell)
+{
+    if (cell.geometry.relative)
+    {
+        return true;
+    }
+
+    return false;
 };
 
 /**
@@ -265,37 +491,33 @@ mxCompactTreeLayout.prototype.isHorizontal = function()
 mxCompactTreeLayout.prototype.execute = function(parent, root)
 {
 	this.parent = parent;
-	var model = this.graph.getModel();
+    var graph = this.graph;
+	var model = graph.getModel();
 
 	if (root == null)
 	{
-		// Takes the parent as the root if it has outgoing edges
-		if (this.graph.getEdges(parent, model.getParent(parent),
-			this.invert, !this.invert, false).length > 0)
-		{
-			this.root = parent;
-		}
-		
-		// Tries to find a suitable root in the parent's
-		// children
-		else
-		{
-			var roots = this.graph.findTreeRoots(parent, true, this.invert);
-			
-			if (roots.length > 0)
-			{
-				for (var i = 0; i < roots.length; i++)
-				{
-					if (!this.isVertexIgnored(roots[i]) &&
-						this.graph.getEdges(roots[i], null,
-							this.invert, !this.invert, false).length > 0)
-					{
-						this.root = roots[i];
-						break;
-					}
-				}
-			}
-		}
+        var tmp = graph.getSelectionCell();
+        var filledVertexSet = Object();
+        var roots = null;
+        this.filterDescendants(parent, filledVertexSet);
+        if (tmp == null)
+        {
+        	roots = this.findRoots(parent, filledVertexSet);
+        }
+        else
+        {
+            roots = [tmp];
+        }
+        var vertexCells = [];
+        for (var key in filledVertexSet) {
+           if (filledVertexSet[key] != null) {
+               vertexCells.push(filledVertexSet[key]);
+           }
+        }
+        if (roots != null && roots.length > 0)
+        {
+        	this.root = roots[0];
+        }
 	}
 	else
 	{
@@ -333,7 +555,7 @@ mxCompactTreeLayout.prototype.execute = function(parent, root)
 		try
 		{
 			this.visited = new Object();
-			this.node = this.dfs(this.root, parent);
+			this.node = this.dfs(this.root, parent, vertexCells);
 			
 			if (this.alignRanks)
 			{
@@ -529,7 +751,7 @@ mxCompactTreeLayout.prototype.setCellHeights = function(node, rank)
  * Makes sure the specified parent is never left by the
  * algorithm.
  */
-mxCompactTreeLayout.prototype.dfs = function(cell, parent)
+mxCompactTreeLayout.prototype.dfs = function(cell, parent, vertexCells)
 {
 	var id = mxCellPath.create(cell);
 	var node = null;
@@ -541,7 +763,8 @@ mxCompactTreeLayout.prototype.dfs = function(cell, parent)
 
 		var model = this.graph.getModel();
 		var prev = null;
-		var out = this.graph.getEdges(cell, parent, this.invert, !this.invert, false, true);
+		// var out = this.graph.getEdges(cell, parent, this.invert, !this.invert, false, true);
+        var out = this.getEdges(cell);
 		var view = this.graph.getView();
 		
 		if (this.sortEdges)
@@ -570,7 +793,14 @@ mxCompactTreeLayout.prototype.dfs = function(cell, parent)
 				// Checks if terminal in same swimlane
 				var state = view.getState(edge);
 				var target = (state != null) ? state.getVisibleTerminal(this.invert) : view.getVisibleTerminal(edge, this.invert);
-				var tmp = this.dfs(target, parent);
+                //判断next是否是在图元的子集中
+                if (this.filterChildFlag && vertexCells != null) {
+                    var index = mxUtils.indexOfNestedArray(vertexCells, target, 'children');
+                    if(index >= 0) {
+                        target = vertexCells[index];
+                    }
+                }
+				var tmp = this.dfs(target, parent, vertexCells);
 				
 				if (tmp != null && model.getGeometry(target) != null)
 				{

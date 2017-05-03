@@ -5019,6 +5019,10 @@ mxGraph.prototype.cellsToggled = function(cells, show)
  */
 mxGraph.prototype.foldCells = function(collapse, recurse, cells, checkFoldable, evt)
 {
+	if(!collapse){
+		this.orderCells(false);
+		this.orderCells(false,this.getAllEdges(this.getSelectionCells()));
+	}
 	recurse = (recurse != null) ? recurse : false;
 	
 	if (cells == null)
@@ -5151,6 +5155,8 @@ mxGraph.prototype.updateAlternateBounds = function(cell, geo, willCollapse)
 		var state = this.view.getState(cell);
 		var style = (state != null) ? state.style : this.getCellStyle(cell);
 
+        var image = this.getFoldingImage(state);
+
 		if (geo.alternateBounds == null)
 		{
 			var bounds = geo;
@@ -5172,14 +5178,19 @@ mxGraph.prototype.updateAlternateBounds = function(cell, geo, willCollapse)
 				}
 			}
 			
-			geo.alternateBounds = new mxRectangle(0, 0, bounds.width, bounds.height);
+			geo.alternateBounds = new mxRectangle(0, 0, image.width, image.height);
 		}
 		
 		if (geo.alternateBounds != null)
 		{
 			geo.alternateBounds.x = geo.x;
 			geo.alternateBounds.y = geo.y;
-			
+            // if(willCollapse) {
+                // state.control.bounds = geo.alternateBounds;
+                // geo.alternateBounds.width = image.width;
+                // geo.alternateBounds.height = image.height;
+            // }
+
 			var alpha = mxUtils.toRadians(style[mxConstants.STYLE_ROTATION] || 0);
 			
 			if (alpha != 0)

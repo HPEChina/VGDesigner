@@ -123,20 +123,11 @@ mxRadialTreeLayout.prototype.rowRadi = [];
 mxRadialTreeLayout.prototype.row = [];
 
 /**
- * Function: isVertexIgnored
- * 
- * Returns a boolean indicating if the given <mxCell> should be ignored as a
- * vertex. This returns true if the cell has no connections.
- * 
- * Parameters:
- * 
- * vertex - <mxCell> whose ignored state should be returned.
+ * Variable: filterChildFlag
+ *
+ * 是否过滤子节点的标志
  */
-mxRadialTreeLayout.prototype.isVertexIgnored = function(vertex)
-{
-	return mxGraphLayout.prototype.isVertexIgnored.apply(this, arguments) ||
-		this.graph.getConnections(vertex).length == 0;
-};
+mxRadialTreeLayout.prototype.filterChildFlag = false;
 
 /**
  * Function: execute
@@ -161,7 +152,7 @@ mxRadialTreeLayout.prototype.execute = function(parent, root)
 	//this.horizontal = false;
 
 	mxCompactTreeLayout.prototype.execute.apply(this, arguments);
-	
+
 	var bounds = null;
 	var rootBounds = this.getVertexBounds(this.root);
 	this.centerX = rootBounds.x + rootBounds.width / 2;
@@ -293,7 +284,7 @@ mxRadialTreeLayout.prototype.calcRowDims = function(row, rowNum)
 		while (child != null)
 		{
 			var cell = child.cell;
-			vertexBounds = this.getVertexBounds(cell);
+			var vertexBounds = this.getVertexBounds(cell);
 			
 			this.rowMinX[rowNum] = Math.min(vertexBounds.x, this.rowMinX[rowNum]);
 			this.rowMaxX[rowNum] = Math.max(vertexBounds.x + vertexBounds.width, this.rowMaxX[rowNum]);

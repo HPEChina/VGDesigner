@@ -1198,7 +1198,15 @@ mxCellRenderer.prototype.redrawControl = function(state, forced)
 	
 	if (state.control != null && image != null)
 	{
-		var bounds = this.getControlBounds(state, image.width, image.height);
+		var w = image.width;
+		var h = image.height;
+		if(state.view.graph.isCellCollapsed(state.cell)) {
+            var geo = state.cell.getGeometry();
+            w = geo.width;
+            h = geo.height;
+		}
+        var bounds = this.getControlBounds(state, w, h);
+
 		var r = (this.legacyControlPosition) ?
 				mxUtils.getValue(state.style, mxConstants.STYLE_ROTATION, 0) :
 				state.shape.getTextRotation();
@@ -1433,17 +1441,7 @@ mxCellRenderer.prototype.redrawShape = function(state, force, rendering)
 {
 	var model = state.view.graph.model;
 	var shapeChanged = false;
-	var graph = state.view.graph;
 
-	//jim
-    if(graph.isCellCollapsed(state.cell)) {
-        var image = graph.getFoldingImage(state);
-        if(image) {
-        	var scale = state.view.scale;
-            state.height = image.height * scale;
-            state.width = image.width * scale;
-        }
-	}
 	// Forces creation of new shape if shape style has changed
 	if (state.shape != null && state.shape.style != null && state.style != null &&
 		state.shape.style[mxConstants.STYLE_SHAPE] != state.style[mxConstants.STYLE_SHAPE])
