@@ -113,12 +113,12 @@ Sidebar.prototype.init = function()
 /**
  * Sets the default font size.
  */
-Sidebar.prototype.collapsedImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/collapsed.gif' : 'data:image/gif;base64,R0lGODlhDQANAIABAJmZmf///yH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozNUQyRTJFNjZGNUYxMUU1QjZEOThCNDYxMDQ2MzNCQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozNUQyRTJFNzZGNUYxMUU1QjZEOThCNDYxMDQ2MzNCQiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjFERjc3MEUxNkY1RjExRTVCNkQ5OEI0NjEwNDYzM0JCIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjFERjc3MEUyNkY1RjExRTVCNkQ5OEI0NjEwNDYzM0JCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Af/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M/OzczLysnIx8bFxMPCwcC/vr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ+enZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcG9ubWxramloZ2ZlZGNiYWBfXl1cW1pZWFdWVVRTUlFQT05NTEtKSUhHRkVEQ0JBQD8+PTw7Ojk4NzY1NDMyMTAvLi0sKyopKCcmJSQjIiEgHx4dHBsaGRgXFhUUExIREA8ODQwLCgkIBwYFBAMCAQAAIfkEAQAAAQAsAAAAAA0ADQAAAhSMj6lrwAjcC1GyahV+dcZJgeIIFgA7';
+Sidebar.prototype.collapsedImage = IMAGE_PATH + '/collapsed.png';
 
 /**
  * Sets the default font size.
  */
-Sidebar.prototype.expandedImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/expanded.gif' : 'data:image/gif;base64,R0lGODlhDQANAIABAJmZmf///yH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoxREY3NzBERjZGNUYxMUU1QjZEOThCNDYxMDQ2MzNCQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoxREY3NzBFMDZGNUYxMUU1QjZEOThCNDYxMDQ2MzNCQiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjFERjc3MERENkY1RjExRTVCNkQ5OEI0NjEwNDYzM0JCIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjFERjc3MERFNkY1RjExRTVCNkQ5OEI0NjEwNDYzM0JCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Af/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M/OzczLysnIx8bFxMPCwcC/vr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ+enZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcG9ubWxramloZ2ZlZGNiYWBfXl1cW1pZWFdWVVRTUlFQT05NTEtKSUhHRkVEQ0JBQD8+PTw7Ojk4NzY1NDMyMTAvLi0sKyopKCcmJSQjIiEgHx4dHBsaGRgXFhUUExIREA8ODQwLCgkIBwYFBAMCAQAAIfkEAQAAAQAsAAAAAA0ADQAAAhGMj6nL3QAjVHIu6azbvPtWAAA7';
+Sidebar.prototype.expandedImage = IMAGE_PATH + '/expanded.png';
 
 /**
  * Sets the default font size.
@@ -226,6 +226,16 @@ Sidebar.prototype.modelClass = [];
  * 一级分类
  */
 Sidebar.prototype.modelList = ['general', 'Model'];
+
+/**
+ * Search flag
+ */
+Sidebar.prototype.searchFlag = false;
+
+/**
+ * Save model Flag
+ */
+Sidebar.prototype.saveModelFlag = false;
 
 /**
  * Adds all palettes to the sidebar.
@@ -450,7 +460,7 @@ Sidebar.prototype.addEntry = function(tags, fn)
 		for (var i = 0; i < tmp.length; i++)
 		{
 			// Replaces trailing numbers and special characters
-			tmp[i] = tmp[i].replace(/\.*\d*$/, '');
+			// tmp[i] = tmp[i].replace(/\.*\d*$/, '');
 			
 			if (tmp[i].length > 1)
 			{
@@ -483,49 +493,35 @@ Sidebar.prototype.searchEntries = function(searchTerms, count, page, success, er
 	if (this.taglist != null && searchTerms != null)
 	{
 		var tmp = searchTerms.toLowerCase().split(' ');
-		var dict = new mxDictionary();
 		var max = (page + 1) * count;
 		var results = [];
-		var index = 0;
-		
+
 		for (var i = 0; i < tmp.length; i++)
 		{
 			if (tmp[i].length > 0)
 			{
 				var entry = this.taglist[tmp[i]];
-				var tmpDict = new mxDictionary();
-				
+
 				if (entry != null)
 				{
 					var arr = entry.entries;
-					results = [];
 
 					for (var j = 0; j < arr.length; j++)
 					{
 						var entry = arr[j];
 	
 						// NOTE Array does not contain duplicates
-						if ((index == 0) == (dict.get(entry) == null))
+						if(results.indexOf(entry) < 0) {
+                            results.push(entry);
+						}
+						// if (i == tmp.length - 1 && results.length == max)
+						if(i < tmp.length - 1 && results.length == max)
 						{
-							tmpDict.put(entry, entry);
-							results.push(entry);
-							
-							if (i == tmp.length - 1 && results.length == max)
-							{
-								success(results.slice(page * count, max), max, true);
-								
-								return;
-							}
+							success(results.slice(page * count, max), max, true);
+							return;
 						}
 					}
 				}
-				else
-				{
-					results = [];
-				}
-				
-				dict = tmpDict;
-				index++;
 			}
 		}
 		
@@ -731,17 +727,23 @@ Sidebar.prototype.addSearchPalette = function(expand)
 							active = false;
 							page++;
 							center.parentNode.removeChild(center);
-							
+
 							for (var i = 0; i < results.length; i++)
 							{
+								this.searchFlag = true;
 								var elt = results[i]();
-								
+								this.searchFlag = false;
+
 								// Avoids duplicates in results
-								if (hash[elt.innerHTML] == null)
-								{
-									hash[elt.innerHTML] = '1';
-									div.appendChild(results[i]());
-								}
+								// if (hash[elt.innerHTML] == null)
+								// {
+								// 	hash[elt.innerHTML] = '1';
+								// 	div.appendChild(elt);
+								// }
+								hash[elt.innerHTML] = elt;
+							}
+							for(var o in hash) {
+								div.appendChild(hash[o]);
 							}
 							
 							if (more)
@@ -929,11 +931,12 @@ Sidebar.prototype.addOtherPalette = function(modelData, id, expand, saveFlag)
         if(prop.type.toLowerCase() == 'edge') {
             fns.push(this.createEdgeTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title));
         }//update by wang,jianhui
-        else if (modelData[i].data) {
-            fns.push(this.createVertexTemplateFromXML(attr, id));
+        else if (attr.data) {
+            // fns.push(this.createVertexTemplateFromXML(attr, id));
+            fns.push(this.createVertexTemplateFromXMLEntry(attr, id));
         }
         else {
-            fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
+            fns.push(this.createVertexTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
         }
     }
 	var modelClassTitle=this.modelClass[id]||modelData[0].description || modelData[0].class
@@ -953,14 +956,14 @@ Sidebar.prototype.addOtherNewPalette = function(modelData, id, expand, saveFlag)
             this.editorUi.openModel();
         }
         var prop = modelData[i].property;
-        // var attr = modelData[i].attribute;
         var attr = modelData[i];
 
         if(prop.type.toLowerCase() == 'edge') {
             fns.push(this.createEdgeTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title));
         }//update by wang,jianhui
-        else if (modelData[i].data) {
-            fns.push(this.createVertexTemplateFromXML(attr, id));
+        else if (attr.data) {
+        	this.saveModelFlag = true;
+            fns.push(this.createVertexTemplateFromXMLEntry(attr, id));
         }
         else {
             fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
@@ -988,8 +991,9 @@ Sidebar.prototype.addGeneralPalette = function(modelData, id, expand, saveFlag)
         if(prop.type.toLowerCase() == 'edge') {
             fns.push(this.createEdgeTemplateEntry(attr, id, prop.style, prop.width, prop.height, prop.value, prop.title));
         }
-        else if (modelData[i].data) {
-            fns.push(this.createVertexTemplateFromXML(attr, id));
+        else if (attr.data) {
+        	fns.push(this.createVertexTemplateFromXMLEntry(attr, id));
+            // fns.push(this.createVertexTemplateFromXML(attr, id));
         }
         else {
             fns.push(this.createVertexTemplateEntry(attr, id,prop.style, prop.width, prop.height, prop.value, prop.title, prop.showLabel, prop.showTitle, prop.tags));
@@ -1004,7 +1008,7 @@ Sidebar.prototype.createVertexTemplateFromXML = function(attr, id) {
 	var name = attr.name;
 	var uuid = attr.id;
 	// var graph = this.editorUi.editor.graph;
-    return function () {
+    // return function () {
         var img = JSON.parse(data);
         var doc = mxUtils.parseXml(img.xml);
         var model = new mxGraphModel();
@@ -1023,10 +1027,10 @@ Sidebar.prototype.createVertexTemplateFromXML = function(attr, id) {
             cells[0].setUuid(uuid);
             // value.setAttribute('uuid', uuid);
         }
-        if (cells.length > 0) {
-            return this.createVertexTemplateFromCells(cells, img.w, img.h, name, true, false, false, attr)
-        }
-    }.bind(this);
+        // if (cells.length > 0) {
+		return this.createVertexTemplateFromCells(cells, img.w, img.h, name, true, false, false, attr);
+        // }
+    // }.bind(this);
 };
 
 /**
@@ -1101,7 +1105,7 @@ Sidebar.prototype.getModelAndAddPalette = function(url, params) {
             var arr = [];
             for (var j in obj) {
                 arr.push([j, obj[j]]);
-            };
+            }
             arr.sort(function (a,b) {
                 return a[0].localeCompare(b[0]);
             });
@@ -1162,7 +1166,7 @@ Sidebar.prototype.createFirstTitle = function(name)
     elt.className = 'geFirstTitle';
     elt.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
     elt.style.backgroundRepeat = 'no-repeat';
-    elt.style.backgroundPosition = '0% 50%';
+    elt.style.backgroundPosition = '5px 50%';
     mxUtils.write(elt, name);
     return elt;
 };
@@ -1174,7 +1178,7 @@ Sidebar.prototype.createSecondTitle = function(name)
     elt.className = 'geFirstTitle second';
     elt.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
     elt.style.backgroundRepeat = 'no-repeat';
-    elt.style.backgroundPosition = '0% 50%';
+    elt.style.backgroundPosition = '5px 50%';
     mxUtils.write(elt, name);
     return elt;
 };
@@ -1188,6 +1192,11 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 	var fo = mxClient.NO_FO;
 	mxClient.NO_FO = Editor.prototype.originalNoForeignObject;
 	
+	var img_src = this.graph.getModel().getValue(cells[0]).getAttribute('image'),img_left,img_top;
+	if (img_src) {
+		img_left = (40 - width) / 2
+		img_top = (40 - height) / 2
+	} else
 	// Paints faster by using the known width and height
 	if (false && realWidth != null && realHeight != null)
 	{
@@ -1206,7 +1215,6 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 				Math.floor((height - bounds.height * s) / 2 / s - bounds.y));
 	}
 	
-	var img_src = this.graph.getModel().getValue(cells[0]).getAttribute('image');
 	var node = null;
 
 	if (img_src && img_src != 'null' && img_src != 'undefined') {
@@ -1236,8 +1244,8 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 		node.style.position = 'relative';
 		node.style.overflow = 'hidden';
 		node.style.cursor = 'move';
-		node.style.left = this.thumbBorder + 'px';
-		node.style.top = this.thumbBorder + 'px';
+		node.style.left = (img_left||this.thumbBorder) + 'px';
+		node.style.top = (img_top||this.thumbBorder) + 'px';
 		node.style.width = width + 'px';
 		node.style.height = height + 'px';
 		node.style.visibility = '';
@@ -1278,21 +1286,25 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 {
     var uuid = cells[0].getUuid();
     var elt = null;
-    if(uuid != ''){
-    	elt = document.getElementById(uuid);
-	}
-	if(elt != null) {
-    	elt.parentNode.removeChild(elt);
-    }
-	// else{
-        elt = document.createElement('a');
-        elt.setAttribute('href', 'javascript:void(0);');
-        if(uuid != '') {
-            elt.setAttribute('id', uuid);
+    if(!this.searchFlag && this.saveModelFlag) {
+        if(uuid != ''){
+            elt = document.getElementsByClassName(uuid);
+            for(var k = elt.length - 1; k >= 0; k--)
+            {
+                elt[k].parentNode.removeChild(elt[k]);
+            }
         }
-	// }
+	}
+	if(this.saveModelFlag) {this.saveModelFlag = false;}
 
-	elt.className = 'geItem';
+	elt = document.createElement('a');
+	elt.setAttribute('href', 'javascript:void(0);');
+
+	var className = 'geItem';
+	if(uuid != '') {
+        className += ' ' + uuid;
+	}
+	elt.className = className;
 	elt.style.overflow = 'hidden';
 	var border = (mxClient.IS_QUIRKS) ? 8 + 2 * this.thumbPadding : 2 * this.thumbBorder;
 	elt.style.width = (this.thumbWidth + border) + 'px';
@@ -1311,7 +1323,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
     //right mouse up to edit model
 	if(data) {
         mxEvent.addListener(elt, 'mouseup', mxUtils.bind(this,function(evt)
-        {
+		{
             if(mxEvent.isRightMouseButton(evt)) {
                 this.editorUi.editor.graph.selectAll(null, true);
 				var ret;
@@ -1339,10 +1351,34 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
             }
         }));
 	}
+	function createImgThumb(img_src) {
+		var w, h;
+		var start = img_src.lastIndexOf('_');
+		var end = img_src.lastIndexOf('.');
+		var str = img_src.slice(start + 1, end);
+		var width = parseInt(str.split('x')[0]);
+		var height = parseInt(str.split('x')[1]);
+		var maxW = this.thumbWidth, maxH = this.thumbHeight;
+		if (width > maxW || height > maxH) {
+			if (width / height > maxW / maxH) {
+				h = Math.floor(height * maxW / width);
+				w = maxW;
+			}
+			else {
+				w = Math.floor(width * maxH / height);
+				h = maxH;
+			}
+		}
+		this.createThumb(cells, w, h, elt, title, showLabel, showTitle, width, height);
+	}
+	var img_src = this.editorUi.editor.graph.getModel().getValue(cells[0]).getAttribute('image');
+	if (img_src && img_src != 'null' && img_src != 'undefined')
+		createImgThumb.bind(this)(img_src)
+	else
+		this.createThumb(cells, this.thumbWidth, this.thumbHeight, elt, title, showLabel, showTitle, width, height);
 
-	this.createThumb(cells, this.thumbWidth, this.thumbHeight, elt, title, showLabel, showTitle, width, height);
 	var bounds = new mxRectangle(0, 0, width, height);
-	
+
 	if (cells.length > 1 || cells[0].vertex)
 	{
 		var ds = this.createDragSource(elt, this.createDropHandler(cells, true, allowCellsInserted,
@@ -2677,6 +2713,25 @@ Sidebar.prototype.createVertexTemplateEntry = function(attr, id, style, width, h
 /**
  * Creates a drop handler for inserting the given cells.
  */
+Sidebar.prototype.createVertexTemplateFromXMLEntry = function(attr, id)
+{
+    // var tags = attr.name + ' ' + attr.category + ' ' + attr.type;
+	var array = [];
+	if(attr.property.tags) {array.push(attr.property.tags);}
+    if(attr.property.title) {array.push(attr.property.title);}
+    if(attr.name) {array.push(attr.name);}
+    if(attr.category) {array.push(attr.category);}
+    if(attr.type) {array.push(attr.type);}
+    var tags = array.join(' ');
+    return this.addEntry(tags, mxUtils.bind(this, function()
+    {
+    	return this.createVertexTemplateFromXML(attr, id);
+    }));
+};
+
+/**
+ * Creates a drop handler for inserting the given cells.
+ */
 Sidebar.prototype.createVertexTemplate = function(attr, id, style, width, height, value, title, showLabel, showTitle, allowCellsInserted)
 {
 	var cells = [new mxCell((value != null) ? value : '', new mxGeometry(0, 0, width, height), style)];
@@ -2793,7 +2848,7 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
 {
     if (this[id]) {
         if (!this[id].style.display||this[id].style.display == 'none') {
-            this[id+title].click();
+            if(this[id+'_'+title])this[id+'_'+title].click();
         }
         onInit(this[id]);
         return this[id];
@@ -2851,20 +2906,22 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
         this.palettes[id] = [elt, outer];
     }
     this[id]=div;
-    this[id+title]=elt;
+    this[id+'_'+title]=elt;
     return div;
 
 };
 // 4/7
 Sidebar.prototype.addOtherNPalette = function(id, title, expanded, onInit)
 {
-    if (this[id]) {
-        if (!this[id].style.display||this[id].style.display == 'none') {
-            this[id+title].click();
-        }
-        onInit(this[id]);
-        return this[id];
-    }
+	if (this[id]) {
+		if (!this[id].style.display || this[id].style.display == 'none') {
+			//左侧兰展开显示更新的模型
+			document.getElementsByClassName('second')[0].click();
+			if (this[id + '_' + title]) this[id + '_' + title].click();
+		}
+		onInit(this[id]);
+		return this[id];
+	}
     // 327
     var ccc = document.createElement('div');
     ccc.className = 'two';
@@ -2927,7 +2984,7 @@ Sidebar.prototype.addOtherNPalette = function(id, title, expanded, onInit)
         this.palettes[id] = [elt, outer];
     }
     this[id]=div;
-    this[id+title]=elt;
+    this[id+'_'+title]=elt;
     return div;
 
 };
@@ -2937,7 +2994,7 @@ Sidebar.prototype.addPaletteOne = function(id, title, expanded, onInit)
 {
     if (this[id]) {
         if (!this[id].style.display||this[id].style.display == 'none') {
-            this[id+title].click();
+            if(this[id+'_'+title])this[id+'_'+title].click();
         }
         onInit(this[id]);
         return this[id];
@@ -2992,7 +3049,7 @@ Sidebar.prototype.addPaletteOne = function(id, title, expanded, onInit)
         this.palettes[id] = [elt, outer];
     }
     this[id]=div;
-    this[id+title]=elt;
+    this[id+'_'+title]=elt;
     return div;
 
 };
@@ -3013,7 +3070,7 @@ Sidebar.prototype.addFoldingHandler = function(title, content, funct)
 	}
 	
 	title.style.backgroundRepeat = 'no-repeat';
-	title.style.backgroundPosition = '7px 50%';
+	title.style.backgroundPosition = '10px 50%';
 
 	mxEvent.addListener(title, 'click', mxUtils.bind(this, function(evt)
 	{
@@ -3076,7 +3133,7 @@ Sidebar.prototype.addFoldingHandlerOne = function(title, content, funct)
     }
 
     title.style.backgroundRepeat = 'no-repeat';
-    title.style.backgroundPosition = '0% 50%';
+    title.style.backgroundPosition = '5px 50%';
 
     mxEvent.addListener(title, 'click', mxUtils.bind(this, function(evt)
     {

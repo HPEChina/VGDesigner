@@ -12,7 +12,7 @@ function ModelAttribute(attribute)
 
     this.intrinsic = (attribute != null && attribute.intrinsic != null ) ? attribute.intrinsic : [];
     this.extended = (attribute != null && attribute.extended != null ) ? attribute.extended : [];
-    this.userFunc = (attribute != null && attribute.userFunc != null ) ? attribute.userFunc : [];
+    // this.userFunc = (attribute != null && attribute.userFunc != null ) ? attribute.userFunc : [];
 };
 
 /**
@@ -31,6 +31,6 @@ ModelAttribute.prototype.toAttributeString = function()
     var arr = {};
     arr['intrinsic'] = JSON.stringify(this.intrinsic);
     arr['extended'] = JSON.stringify(this.extended);
-    arr['userFunc'] = JSON.stringify(this.userFunc);
+    // arr['userFunc'] = JSON.stringify(this.userFunc);
     return arr;
 };
