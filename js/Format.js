@@ -336,10 +336,10 @@ Format.prototype.clear = function()
 Format.prototype.refresh = function()
 {
 	// Performance tweak: No refresh needed if not visible
-	if (this.container.style.width == '0px')
-	{
-		return;
-	}
+	// if (this.container.style.width == '0px')
+	// {
+	// 	return;
+	// }
 
 	this.clear();
 	var ui = this.editorUi;
@@ -5218,8 +5218,6 @@ AttributePanel.prototype.collapsedImage = function(cell, value)
 
 };
 
-
-
 /**
  * 创建固有属性面板
  * @param ui
@@ -5234,9 +5232,6 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
     title.style.paddingLeft = '18px';
     title.style.paddingTop = '10px';
     title.style.paddingBottom = '6px';
-
-    if(type =='intrinsic'){
-}
 
     container.appendChild(title);
 
