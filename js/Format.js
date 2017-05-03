@@ -5113,6 +5113,9 @@ AttributePanel.prototype.init = function()
     if(tObj['extended'] && editorUi.interfaceParams.type != 'model' && cell.getId() == '0') {
     	delete tObj['extended'];
 	}
+
+	this.createEnhanced();
+
     for( var o in tObj){
 		this.createAttrsPanel(cell, value, tObj[o], o, allNames);
     }
@@ -5771,11 +5774,12 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
 
 };
 
-AttributePanel.prototype.createEnhanced = function(title){
+AttributePanel.prototype.createEnhanced = function(){
+    var container = this.container;
     var leftcoll = document.createElement('img');
     leftcoll.setAttribute('src', Format.prototype.leftOpen);
     leftcoll.className = 'geleftcoll';
-    title.appendChild(leftcoll);
+    container.appendChild(leftcoll);
 
     function Enhanced() {
         var enhanced = document.getElementsByClassName('geEnhanced')[0];
