@@ -1200,12 +1200,23 @@ mxCellRenderer.prototype.redrawControl = function(state, forced)
 	{
 		var w = image.width;
 		var h = image.height;
-		if(state.view.graph.isCellCollapsed(state.cell)) {
-            var geo = state.cell.getGeometry();
-            w = geo.width;
-            h = geo.height;
+		var graph = state.view.graph;
+		var cell = state.cell;
+        if(graph.isCellCollapsed(cell)) {
+            var geo = cell.getGeometry();
+        	if(graph.isUploadImage) {
+                geo.width = w;
+                geo.height = h;
+                cell.setGeometry(geo);
+                graph.isUploadImage = false;
+			}
+            else {
+        		w = geo.width;
+        		h = geo.height;
+			}
 		}
         var bounds = this.getControlBounds(state, w, h);
+
 
 		var r = (this.legacyControlPosition) ?
 				mxUtils.getValue(state.style, mxConstants.STYLE_ROTATION, 0) :

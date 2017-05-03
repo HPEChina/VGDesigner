@@ -1731,6 +1731,11 @@ Graph.prototype.isMoveCellsEvent = function(evt)
 };
 
 /**
+ * Upload image flag
+ */
+Graph.prototype.isUploadImage = false;
+
+/**
  * Adds Shift+collapse/expand and size management for folding inside stack
  */
 Graph.prototype.foldCells = function(collapse, recurse, cells, checkFoldable, evt)
