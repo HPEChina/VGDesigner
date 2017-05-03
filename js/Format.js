@@ -5874,8 +5874,11 @@ AttributePanel.prototype.createEnhanced = function(){
                     var li = document.createElement('div');
                     li.id = name[i] + 'li';
                     li.className = 'gesideLi';
-                    li.innerHTML = name[i];
                     titleCon.appendChild(li);
+                    var liLabel = document.createElement('label');
+                    liLabel.innerHTML = name[i];
+                    liLabel.className = 'geenLabel';
+                    li.appendChild(liLabel);
                     var sideliCol = document.createElement('img');
                     sideliCol.setAttribute('src', Sidebar.prototype.collapsedImage);
                     sideliCol.className = 'gesideliCol';
@@ -5899,9 +5902,12 @@ AttributePanel.prototype.createEnhanced = function(){
                 for (var i = 0; i < key.length; i++) {
                     var ul = document.createElement('div');
                     ul.id = key[i];
-                    ul.innerHTML = key[i];
                     ul.className = 'gesideUl';
                     side.appendChild(ul);
+                    var enLabel = document.createElement('label');
+                    enLabel.innerHTML = key[i];
+                    enLabel.className = 'geenLabel';
+                    ul.appendChild(enLabel);
                     var sideCol = document.createElement('img');
                     sideCol.setAttribute('src', Sidebar.prototype.collapsedImage);
                     sideCol.className = 'gesideCol';
@@ -6008,8 +6014,7 @@ AttributePanel.prototype.createEnhanced = function(){
                 var adddef = function (div, key, value) {
                     var inputN = document.createElement('input');
                     inputN.className = 'geinputN';
-                    inputN.value = 'NAME';
-                    inputN.disabled = 'disabled';
+                    inputN.placeholder = 'NAME';
                     div.appendChild(inputN);
                     var inputEn = document.createElement('input');
                     inputEn.className = 'gedefInput';
@@ -6022,7 +6027,7 @@ AttributePanel.prototype.createEnhanced = function(){
                 adddef(titleCon, 'TYPE', 'type');
                 adddef(titleCon, 'CATEGORY', 'category');
                 mxEvent.addListener(addCon, 'click', function (oEvent) {
-                    addpro(titleCon);
+                    adddef(titleCon);
                     if (window.event) {
                         window.event.cancelBubble = true;
                     } else {
@@ -6089,11 +6094,9 @@ AttributePanel.prototype.createEnhanced = function(){
             };
 
 
-            addTitle('INHERENT PROPERTIES');
+            addTitle(mxResources.get('intrinsic'));
 
-            addDefTitle('EXTENDED PROPERTIES');
-
-            addDefTitle('CUSTOM METHOD');
+            addDefTitle(mxResources.get('extended'));
 
             addImgTitle('IMAGE');
 
@@ -6116,9 +6119,9 @@ AttributePanel.prototype.createEnhanced = function(){
 			 }});*/
 
             //INcol监听事件
-            var titlecoll1 = document.getElementById('INHERENT PROPERTIES');
+            var titlecoll1 = document.getElementById('Static Properties');
             mxEvent.addListener(titlecoll1, 'click', function () {
-                var titlecon1 = document.getElementById('INHERENT PROPERTIESCon');
+                var titlecon1 = document.getElementById('Static PropertiesCon');
                 if (titlecon1.style.display == 'block') {
                     titlecon1.style.display = 'none';
                 } else {
@@ -6127,23 +6130,13 @@ AttributePanel.prototype.createEnhanced = function(){
             });
 
             //EXcol监听事件
-            var titlecoll2 = document.getElementById('EXTENDED PROPERTIES');
+            var titlecoll2 = document.getElementById('Dynamic Properties');
             mxEvent.addListener(titlecoll2, 'click', function () {
-                var titlecon2 = document.getElementById('EXTENDED PROPERTIESCon');
+                var titlecon2 = document.getElementById('Dynamic PropertiesCon');
                 if (titlecon2.style.display == 'block') {
                     titlecon2.style.display = 'none';
                 } else {
                     titlecon2.style.display = 'block';
-                }
-            });
-            //CUcol监听事件
-            var titlecoll3 = document.getElementById('CUSTOM METHOD');
-            mxEvent.addListener(titlecoll3, 'click', function () {
-                var titlecon3 = document.getElementById('CUSTOM METHODCon');
-                if (titlecon3.style.display == 'block') {
-                    titlecon3.style.display = 'none';
-                } else {
-                    titlecon3.style.display = 'block';
                 }
             });
             //IMcol监听事件
