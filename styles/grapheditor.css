@@ -492,6 +492,240 @@ div.mxWindow .geButton {
 .geHsplit:hover, .geVsplit:hover, .gefootHsplit:hover, .geVsplit:hover, .geFsplit:hover{
 	background-color: #dadada;
 }
+/*420*/
+
+.geEnhanced {
+	position:absolute;
+	background:white;
+	overflow:hidden;
+	padding:0;
+	right : 0;
+	top : 33px;
+	bottom : 0;
+	border:1px solid #acacac;
+	-webkit-box-shadow:0px 0px 2px 2px #d5d5d5;
+	-moz-box-shadow:0px 0px 2px 2px #d5d5d5;
+	box-shadow:0px 0px 2px 2px #d5d5d5;
+	_filter:progid:DXImageTransform.Microsoft.DropShadow(OffX=2, OffY=2, Color='#d5d5d5', Positive='true');
+	z-index: 1008;
+}
+
+/*属性增强面板*/
+.geleftcoll{
+	height: 12px;
+	width: 12px;
+	/*float: left;*/
+	/*margin-left: -15px;*/
+	cursor: pointer;
+}
+.geleftD{
+	width: 30%;
+	height: 100%;
+	float: left;
+	background-color: #ffffff;
+}
+.gerightD{
+	width: calc(70% - 2px);
+	height: 100%;
+	float: left;
+	background-color: #ffffff;
+	border-left: 2px solid black;
+}
+.geleftT{
+	width: 100%;
+	height: 35px;
+	text-align: center;
+	background-color: rgb(109, 96, 176);
+	cursor: pointer;
+}
+.gelabL{
+	width: 100px;
+	line-height: 35px;
+	margin: 0 auto;
+	color: #FFF;
+}
+.gecolDiv{
+	width: 12px;
+	height: 12px;
+	float: left;
+	margin-top: 12px;
+	margin-left: 12px;
+}
+.geokDiv{
+	width: 18px;
+	height: 18px;
+	margin-top: 8px;
+	margin-right: 8px;
+	float: right;
+	cursor: pointer;
+}
+.geside{
+	width: 100%;
+	height: calc(100% - 35px);
+	top: 35px;
+	background-color: #FFF;
+	overflow: auto;
+}
+.gesideUl{
+	width: calc(100% - 5px);
+	height: 25px;
+	line-height: 25px;
+	padding-left: 5px;
+	border-bottom: 1px solid #ffffff;
+	background-color: #e5e5e5;
+	cursor: pointer;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+.geliCon{
+	display: none;
+	cursor: pointer;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+.geolCon{
+	display: none;
+	padding: 3px 0 3px 0;
+	cursor: pointer;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	pointer-events: auto;
+}
+.gesideCol{
+	width: 10px;
+	height: 10px;
+	float: left;
+	margin-top: 8px;
+	margin-left: 7px;
+}
+.gesideLi{
+	width: calc(100% - 15px);
+	/*height: 22px;*/
+	font-size: 16px;
+	line-height: 22px;
+	padding-left: 15px;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+.gesideOl{
+	width: calc(100% - 35px);
+	height: 20px;
+	line-height: 20px;
+	padding: 1px 0 1px 35px;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+.gesideOl:hover{
+	background-color: #c0c0c0;
+}
+.gesideliCol{
+	width: 10px;
+	height: 10px;
+	float: left;
+	margin-top: 5px;
+	margin-left: 7px;
+}
+.gecon{
+	width: 100%;
+	height: 90%;
+	top: 35px;
+	background-color: #fff;
+}
+.gesideTitle{
+	width: 100%;
+	height: 30px;
+	background-color: #d5d5d5;
+	border-bottom: 1px solid #c0c0c0;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+.getitleLab{
+	width: 100px;
+	line-height: 30px;
+	margin:0 auto;
+	color: #000000;
+	font-weight: bold;
+	padding-left: 20px;
+}
+.gesideTitle:hover, .getitleLab:hover{
+	cursor: pointer;
+}
+.getitleCol{
+	width: 10px;
+	height: 10px;
+	float: left;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+.geaddCon{
+	width: 15px;
+	height: 15px;
+	float: right;
+	margin-top: 9px;
+	margin-right: 9px;
+	/*pointer-events: auto;*/
+	/*cursor: pointer;*/
+}
+.getitleCon{
+	width: 100%;
+	height: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: none;
+}
+.geproDiv{
+	width:100%;
+	height: auto;
+}
+.geinputN{
+	width: 80px;
+	margin-left: 20px;
+}
+.gedefInput{
+	width: 80px;
+	margin-left: 3px;
+}
+.geselectType{
+	width: 60px;
+	margin-left: 3px;
+}
+.geselectNo{
+	width: 40px;
+	margin-left: 3px;
+}
+.geselectOpe{
+	width: 55px;
+	margin-left: 3px;
+}
+.geinputI{
+	width: 180px;
+	margin-left: 20px;
+}
+.geDel{
+	width: 10px;
+	height: 10px;
+	margin-top: 4px;
+	display: inline-block;;
+}
+
 .geDialog {
 	position:absolute;
 	background:white;
