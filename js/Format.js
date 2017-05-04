@@ -6035,16 +6035,33 @@ AttributePanel.prototype.createEnhanced = function()
                 con.appendChild(titleCon);
 
                 var adddef = function (div, key, value) {
+                	var defDiv = document.createElement('div');
+                	defDiv.className = 'geproDiv';
+                	div.appendChild(defDiv);
                     var inputN = document.createElement('input');
                     inputN.className = 'geinputN';
                     inputN.placeholder = 'NAME';
-                    div.appendChild(inputN);
+                    defDiv.appendChild(inputN);
                     var inputEn = document.createElement('input');
                     inputEn.className = 'gedefInput';
                     inputEn.placeholder = value;
-                    div.appendChild(inputEn);
+                    defDiv.appendChild(inputEn);
+                    var del = document.createElement('img');
+                    del.className = 'gedefDel';
+                    del.setAttribute('src', Dialog.prototype.closeImage);
+                    defDiv.appendChild(del);
                     var br = document.createElement('br');
-                    div.appendChild(br);
+                    defDiv.appendChild(br);
+
+                    // del监听事件
+                    var childs = defDiv.childNodes;
+                    var childsL = childs.length;
+                    mxEvent.addListener(del, 'click', function () {
+                        for (var i = 0; i < childsL; i++) {
+                            defDiv.removeChild(defDiv.firstChild);
+                        }
+                    });
+
                 };
                 adddef(titleCon, 'NAME', 'name');
                 adddef(titleCon, 'TYPE', 'type');
@@ -6133,15 +6150,36 @@ AttributePanel.prototype.createEnhanced = function()
             var liChange = document.getElementsByClassName('geliChange');
             var olDiv = document.getElementsByClassName('gesideOl');
             var olChange = document.getElementsByClassName('geolChange');
+            var ulDiv = document.getElementsByClassName('gesideUl');
+            var ulChange = document.getElementsByClassName('geulChange');
+
+            for (var i = 0; i < ulDiv.length; i++)
+            {
+                mxEvent.addListener(ulDiv[i], 'click', function () {
+                    for (var k = 0; k < olChange.length; k++) {
+                        olChange[k].className = "gesideOl";
+                    }
+                    for (var j = 0; j < liChange.length; j++) {
+                        liChange[j].className = "gesideLi";
+                    }
+                    for (var n = 0; n < ulChange.length; n++) {
+                        ulChange[n].className = "gesideUl";
+                    }
+                    this.className = "geulChange";
+                });
+            }
+
             for (var i = 0; i < liDiv.length; i++)
             {
                 mxEvent.addListener(liDiv[i], 'click', function () {
-                    for (var j = 0; j < liChange.length; j++) {
-                        liChange[j].className = "gesideLi";
-                        olChange[j].className = "gesideOl";
-                    }
                     for (var k = 0; k < olChange.length; k++) {
                         olChange[k].className = "gesideOl";
+                    }
+                    for (var j = 0; j < liChange.length; j++) {
+                        liChange[j].className = "gesideLi";
+                    }
+                    for (var n = 0; n < ulChange.length; n++) {
+                        ulChange[n].className = "gesideUl";
                     }
                     this.className = "geliChange";
                 });
@@ -6151,10 +6189,12 @@ AttributePanel.prototype.createEnhanced = function()
                 mxEvent.addListener(olDiv[i], 'click', function () {
                     for (var j = 0; j < liChange.length; j++) {
                         liChange[j].className = "gesideLi";
-                        olChange[j].className = "gesideOl";
                     }
                     for (var k = 0; k < olChange.length; k++) {
                         olChange[k].className = "gesideOl";
+                    }
+                    for (var n = 0; n < ulChange.length; n++) {
+                        ulChange[n].className = "gesideUl";
                     }
                     this.className = "geolChange";
                 });
