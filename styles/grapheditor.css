@@ -619,6 +619,20 @@ div.mxWindow .geButton {
 	-webkit-user-select: none;
 	-ms-user-select: none;
 }
+.geulChange{
+	width: calc(100% - 5px);
+	height: 25px;
+	line-height: 25px;
+	padding-left: 5px;
+	border-bottom: 1px solid #ffffff;
+	background-color: #9db2c8;
+	cursor: pointer;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
 .gesideOl{
 	width: calc(100% - 35px);
 	height: 20px;
@@ -750,7 +764,13 @@ div.mxWindow .geButton {
 	margin-left: 5px;
 	display: inline-block;;
 }
-
+.gedefDel{
+	width: 10px;
+	height: 10px;
+	margin-top: 4px;
+	margin-left: 5px;
+	display: inline-block;;
+}
 .geDialog {
 	position:absolute;
 	background:white;
