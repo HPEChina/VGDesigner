@@ -5859,6 +5859,7 @@ AttributePanel.prototype.createEnhanced = function(){
                     }
                 });
 
+
             };
 
             var addLi = function (name,ul,title,img) {
@@ -6101,17 +6102,36 @@ AttributePanel.prototype.createEnhanced = function(){
             editorcon.appendChild(div);
 
 
-			/*var addCon = document.getElementsByClassName('geaddCon')[0];
-			 var titleCon = document.getElementsByClassName('getitleCon')[0];
-			 mxEvent.addListener(addCon, 'click', function (oEvent) {
-			 for(i = 0;i<addCon.length;i++){
-			 addpro(titleCon);
-			 if(window.event){
-			 window.event.cancelBubble = true;
-			 }else{
-			 oEvent.stopPropagation();
-			 }
-			 }});*/
+            var liDiv = document.getElementsByClassName('gesideLi');
+            var liChange = document.getElementsByClassName('geliChange');
+            var olDiv = document.getElementsByClassName('gesideOl');
+            var olChange = document.getElementsByClassName('geolChange');
+            for (var i = 0; i < liDiv.length; i++)
+            {
+                mxEvent.addListener(liDiv[i], 'click', function () {
+                    for (var j = 0; j < liChange.length; j++) {
+                        liChange[j].className = "gesideLi";
+                        olChange[j].className = "gesideOl";
+                    }
+                    for (var k = 0; k < olChange.length; k++) {
+                        olChange[k].className = "gesideOl";
+                    }
+                    this.className = "geliChange";
+                });
+            }
+
+            for (var i = 0; i < olDiv.length; i++) {
+                mxEvent.addListener(olDiv[i], 'click', function () {
+                    for (var j = 0; j < liChange.length; j++) {
+                        liChange[j].className = "gesideLi";
+                        olChange[j].className = "gesideOl";
+                    }
+                    for (var k = 0; k < olChange.length; k++) {
+                        olChange[k].className = "gesideOl";
+                    }
+                    this.className = "geolChange";
+                });
+            };
 
             //INcol监听事件
             var titlecoll1 = document.getElementById('Static Properties');
