@@ -5784,7 +5784,7 @@ AttributePanel.prototype.createEnhanced = function(){
             var editorcon = document.getElementsByClassName('geEditor')[0];
             var side = document.getElementsByClassName('geSidebarContainer')[0];
             var div = document.createElement('div');
-            div.style.width = 0.5 * document.body.clientWidth + 'px';
+            div.style.width = 0.7 * document.body.clientWidth + 'px';
             div.style.height = side.style.height;
             div.className = 'geEnhanced';
 
@@ -5848,7 +5848,7 @@ AttributePanel.prototype.createEnhanced = function(){
                     liCon.appendChild(ol);
                 }
 
-                mxEvent.addListener(li, 'click', function()
+                mxEvent.addListener(img, 'click', function()
                 {
                     if(liCon.style.display == 'block'){
                         liCon.style.display = 'none';
@@ -5858,6 +5858,7 @@ AttributePanel.prototype.createEnhanced = function(){
                         img.setAttribute('src', Sidebar.prototype.expandedImage);
                     }
                 });
+
 
             };
 
@@ -5882,7 +5883,7 @@ AttributePanel.prototype.createEnhanced = function(){
                     addOl(['aaaa', 'bbbbb', 'ccc'],li,name[i],sideliCol,titleCon);
                 }
 
-				 mxEvent.addListener(ul, 'click', function()
+				 mxEvent.addListener(img, 'click', function()
 				 {
 					 if(titleCon.style.display == 'block'){
                          titleCon.style.display = 'none';
@@ -5910,7 +5911,6 @@ AttributePanel.prototype.createEnhanced = function(){
                     ul.appendChild(sideCol);
 
                     addLi(['1111', '222', '3333333','44444'],ul,key[i],sideCol);
-
                 }
             };
             addName(['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE']);
@@ -6102,17 +6102,36 @@ AttributePanel.prototype.createEnhanced = function(){
             editorcon.appendChild(div);
 
 
-			/*var addCon = document.getElementsByClassName('geaddCon')[0];
-			 var titleCon = document.getElementsByClassName('getitleCon')[0];
-			 mxEvent.addListener(addCon, 'click', function (oEvent) {
-			 for(i = 0;i<addCon.length;i++){
-			 addpro(titleCon);
-			 if(window.event){
-			 window.event.cancelBubble = true;
-			 }else{
-			 oEvent.stopPropagation();
-			 }
-			 }});*/
+            var liDiv = document.getElementsByClassName('gesideLi');
+            var liChange = document.getElementsByClassName('geliChange');
+            var olDiv = document.getElementsByClassName('gesideOl');
+            var olChange = document.getElementsByClassName('geolChange');
+            for (var i = 0; i < liDiv.length; i++)
+            {
+                mxEvent.addListener(liDiv[i], 'click', function () {
+                    for (var j = 0; j < liChange.length; j++) {
+                        liChange[j].className = "gesideLi";
+                        olChange[j].className = "gesideOl";
+                    }
+                    for (var k = 0; k < olChange.length; k++) {
+                        olChange[k].className = "gesideOl";
+                    }
+                    this.className = "geliChange";
+                });
+            }
+
+            for (var i = 0; i < olDiv.length; i++) {
+                mxEvent.addListener(olDiv[i], 'click', function () {
+                    for (var j = 0; j < liChange.length; j++) {
+                        liChange[j].className = "gesideLi";
+                        olChange[j].className = "gesideOl";
+                    }
+                    for (var k = 0; k < olChange.length; k++) {
+                        olChange[k].className = "gesideOl";
+                    }
+                    this.className = "geolChange";
+                });
+            };
 
             //INcol监听事件
             var titlecoll1 = document.getElementById('Static Properties');
