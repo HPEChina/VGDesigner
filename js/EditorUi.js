@@ -3730,7 +3730,12 @@ EditorUi.prototype.getModelJsonString = function()
         }
 		ret['attribute'] = attribute;
 
-        //组合
+		if (graph.getSelectionCell().parent.children.length == 1 &&
+			graph.getSelectionCell().getStyle() &&
+			graph.getSelectionCell().getStyle().indexOf('group') >= 0) {
+			graph.foldCells(false)//展开组
+		}
+		//组合
 		//检查所有图元是否已经组合, ==1组合，>1否
 		// var num = graph.getSelectionCell().parent.children.length;
 		// var select = graph.getSelectionCell();
