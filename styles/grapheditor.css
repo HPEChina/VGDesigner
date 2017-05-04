@@ -610,7 +610,6 @@ div.mxWindow .geButton {
 }
 .gesideLi{
 	width: calc(100% - 15px);
-	/*height: 22px;*/
 	font-size: 16px;
 	line-height: 22px;
 	padding-left: 15px;
@@ -633,6 +632,30 @@ div.mxWindow .geButton {
 }
 .gesideLi:hover, .gesideOl:hover{
 	background-color: #c0c0c0;
+}
+.geliChange{
+	width: calc(100% - 15px);
+	font-size: 16px;
+	line-height: 22px;
+	padding-left: 15px;
+	background-color: #9db2c8;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+.geolChange{
+	width: calc(100% - 35px);
+	height: 20px;
+	line-height: 20px;
+	padding: 1px 0 1px 35px;
+	background-color: #9db2c8;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 }
 .gesideliCol{
 	width: 10px;
