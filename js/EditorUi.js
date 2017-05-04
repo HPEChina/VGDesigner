@@ -3732,19 +3732,19 @@ EditorUi.prototype.getModelJsonString = function()
 
         //组合
 		//检查所有图元是否已经组合, ==1组合，>1否
-		var num = graph.getSelectionCell().parent.children.length;
-		var select = graph.getSelectionCell();
-		var group = null;
+		// var num = graph.getSelectionCell().parent.children.length;
+		// var select = graph.getSelectionCell();
+		// var group = null;
 		// var groupFlag = false;
-        if(num > 1 || (num == 1 && select.getStyle() && select.getStyle().indexOf('group') < 0)) {
-            group = graph.groupCells(null, 0);
-            graph.setSelectionCell(group);
-		}
-		else {
+        // if(num > 1 || (num == 1 && select.getStyle() && select.getStyle().indexOf('group') < 0)) {
+		var group = graph.groupCells(null, 0);
+		graph.setSelectionCell(group);
+		// }
+		// else {
         	// groupFlag = true;
-        	group = graph.getSelectionCell();
-			graph.foldCells(false)//展开组
-		}
+        	// group = graph.getSelectionCell();
+            // graph.foldCells(false)//展开组
+		// }
 
         var doc = mxUtils.createXmlDocument();
         var obj = doc.createElement('object');
@@ -3767,9 +3767,9 @@ EditorUi.prototype.getModelJsonString = function()
 		//update by wang,jianhui--end
 		
         //解组
-        if(num > 1) {
+        // if(num > 1) {
             graph.setSelectionCells(graph.ungroupCells());
-		}
+		// }
 
         var entry = { xml: xml, w: bounds.width, h: bounds.height };
 
