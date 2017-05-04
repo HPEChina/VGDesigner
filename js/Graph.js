@@ -2095,7 +2095,8 @@ Graph.prototype.getTooltipForCell = function(cell)
 			{
 				ignored.push('link');
 			}
-			
+            tip = 'ID: ' + cell.getId() + '\n';
+
 			for (var i = 0; i < attrs.length; i++)
 			{
 				if (mxUtils.indexOf(ignored, attrs[i].nodeName) < 0 && attrs[i].nodeValue.length > 0)
@@ -2109,17 +2110,23 @@ Graph.prototype.getTooltipForCell = function(cell)
 					{
 						var data = JSON.parse(attrs[i].nodeValue);
 						if(data.length > 0){
-							tip += attrs[i].nodeName + ':' + '\n';
+							tip += mxResources.get(attrs[i].nodeName) + ':' + '\n';
 							for(var j in data) {
                                 tip += '&nbsp;&nbsp;&nbsp;&nbsp;' + data[j].name;
-								for(var k in data[j].value) {
-									if( data[j].logic[k] == 'none') {
-                                        tip += data[j].operator[k] + data[j].value[k];
-									}
-									else {
-                                        tip += data[j].operator[k] + data[j].value[k] + ' ' + data[j].logic[k] + ' ';
-									}
+                                if(attrs[i].nodeName == 'intrinsic') {
+                                	tip += ': ' + data[j].value[0];
 								}
+								else {
+                                    for(var k in data[j].value) {
+                                        if( data[j].logic[k] == 'none') {
+                                            tip += data[j].operator[k] + data[j].value[k];
+                                        }
+                                        else {
+                                            tip += data[j].operator[k] + data[j].value[k] + ' ' + data[j].logic[k] + ' ';
+                                        }
+                                    }
+								}
+
 								tip += '\n';
 							}
 						}
@@ -2136,6 +2143,18 @@ Graph.prototype.getTooltipForCell = function(cell)
 				tip = tip.substring(0, tip.length - 1);
 			}
 		}
+	}
+	else if(cell.edge) {
+        tip = 'ID: ' + cell.getId() + '\n';
+        tip += 'Source Id: ';
+        if(cell.source != null) {
+        	tip += cell.source.getId();
+		}
+		tip += '\n';
+        tip += 'Target Id: ';
+        if(cell.target != null) {
+            tip += cell.target.getId();
+        }
 	}
 	
 	return tip;
