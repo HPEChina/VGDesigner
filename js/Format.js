@@ -5784,7 +5784,7 @@ AttributePanel.prototype.createEnhanced = function(){
             var editorcon = document.getElementsByClassName('geEditor')[0];
             var side = document.getElementsByClassName('geSidebarContainer')[0];
             var div = document.createElement('div');
-            div.style.width = 0.5 * document.body.clientWidth + 'px';
+            div.style.width = 0.7 * document.body.clientWidth + 'px';
             div.style.height = side.style.height;
             div.className = 'geEnhanced';
 
@@ -5848,7 +5848,7 @@ AttributePanel.prototype.createEnhanced = function(){
                     liCon.appendChild(ol);
                 }
 
-                mxEvent.addListener(li, 'click', function()
+                mxEvent.addListener(img, 'click', function()
                 {
                     if(liCon.style.display == 'block'){
                         liCon.style.display = 'none';
@@ -5882,7 +5882,7 @@ AttributePanel.prototype.createEnhanced = function(){
                     addOl(['aaaa', 'bbbbb', 'ccc'],li,name[i],sideliCol,titleCon);
                 }
 
-				 mxEvent.addListener(ul, 'click', function()
+				 mxEvent.addListener(img, 'click', function()
 				 {
 					 if(titleCon.style.display == 'block'){
                          titleCon.style.display = 'none';
@@ -5910,7 +5910,6 @@ AttributePanel.prototype.createEnhanced = function(){
                     ul.appendChild(sideCol);
 
                     addLi(['1111', '222', '3333333','44444'],ul,key[i],sideCol);
-
                 }
             };
             addName(['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE']);
