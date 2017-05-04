@@ -101,6 +101,7 @@ editImage=编辑图片
 editLink=编辑链接
 editStyle=编辑样式
 editTooltip=编辑提示信息
+enhancedPanel=增强属性面板
 enterGroup=进入组
 enterValue=输入值
 enterName=输入名称

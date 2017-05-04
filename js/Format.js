@@ -5740,7 +5740,7 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
 		var newProp = document.createElement('div');
 		newProp.style.whiteSpace = 'nowrap';
 		newProp.style.marginTop = '16px';
-	    	newProp.style.textAlign = 'center';
+		newProp.style.textAlign = 'center';
 
 		div.appendChild(newProp);
 
@@ -5769,18 +5769,45 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
 
 };
 
-AttributePanel.prototype.createEnhanced = function(){
+AttributePanel.prototype.createEnhanced = function()
+{
+    // var ui = this.editorUi;
+    // var graph = ui.editor.graph;
     var container = this.container;
-    var leftcoll = document.createElement('img');
-    leftcoll.setAttribute('src', Format.prototype.leftOpen);
-    leftcoll.className = 'geleftcoll';
-    container.appendChild(leftcoll);
+
+    var title = this.createTitle(mxResources.get('enhancedPanel'));
+    title.style.paddingLeft = '18px';
+    title.style.paddingTop = '10px';
+    title.style.paddingBottom = '6px';
+    container.appendChild(title);
+
+    var div = this.createPanel();
+    this.container.appendChild(div);
+    var enhancedDiv = document.createElement('div');
+    enhancedDiv.style.whiteSpace = 'nowrap';
+    enhancedDiv.style.marginTop = '10px';
+    enhancedDiv.style.textAlign = 'center';
+    div.appendChild(enhancedDiv);
+
+    var enBtn = mxUtils.button(mxResources.get('open'), Enhanced);
+
+    enBtn.style.width = '62%';
+    enBtn.className = 'btn-purple';
+    enhancedDiv.appendChild(enBtn);
+
+
+    // var container = this.container;
+    // var leftcoll = document.createElement('img');
+    // leftcoll.setAttribute('src', Format.prototype.leftOpen);
+    // leftcoll.className = 'geleftcoll';
+    // container.appendChild(leftcoll);
 
     function Enhanced() {
         var enhanced = document.getElementsByClassName('geEnhanced')[0];
         if(enhanced){
             enhanced.style.display = 'block';
-        }else {
+        }
+        else {
             var editorcon = document.getElementsByClassName('geEditor')[0];
             var side = document.getElementsByClassName('geSidebarContainer')[0];
             var div = document.createElement('div');
@@ -6205,10 +6232,7 @@ AttributePanel.prototype.createEnhanced = function(){
                 }
             });
 
-        };
-    };
+        }
+    }
 
-
-    mxEvent.addListener(leftcoll, 'click', Enhanced);
-
-};
+}
