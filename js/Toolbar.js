@@ -58,10 +58,12 @@ Toolbar.prototype.init = function()
 	
 	// Takes into account initial compact mode
 	sw -= (screen.height > 740) ? 56 : 0;
-	
+
+
 	if (sw >= 700)
 	{
-		var formatMenu = this.addMenu('', mxResources.get('view') + ' (' + mxResources.get('panTooltip') + ')', true, 'viewPanels', null, true);
+        this.addItems(['new','-']);
+        var formatMenu = this.addMenu('', mxResources.get('view') + ' (' + mxResources.get('panTooltip') + ')', true, 'viewPanels', null, true);
 		this.addDropDownArrow(formatMenu, 'geSprite-formatpanel', 38, 50, -4, -3, 36, -8);
 		this.addSeparator();
 	}
@@ -115,6 +117,9 @@ Toolbar.prototype.init = function()
 		elts[1].setAttribute('title', mxResources.get('delete') + ' (' + this.editorUi.actions.get('delete').shortcut + ')');
 		// 4/17
         this.addItems(['-', 'lockUnlock']);
+        this.addItems(['-', 'collapsible']);
+        this.addItems(['-', 'expand']);
+        this.addItems(['-', 'collapse']);
 	}
 	
 	if (sw >= 550)
