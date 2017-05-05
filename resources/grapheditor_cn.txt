@@ -276,6 +276,7 @@ search=搜索
 searchShapes=搜索模型
 selectAll=全选
 selectEdges=选择连线
+selectImgFile=选择图片
 selectFont=选择一个字体
 selectNone=取消选择
 selectThumbnail=选择缩略图
