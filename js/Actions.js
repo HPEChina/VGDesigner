@@ -264,6 +264,7 @@ Actions.prototype.init = function()
 	this.addAction('expand', function() { graph.foldCells(false); }, null, null, 'Ctrl+Page Down');
 	this.addAction('collapse', function() { graph.foldCells(true); }, null, null, 'Ctrl+Page Up');
 
+
 	// Arrange actions
 	this.addAction('toFront', function() { graph.orderCells(false); }, null, null, 'Ctrl+Shift+F');
 	this.addAction('toBack', function() { graph.orderCells(true); }, null, null, 'Ctrl+Shift+B');
