@@ -386,12 +386,14 @@ div.mxWindow .geButton {
 	font-size:11pt;
 	font-weight:normal;
 	padding:6px 0px 6px 26px;
-	margin:0px;
-	background:#ddd;
+	background:#ebebeb;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	line-height:1.4em;
+	border-radius: 7px;
+	margin-right: 10px;
+	margin-bottom: 3px;
 }
 .geSidebarContainer .geFirstTitle:hover {
 	color:#f95f5b;
@@ -988,7 +990,7 @@ div.mxWindow .geButton {
 /*4/17*/
 .geSprite-lockunlock { background-position: 0 -6226px; }
 .geSprite-collapsible { background-position: 0 -6270px; }
-.geSprite-new { background-position: 0 -6226px; }
+.geSprite-new { background-position: 0 -6401px; }
 .geSprite-collapse { background-position: 0 -6315px; }
 .geSprite-expand { background-position: 0 -6359px; }
 
@@ -1010,8 +1012,8 @@ div.mxWindow .geButton {
 .formatTab:last-child{ margin-right: 0;}
 .formatPanel {white-space: nowrap;color: rgb(112, 112, 112);text-align: left;cursor:default;margin-left: 5px;}
 
-.geSidebarContainer .fileA {position: relative;overflow: hidden;height: 27px;line-height: 27px;color: #fff;width: 171px;border: 0;}
-.geSidebarContainer .fileInput {position: absolute;opacity: 0;left: -65px;height: 27px;width: calc(100% + 65px);border: 0;padding: 0;cursor: pointer;}
+.geSidebarContainer .fileA,.geDialog .fileA {position: relative;overflow: hidden;height: 27px;line-height: 27px;color: #fff;width: 171px;border: 0;}
+.geSidebarContainer .fileInput,.geDialog .fileInput {position: absolute;opacity: 0;left: -65px;height: 27px;width: calc(100% + 65px);border: 0;padding: 0;cursor: pointer;}
 
 .codeSelected {border-bottom: 4px solid #3a3e55;font-weight: bold;font-style: italic;}
 

@@ -2708,23 +2708,41 @@ var LocalImgDialog = function(editorUi, btnLabel, fn)
 	
 	var inner = document.createElement('div');
 	inner.className = 'geTitle';
-	inner.style.backgroundColor = 'transparent';
-	inner.style.borderColor = 'transparent';
 	inner.style.whiteSpace = 'nowrap';
 	inner.style.textOverflow = 'clip';
-	inner.style.cursor = 'default';
+	inner.style.marginTop = '10px';
+	inner.style.position = 'relative';
 	
 	if (!mxClient.IS_VML)
 	{
 		inner.style.paddingRight = '20px';
 	}
+	var imgA = document.createElement('a');
+	imgA.className = 'fileA btn-purple';
+	mxUtils.write(imgA, mxResources.get('selectImgFile'));
+
+	var span = document.createElement('span');
+	span.style.position = 'absolute';
+	span.style.top = '6px';
+	span.style.marginLeft = '10px';
+	span.style.width = '230px';
+	span.style.textOverflow = 'ellipsis';
+	span.style.overflow = 'hidden';
 	
 	var imgInput = document.createElement('input');
+	imgInput.className = 'fileInput';
 	imgInput.setAttribute('type', 'file');
 	imgInput.setAttribute('accept', 'image/png,image/jpeg');
-	imgInput.style.marginTop = '6px';
+	mxEvent.addListener(imgInput, 'change', function () {
+		if (imgInput.files.length > 0) {
+			mxUtils.write(span, imgInput.files[0].name);
+			span.setAttribute('title', imgInput.files[0].name);
+		}
+	});
 	
-	inner.appendChild(imgInput);
+	imgA.appendChild(imgInput);
+	inner.appendChild(imgA);
+	inner.appendChild(span);
 	div.appendChild(inner);
 	
 	var btns = document.createElement('div');
@@ -2735,7 +2753,9 @@ var LocalImgDialog = function(editorUi, btnLabel, fn)
 	{
 		editorUi.hideDialog();
 	});
-	cancelBtn.className = 'geBtn';
+	cancelBtn.style.width = '80px';
+	cancelBtn.style.marginRight = '5px';
+	cancelBtn.className = 'btn-gray';
 	
 	if (editorUi.editor.cancelFirst)
 	{
@@ -2772,7 +2792,8 @@ var LocalImgDialog = function(editorUi, btnLabel, fn)
 			reader.readAsDataURL(imgInput.files[0]);
 		}
 	});
-	mainBtn.className = 'geBtn gePrimaryBtn';
+	mainBtn.style.width = '80px';
+	mainBtn.className = 'btn-purple';
 	btns.appendChild(mainBtn);
 	
 	if (!editorUi.editor.cancelFirst)
