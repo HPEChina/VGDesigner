@@ -145,10 +145,12 @@ function list2tree(resources, ids) {//生成嵌套结构
         var id = ids.pop()
         var parentId = resources[id].parent
         delete resources[id].parent
-        if (parentId === '1') parentId = '0'
-        if (parentId && resources[parentId]) {
-            resources[parentId].resources.push(resources[id])
-            delete resources[id]
+        if (parentId) {
+            if (!resources[parentId]) parentId = '0'//忽略保存模型时强制加组,topo忽略底板
+            if (resources[parentId]) {
+                resources[parentId].resources.push(resources[id])
+                delete resources[id]
+            }
         }
     }
     return obj_values(resources)
