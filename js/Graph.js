@@ -2155,6 +2155,16 @@ Graph.prototype.getTooltipForCell = function(cell)
         if(cell.target != null) {
             tip += cell.target.getId();
         }
+
+        //jim: todo: mousemove and mouseleave
+        // var state = this.view.getState(cell);
+        // var shape = state.shape;
+        // // shape.isDashed = false;
+        // shape.stroke = '#00FF00';
+        // shape.strokewidth = 3;
+        // // shape.strokewidth = 3 / shape.scale / shape.scale;
+        // shape.isShadow = true;
+        // shape.redraw();
 	}
 	
 	return tip;
@@ -2259,7 +2269,7 @@ HoverIcons = function(graph)
 /**
  * Up arrow.
  */
-HoverIcons.prototype.arrowSpacing = 6;
+HoverIcons.prototype.arrowSpacing = 0;
 
 /**
  * Delay to switch to another state for overlapping bbox. Default is 500ms.
@@ -2290,7 +2300,7 @@ HoverIcons.prototype.inactiveOpacity = 15;
  * Whether to hide arrows that collide with vertices.
  * LATER: Add keyboard override, touch support.
  */
-HoverIcons.prototype.checkCollisions = true;
+HoverIcons.prototype.checkCollisions = false;
 
 /**
  * Up arrow.
