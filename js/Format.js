@@ -5114,7 +5114,8 @@ AttributePanel.prototype.init = function()
     	delete tObj['extended'];
 	}
 
-	this.createEnhanced();
+	this.createEnhancedPanel();
+    // this.createEnhanced1();
 
     for( var o in tObj){
 		this.createAttrsPanel(cell, value, tObj[o], o, allNames);
@@ -5769,6 +5770,113 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
 
 };
 
+/**
+ * 创建扩展面板
+ */
+AttributePanel.prototype.createEnhancedPanel = function()
+{
+    var title = this.createTitle(mxResources.get('enhancedPanel'));
+    title.style.paddingLeft = '18px';
+    title.style.paddingTop = '10px';
+    title.style.paddingBottom = '6px';
+    this.container.appendChild(title);
+
+    var div = this.createPanel();
+    this.container.appendChild(div);
+    var enhDiv = document.createElement('div');
+    enhDiv.style.whiteSpace = 'nowrap';
+    enhDiv.style.marginTop = '10px';
+    enhDiv.style.textAlign = 'center';
+    div.appendChild(enhDiv);
+
+    var enhBtn = mxUtils.button(mxResources.get('open'), openEnhancedPanel);
+    enhBtn.style.width = '62%';
+    enhBtn.className = 'btn-purple';
+    enhDiv.appendChild(enhBtn);
+
+    function openEnhancedPanel()
+	{
+		var enhancedPanel = document.getElementsByClassName('geEnhanced')[0];
+		if (enhancedPanel) {
+            enhancedPanel.style.display = 'block';
+		}
+		else {
+			createNewPanel();
+		}
+	}
+
+	function createNewPanel()
+	{
+        var vgDesignerDiv = document.getElementsByClassName('geEditor')[0];
+        var sidebar = document.getElementsByClassName('geSidebarContainer')[1];
+        var div = document.createElement('div');
+        div.style.width = 0.7 * document.body.clientWidth + 'px';
+        div.style.height = sidebar.style.height;
+        div.className = 'geEnhanced';
+
+        //左右两部分Div
+        var leftDiv = document.createElement('div');
+        var rightDiv = document.createElement('div');
+        leftDiv.className = 'geEnhancedLeftDiv';
+        rightDiv.className = 'geEnhancedRightDiv';
+
+        // 左侧顶部栏
+        var leftTitle = document.createElement('div');
+        leftTitle.className = 'geEnhancedTitle';
+        var title = document.createElement('label');
+        title.className = 'geEnhancedLabel';
+        title.innerHTML = mxResources.get('resourceList');
+        leftTitle.appendChild(title);
+        var closeImg = document.createElement('img');
+        closeImg.setAttribute('src', Format.prototype.rightClose);
+        closeImg.className = 'geEnhancedCloseImg';
+        leftTitle.appendChild(closeImg);
+        leftDiv.appendChild(leftTitle);
+        mxEvent.addListener(closeImg, 'click', function () {
+            div.style.display = 'none';
+        });
+
+        //右侧顶部栏
+        var rightTitle = document.createElement('div');
+        rightTitle.className = 'geEnhancedTitle';
+        title = document.createElement('label');
+        title.className = 'geEnhancedLabel';
+        title.innerHTML = mxResources.get('attribute');
+        rightTitle.appendChild(title);
+        // var okDiv = document.createElement('img');
+        // okDiv.setAttribute('src', Format.prototype.sureImage);
+        // okDiv.className = 'geokDiv';
+        // rightTitle.appendChild(okDiv);
+        rightDiv.appendChild(rightTitle);
+
+        //左侧列表
+        var listDiv = document.createElement('div');
+        listDiv.className = 'geEnhancedList';
+        leftDiv.appendChild(listDiv);
+
+		var listRoot = function() {
+            var div = document.createElement('div');
+            // div.id = key[i];
+            div.className = 'gesideUl';
+            listDiv.appendChild(div);
+            var enLabel = document.createElement('label');
+            enLabel.innerHTML = '';
+            enLabel.className = 'geenLabel';
+            div.appendChild(enLabel);
+            var sideCol = document.createElement('img');
+            sideCol.setAttribute('src', Sidebar.prototype.collapsedImage);
+            sideCol.className = 'gesideCol';
+            div.appendChild(sideCol);
+		};
+		listRoot();
+
+        div.appendChild(leftDiv);
+        div.appendChild(rightDiv);
+        vgDesignerDiv.appendChild(div);
+	}
+
+};
+
 AttributePanel.prototype.createEnhanced = function()
 {
     // var ui = this.editorUi;
@@ -5818,19 +5926,19 @@ AttributePanel.prototype.createEnhanced = function()
             //左右两部分Div
             var leftD = document.createElement('div');
             var rightD = document.createElement('div');
-            leftD.className = 'geleftD';
-            rightD.className = 'gerightD';
+            leftD.className = 'geEnhancedLeftDiv';
+            rightD.className = 'geEnhancedRightDiv';
 
             // 左侧顶部栏
             var leftT = document.createElement('div');
-            leftT.className = 'geleftT';
+            leftT.className = 'geEnhancedTitle';
             var labL = document.createElement('label');
-            labL.className = 'gelabL';
+            labL.className = 'geEnhancedLabel';
             labL.innerHTML = 'LTE-TDD';
             leftT.appendChild(labL);
             var colDiv = document.createElement('img');
             colDiv.setAttribute('src', Format.prototype.rightClose);
-            colDiv.className = 'gecolDiv';
+            colDiv.className = 'geEnhancedCloseImg';
             leftT.appendChild(colDiv);
 
             mxEvent.addListener(colDiv, 'click', function () {
@@ -5843,9 +5951,9 @@ AttributePanel.prototype.createEnhanced = function()
 
             //右侧顶部栏
             var rightT = document.createElement('div');
-            rightT.className = 'geleftT';
+            rightT.className = 'geEnhancedTitle';
             var labR = document.createElement('label');
-            labR.className = 'gelabL';
+            labR.className = 'geEnhancedLabel';
             labR.innerHTML = 'ATTRIBUTE OF MODEL';
             rightT.appendChild(labR);
             var okDiv = document.createElement('img');
@@ -5910,16 +6018,16 @@ AttributePanel.prototype.createEnhanced = function()
                     addOl(['aaaa', 'bbbbb', 'ccc'],li,name[i],sideliCol,titleCon);
                 }
 
-				 mxEvent.addListener(img, 'click', function()
-				 {
-					 if(titleCon.style.display == 'block'){
-                         titleCon.style.display = 'none';
-                         img.setAttribute('src', Sidebar.prototype.collapsedImage);
-                     }else{
-                         titleCon.style.display = 'block';
-                         img.setAttribute('src', Sidebar.prototype.expandedImage);
-                     }
-				 });
+                mxEvent.addListener(img, 'click', function()
+                {
+                    if(titleCon.style.display == 'block'){
+                        titleCon.style.display = 'none';
+                        img.setAttribute('src', Sidebar.prototype.collapsedImage);
+                    }else{
+                        titleCon.style.display = 'block';
+                        img.setAttribute('src', Sidebar.prototype.expandedImage);
+                    }
+                });
             };
 
             var addName = function (key) {
@@ -6035,9 +6143,9 @@ AttributePanel.prototype.createEnhanced = function()
                 con.appendChild(titleCon);
 
                 var adddef = function (div, key, value) {
-                	var defDiv = document.createElement('div');
-                	defDiv.className = 'geproDiv';
-                	div.appendChild(defDiv);
+                    var defDiv = document.createElement('div');
+                    defDiv.className = 'geproDiv';
+                    div.appendChild(defDiv);
                     var inputN = document.createElement('input');
                     inputN.className = 'geinputN';
                     inputN.placeholder = 'NAME';
