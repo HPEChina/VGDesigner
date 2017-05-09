@@ -517,29 +517,29 @@ div.mxWindow .geButton {
 	/*margin-left: -15px;*/
 	cursor: pointer;
 }
-.geleftD{
+.geEnhancedLeftDiv{
 	width: 30%;
 	height: 100%;
 	float: left;
 }
-.gerightD{
+.geEnhancedRightDiv{
 	width: 70%;
 	height: 100%;
 	float: left;
 }
-.geleftT{
+.geEnhancedTitle{
 	width: 100%;
 	height: 35px;
 	text-align: center;
 	background-color: #337ab7;
 }
-.gelabL{
+.geEnhancedLabel{
 	width: 100px;
 	line-height: 35px;
 	margin: 0 auto;
 	color: #FFF;
 }
-.gecolDiv{
+.geEnhancedCloseImg{
 	width: 12px;
 	height: 12px;
 	float: left;
@@ -555,7 +555,7 @@ div.mxWindow .geButton {
 	float: right;
 	cursor: pointer;
 }
-.geside{
+.geEnhancedList{
 	width: 92%;
 	height: calc(97% - 35px);
 	top: 35px;
@@ -608,10 +608,10 @@ div.mxWindow .geButton {
 	pointer-events: auto;
 }
 .gesideCol{
-	width: 10px;
-	height: 10px;
+	width: 16px;
+	height: 16px;
 	float: left;
-	margin-top: 8px;
+	margin-top: 5px;
 	margin-left: 7px;
 }
 .gesideLi{
@@ -682,8 +682,8 @@ div.mxWindow .geButton {
 	-ms-user-select: none;
 }
 .gesideliCol{
-	width: 10px;
-	height: 10px;
+	width: 16px;
+	height: 16px;
 	float: left;
 	margin-top: 5px;
 	margin-left: 7px;

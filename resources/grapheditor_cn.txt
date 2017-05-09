@@ -249,6 +249,7 @@ print=打印
 propertyNameIsEmpty=属性名称为空
 radialTree=放射树
 range=范围
+resourceList=资源列表
 redo=重做
 removeFormat=Clear Formatting
 removeFromGroup=从组中移出
