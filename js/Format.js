@@ -5353,15 +5353,12 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
     {
         var td = document.createElement('td');
         var removeAttr = document.createElement('a');
-        var img = mxUtils.createImage(Dialog.prototype.closeImage);
-        img.style.height = '9px';
-        img.style.fontSize = '9px';
+        var img = mxUtils.createImage("/images/delete.png");
+        img.style.height = '15px';
+		img.style.opacity = '.6';
 
         removeAttr.className = 'geButton';
         removeAttr.setAttribute('title', mxResources.get('delete'));
-        removeAttr.style.margin = '0px';
-        removeAttr.style.width = '14px';
-        removeAttr.style.height = '14px';
         removeAttr.style.fontSize = '14px';
         removeAttr.style.cursor = 'pointer';
         removeAttr.style.marginLeft = '6px';
@@ -5411,14 +5408,11 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
         var td = document.createElement('td');
         var editAttr = document.createElement('a');
         var img = mxUtils.createImage(Dialog.prototype.editImage);
-        img.style.height = '12px';
-        img.style.fontSize = '9px';
+        img.style.height = '15px';
+		img.style.opacity = '.7';
 
         editAttr.className = 'geButton';
         editAttr.setAttribute('title', mxResources.get('edit'));
-        editAttr.style.margin = '0px';
-        editAttr.style.width = '14px';
-        editAttr.style.height = '14px';
         editAttr.style.fontSize = '14px';
         editAttr.style.cursor = 'pointer';
         editAttr.style.marginLeft = '6px';
