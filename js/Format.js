@@ -1583,7 +1583,8 @@ ArrangePanel.prototype.addLayerOps = function(div)
 
 	btn.setAttribute('title', mxResources.get('toFront') + ' (' + this.editorUi.actions.get('toFront').shortcut + ')');
 	btn.style.width = '36%';
-	btn.className = 'btn-purple';
+	btn.style.height = '22px';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	var btn = mxUtils.button(mxResources.get('toBack'), function(evt)
@@ -1593,8 +1594,9 @@ ArrangePanel.prototype.addLayerOps = function(div)
 
 	btn.setAttribute('title', mxResources.get('toBack') + ' (' + this.editorUi.actions.get('toBack').shortcut + ')');
 	btn.style.width = '36%';
+	btn.style.height = '22px';
 	btn.style.marginLeft = '3%';
-	btn.className = 'btn-purple';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	return div;
@@ -1624,7 +1626,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		btn.setAttribute('title', mxResources.get('group') + ' (' + this.editorUi.actions.get('group').shortcut + ')');
 		btn.style.width = '75%';
 		btn.style.marginBottom = '5px';
-		btn.className = 'btn-purple';
+		btn.style.height = '22px';
+		btn.className = 'geColorBtn';
 		div.appendChild(btn);
 		count++;
 	}
@@ -1639,7 +1642,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		btn.setAttribute('title', mxResources.get('ungroup') + ' (' + this.editorUi.actions.get('ungroup').shortcut + ')');
 		btn.style.width = '75%';
 		btn.style.marginBottom = '5px';
-		btn.className = 'btn-purple';
+		btn.style.height = '22px';
+		btn.className = 'geColorBtn';
 		div.appendChild(btn);
 		count++;
 	}
@@ -1660,7 +1664,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		btn.setAttribute('title', mxResources.get('removeFromGroup'));
 		btn.style.width = '75%';
 		btn.style.marginBottom = '5px';
-		btn.className = 'btn-purple';
+		btn.style.height = '22px';
+		btn.className = 'geColorBtn';
 		div.appendChild(btn);
 		count++;
 	}
@@ -1679,7 +1684,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		btn.setAttribute('title', mxResources.get('clearWaypoints'));
 		btn.style.width = '75%';
 		btn.style.marginBottom = '5px';
-		btn.className = 'btn-purple';
+		btn.style.height = '22px';
+		btn.className = 'geColorBtn';
 		div.appendChild(btn);
 
 		count++;
@@ -1712,7 +1718,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		btn.setAttribute('title', mxResources.get('editLink'));
 		btn.style.width = '75%';
 		btn.style.marginBottom = '2px';
-		btn.className = 'btn-purple';
+		btn.style.height = '22px';
+		btn.className = 'geColorBtn';
 		div.appendChild(btn);
 		count++;
 	}
@@ -1793,7 +1800,8 @@ ArrangePanel.prototype.addFlip = function(div)
 
 	btn.setAttribute('title', mxResources.get('horizontal'));
 	btn.style.width = '36%';
-	btn.className = 'btn-purple';
+	btn.style.height = '22px';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	var btn = mxUtils.button(mxResources.get('vertical'), function(evt)
@@ -1804,7 +1812,8 @@ ArrangePanel.prototype.addFlip = function(div)
 	btn.setAttribute('title', mxResources.get('vertical'));
 	btn.style.width = '36%';
 	btn.style.marginLeft = '3%';
-	btn.className = 'btn-purple';
+	btn.style.height = '22px';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	return div;
@@ -1836,7 +1845,8 @@ ArrangePanel.prototype.addDistribute = function(div)
 
 	btn.setAttribute('title', mxResources.get('horizontal'));
 	btn.style.width = '36%';
-	btn.className = 'btn-purple';
+	btn.style.height = '22px';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	var btn = mxUtils.button(mxResources.get('vertical'), function(evt)
@@ -1847,7 +1857,8 @@ ArrangePanel.prototype.addDistribute = function(div)
 	btn.setAttribute('title', mxResources.get('vertical'));
 	btn.style.width = '36%';
 	btn.style.marginLeft = '3%';
-	btn.className = 'btn-purple';
+	btn.style.height = '22px';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	return div;
@@ -3471,7 +3482,8 @@ StyleFormatPanel.prototype.addEditOps = function(div)
 
 		btn.style.width = '75%';
 		btn.style.marginBottom = '5px';
-		btn.className = 'btn-purple';
+		btn.style.height = '22px';
+		btn.className = 'geColorBtn';
 		
 		div.appendChild(btn);
 	}
@@ -3489,15 +3501,18 @@ StyleFormatPanel.prototype.addEditOps = function(div)
 		if (btn == null)
 		{
 			btn2.style.width = '75%';
-			btn2.className = 'btn-purple';
+			btn.style.height = '22px';
+			btn.className = 'geColorBtn';
 		}
 		else
 		{
 			btn.style.width = '36%';
-			btn.className = 'btn-purple';
+			btn.style.height = '22px';
+			btn.className = 'geColorBtn';
 			btn2.style.width = '36%';
 			btn2.style.marginLeft = '3%';
-			btn2.className = 'btn-purple';
+			btn2.style.height = '22px';
+			btn2.className = 'geColorBtn';
 		}
 
 		div.appendChild(btn2);
@@ -4403,7 +4418,8 @@ StyleFormatPanel.prototype.addStyleOps = function(div)
 
 	btn.setAttribute('title', mxResources.get('setAsDefaultStyle') + ' (' + this.editorUi.actions.get('setAsDefaultStyle').shortcut + ')');
 	btn.style.width = '75%';
-	btn.className = 'btn-purple';
+	btn.style.height = '22px';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	return div;
@@ -5038,7 +5054,7 @@ DiagramFormatPanel.prototype.addStyleOps = function(div)
 	}));
 
 	btn.setAttribute('title', mxResources.get('clearDefaultStyle') + ' (' + this.editorUi.actions.get('clearDefaultStyle').shortcut + ')');
-    	btn.style.width = '75%';
+    btn.style.width = '75%';
 	btn.className = 'btn-purple';
 
 	div.style.padding = '10px 0';
