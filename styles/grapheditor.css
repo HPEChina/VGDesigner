@@ -580,6 +580,10 @@ div.mxWindow .geButton {
 	-webkit-user-select: none;
 	-ms-user-select: none;
 }
+.gesideUl:first-child{
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
 .geenLabel{
 	margin-left: 5px;
 }
@@ -634,6 +638,10 @@ div.mxWindow .geButton {
 	user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
+}
+.geulChange:first-child{
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
 }
 .gesideOl{
 	width: calc(100% - 35px);
@@ -702,11 +710,14 @@ div.mxWindow .geButton {
 	-webkit-user-select: none;
 	-ms-user-select: none;
 }
+.gesideTitle:first-child{
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
 .getitleLab{
 	width: 100px;
 	line-height: 30px;
 	margin:0 auto;
-	color: #000000;
 	font-weight: bold;
 	padding-left: 20px;
 }
@@ -721,10 +732,8 @@ div.mxWindow .geButton {
 	margin-left: 10px;
 }
 .geaddCon{
-	width: 15px;
-	height: 15px;
 	float: right;
-	margin-top: 9px;
+	margin-top: 3px;
 	margin-right: 9px;
 	/*pointer-events: auto;*/
 	/*cursor: pointer;*/
@@ -783,7 +792,6 @@ div.mxWindow .geButton {
 	background:white;
 	overflow:hidden;
 	padding:30px;
-	border:1px solid #acacac;
 	-webkit-box-shadow:0px 0px 2px 2px #d5d5d5;
 	-moz-box-shadow:0px 0px 2px 2px #d5d5d5;
 	box-shadow:0px 0px 2px 2px #d5d5d5;

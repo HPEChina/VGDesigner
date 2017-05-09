@@ -6036,7 +6036,7 @@ AttributePanel.prototype.createEnhanced = function()
                     ul.id = key[i];
                     ul.className = 'gesideUl';
                     side.appendChild(ul);
-                    var enLabel = document.createElement('label');
+                    var enLabel = document.createElement('span');
                     enLabel.innerHTML = key[i];
                     enLabel.className = 'geenLabel';
                     ul.appendChild(enLabel);
@@ -6132,9 +6132,9 @@ AttributePanel.prototype.createEnhanced = function()
                 titleLab.className = 'getitleLab';
                 titleLab.innerHTML = tit;
                 title.appendChild(titleLab);
-                var addCon = document.createElement('img');
-                addCon.className = 'geaddCon';
-                addCon.setAttribute('src', Format.prototype.addproCon);
+                var addCon = document.createElement('span');
+                addCon.className = 'geaddCon icon-24 icon-add';
+                // addCon.setAttribute('src', Format.prototype.addproCon);
                 title.appendChild(addCon);
                 con.appendChild(title);
                 var titleCon = document.createElement('div');
@@ -6193,8 +6193,8 @@ AttributePanel.prototype.createEnhanced = function()
                 titleLab.className = 'getitleLab';
                 titleLab.innerHTML = tit;
                 title.appendChild(titleLab);
-                var addCon = document.createElement('img');
-                addCon.className = 'geaddCon';
+                var addCon = document.createElement('span');
+                addCon.className = 'geaddCon icon-24 icon-add';
                 addCon.setAttribute('src', Format.prototype.addproCon);
                 title.appendChild(addCon);
                 con.appendChild(title);
