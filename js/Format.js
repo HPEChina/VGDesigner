@@ -1583,7 +1583,8 @@ ArrangePanel.prototype.addLayerOps = function(div)
 
 	btn.setAttribute('title', mxResources.get('toFront') + ' (' + this.editorUi.actions.get('toFront').shortcut + ')');
 	btn.style.width = '36%';
-	btn.className = 'btn-purple';
+	btn.style.height = '22px';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	var btn = mxUtils.button(mxResources.get('toBack'), function(evt)
@@ -1593,8 +1594,9 @@ ArrangePanel.prototype.addLayerOps = function(div)
 
 	btn.setAttribute('title', mxResources.get('toBack') + ' (' + this.editorUi.actions.get('toBack').shortcut + ')');
 	btn.style.width = '36%';
+	btn.style.height = '22px';
 	btn.style.marginLeft = '3%';
-	btn.className = 'btn-purple';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	return div;
@@ -1624,7 +1626,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		btn.setAttribute('title', mxResources.get('group') + ' (' + this.editorUi.actions.get('group').shortcut + ')');
 		btn.style.width = '75%';
 		btn.style.marginBottom = '5px';
-		btn.className = 'btn-purple';
+		btn.style.height = '22px';
+		btn.className = 'geColorBtn';
 		div.appendChild(btn);
 		count++;
 	}
@@ -1639,7 +1642,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		btn.setAttribute('title', mxResources.get('ungroup') + ' (' + this.editorUi.actions.get('ungroup').shortcut + ')');
 		btn.style.width = '75%';
 		btn.style.marginBottom = '5px';
-		btn.className = 'btn-purple';
+		btn.style.height = '22px';
+		btn.className = 'geColorBtn';
 		div.appendChild(btn);
 		count++;
 	}
@@ -1660,7 +1664,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		btn.setAttribute('title', mxResources.get('removeFromGroup'));
 		btn.style.width = '75%';
 		btn.style.marginBottom = '5px';
-		btn.className = 'btn-purple';
+		btn.style.height = '22px';
+		btn.className = 'geColorBtn';
 		div.appendChild(btn);
 		count++;
 	}
@@ -1679,7 +1684,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		btn.setAttribute('title', mxResources.get('clearWaypoints'));
 		btn.style.width = '75%';
 		btn.style.marginBottom = '5px';
-		btn.className = 'btn-purple';
+		btn.style.height = '22px';
+		btn.className = 'geColorBtn';
 		div.appendChild(btn);
 
 		count++;
@@ -1712,7 +1718,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		btn.setAttribute('title', mxResources.get('editLink'));
 		btn.style.width = '75%';
 		btn.style.marginBottom = '2px';
-		btn.className = 'btn-purple';
+		btn.style.height = '22px';
+		btn.className = 'geColorBtn';
 		div.appendChild(btn);
 		count++;
 	}
@@ -1793,7 +1800,8 @@ ArrangePanel.prototype.addFlip = function(div)
 
 	btn.setAttribute('title', mxResources.get('horizontal'));
 	btn.style.width = '36%';
-	btn.className = 'btn-purple';
+	btn.style.height = '22px';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	var btn = mxUtils.button(mxResources.get('vertical'), function(evt)
@@ -1804,7 +1812,8 @@ ArrangePanel.prototype.addFlip = function(div)
 	btn.setAttribute('title', mxResources.get('vertical'));
 	btn.style.width = '36%';
 	btn.style.marginLeft = '3%';
-	btn.className = 'btn-purple';
+	btn.style.height = '22px';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	return div;
@@ -1836,7 +1845,8 @@ ArrangePanel.prototype.addDistribute = function(div)
 
 	btn.setAttribute('title', mxResources.get('horizontal'));
 	btn.style.width = '36%';
-	btn.className = 'btn-purple';
+	btn.style.height = '22px';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	var btn = mxUtils.button(mxResources.get('vertical'), function(evt)
@@ -1847,7 +1857,8 @@ ArrangePanel.prototype.addDistribute = function(div)
 	btn.setAttribute('title', mxResources.get('vertical'));
 	btn.style.width = '36%';
 	btn.style.marginLeft = '3%';
-	btn.className = 'btn-purple';
+	btn.style.height = '22px';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	return div;
@@ -3471,7 +3482,8 @@ StyleFormatPanel.prototype.addEditOps = function(div)
 
 		btn.style.width = '75%';
 		btn.style.marginBottom = '5px';
-		btn.className = 'btn-purple';
+		btn.style.height = '22px';
+		btn.className = 'geColorBtn';
 		
 		div.appendChild(btn);
 	}
@@ -3489,15 +3501,18 @@ StyleFormatPanel.prototype.addEditOps = function(div)
 		if (btn == null)
 		{
 			btn2.style.width = '75%';
-			btn2.className = 'btn-purple';
+			btn.style.height = '22px';
+			btn.className = 'geColorBtn';
 		}
 		else
 		{
 			btn.style.width = '36%';
-			btn.className = 'btn-purple';
+			btn.style.height = '22px';
+			btn.className = 'geColorBtn';
 			btn2.style.width = '36%';
 			btn2.style.marginLeft = '3%';
-			btn2.className = 'btn-purple';
+			btn2.style.height = '22px';
+			btn2.className = 'geColorBtn';
 		}
 
 		div.appendChild(btn2);
@@ -4403,7 +4418,8 @@ StyleFormatPanel.prototype.addStyleOps = function(div)
 
 	btn.setAttribute('title', mxResources.get('setAsDefaultStyle') + ' (' + this.editorUi.actions.get('setAsDefaultStyle').shortcut + ')');
 	btn.style.width = '75%';
-	btn.className = 'btn-purple';
+	btn.style.height = '22px';
+	btn.className = 'geColorBtn';
 	div.appendChild(btn);
 
 	return div;
@@ -5038,7 +5054,7 @@ DiagramFormatPanel.prototype.addStyleOps = function(div)
 	}));
 
 	btn.setAttribute('title', mxResources.get('clearDefaultStyle') + ' (' + this.editorUi.actions.get('clearDefaultStyle').shortcut + ')');
-    	btn.style.width = '75%';
+    btn.style.width = '75%';
 	btn.className = 'btn-purple';
 
 	div.style.padding = '10px 0';
@@ -5114,7 +5130,8 @@ AttributePanel.prototype.init = function()
     	delete tObj['extended'];
 	}
 
-	this.createEnhanced();
+	this.createEnhancedPanel();
+    // this.createEnhanced1();
 
     for( var o in tObj){
 		this.createAttrsPanel(cell, value, tObj[o], o, allNames);
@@ -5336,15 +5353,12 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
     {
         var td = document.createElement('td');
         var removeAttr = document.createElement('a');
-        var img = mxUtils.createImage(Dialog.prototype.closeImage);
-        img.style.height = '9px';
-        img.style.fontSize = '9px';
+        var img = mxUtils.createImage("/images/delete.png");
+        img.style.height = '15px';
+		img.style.opacity = '.6';
 
         removeAttr.className = 'geButton';
         removeAttr.setAttribute('title', mxResources.get('delete'));
-        removeAttr.style.margin = '0px';
-        removeAttr.style.width = '14px';
-        removeAttr.style.height = '14px';
         removeAttr.style.fontSize = '14px';
         removeAttr.style.cursor = 'pointer';
         removeAttr.style.marginLeft = '6px';
@@ -5394,14 +5408,11 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
         var td = document.createElement('td');
         var editAttr = document.createElement('a');
         var img = mxUtils.createImage(Dialog.prototype.editImage);
-        img.style.height = '12px';
-        img.style.fontSize = '9px';
+        img.style.height = '15px';
+		img.style.opacity = '.7';
 
         editAttr.className = 'geButton';
         editAttr.setAttribute('title', mxResources.get('edit'));
-        editAttr.style.margin = '0px';
-        editAttr.style.width = '14px';
-        editAttr.style.height = '14px';
         editAttr.style.fontSize = '14px';
         editAttr.style.cursor = 'pointer';
         editAttr.style.marginLeft = '6px';
@@ -5769,6 +5780,113 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
 
 };
 
+/**
+ * 创建扩展面板
+ */
+AttributePanel.prototype.createEnhancedPanel = function()
+{
+    var title = this.createTitle(mxResources.get('enhancedPanel'));
+    title.style.paddingLeft = '18px';
+    title.style.paddingTop = '10px';
+    title.style.paddingBottom = '6px';
+    this.container.appendChild(title);
+
+    var div = this.createPanel();
+    this.container.appendChild(div);
+    var enhDiv = document.createElement('div');
+    enhDiv.style.whiteSpace = 'nowrap';
+    enhDiv.style.marginTop = '10px';
+    enhDiv.style.textAlign = 'center';
+    div.appendChild(enhDiv);
+
+    var enhBtn = mxUtils.button(mxResources.get('open'), openEnhancedPanel);
+    enhBtn.style.width = '62%';
+    enhBtn.className = 'btn-purple';
+    enhDiv.appendChild(enhBtn);
+
+    function openEnhancedPanel()
+	{
+		var enhancedPanel = document.getElementsByClassName('geEnhanced')[0];
+		if (enhancedPanel) {
+            enhancedPanel.style.display = 'block';
+		}
+		else {
+			createNewPanel();
+		}
+	}
+
+	function createNewPanel()
+	{
+        var vgDesignerDiv = document.getElementsByClassName('geEditor')[0];
+        var sidebar = document.getElementsByClassName('geSidebarContainer')[1];
+        var div = document.createElement('div');
+        div.style.width = 0.7 * document.body.clientWidth + 'px';
+        div.style.height = sidebar.style.height;
+        div.className = 'geEnhanced';
+
+        //左右两部分Div
+        var leftDiv = document.createElement('div');
+        var rightDiv = document.createElement('div');
+        leftDiv.className = 'geEnhancedLeftDiv';
+        rightDiv.className = 'geEnhancedRightDiv';
+
+        // 左侧顶部栏
+        var leftTitle = document.createElement('div');
+        leftTitle.className = 'geEnhancedTitle';
+        var title = document.createElement('label');
+        title.className = 'geEnhancedLabel';
+        title.innerHTML = mxResources.get('resourceList');
+        leftTitle.appendChild(title);
+        var closeImg = document.createElement('img');
+        closeImg.setAttribute('src', Format.prototype.rightClose);
+        closeImg.className = 'geEnhancedCloseImg';
+        leftTitle.appendChild(closeImg);
+        leftDiv.appendChild(leftTitle);
+        mxEvent.addListener(closeImg, 'click', function () {
+            div.style.display = 'none';
+        });
+
+        //右侧顶部栏
+        var rightTitle = document.createElement('div');
+        rightTitle.className = 'geEnhancedTitle';
+        title = document.createElement('label');
+        title.className = 'geEnhancedLabel';
+        title.innerHTML = mxResources.get('attribute');
+        rightTitle.appendChild(title);
+        // var okDiv = document.createElement('img');
+        // okDiv.setAttribute('src', Format.prototype.sureImage);
+        // okDiv.className = 'geokDiv';
+        // rightTitle.appendChild(okDiv);
+        rightDiv.appendChild(rightTitle);
+
+        //左侧列表
+        var listDiv = document.createElement('div');
+        listDiv.className = 'geEnhancedList';
+        leftDiv.appendChild(listDiv);
+
+		var listRoot = function() {
+            var div = document.createElement('div');
+            // div.id = key[i];
+            div.className = 'gesideUl';
+            listDiv.appendChild(div);
+            var enLabel = document.createElement('label');
+            enLabel.innerHTML = '';
+            enLabel.className = 'geenLabel';
+            div.appendChild(enLabel);
+            var sideCol = document.createElement('img');
+            sideCol.setAttribute('src', Sidebar.prototype.collapsedImage);
+            sideCol.className = 'gesideCol';
+            div.appendChild(sideCol);
+		};
+		listRoot();
+
+        div.appendChild(leftDiv);
+        div.appendChild(rightDiv);
+        vgDesignerDiv.appendChild(div);
+	}
+
+};
+
 AttributePanel.prototype.createEnhanced = function()
 {
     // var ui = this.editorUi;
@@ -5818,19 +5936,19 @@ AttributePanel.prototype.createEnhanced = function()
             //左右两部分Div
             var leftD = document.createElement('div');
             var rightD = document.createElement('div');
-            leftD.className = 'geleftD';
-            rightD.className = 'gerightD';
+            leftD.className = 'geEnhancedLeftDiv';
+            rightD.className = 'geEnhancedRightDiv';
 
             // 左侧顶部栏
             var leftT = document.createElement('div');
-            leftT.className = 'geleftT';
+            leftT.className = 'geEnhancedTitle';
             var labL = document.createElement('label');
-            labL.className = 'gelabL';
+            labL.className = 'geEnhancedLabel';
             labL.innerHTML = 'LTE-TDD';
             leftT.appendChild(labL);
             var colDiv = document.createElement('img');
             colDiv.setAttribute('src', Format.prototype.rightClose);
-            colDiv.className = 'gecolDiv';
+            colDiv.className = 'geEnhancedCloseImg';
             leftT.appendChild(colDiv);
 
             mxEvent.addListener(colDiv, 'click', function () {
@@ -5843,9 +5961,9 @@ AttributePanel.prototype.createEnhanced = function()
 
             //右侧顶部栏
             var rightT = document.createElement('div');
-            rightT.className = 'geleftT';
+            rightT.className = 'geEnhancedTitle';
             var labR = document.createElement('label');
-            labR.className = 'gelabL';
+            labR.className = 'geEnhancedLabel';
             labR.innerHTML = 'ATTRIBUTE OF MODEL';
             rightT.appendChild(labR);
             var okDiv = document.createElement('img');
@@ -5910,16 +6028,16 @@ AttributePanel.prototype.createEnhanced = function()
                     addOl(['aaaa', 'bbbbb', 'ccc'],li,name[i],sideliCol,titleCon);
                 }
 
-				 mxEvent.addListener(img, 'click', function()
-				 {
-					 if(titleCon.style.display == 'block'){
-                         titleCon.style.display = 'none';
-                         img.setAttribute('src', Sidebar.prototype.collapsedImage);
-                     }else{
-                         titleCon.style.display = 'block';
-                         img.setAttribute('src', Sidebar.prototype.expandedImage);
-                     }
-				 });
+                mxEvent.addListener(img, 'click', function()
+                {
+                    if(titleCon.style.display == 'block'){
+                        titleCon.style.display = 'none';
+                        img.setAttribute('src', Sidebar.prototype.collapsedImage);
+                    }else{
+                        titleCon.style.display = 'block';
+                        img.setAttribute('src', Sidebar.prototype.expandedImage);
+                    }
+                });
             };
 
             var addName = function (key) {
@@ -5928,7 +6046,7 @@ AttributePanel.prototype.createEnhanced = function()
                     ul.id = key[i];
                     ul.className = 'gesideUl';
                     side.appendChild(ul);
-                    var enLabel = document.createElement('label');
+                    var enLabel = document.createElement('span');
                     enLabel.innerHTML = key[i];
                     enLabel.className = 'geenLabel';
                     ul.appendChild(enLabel);
@@ -6024,9 +6142,9 @@ AttributePanel.prototype.createEnhanced = function()
                 titleLab.className = 'getitleLab';
                 titleLab.innerHTML = tit;
                 title.appendChild(titleLab);
-                var addCon = document.createElement('img');
-                addCon.className = 'geaddCon';
-                addCon.setAttribute('src', Format.prototype.addproCon);
+                var addCon = document.createElement('span');
+                addCon.className = 'geaddCon icon-24 icon-add';
+                // addCon.setAttribute('src', Format.prototype.addproCon);
                 title.appendChild(addCon);
                 con.appendChild(title);
                 var titleCon = document.createElement('div');
@@ -6035,9 +6153,9 @@ AttributePanel.prototype.createEnhanced = function()
                 con.appendChild(titleCon);
 
                 var adddef = function (div, key, value) {
-                	var defDiv = document.createElement('div');
-                	defDiv.className = 'geproDiv';
-                	div.appendChild(defDiv);
+                    var defDiv = document.createElement('div');
+                    defDiv.className = 'geproDiv';
+                    div.appendChild(defDiv);
                     var inputN = document.createElement('input');
                     inputN.className = 'geinputN';
                     inputN.placeholder = 'NAME';
@@ -6085,8 +6203,8 @@ AttributePanel.prototype.createEnhanced = function()
                 titleLab.className = 'getitleLab';
                 titleLab.innerHTML = tit;
                 title.appendChild(titleLab);
-                var addCon = document.createElement('img');
-                addCon.className = 'geaddCon';
+                var addCon = document.createElement('span');
+                addCon.className = 'geaddCon icon-24 icon-add';
                 addCon.setAttribute('src', Format.prototype.addproCon);
                 title.appendChild(addCon);
                 con.appendChild(title);

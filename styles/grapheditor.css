@@ -496,18 +496,17 @@ div.mxWindow .geButton {
 
 .geEnhanced {
 	position:absolute;
-	background:white;
 	overflow:hidden;
 	padding:0;
 	right : 0;
 	top : 33px;
 	bottom : 0;
-	border:1px solid #acacac;
-	-webkit-box-shadow:0px 0px 2px 2px #d5d5d5;
-	-moz-box-shadow:0px 0px 2px 2px #d5d5d5;
-	box-shadow:0px 0px 2px 2px #d5d5d5;
+	border:1px solid #2e6da4;
 	_filter:progid:DXImageTransform.Microsoft.DropShadow(OffX=2, OffY=2, Color='#d5d5d5', Positive='true');
 	z-index: 1008;
+	box-shadow: 0 5px 15px rgba(0,0,0,0.5),inset 0 0 10px rgba(255,255,255,0.4);
+	background: rgba(214, 206, 191, 0.3);
+	border-radius: 7px;
 }
 
 /*属性增强面板*/
@@ -518,38 +517,35 @@ div.mxWindow .geButton {
 	/*margin-left: -15px;*/
 	cursor: pointer;
 }
-.geleftD{
+.geEnhancedLeftDiv{
 	width: 30%;
 	height: 100%;
 	float: left;
-	background-color: #ffffff;
 }
-.gerightD{
-	width: calc(70% - 2px);
+.geEnhancedRightDiv{
+	width: 70%;
 	height: 100%;
 	float: left;
-	background-color: #ffffff;
-	border-left: 2px solid black;
 }
-.geleftT{
+.geEnhancedTitle{
 	width: 100%;
 	height: 35px;
 	text-align: center;
-	background-color: rgb(109, 96, 176);
-	cursor: pointer;
+	background-color: #337ab7;
 }
-.gelabL{
+.geEnhancedLabel{
 	width: 100px;
 	line-height: 35px;
 	margin: 0 auto;
 	color: #FFF;
 }
-.gecolDiv{
+.geEnhancedCloseImg{
 	width: 12px;
 	height: 12px;
 	float: left;
 	margin-top: 12px;
 	margin-left: 12px;
+	cursor: pointer;
 }
 .geokDiv{
 	width: 18px;
@@ -559,12 +555,16 @@ div.mxWindow .geButton {
 	float: right;
 	cursor: pointer;
 }
-.geside{
-	width: 100%;
-	height: calc(100% - 35px);
+.geEnhancedList{
+	width: 92%;
+	height: calc(97% - 35px);
 	top: 35px;
 	background-color: #FFF;
 	overflow: auto;
+	margin: 2%;
+	border-radius: 7px;
+	border: 1px solid #ddd;
+	padding: 6px 2%;
 }
 .gesideUl{
 	width: calc(100% - 5px);
@@ -572,13 +572,17 @@ div.mxWindow .geButton {
 	line-height: 25px;
 	padding-left: 5px;
 	border-bottom: 1px solid #ffffff;
-	background-color: #e5e5e5;
+	background-color: #ebebeb;
 	cursor: pointer;
 	-moz-user-select: none;
 	-khtml-user-select: none;
 	user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
+}
+.gesideUl:first-child{
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
 }
 .geenLabel{
 	margin-left: 5px;
@@ -604,10 +608,10 @@ div.mxWindow .geButton {
 	pointer-events: auto;
 }
 .gesideCol{
-	width: 10px;
-	height: 10px;
+	width: 16px;
+	height: 16px;
 	float: left;
-	margin-top: 8px;
+	margin-top: 5px;
 	margin-left: 7px;
 }
 .gesideLi{
@@ -627,13 +631,17 @@ div.mxWindow .geButton {
 	line-height: 25px;
 	padding-left: 5px;
 	border-bottom: 1px solid #ffffff;
-	background-color: #9db2c8;
+	background-color: #ebebeb;
 	cursor: pointer;
 	-moz-user-select: none;
 	-khtml-user-select: none;
 	user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
+}
+.geulChange:first-child{
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
 }
 .gesideOl{
 	width: calc(100% - 35px);
@@ -674,34 +682,42 @@ div.mxWindow .geButton {
 	-ms-user-select: none;
 }
 .gesideliCol{
-	width: 10px;
-	height: 10px;
+	width: 16px;
+	height: 16px;
 	float: left;
 	margin-top: 5px;
 	margin-left: 7px;
 }
 .gecon{
-	width: 100%;
-	height: 90%;
+	width: 96%;
+	height: calc(97% - 35px);
 	top: 35px;
 	background-color: #fff;
+	margin: 1%;
+	padding: 6px 1%;
+	border-radius: 7px;
+	overflow: auto;
+	border: 1px solid #ddd;
 }
 .gesideTitle{
 	width: 100%;
 	height: 30px;
-	background-color: #d5d5d5;
-	border-bottom: 1px solid #c0c0c0;
+	background-color: #ebebeb;
+	border-bottom: 1px solid #ffffff;
 	-moz-user-select: none;
 	-khtml-user-select: none;
 	user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
 }
+.gesideTitle:first-child{
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
 .getitleLab{
 	width: 100px;
 	line-height: 30px;
 	margin:0 auto;
-	color: #000000;
 	font-weight: bold;
 	padding-left: 20px;
 }
@@ -716,10 +732,8 @@ div.mxWindow .geButton {
 	margin-left: 10px;
 }
 .geaddCon{
-	width: 15px;
-	height: 15px;
 	float: right;
-	margin-top: 9px;
+	margin-top: 3px;
 	margin-right: 9px;
 	/*pointer-events: auto;*/
 	/*cursor: pointer;*/
@@ -778,12 +792,12 @@ div.mxWindow .geButton {
 	background:white;
 	overflow:hidden;
 	padding:30px;
-	border:1px solid #acacac;
 	-webkit-box-shadow:0px 0px 2px 2px #d5d5d5;
 	-moz-box-shadow:0px 0px 2px 2px #d5d5d5;
 	box-shadow:0px 0px 2px 2px #d5d5d5;
 	_filter:progid:DXImageTransform.Microsoft.DropShadow(OffX=2, OffY=2, Color='#d5d5d5', Positive='true');
 	z-index: 2;
+	border-radius: 7px;
 }
 .geDialogClose {
 	position:absolute;

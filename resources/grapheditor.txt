@@ -249,6 +249,7 @@ print=Print
 propertyNameIsEmpty=Property name is Empty
 radialTree=Radial Tree
 range=Range
+resourceList=Resources List
 redo=Redo
 removeFormat=Clear Formatting
 removeFromGroup=Remove from Group
