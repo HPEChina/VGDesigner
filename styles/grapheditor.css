@@ -893,10 +893,14 @@ div.mxWindow .geButton {
 	/*width: 60px;*/
 	/*margin-left: 3px;*/
 /*}*/
-.geinputI{
+.geEnhancedInputFile{
 	width: 180px;
 	margin-left: 20px;
 }
+/*.geinputI{*/
+	/*width: 180px;*/
+	/*margin-left: 20px;*/
+/*}*/
 .geEnhancedDel{
 	width: 10px;
 	height: 10px;
