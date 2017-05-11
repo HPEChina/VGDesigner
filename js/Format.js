@@ -5048,7 +5048,7 @@ DiagramFormatPanel.prototype.addStyleOps = function(div)
     //
 	// mxUtils.br(div);
 
-	btn = mxUtils.button(mxResources.get('clearDefaultStyle'), mxUtils.bind(this, function(evt)
+	var btn = mxUtils.button(mxResources.get('clearDefaultStyle'), mxUtils.bind(this, function(evt)
 	{
 		this.editorUi.actions.get('clearDefaultStyle').funct();
 	}));
@@ -6038,7 +6038,6 @@ AttributePanel.prototype.createEnhancedPanel = function()
                 container.appendChild(titleDiv);
                 var titleCon = document.createElement('div');
                 titleCon.className = 'geEnhancedTitleCon';
-                titleCon.style.display = 'none';
                 container.appendChild(titleCon);
 
                 //监听新增按钮点击事件
@@ -6265,7 +6264,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
                     div.className = 'geEnhancedProDiv';
                     conDiv.appendChild(div);
                     var inputI = document.createElement('input');
-                    inputI.className = 'geinputI';
+                    inputI.className = 'geEnhancedInputFile';
                     inputI.type = 'file';
                     div.appendChild(inputI);
                 };

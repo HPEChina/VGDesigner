@@ -836,7 +836,7 @@ div.mxWindow .geButton {
 	height: auto;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	display: none;
+	display: block;
 }
 /*.getitleCon{*/
 	/*width: 100%;*/
@@ -893,10 +893,14 @@ div.mxWindow .geButton {
 	/*width: 60px;*/
 	/*margin-left: 3px;*/
 /*}*/
-.geinputI{
+.geEnhancedInputFile{
 	width: 180px;
 	margin-left: 20px;
 }
+/*.geinputI{*/
+	/*width: 180px;*/
+	/*margin-left: 20px;*/
+/*}*/
 .geEnhancedDel{
 	width: 10px;
 	height: 10px;
