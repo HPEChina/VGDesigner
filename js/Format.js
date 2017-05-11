@@ -6264,7 +6264,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
                     div.className = 'geEnhancedProDiv';
                     conDiv.appendChild(div);
                     var inputI = document.createElement('input');
-                    inputI.className = 'geinputI';
+                    inputI.className = 'geEnhancedInputFile';
                     inputI.type = 'file';
                     div.appendChild(inputI);
                 };
