@@ -2753,9 +2753,7 @@ var LocalImgDialog = function(editorUi, btnLabel, fn)
 	{
 		editorUi.hideDialog();
 	});
-	cancelBtn.style.width = '80px';
-	cancelBtn.style.marginRight = '5px';
-	cancelBtn.className = 'btn-gray';
+	cancelBtn.className = 'geBtn';
 	
 	if (editorUi.editor.cancelFirst)
 	{
@@ -2792,8 +2790,7 @@ var LocalImgDialog = function(editorUi, btnLabel, fn)
 			reader.readAsDataURL(imgInput.files[0]);
 		}
 	});
-	mainBtn.style.width = '80px';
-	mainBtn.className = 'btn-purple';
+	mainBtn.className = 'geBtn gePrimaryBtn';
 	btns.appendChild(mainBtn);
 	
 	if (!editorUi.editor.cancelFirst)
