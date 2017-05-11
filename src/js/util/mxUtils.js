@@ -4324,5 +4324,46 @@ var mxUtils =
 		}
 
     	return result.join('');
+	},
+
+    getCellAttributeValue: function(cell, name)
+    {
+    	var res = null;
+    	var value = cell.value;
+    	var attributes = value ? value.attributes : null;
+    	if(attributes) {
+    		for(var o in attributes) {
+				var str = attributes[o].value;
+                try {
+                    var obj = JSON.parse(str);
+                    for(var i in obj) {
+                        if(obj[i].name == name) {
+                            res = obj[i].value[0];
+                            return res;
+                        }
+                    }
+                }
+                catch (e) {}
+			}
+		}
+		return res;
+	},
+
+    //检测数组中是否有重复值
+    checkArrayIfDuplicateValues: function(array)
+	{
+		var narr = array.sort();
+		var ret = {};
+		ret.status = false;
+		for(var i in array)
+		{
+			if (narr[i] == narr[parseInt(i) + 1])
+			{
+				ret.status = true;
+				ret.data = narr[i];
+				return ret;
+			}
+		}
+		return ret;
 	}
 };
