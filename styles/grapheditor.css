@@ -836,7 +836,7 @@ div.mxWindow .geButton {
 	height: auto;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	display: none;
+	display: block;
 }
 /*.getitleCon{*/
 	/*width: 100%;*/
