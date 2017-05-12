@@ -5196,44 +5196,51 @@ AttributePanel.prototype.collapsedImage = function(cell, value)
 
     div.appendChild(form.table);
 
-    function uploadImg() {
-        if (imgInput.files.length > 0) {
-            //Check file size
-            var fileSize = imgInput.files[0].size;
-            if(fileSize > ui.maxUploadImgSize * 1024 * 1024){
-                mxUtils.alert(mxResources.get('maxFileSize', [ui.maxUploadImgSize]));
-                return;
-            }
-            var img = new Image();
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                img.src = e.target.result;
-                var url = BASE_URL + SAVE_IMG;
-                var params = 'data=' + encodeURIComponent(img.src);
-                mxUtils.post(url, params, mxUtils.bind(this, function (req) {
-                    var result = JSON.parse(req.getText());
-                    if (result.status == 0) {
-                        var src = UPLOADIMAGE_PATH + '/' + result.data.url;
-                		image.src = src;
-                        value.setAttribute('image', src);
-                        var model = graph.getModel();
-                        graph.isUploadImage = true;
-                        model.setValue(cell, value);
-                        if(graph.isCellCollapsed(cell)) {
-                            graph.foldCells(false);
-                            graph.foldCells(true);
-						}
-                    }
-                    else {
-                        mxUtils.alert(result.data.msg);
-                    }
-                }));
-            };
-            reader.readAsDataURL(imgInput.files[0]);
-        }
-    };
-    mxEvent.addListener(imgInput, 'change', uploadImg);
+    
+    mxEvent.addListener(imgInput, 'change', mxUtils.bind(this,function(){
+		this.uploadImg(imgInput, image, cell, value);
+	}));
 
+};
+
+//图片上传
+AttributePanel.prototype.uploadImg = function(imgInput, image, cell, value) {
+	var ui = this.editorUi;
+	var graph = ui.editor.graph;
+	if (imgInput.files.length > 0) {
+		//Check file size
+		var fileSize = imgInput.files[0].size;
+		if(fileSize > ui.maxUploadImgSize * 1024 * 1024){
+			mxUtils.alert(mxResources.get('maxFileSize', [ui.maxUploadImgSize]));
+			return;
+		}
+		var img = new Image();
+		var reader = new FileReader();
+		reader.onload = function (e) {
+			img.src = e.target.result;
+			var url = BASE_URL + SAVE_IMG;
+			var params = 'data=' + encodeURIComponent(img.src);
+			mxUtils.post(url, params, mxUtils.bind(this, function (req) {
+				var result = JSON.parse(req.getText());
+				if (result.status == 0) {
+					var src = UPLOADIMAGE_PATH + '/' + result.data.url;
+					image.src = src;
+					value.setAttribute('image', src);
+					var model = graph.getModel();
+					graph.isUploadImage = true;
+					model.setValue(cell, value);
+					if(graph.isCellCollapsed(cell)) {
+						graph.foldCells(false);
+						graph.foldCells(true);
+					}
+				}
+				else {
+					mxUtils.alert(result.data.msg);
+				}
+			}));
+		};
+		reader.readAsDataURL(imgInput.files[0]);
+	}
 };
 
 /**
@@ -6011,21 +6018,24 @@ AttributePanel.prototype.createEnhancedPanel = function()
 				}
             }
 
-            // if((cell.getStyle() && cell.getStyle().indexOf('group')) >= 0 || (cellId == '0' && ui.interfaceParams.type == 'model')) {
-            //     addImgTitle(container, 'image');
-            // }
+            if((cell.getStyle() && cell.getStyle().indexOf('group')) >= 0 || (cellId == '0' && ui.interfaceParams.type == 'model')) {
+                addImgTitle(container, 'image');
+            }
 
             //添加属性分类标题
             function addTitle(container, e) {
             	var title = mxResources.get(e);
                 var titleDiv = document.createElement('div');
                 titleDiv.className = 'geEnhancedSideTitle';
+				titleDiv.style.backgroundImage = 'url(\'' + IMAGE_PATH + '/expanded.gif' + '\')';
                 mxEvent.addListener(titleDiv, 'click', function () {
                 	var next = titleDiv.nextSibling;
                     if (next.style.display == 'block') {
                         next.style.display = 'none';
+						titleDiv.style.backgroundImage = 'url(\'' + IMAGE_PATH + '/collapsed.gif'  + '\')';
                     } else {
                         next.style.display = 'block';
+						titleDiv.style.backgroundImage = 'url(\'' + IMAGE_PATH + '/expanded.gif'  + '\')';
                     }
 				});
                 var titleLab = document.createElement('label');
@@ -6107,8 +6117,8 @@ AttributePanel.prototype.createEnhancedPanel = function()
                 div.className = 'geEnhancedProDiv geEnhancedExtended';
                 container.appendChild(div);
                 var nDiv = document.createElement('div');
-                nDiv.style.float = 'left';
-                nDiv.style.display = 'inline';
+                nDiv.style.display = 'inline-block';
+				nDiv.style.verticalAlign = 'top';
                 div.appendChild(nDiv);
 
                 var inputN = document.createElement('input');
@@ -6135,15 +6145,14 @@ AttributePanel.prototype.createEnhancedPanel = function()
                 nDiv.appendChild(select);
 
                 var lDiv = document.createElement('div');
-                lDiv.style.float = 'left';
-                lDiv.style.display = 'inline';
+                lDiv.style.display = 'inline-block';
                 div.appendChild(lDiv);
 
 				addAttributeCondition(lDiv, obj);
 
                 var iDiv = document.createElement('div');
-                iDiv.style.float = 'left';
-                iDiv.style.display = 'inline';
+                iDiv.style.display = 'inline-block';
+				iDiv.style.verticalAlign = 'top';
                 div.appendChild(iDiv);
                 var del = document.createElement('img');
                 del.className = 'geEnhancedDel';
@@ -6239,6 +6248,8 @@ AttributePanel.prototype.createEnhancedPanel = function()
 
             //添加图标
             function addImgTitle(container, e) {
+				var value = currentCell.value;
+				
                 var title = document.createElement('div');
                 title.className = 'geEnhancedSideTitle';
                 var titleLab = document.createElement('label');
@@ -6258,18 +6269,41 @@ AttributePanel.prototype.createEnhancedPanel = function()
                         next.style.display = 'block';
                     }
                 });
+				var imgDiv = document.createElement('div');
+				imgDiv.className = 'geEnhancedProDiv';
+                titleCon.appendChild(imgDiv);
 
-                var addimg = function (conDiv) {
-                    var div = document.createElement('div');
-                    div.className = 'geEnhancedProDiv';
-                    conDiv.appendChild(div);
-                    var inputI = document.createElement('input');
-                    inputI.className = 'geEnhancedInputFile';
-                    inputI.type = 'file';
-                    div.appendChild(inputI);
-                };
-                // 添加图片事件
-                addimg(titleCon);
+				var imgShowDiv = document.createElement('div');
+				imgShowDiv.style.float = 'left';
+				imgShowDiv.style.height = '60px';
+				imgShowDiv.style.lineHeight = '40px';
+				var image = document.createElement('img');
+				image.style.maxWidth = '60px';
+				image.style.maxHeight = '60px';
+				image.style.padding = '0 10px';
+				image.style.verticalAlign = 'middle';
+				image.src = (value.getAttribute('image') && value.getAttribute('image') != 'null') ? value.getAttribute('image') : mxGraph.prototype.collapsedImage.src;
+				imgShowDiv.appendChild(image);
+				imgDiv.appendChild(imgShowDiv);
+
+				var imgInsDiv = document.createElement('div');
+				imgInsDiv.style.float = 'left';
+				imgInsDiv.style.height = '60px';
+				imgInsDiv.style.lineHeight = '60px';
+				var imgA = document.createElement('a');
+				imgA.className = 'fileA btn-purple';
+				mxUtils.write(imgA, mxResources.get('selectThumbnail'));
+				var imgInput = document.createElement('input');
+				imgInput.className = 'fileInput';
+				imgInput.setAttribute('type', 'file');
+				imgInput.setAttribute('accept', 'image/png,image/jpeg');
+				imgA.appendChild(imgInput);
+				imgInsDiv.appendChild(imgA);
+				imgDiv.appendChild(imgInsDiv);
+
+				mxEvent.addListener(imgInput, 'change', mxUtils.bind(this,function(){
+					ui.format.panels[0].uploadImg(imgInput, image, currentCell, value);
+				}));
             };
         };
 
