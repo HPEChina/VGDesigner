@@ -6030,7 +6030,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
 				titleDiv.style.backgroundImage = 'url(\'' + IMAGE_PATH + '/expanded.gif' + '\')';
                 mxEvent.addListener(titleDiv, 'click', function () {
                 	var next = titleDiv.nextSibling;
-                    if (next.style.display == 'block') {
+                    if (next.style.display == 'block' || next.style.display == '') {
                         next.style.display = 'none';
 						titleDiv.style.backgroundImage = 'url(\'' + IMAGE_PATH + '/collapsed.gif'  + '\')';
                     } else {
@@ -6263,7 +6263,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
 
                 mxEvent.addListener(title, 'click', function () {
                     var next = title.nextSibling;
-                    if (next.style.display == 'block') {
+                    if (next.style.display == 'block' || next.style.display == '') {
                         next.style.display = 'none';
                     } else {
                         next.style.display = 'block';
