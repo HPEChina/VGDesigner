@@ -6022,7 +6022,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
                 titleDiv.className = 'geEnhancedSideTitle';
                 mxEvent.addListener(titleDiv, 'click', function () {
                 	var next = titleDiv.nextSibling;
-                    if (next.style.display == 'block') {
+                    if (next.style.display == 'block' || next.style.display == '') {
                         next.style.display = 'none';
                     } else {
                         next.style.display = 'block';
@@ -6252,7 +6252,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
 
                 mxEvent.addListener(title, 'click', function () {
                     var next = title.nextSibling;
-                    if (next.style.display == 'block') {
+                    if (next.style.display == 'block' || next.style.display == '') {
                         next.style.display = 'none';
                     } else {
                         next.style.display = 'block';
