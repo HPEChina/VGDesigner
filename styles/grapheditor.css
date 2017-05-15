@@ -505,7 +505,7 @@ div.mxWindow .geButton {
 	_filter:progid:DXImageTransform.Microsoft.DropShadow(OffX=2, OffY=2, Color='#d5d5d5', Positive='true');
 	z-index: 1008;
 	box-shadow: 0 5px 15px rgba(0,0,0,0.5),inset 0 0 10px rgba(255,255,255,0.4);
-	background: rgba(214, 206, 191, 0.3);
+	background: #ebebeb;
 	border-radius: 7px;
 }
 
@@ -575,9 +575,9 @@ div.mxWindow .geButton {
 	padding: 6px 2%;
 }
 .geEnhancedRoot{
-	/*width: calc(100% - 5px);*/
-	width: auto;
-	min-width: 100%;
+	width: calc(100% - 5px);
+	/*width: auto;
+	min-width: 100%;*/
 	float: left;
 	height: 25px;
 	line-height: 25px;
@@ -596,9 +596,9 @@ div.mxWindow .geButton {
 	border-top-right-radius: 5px;
 }
 .geEnhancedItem{
-	/*width: calc(100% - 5px);*/
-	width: auto;
-	min-width: 100%;
+	width: calc(100% - 5px);
+	/*width: auto;
+	min-width: 100%;*/
 	height: 25px;
 	line-height: 25px;
 	padding-left: 5px;
@@ -769,6 +769,8 @@ div.mxWindow .geButton {
 	user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
+	background-position: 5px 50%;
+  	background-repeat: no-repeat;
 }
 .geEnhancedSideTitle:first-child{
 	border-top-left-radius: 5px;
@@ -782,7 +784,7 @@ div.mxWindow .geButton {
 	line-height: 30px;
 	margin:0 auto;
 	font-weight: bold;
-	padding-left: 20px;
+	padding-left: 25px;
 }
 /*.gesideTitle{*/
 	/*width: 100%;*/
@@ -907,6 +909,7 @@ div.mxWindow .geButton {
 	margin-top: 4px;
 	margin-left: 5px;
 	display: inline-block;
+	cursor: pointer;
 }
 /*.gedefDel{*/
 	/*width: 10px;*/
@@ -1154,8 +1157,8 @@ div.mxWindow .geButton {
 .formatTab:last-child{ margin-right: 0;}
 .formatPanel {white-space: nowrap;color: rgb(112, 112, 112);text-align: left;cursor:default;margin-left: 5px;}
 
-.geSidebarContainer .fileA,.geDialog .fileA {position: relative;overflow: hidden;height: 27px;line-height: 27px;color: #fff;width: 171px;border: 0;}
-.geSidebarContainer .fileInput,.geDialog .fileInput {position: absolute;opacity: 0;left: -65px;height: 27px;width: calc(100% + 65px);border: 0;padding: 0;cursor: pointer;}
+.geSidebarContainer .fileA,.geDialog .fileA,.geEnhancedProDiv .fileA {position: relative;overflow: hidden;height: 27px;line-height: 27px;color: #fff;width: 171px;border: 0;}
+.geSidebarContainer .fileInput,.geDialog .fileInput,.geEnhancedProDiv .fileInput {position: absolute;opacity: 0;left: -65px;height: 27px;width: calc(100% + 65px);border: 0;padding: 0;cursor: pointer;}
 
 .codeSelected {border-bottom: 4px solid #3a3e55;font-weight: bold;font-style: italic;}
 
