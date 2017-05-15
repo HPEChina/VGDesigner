@@ -3497,22 +3497,18 @@ StyleFormatPanel.prototype.addEditOps = function(div)
 
 		btn2.setAttribute('title', mxResources.get('editImage'));
 		btn2.style.marginBottom = '2px';
+		btn2.style.height = '22px';
+		btn2.className = 'geColorBtn';
 
 		if (btn == null)
 		{
 			btn2.style.width = '75%';
-			btn.style.height = '22px';
-			btn.className = 'geColorBtn';
 		}
 		else
 		{
 			btn.style.width = '36%';
-			btn.style.height = '22px';
-			btn.className = 'geColorBtn';
 			btn2.style.width = '36%';
 			btn2.style.marginLeft = '3%';
-			btn2.style.height = '22px';
-			btn2.className = 'geColorBtn';
 		}
 
 		div.appendChild(btn2);
@@ -5863,14 +5859,20 @@ AttributePanel.prototype.createEnhancedPanel = function()
         title.className = 'geEnhancedLabel';
         title.innerHTML = mxResources.get('attribute');
         rightTitle.appendChild(title);
-        var saveImg = document.createElement('img');
-        saveImg.setAttribute('src', Format.prototype.sureImage);
-        saveImg.className = 'geEnhancedSaveDiv';
-        rightTitle.appendChild(saveImg);
-        rightDiv.appendChild(rightTitle);
-		//监听点击保存事件
-        mxEvent.addListener(saveImg, 'click', function(){
-            var names = document.getElementsByClassName('geEnhancedInputN');
+
+        //左侧列表
+        var listDiv = document.createElement('div');
+        listDiv.className = 'geEnhancedList';
+        leftDiv.appendChild(listDiv);
+
+        div.appendChild(leftDiv);
+        div.appendChild(rightDiv);
+
+		//添加底部按钮栏
+		var footDiv = document.createElement('div');
+		footDiv.className = 'geEnhancedFoot';
+		var saveBtn = mxUtils.button('', function(){  //保存按钮事件
+			var names = document.getElementsByClassName('geEnhancedInputN');
             var allNames = [];
             for(var i = 0; i < names.length; i++) {
                 if (names[i].value == '') {
@@ -5934,15 +5936,26 @@ AttributePanel.prototype.createEnhancedPanel = function()
 
             mxUtils.alert(mxResources.get('saved'));
             return true;
+		});
+		saveBtn.style.marginRight = '30px';
+		saveBtn.style.cursor = 'pointer';
+		saveBtn.title = mxResources.get('save', ['']);
+        saveBtn.className = 'icon-24 icon-tick';
+		
+		var cancelBtn = mxUtils.button('', function()
+        {
+			if (!window.confirm(mxResources.get('sureToClose'))){
+                return;
+			}
+            div.parentNode.removeChild(div);
+			ui.format.refresh();
         });
+		cancelBtn.title = mxResources.get('close');
+        cancelBtn.className = 'icon-24 icon-delete';
+		footDiv.appendChild(saveBtn);
+		footDiv.appendChild(cancelBtn);
+		div.appendChild(footDiv);
 
-        //左侧列表
-        var listDiv = document.createElement('div');
-        listDiv.className = 'geEnhancedList';
-        leftDiv.appendChild(listDiv);
-
-        div.appendChild(leftDiv);
-        div.appendChild(rightDiv);
         vgDesignerDiv.appendChild(div);
 
         var graph = ui.editor.graph;
