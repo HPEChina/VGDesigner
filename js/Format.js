@@ -5357,7 +5357,7 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
     {
         var td = document.createElement('td');
         var removeAttr = document.createElement('a');
-        var img = mxUtils.createImage("/images/delete.png");
+        var img = mxUtils.createImage("images/delete.png");
         img.style.height = '15px';
 		img.style.opacity = '.6';
 
