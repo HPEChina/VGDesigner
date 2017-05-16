@@ -302,6 +302,7 @@ subscript=Subscript
 superscript=Superscript
 sureNew=确定要继续操作？
 sureToDelete=确定要删除 {1}
+sureToClose=确定要关闭?
 table=Table
 targetSpacing=Target Spacing
 text=文本

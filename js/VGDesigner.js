@@ -98,6 +98,7 @@ VGDesigner.prototype.init = function(interfaceParams)
                         }));
                         var xml = CodeTranslator.json2xml(data.data);
                         window.openFile.setData(xml, data.filename);
+                        editor.setModified(false);
                     }
                 }));
             }
