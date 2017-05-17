@@ -98,6 +98,12 @@ CodeMirror.defineMode("yaml", function() {
       stream.next();
       return null;
     },
+
+    //检查格式
+    validator: function(cm) {
+        return null;
+    },
+
     startState: function() {
       return {
         pair: false,

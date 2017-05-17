@@ -295,7 +295,7 @@ Footwall.prototype.init = function()
                         .replace(/</g, "&lt;")
                         .replace(/>/g, "&gt;")
                         .replace(/\'/g, "&#39;")
-                        .replace(/\\"/g, '&quot;')
+                        .replace(/\\"/g, '&quot;');
                     data = CodeTranslator.json2xml(data);
                 }
                 else if(this.codeType == 'yaml') {
@@ -304,7 +304,7 @@ Footwall.prototype.init = function()
                         .replace(/</g, "&lt;")
                         .replace(/>/g, "&gt;")
                         .replace(/\'/g, "&#39;")
-                        .replace(/\\"/g, '&quot;')
+                        .replace(/\\"/g, '&quot;');
                     data = CodeTranslator.json2xml(data);
                 }
                 data = data.replace(/'/g, '&quot;');
