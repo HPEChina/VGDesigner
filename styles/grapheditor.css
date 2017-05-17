@@ -527,6 +527,15 @@ div.mxWindow .geButton {
 	height: 100%;
 	float: left;
 }
+.geEnhancedFoot{
+	height: 30px;
+	width: 70%;
+	padding-top: 5px;
+	margin-left: 30%;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+}
 .geEnhancedTitle{
 	width: 100%;
 	height: 35px;
@@ -565,7 +574,7 @@ div.mxWindow .geButton {
 /*}*/
 .geEnhancedList{
 	width: 92%;
-	height: calc(97% - 35px);
+	max-height: calc(97% - 75px);
 	top: 35px;
 	background-color: #FFF;
 	overflow: auto;
@@ -612,7 +621,7 @@ div.mxWindow .geButton {
 	-ms-user-select: none;
 }
 .geEnhancedRoot:hover, .geEnhancedItem:hover{
-	background-color: #c0c0c0;
+	background-color: #ddd;
 }
 /*.gesideUl{*/
 	/*!*display: none;*!*/
@@ -739,7 +748,7 @@ div.mxWindow .geButton {
 }
 .geEnhancedRightDiv1{
 	width: 96%;
-	height: calc(97% - 35px);
+	height: calc(97% - 75px);
 	top: 35px;
 	background-color: #fff;
 	margin: 1%;
