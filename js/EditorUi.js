@@ -2233,7 +2233,7 @@ EditorUi.prototype.openModel = function()
                         this.editor.setFilename(filename);
                         this.updateDocumentTitle();
                     }
-
+					this.editor.setModified(false);
                     return;
                 }
                 catch (e)
