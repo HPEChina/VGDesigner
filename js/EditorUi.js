@@ -1120,7 +1120,7 @@ EditorUi.prototype.init = function()
 	// Updates action states
 	this.addUndoListener();
 	this.addBeforeUnloadListener();
-	
+
 	graph.getSelectionModel().addListener(mxEvent.CHANGE, mxUtils.bind(this, function()
 	{
 		this.updateActionStates();

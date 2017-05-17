@@ -1497,13 +1497,13 @@ function highlightLine(cm, line, state, forceToEnd) {
   // mode/overlays that it is based on (for easy invalidation).
   var st = [cm.state.modeGen], lineClasses = {}
   // Compute the base array of styles
-  runMode(cm, line.text, cm.doc.mode, state, function (end, style) { return st.push(end, style); },
+  runMode(cm, line, cm.doc.mode, state, function (end, style) { return st.push(end, style); },
     lineClasses, forceToEnd)
 
   // Run overlays, adjust style array.
   var loop = function ( o ) {
     var overlay = cm.state.overlays[o], i = 1, at = 0
-    runMode(cm, line.text, overlay.mode, true, function (end, style) {
+    runMode(cm, line, overlay.mode, true, function (end, style) {
       var start = i
       // Ensure there's a token end at the current position, and that i points at it
       while (at < end) {
@@ -1627,7 +1627,8 @@ function extractLineClasses(type, output) {
 }
 
 // Run the given mode's parser over a line, calling f for each token.
-function runMode(cm, text, mode, state, f, lineClasses, forceToEnd) {
+function runMode(cm, line, mode, state, f, lineClasses, forceToEnd) {
+  var text = line.text
   var flattenSpans = mode.flattenSpans
   if (flattenSpans == null) { flattenSpans = cm.options.flattenSpans }
   var curStart = 0, curStyle = null
@@ -1642,6 +1643,9 @@ function runMode(cm, text, mode, state, f, lineClasses, forceToEnd) {
       style = null
     } else {
       style = extractLineClasses(readToken(mode, stream, state, inner), lineClasses)
+      // if(cm.errorLineNum != null && lineNo(line) + 1 == cm.errorLineNum ) {
+      //   style = style == '' ? 'error' : style + ' error'
+      // }
     }
     if (inner) {
       var mName = inner[0].name
@@ -4143,10 +4147,22 @@ function patchDisplay(cm, updateNumbersFrom, dims) {
   }
 
   var view = display.view, lineN = display.viewFrom
+  var mode = cm.doc.mode;
+  var errorLine =  mode.validator(cm);
+  cm.errorLineNum = errorLine;
   // Loop over the elements in the view, syncing cur (the DOM nodes
   // in display.lineDiv) with the view as we go.
   for (var i = 0; i < view.length; i++) {
     var lineView = view[i]
+    if(lineView.text){
+      if(errorLine == i + 1) {
+          addClass(lineView.text, 'cm-error')
+      }
+      else {
+          rmClass(lineView.text, 'cm-error')
+      }
+    }
+
     if (lineView.hidden) {
     } else if (!lineView.node || lineView.node.parentNode != container) { // Not drawn yet
       var node = buildLineElement(cm, lineView, lineN, dims)

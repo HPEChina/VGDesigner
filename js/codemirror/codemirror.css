@@ -135,7 +135,8 @@
 .cm-s-default .cm-hr {color: #999;}
 .cm-s-default .cm-link {color: #00c;}
 
-.cm-s-default .cm-error {color: #f00;}
+.cm-s-default .cm-error, .cm-s-default .cm-error span, .cm-s-default .cm-error span span {color: #ffffff;background-color:#f00;}
+
 .cm-invalidchar {color: #f00;}
 
 .CodeMirror-composing { border-bottom: 2px solid; }

@@ -325,6 +325,11 @@ CodeMirror.defineMode("xml", function(editorConf, config_) {
       return style;
     },
 
+    //检查格式
+    validator: function(cm) {
+        return null;
+    },
+
     indent: function(state, textAfter, fullLine) {
       var context = state.context;
       // Indent multi-line strings (e.g. css).
