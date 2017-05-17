@@ -302,6 +302,7 @@ subscript=Subscript
 superscript=Superscript
 sureNew=Drawing is not empty. Are you sure to do?
 sureToDelete=Are you sure to delete {1}
+sureToClose=Are you sure to close?
 table=Table
 targetSpacing=Target Spacing
 text=Text

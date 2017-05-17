@@ -236,6 +236,11 @@ Editor.prototype.editBlankUrl = window.location.protocol + '//' + window.locatio
 Editor.prototype.editBlankFallbackUrl = window.location.protocol + '//' + window.location.host + '/?create=drawdata&splash=0';
 
 /**
+ * If the editor is first loaded.
+ */
+Editor.prototype.isFirstLoad = true;
+
+/**
  * Initializes the environment.
  */
 Editor.prototype.init = function()
@@ -524,6 +529,10 @@ Editor.prototype.updateGraphComponents = function()
  */
 Editor.prototype.setModified = function(value)
 {
+	if(this.isFirstLoad){
+		this.isFirstLoad = false;
+		return;
+	}
 	this.modified = value;
 };
 
