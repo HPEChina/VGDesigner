@@ -5357,7 +5357,7 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
     {
         var td = document.createElement('td');
         var removeAttr = document.createElement('a');
-        var img = mxUtils.createImage("images/delete.png");
+        var img = mxUtils.createImage(IMAGE_PATH + '/delete.png');
         img.style.height = '15px';
 		img.style.opacity = '.6';
 
@@ -6365,15 +6365,20 @@ AttributePanel.prototype.createEnhancedPanel = function()
                 div.className = isRoot ? 'geEnhancedRoot' : 'geEnhancedItem';
                 itemClick(div, cell);
                 container.appendChild(div);
+		    if(!isRoot && cell.style.split(';')[0].indexOf("edgeStyle") ==0){
+					var img = mxUtils.createImage(IMAGE_PATH + '/line.png');
+                    img.className = 'geEnhancedListImg';
+                    div.appendChild(img);
+				}
+				else if(!isRoot && cell.style.split(';')[0].indexOf("shape") ==0){
+					var img = mxUtils.createImage(IMAGE_PATH + '/model.png');
+                    img.className = 'geEnhancedListImg';
+                    img.style.marginLeft = leftPx;
+                    div.appendChild(img);
+				}
                 var enLabel = document.createElement('label');
-                enLabel.style.whiteSpace = 'nowrap';
                 enLabel.innerHTML = title;
-                if(!isRoot && childCount == 0) {
-                    enLabel.style.marginLeft = leftPx;
-                } else {
-                    enLabel.style.marginLeft = '5px';
-                }
-                div.appendChild(enLabel);
+                enLabel.style.marginLeft = '5px';
                 if(childCount > 0) {
                     var img = document.createElement('img');
                     img.setAttribute('src', Sidebar.prototype.collapsedImage);
@@ -6382,11 +6387,15 @@ AttributePanel.prototype.createEnhancedPanel = function()
                     	img.style.marginLeft = leftPx;
                     }
                     div.appendChild(img);
+			div.appendChild(enLabel);
                     var div1 = document.createElement('div');
                     div1.className = 'geEnhancedListItem';
                     container.appendChild(div1);
                     listShow(children, false, div1, img);
                 }
+		else{
+					div.appendChild(enLabel);
+				}
             }
             level = isRoot ? level : level - 1;
 		};
