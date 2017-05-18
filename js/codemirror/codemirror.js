@@ -4148,20 +4148,12 @@ function patchDisplay(cm, updateNumbersFrom, dims) {
 
   var view = display.view, lineN = display.viewFrom
   var mode = cm.doc.mode;
-  var errorLine =  mode.validator(cm);
-  cm.errorLineNum = errorLine;
+  var pError =  mode.validator(cm);
+  // cm.errorLineNum = pError.lineNo;
   // Loop over the elements in the view, syncing cur (the DOM nodes
   // in display.lineDiv) with the view as we go.
   for (var i = 0; i < view.length; i++) {
     var lineView = view[i]
-    if(lineView.text){
-      if(errorLine == i + 1) {
-          addClass(lineView.text, 'cm-error')
-      }
-      else {
-          rmClass(lineView.text, 'cm-error')
-      }
-    }
 
     if (lineView.hidden) {
     } else if (!lineView.node || lineView.node.parentNode != container) { // Not drawn yet
@@ -4182,6 +4174,18 @@ function patchDisplay(cm, updateNumbersFrom, dims) {
       cur = lineView.node.nextSibling
     }
     lineN += lineView.size
+
+    //给错误行添加class:error，设置title: error.message
+    if(lineView.text){
+        if(pError && pError.lineNo && pError.lineNo == i + 1) {
+            addClass(lineView.text, 'cm-error')
+            lineView.text.setAttribute('title', pError.message)
+        }
+        else {
+            rmClass(lineView.text, 'cm-error')
+            lineView.text.removeAttribute('title')
+        }
+    }
   }
   while (cur) { cur = rm(cur) }
 }
