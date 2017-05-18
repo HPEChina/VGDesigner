@@ -73,9 +73,12 @@ VGDesigner.prototype.init = function(interfaceParams)
             if(ui.interfaceParams.type == 'topo'){
                 var url = BASE_URL + VIEWER_COLLECTION + GET_URL;
                 var params = 'id=' + ui.interfaceParams.id;
+                // var url = '/viewer/'+ui.interfaceParams.id
+                // mxUtils.get(url, mxUtils.bind(this, function (req) {
                 mxUtils.post(url, params, mxUtils.bind(this, function (req) {
                     var result = JSON.parse(req.getText());
                     var data = result.data[0];
+                    // data=req.request.response
                     if(data){
                         var editor = ui.editor;
                         window.openFile = new OpenFile(function()
@@ -97,6 +100,7 @@ VGDesigner.prototype.init = function(interfaceParams)
                             }
                         }));
                         var xml = CodeTranslator.json2xml(data.data);
+                        // var xml = CodeTranslator.json2xml(data);
                         window.openFile.setData(xml, data.filename);
                         editor.setModified(false);
                     }
