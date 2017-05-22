@@ -71,14 +71,11 @@ VGDesigner.prototype.init = function(interfaceParams)
         else if(ui.interfaceParams.operator == 'edit') {
             title = 'Edit ' + ui.interfaceParams.type;
             if(ui.interfaceParams.type == 'topo'){
-                // var url = BASE_URL + VIEWER_COLLECTION + GET_URL;
-                // var params = 'id=' + ui.interfaceParams.id;
-                var url = BASE_URL + DATA_PATH + VIEWER_COLLECTION + ui.interfaceParams.id
-                mxUtils.get(url, mxUtils.bind(this, function (req) {
-                // mxUtils.post(url, params, mxUtils.bind(this, function (req) {
-                    // var result = JSON.parse(req.getText());
-                    // var data = result.data[0];
-                    data=req.request.response
+                var url = BASE_URL + VIEWER_COLLECTION + GET_URL;
+                var params = 'id=' + ui.interfaceParams.id;
+                mxUtils.post(url, params, mxUtils.bind(this, function (req) {
+                    var result = JSON.parse(req.getText());
+                    var data = result.data[0];
                     if(data){
                         var editor = ui.editor;
                         window.openFile = new OpenFile(function()
@@ -99,8 +96,7 @@ VGDesigner.prototype.init = function(interfaceParams)
                                 mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
                             }
                         }));
-                        // var xml = CodeTranslator.json2xml(data.data);
-                        var xml = CodeTranslator.json2xml(data);
+                        var xml = CodeTranslator.json2xml(data.data);
                         window.openFile.setData(xml, data.filename);
                         editor.setModified(false);
                     }
