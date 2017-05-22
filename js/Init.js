@@ -23,6 +23,7 @@ window.SAVE_IMG = window.SAVE_IMG || '/saveImg';
 window.MODEL_COLLECTION =window.MODEL_COLLECTION || '/model';
 window.MODELCLASS_COLLECTION =window.MODELCLASS_COLLECTION || '/modelClass';
 window.VIEWER_COLLECTION =window.VIEWER_COLLECTION || '/viewer';
+window.DATA_PATH =window.DATA_PATH || '/data';
 
 window.RESOURCES_PATH = window.RESOURCES_PATH || 'resources';
 window.RESOURCE_BASE = window.RESOURCE_BASE || window.RESOURCES_PATH + '/grapheditor';
