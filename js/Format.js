@@ -5184,6 +5184,18 @@ AttributePanel.prototype.collapsedImage = function(cell, value)
     imgInput.setAttribute('accept', 'image/png,image/jpeg');
 	imgA.appendChild(imgInput);
     td2.appendChild(imgA);
+	
+	var imgDelete = mxUtils.createImage(IMAGE_PATH + '/delete.png');
+	imgDelete.style.height = '15px';
+	imgDelete.style.opacity = '.6';
+	imgDelete.style.marginTop = '5px';
+	imgDelete.style.marginLeft = '15px';
+	imgDelete.style.cursor = 'pointer';
+	imgDelete.setAttribute('title', mxResources.get('delete'));
+	td2.appendChild(imgDelete);
+	mxEvent.addListener(imgDelete, 'click', function(){
+
+	});
 
     tr.appendChild(td1);
     tr.appendChild(td0);
@@ -6265,6 +6277,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
 				
                 var title = document.createElement('div');
                 title.className = 'geEnhancedSideTitle';
+		    title.style.backgroundImage = 'url(\'' + IMAGE_PATH + '/expanded.gif' + '\')';
                 var titleLab = document.createElement('label');
                 titleLab.className = 'geEnhancedTitleLab';
                 titleLab.innerHTML = mxResources.get(e);
@@ -6278,8 +6291,10 @@ AttributePanel.prototype.createEnhancedPanel = function()
                     var next = title.nextSibling;
                     if (next.style.display == 'block' || next.style.display == '') {
                         next.style.display = 'none';
+			    title.style.backgroundImage = 'url(\'' + IMAGE_PATH + '/collapsed.gif'  + '\')';
                     } else {
                         next.style.display = 'block';
+			    title.style.backgroundImage = 'url(\'' + IMAGE_PATH + '/expanded.gif'  + '\')';
                     }
                 });
 				var imgDiv = document.createElement('div');
@@ -6312,6 +6327,19 @@ AttributePanel.prototype.createEnhancedPanel = function()
 				imgInput.setAttribute('accept', 'image/png,image/jpeg');
 				imgA.appendChild(imgInput);
 				imgInsDiv.appendChild(imgA);
+		    
+		    var imgDelete = mxUtils.createImage(IMAGE_PATH + '/delete.png');
+				imgDelete.style.height = '15px';
+				imgDelete.style.opacity = '.6';
+  				imgDelete.style.marginTop = '15px';
+				imgDelete.style.marginLeft = '15px';
+				imgDelete.style.cursor = 'pointer';
+				imgDelete.setAttribute('title', mxResources.get('delete'));
+				imgInsDiv.appendChild(imgDelete);
+				mxEvent.addListener(imgDelete, 'click', function(){
+
+				});
+		    
 				imgDiv.appendChild(imgInsDiv);
 
 				mxEvent.addListener(imgInput, 'change', mxUtils.bind(this,function(){
