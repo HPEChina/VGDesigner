@@ -19,6 +19,7 @@ function js2data(json, envType) {
                 resources_properties[prop.name] = prop.value[0]
             })
         }
+        if (envType !== 'model' && modelID === '0') return
         property = model['object@extended']
         if (property) {//动态属性
             property = JSON.parse(property)
