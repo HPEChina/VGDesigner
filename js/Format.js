@@ -3484,6 +3484,7 @@ StyleFormatPanel.prototype.addEditOps = function(div)
 		btn.style.marginBottom = '5px';
 		btn.style.height = '22px';
 		btn.className = 'geColorBtn';
+		btn.style.display = 'none';
 		
 		div.appendChild(btn);
 	}
@@ -3499,6 +3500,7 @@ StyleFormatPanel.prototype.addEditOps = function(div)
 		btn2.style.marginBottom = '2px';
 		btn2.style.height = '22px';
 		btn2.className = 'geColorBtn';
+		btn2.style.display = 'none';
 
 		if (btn == null)
 		{
