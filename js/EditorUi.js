@@ -3594,7 +3594,25 @@ EditorUi.prototype.saveFile = function(forceDialog)
 	}
 	else
 	{
-		var dlg = new FilenameDialog(this, this.editor.getOrCreateJsonFilename(), mxResources.get('save'), mxUtils.bind(this, function(name)
+		var filename;
+		if(this.interfaceParams.type == 'topology') {
+			filename = this.interfaceParams.name;
+			if(!filename) {
+                var intrAttr = this.editor.graph.model.getRoot().value.getAttribute('intrinsic');
+                if(intrAttr) {
+                    var arr = JSON.parse(intrAttr);
+                    for(var o in arr) {
+                        if(arr[o].name == 'name') {
+                            filename = filename || arr[o].value[0];
+                            break;
+                        }
+                    }
+                }
+			}
+
+		}
+		filename = filename || this.editor.getOrCreateJsonFilename();
+		var dlg = new FilenameDialog(this, filename, mxResources.get('save', ['']), mxUtils.bind(this, function(name)
 		{
 			this.saveDB(name, cellection, action);
 		}), null, mxUtils.bind(this, function(name)
@@ -3894,6 +3912,9 @@ EditorUi.prototype.saveDB = function(name, collection, action)
                 if(result.status == 0) {
                     this.editor.setModified(false);
                     this.editor.setFilename(name);
+                    if(this.interfaceParams.type == 'topology') {
+                        this.interfaceParams.name = name;
+					}
                     this.updateDocumentTitle();
                     if( this.interfaceParams.operator == 'new'){
                         this.interfaceParams.operator = 'edit';
