@@ -41,31 +41,43 @@ Actions.prototype.init = function()
 
         ui.editor.graph.model.nextId = 0;
         ui.attributeNameIndex = 1;
-		ui.initInterfaceParams('new');
+
+        var arrParams = [];
+        arrParams['operator'] = 'new';
+        arrParams['id'] = '';
+		ui.initInterfaceParams(arrParams);
 
         deleteCells(true);
+
+        var cell = graph.getModel().getRoot();
+
+		var value = graph.getModel().getValue(cell);
+		if (!mxUtils.isNode(value)) {
+			var doc = mxUtils.createXmlDocument();
+			var obj = doc.createElement('object');
+			value = obj;
+		}
+		value.setAttribute('label', '');
+		ui.setInitAttributes();
+		for (var o in ui.initAttributes) {
+			value.setAttribute(o, JSON.stringify(ui.initAttributes[o]));
+		}
+        if(ui.interfaceParams.type == 'model') {
+            value.setAttribute('image', mxGraph.prototype.collapsedImage.src);
+        }
+        else if(ui.interfaceParams.type == 'topology') {
+			value.removeAttribute('image');
+		}
+
+        graph.setSelectionCells([]);
+		ui.format.refresh();
+
         //clear xml code
         ui.footwall.reset();
 
-        var cell = graph.getModel().getRoot();
-        var value = graph.getModel().getValue(cell);
-        if (!mxUtils.isNode(value))
-        {
-            var doc = mxUtils.createXmlDocument();
-            var obj = doc.createElement('object');
-            value = obj;
-        }
-        value.setAttribute('label', '');
-		ui.setInitAttributes();
-		for(var o in ui.initAttributes){
-			value.setAttribute(o,  JSON.stringify(ui.initAttributes[o]));
-		}
-		value.setAttribute('image', mxGraph.prototype.collapsedImage.src);
-		ui.format.refresh();
-
         var title = 'Create new ' + ui.interfaceParams.type;
         document.title = title;
-        this.get('resetView').funct();
+        // this.get('resetView').funct();
 		// window.open(ui.getUrl());
 
 	}),null,null,null,this.editorUi.interfaceParams.type

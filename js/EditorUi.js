@@ -1026,7 +1026,7 @@ EditorUi.prototype.attributeLogic = ['none', 'or', 'and'];
 /**
  * 接口入参
  *
- * type	       建模类型: model（模型）/topo（拓扑环境）/physic（物理环境）
+ * type	       建模类型: model（模型）/topology（拓扑环境）/physic（物理环境）
  * operator	   操作: new（新建）/edit（编辑）
  * designLibraryId	产品线ID
  * user	          用户标识
@@ -1042,26 +1042,33 @@ EditorUi.prototype.maxUploadImgSize = 1;
 /**
  * Init interface params
  */
-EditorUi.prototype.initInterfaceParams = function(type, id)
+EditorUi.prototype.initInterfaceParams = function(arrParams)
 {
-	if(type == null){
-        this.interfaceParams.type = this.interfaceParams.type || 'model';
-        this.interfaceParams.operator = this.interfaceParams.operator || 'new';
-        this.interfaceParams.model = this.interfaceParams.model || 'editor';
-        this.interfaceParams.designLibraryId = this.interfaceParams.designLibraryId || '';		//产品线id
-        this.interfaceParams.id = this.interfaceParams.id || '';		//图形id
-        this.interfaceParams.author = this.interfaceParams.author || this.interfaceParams.user || '';	//用户标示
-        this.interfaceParams.from = this.interfaceParams.from || '';		//调用系统的名称
+	if(arrParams instanceof Array && arrParams['operator'] && arrParams['operator'] == 'new') {
+        this.interfaceParams = GetRequest();
 	}
-	else if(type == 'new') {
-        this.interfaceParams.operator = 'new';
-        this.interfaceParams.id = '';		//图形id
+
+	this.interfaceParams.type = this.interfaceParams.type || 'model';
+	if(this.interfaceParams.type.indexOf('topo') >= 0) { this.interfaceParams.type = 'topology'; }
+	this.interfaceParams.operator = this.interfaceParams.operator || 'new';
+	this.interfaceParams.model = this.interfaceParams.model || 'editor';
+	this.interfaceParams.designLibraryId = this.interfaceParams.designLibraryId || '';		//产品线id
+	this.interfaceParams.id = this.interfaceParams.id || '';		//图形id
+	this.interfaceParams.author = this.interfaceParams.author || this.interfaceParams.user || '';	//用户标示
+	this.interfaceParams.from = this.interfaceParams.from || '';		//调用系统的名称
+
+	if(arrParams instanceof Array) {
+		for(var i in arrParams) {
+			this.interfaceParams[i] = arrParams[i];
+		}
 	}
-	else if(type == 'editModel') {
-        this.interfaceParams.type = 'model';
-        this.interfaceParams.operator = 'edit';
-        this.interfaceParams.id = id;		//图形id
-	}
+
+	if(this.interfaceParams.type == 'topology') {
+        mxCell.prototype.name = null;
+        if(this.interfaceParams.operator == 'new') {
+        	this.interfaceParams.name = '';
+		}
+    }
 }
 
 /**
@@ -1195,7 +1202,7 @@ EditorUi.prototype.setInitAttributes = function()
     }
     else if(type == 'topology') {
         arr['intrinsic'] = [];
-        arr['extended'] = [];
+        // arr['extended'] = [];
         // arr['userFunc'] = [];
     }
     else if(type == 'environment') {
@@ -3587,7 +3594,25 @@ EditorUi.prototype.saveFile = function(forceDialog)
 	}
 	else
 	{
-		var dlg = new FilenameDialog(this, this.editor.getOrCreateJsonFilename(), mxResources.get('save'), mxUtils.bind(this, function(name)
+		var filename;
+		if(this.interfaceParams.type == 'topology') {
+			filename = this.interfaceParams.name;
+			if(!filename) {
+                var intrAttr = this.editor.graph.model.getRoot().value.getAttribute('intrinsic');
+                if(intrAttr) {
+                    var arr = JSON.parse(intrAttr);
+                    for(var o in arr) {
+                        if(arr[o].name == 'name') {
+                            filename = filename || arr[o].value[0];
+                            break;
+                        }
+                    }
+                }
+			}
+
+		}
+		filename = filename || this.editor.getOrCreateJsonFilename();
+		var dlg = new FilenameDialog(this, filename, mxResources.get('save', ['']), mxUtils.bind(this, function(name)
 		{
 			this.saveDB(name, cellection, action);
 		}), null, mxUtils.bind(this, function(name)
@@ -3887,6 +3912,9 @@ EditorUi.prototype.saveDB = function(name, collection, action)
                 if(result.status == 0) {
                     this.editor.setModified(false);
                     this.editor.setFilename(name);
+                    if(this.interfaceParams.type == 'topology') {
+                        this.interfaceParams.name = name;
+					}
                     this.updateDocumentTitle();
                     if( this.interfaceParams.operator == 'new'){
                         this.interfaceParams.operator = 'edit';

@@ -481,6 +481,11 @@ Editor.prototype.getGraphXml = function(ui, ignoreSelection)
 
     node.setAttribute('envType', ui.interfaceParams.type);
     node.setAttribute('uuid', ui.interfaceParams.id);
+    node.setAttribute('author', ui.interfaceParams.author);
+    if(ui.interfaceParams.type == 'topology') {
+        node.setAttribute('name', ui.interfaceParams.name);
+	}
+    node.setAttribute('designLibraryId', ui.interfaceParams.designLibraryId);
 	if (this.graph.view.translate.x != 0 || this.graph.view.translate.y != 0)
 	{
 		node.setAttribute('dx', Math.round(this.graph.view.translate.x * 100) / 100);

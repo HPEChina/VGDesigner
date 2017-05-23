@@ -1,7 +1,8 @@
 /*
 画图规则:parent在前,child在后(先定义后使用)
 */
-function js2data (json, envType) {
+function js2data (json, interfaceParams) {
+  var envType = interfaceParams.type
   var relations = [], resources = {}, resourcesID = [], properties = { name: '', id: '', type: '', author: '', from: '' }
   function getAttrs (modelID, model) { // 获取属性面板数据
     var resources_properties = {},
@@ -10,7 +11,7 @@ function js2data (json, envType) {
     if (property) { // 静态属性
       property = JSON.parse(property)
       if (envType !== 'model' && modelID === '0') {
-        // topo忽略底板,只保留底板静态属性作为topo属性,忽略id
+                // topo忽略底板,只保留底板静态属性作为topo属性,忽略id
         return property.forEach(function (prop) {
           properties[prop.name] = prop.value[0]
         })
@@ -69,7 +70,7 @@ function js2data (json, envType) {
       continue
     }
 
-    // 无属性的模型
+        // 无属性的模型
     resourcesID.push(modelID)
     resources[modelID] = {
       properties: { id: modelID },
@@ -84,13 +85,14 @@ function js2data (json, envType) {
     return relation
   })
   if (envType !== 'model') { // topo
+    properties.name = interfaceParams.name || properties.name
     return {
       properties: properties,
       resources: list2tree(resources, resourcesID),
       relations: relations
     }
   }
-  // model
+    // model
   return {
     properties: { name: resources['0'] ? resources['0'].properties.name : '' }, // 底板name属性做为model name,err:有属性无模型时root节点是对象而非数组
     resources: list2tree(resources, resourcesID)

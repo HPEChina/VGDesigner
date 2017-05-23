@@ -49,7 +49,7 @@ var CodeTranslator =
                             if (n.nodeType == 1) {
                                 hasElementChild = true;
                                 elemCount[n.nodeName] = (elemCount[n.nodeName] ? elemCount[n.nodeName] + 1 : 1);
-                                if (elemCount[n.nodeName] > 1) needsArray = true;
+                                if (elemCount[n.nodeName] > 1 || Object.keys(elemCount).length > 1 ) needsArray = true;
                             }
                             else if (n.nodeType == 3 && n.nodeValue.match(/[^ \f\n\r\t\v]/)) textChild++; // non-whitespace text
                             else if (n.nodeType == 4) cdataChild++; // cdata section node

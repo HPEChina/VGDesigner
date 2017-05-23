@@ -254,7 +254,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
   color: inherit;
   z-index: 2;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   -webkit-tap-highlight-color: transparent;
   -webkit-font-variant-ligatures: contextual;
   font-variant-ligatures: contextual;

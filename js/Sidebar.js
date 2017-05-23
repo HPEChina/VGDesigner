@@ -1007,30 +1007,33 @@ Sidebar.prototype.createVertexTemplateFromXML = function(attr, id) {
 	var data = attr.data;
 	var name = attr.name;
 	var uuid = attr.id;
-	// var graph = this.editorUi.editor.graph;
-    // return function () {
-        var img = JSON.parse(data);
-        var doc = mxUtils.parseXml(img.xml);
-        var model = new mxGraphModel();
-        var codec = new mxCodec(doc);
-        codec.decode(doc.documentElement, model);
-        var parent = model.getChildAt(model.getRoot(), 0);
-        var cells = [];
+	var author = attr.author;
+	var pid = attr.designLibraryId;
 
-        for (var j = 0; j < model.getChildCount(parent); j++) {
-            cells.push(model.getChildAt(parent, j));
-        }
-        cells[0].setCategory(id);
-        // var value = graph.getModel().getValue(cells[0]);
-        // value.setAttribute('category', id);
-        if(uuid) {
-            cells[0].setUuid(uuid);
-            // value.setAttribute('uuid', uuid);
-        }
-        // if (cells.length > 0) {
-		return this.createVertexTemplateFromCells(cells, img.w, img.h, name, true, false, false, attr);
-        // }
-    // }.bind(this);
+	var img = JSON.parse(data);
+	var doc = mxUtils.parseXml(img.xml);
+	var model = new mxGraphModel();
+	var codec = new mxCodec(doc);
+	codec.decode(doc.documentElement, model);
+	var parent = model.getChildAt(model.getRoot(), 0);
+	var cells = [];
+
+	for (var j = 0; j < model.getChildCount(parent); j++) {
+		cells.push(model.getChildAt(parent, j));
+	}
+	cells[0].setCategory(id);
+	if(uuid) {
+		cells[0].setUuid(uuid);
+	}
+	if(author) {
+		cells[0].setAuthor(author);
+	}
+	if(pid) {
+		cells[0].setDesignLibraryId(pid);
+	}
+
+	return this.createVertexTemplateFromCells(cells, img.w, img.h, name, true, false, false, attr);
+	// }
 };
 
 /**
@@ -1285,6 +1288,9 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, width, height, allowCellsInserted, data)
 {
     var uuid = cells[0].getUuid();
+    var author = cells[0].getAuthor();
+    var pId = cells[0].getDesignLibraryId();
+
     var elt = null;
     if(!this.searchFlag && this.saveModelFlag) {
         if(uuid != ''){
@@ -1339,7 +1345,15 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 
                 this.editorUi.editor.graph.model.nextId = 0;
                 this.editorUi.attributeNameIndex = 1;
-                this.editorUi.initInterfaceParams('editModel', uuid);
+
+                var arrParams = [];
+                arrParams['id'] = uuid;
+                arrParams['designLibraryId'] = pId;
+                arrParams['author'] = author;
+                arrParams['type'] = 'model';
+                arrParams['operator'] = 'edit';
+                this.editorUi.initInterfaceParams(arrParams);
+
                 window.opener = {};
                 window.opener.openFile = new OpenFile();
                 window.opener.openFile.setData(JSON.parse(data.data).xml, data.filename);
@@ -1410,69 +1424,6 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 		}));
 	}
 	return elt;
-};
-Sidebar.prototype.createItem1 = function(cells, title, showLabel, showTitle, width, height, allowCellsInserted)
-{
-    var uuid = cells[0].getUuid();
-    var elt = null;
-    if(uuid != ''){
-        elt = document.getElementById(uuid);
-    }
-    if(elt == null)
-        elt = document.createElement('a');
-    elt.setAttribute('href', 'javascript:void(0);');
-
-    if(uuid != '') {
-        elt.setAttribute('id', uuid);
-    }
-    elt.className = 'geItem';
-    elt.style.overflow = 'hidden';
-    var border = (mxClient.IS_QUIRKS) ? 8 + 2 * this.thumbPadding : 2 * this.thumbBorder;
-    elt.style.width = (this.thumbWidth + border) + 'px';
-    elt.style.height = (this.thumbHeight + border) + 'px';
-    elt.style.padding = this.thumbPadding + 'px';
-
-    // Blocks default click action
-    mxEvent.addListener(elt, 'click', function(evt)
-    {
-        mxEvent.consume(evt);
-    });
-
-    this.createThumb(cells, this.thumbWidth, this.thumbHeight, elt, title, showLabel, showTitle, width, height);
-    var bounds = new mxRectangle(0, 0, width, height);
-
-    if (cells.length > 1 || cells[0].vertex)
-    {
-        var ds = this.createDragSource(elt, this.createDropHandler(cells, true, allowCellsInserted,
-            bounds), this.createDragPreview(width, height), cells, bounds);
-        this.addClickHandler(elt, ds, cells);
-
-        // Uses guides for vertices only if enabled in graph
-        ds.isGuidesEnabled = mxUtils.bind(this, function()
-        {
-            return this.editorUi.editor.graph.graphHandler.guidesEnabled;
-        });
-    }
-    else if (cells[0] != null && cells[0].edge)
-    {
-        var ds = this.createDragSource(elt, this.createDropHandler(cells, false, allowCellsInserted,
-            bounds), this.createDragPreview(width, height), cells, bounds);
-        this.addClickHandler(elt, ds, cells);
-    }
-
-    // Shows a tooltip with the rendered cell
-    if (!mxClient.IS_IOS)
-    {
-        mxEvent.addGestureListeners(elt, null, mxUtils.bind(this, function(evt)
-        {
-            if (mxEvent.isMouseEvent(evt))
-            {
-                this.showTooltip(elt, cells, bounds.width, bounds.height, title, showLabel);
-            }
-        }));
-    }
-
-    return elt;
 };
 
 /**

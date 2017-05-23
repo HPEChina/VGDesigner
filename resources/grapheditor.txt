@@ -207,6 +207,7 @@ navigation=Navigation
 name=Name
 new=New {1}
 noColor=No Color
+noDiagramId=No diagram ID
 noFiles=No files
 noMoreResults=No more results
 none=None
