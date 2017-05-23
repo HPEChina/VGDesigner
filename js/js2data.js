@@ -1,7 +1,8 @@
 /*
 画图规则:parent在前,child在后(先定义后使用)
 */
-function js2data(json, envType) {
+function js2data(json, interfaceParams) {
+    var envType = interfaceParams.type;
     var relations = [], resources = {}, resourcesID = [], properties = { name: '', id: '', type: '', author: '', from: '' }
     function getAttrs(modelID, model) {//获取属性面板数据
         var resources_properties = {},
@@ -84,6 +85,7 @@ function js2data(json, envType) {
         return relation
     })
     if (envType !== 'model') {//topo
+        properties.name = interfaceParams.name || properties.name;
         return {
             properties: properties,
             resources: list2tree(resources, resourcesID),

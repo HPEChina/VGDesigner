@@ -70,13 +70,43 @@ VGDesigner.prototype.init = function(interfaceParams)
         }
         else if(ui.interfaceParams.operator == 'edit') {
             title = 'Edit ' + ui.interfaceParams.type;
-            if(ui.interfaceParams.type == 'topo'){
+            if(ui.interfaceParams.type == 'topology'){
+                var uuid = ui.interfaceParams.id;
+                var author = ui.interfaceParams.author;
+                var pId = ui.interfaceParams.designLibraryId;
+
+                if(uuid == '') {
+                    mxUtils.alert(mxResources.get('noDiagramId'));
+                    return false;
+                }
                 var url = BASE_URL + VIEWER_COLLECTION + GET_URL;
-                var params = 'id=' + ui.interfaceParams.id;
+
+                var queryArr = [];
+                var tmp = 'd.id=="' + uuid + '"';
+                if(pId != ''){
+                    queryArr.push('(d.designLibraryId=="' + pId + '" || d.designLibraryId=="")');
+                }
+                if(author != ''){
+                    queryArr.push('(d.author=="' + author + '" || d.author=="")');
+                }
+                if(queryArr.length > 0) {
+                    var tmp1 = queryArr.join(' || ');
+                    tmp = tmp + ' && (' + tmp1 + ')';
+                }
+
+                var params = 'query=' + encodeURIComponent(tmp);
                 mxUtils.post(url, params, mxUtils.bind(this, function (req) {
                     var result = JSON.parse(req.getText());
                     var data = result.data[0];
                     if(data){
+                        var arrParams = [];
+                        arrParams['id'] = data.id;
+                        arrParams['designLibraryId'] = data.designLibraryId;
+                        arrParams['author'] = data.author;
+                        arrParams['name'] = data.filename;
+                        arrParams['operator'] = 'edit';
+                        ui.initInterfaceParams(arrParams);
+
                         var editor = ui.editor;
                         window.openFile = new OpenFile(function()
                         {
@@ -98,6 +128,7 @@ VGDesigner.prototype.init = function(interfaceParams)
                         }));
                         var xml = CodeTranslator.json2xml(data.data);
                         window.openFile.setData(xml, data.filename);
+                        ui.footwall.reset();
                         editor.setModified(false);
                     }
                 }));
