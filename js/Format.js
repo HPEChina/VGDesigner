@@ -6395,17 +6395,19 @@ AttributePanel.prototype.createEnhancedPanel = function()
                 div.className = isRoot ? 'geEnhancedRoot' : 'geEnhancedItem';
                 itemClick(div, cell);
                 container.appendChild(div);
-		    if(!isRoot && cell.style.split(';')[0].indexOf("edgeStyle") ==0){
-					var img = mxUtils.createImage(IMAGE_PATH + '/line.png');
-                    img.className = 'geEnhancedListImg';
-                    div.appendChild(img);
-				}
-				else if(!isRoot && cell.style.split(';')[0].indexOf("shape") ==0){
-					var img = mxUtils.createImage(IMAGE_PATH + '/model.png');
-                    img.className = 'geEnhancedListImg';
-                    img.style.marginLeft = leftPx;
-                    div.appendChild(img);
-				}
+		if(!isRoot && cell.style.split(';')[0].indexOf("group") < 0){
+			if(graph.getModel().isEdge(cell)){
+				var img = mxUtils.createImage(IMAGE_PATH + '/line.png');
+				img.className = 'geEnhancedListImg';
+				div.appendChild(img);
+			}
+			else if(graph.getModel().isVertex(cell)){
+				var img = mxUtils.createImage(IMAGE_PATH + '/model.png');
+				img.className = 'geEnhancedListImg';
+				img.style.marginLeft = leftPx;
+				div.appendChild(img);
+			}
+		}
                 var enLabel = document.createElement('label');
                 enLabel.innerHTML = title;
                 enLabel.style.marginLeft = '5px';
