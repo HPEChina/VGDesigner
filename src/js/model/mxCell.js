@@ -107,6 +107,8 @@ mxCell.prototype.style = null;
 
 mxCell.prototype.category = null;
 mxCell.prototype.uuid = null;
+mxCell.prototype.author = null;
+mxCell.prototype.designLibraryId = null;
 mxCell.prototype.image = null;
 /**
  * Variable: vertex
@@ -306,6 +308,27 @@ mxCell.prototype.setUuid = function(uuid)
 {
     this.uuid = uuid;
 };
+
+mxCell.prototype.getAuthor = function()
+{
+    return this.author || '';
+};
+
+mxCell.prototype.setAuthor = function(author)
+{
+    this.author = author;
+};
+
+mxCell.prototype.getDesignLibraryId = function()
+{
+    return this.designLibraryId || '';
+};
+
+mxCell.prototype.setDesignLibraryId = function(designLibraryId)
+{
+    this.designLibraryId = designLibraryId;
+};
+
 /**
  * Function: isVertex
  *

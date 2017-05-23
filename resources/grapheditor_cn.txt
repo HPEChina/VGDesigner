@@ -207,6 +207,7 @@ name=名称
 navigation=导航
 new=新建 {1}
 noColor=No Color
+noDiagramId=没有获取图形ID
 noFiles=No files
 noMoreResults=No more results
 none=None
