@@ -6411,7 +6411,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
 			if(graph.getModel().isEdge(cell)){
 				var img = mxUtils.createImage(IMAGE_PATH + '/line.png');
 				img.className = 'geEnhancedListImg';
-				img.style.marginLeft = marginLeft + 'px';
+				img.style.marginLeft = leftPx;
 				div.appendChild(img);
 			}
 			else if(graph.getModel().isVertex(cell)){
