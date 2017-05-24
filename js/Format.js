@@ -5147,7 +5147,7 @@ AttributePanel.prototype.init = function()
 AttributePanel.prototype.collapsedImage = function(cell, value)
 {
 	var ui = this.editorUi;
-    var graph = ui.editor.graph;
+    // var graph = ui.editor.graph;
 
     var container = this.container;
     var title = this.createTitle(mxResources.get('image'));
@@ -5195,9 +5195,6 @@ AttributePanel.prototype.collapsedImage = function(cell, value)
 	imgDelete.style.cursor = 'pointer';
 	imgDelete.setAttribute('title', mxResources.get('delete'));
 	td2.appendChild(imgDelete);
-	mxEvent.addListener(imgDelete, 'click', function(){
-
-	});
 
     tr.appendChild(td1);
     tr.appendChild(td0);
@@ -5207,10 +5204,15 @@ AttributePanel.prototype.collapsedImage = function(cell, value)
     div.appendChild(form.table);
 
     
-    mxEvent.addListener(imgInput, 'change', mxUtils.bind(this,function(){
+    mxEvent.addListener(imgInput, 'change', mxUtils.bind(this,function() {
 		this.uploadImg(imgInput, image, cell, value);
 	}));
 
+    mxEvent.addListener(imgDelete, 'click', mxUtils.bind(this, function() {
+    	if (mxUtils.confirm(mxResources.get('sureToDelete' , ['thumbnail']))) {
+            this.deleteImg(image, cell, value);
+		}
+    }));
 };
 
 //图片上传
@@ -5253,6 +5255,16 @@ AttributePanel.prototype.uploadImg = function(imgInput, image, cell, value) {
 	}
 };
 
+//删除group的图片
+AttributePanel.prototype.deleteImg = function(image, cell, value) {
+    var ui = this.editorUi;
+    var graph = ui.editor.graph;
+    var src = mxGraph.prototype.collapsedImage.src;
+    image.src = src;
+    value.removeAttribute('image');
+    var model = graph.getModel();
+    model.setValue(cell, value);
+};
 /**
  * 创建固有属性面板
  * @param ui
