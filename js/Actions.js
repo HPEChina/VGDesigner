@@ -41,6 +41,7 @@ Actions.prototype.init = function()
 
         ui.editor.graph.model.nextId = 0;
         ui.attributeNameIndex = 1;
+        ui.cellNumber = 0;
 
         var arrParams = [];
         arrParams['operator'] = 'new';
@@ -77,7 +78,7 @@ Actions.prototype.init = function()
 
         var title = 'Create new ' + ui.interfaceParams.type;
         document.title = title;
-        // this.get('resetView').funct();
+        this.get('resetView').funct();
 		// window.open(ui.getUrl());
 
 	}),null,null,null,this.editorUi.interfaceParams.type
