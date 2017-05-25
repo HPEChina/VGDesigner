@@ -4061,6 +4061,7 @@ StyleFormatPanel.prototype.addStroke = function(container)
 	perimeterPanel.style.marginTop = '6px';
 	perimeterPanel.style.borderWidth = '0px';
 	perimeterPanel.style.paddingBottom = '18px';
+	perimeterPanel.style.display = 'none';
 
 	var span = document.createElement('div');
 	span.style.position = 'absolute';
@@ -5147,7 +5148,7 @@ AttributePanel.prototype.init = function()
 AttributePanel.prototype.collapsedImage = function(cell, value)
 {
 	var ui = this.editorUi;
-    var graph = ui.editor.graph;
+    // var graph = ui.editor.graph;
 
     var container = this.container;
     var title = this.createTitle(mxResources.get('image'));
@@ -5195,9 +5196,6 @@ AttributePanel.prototype.collapsedImage = function(cell, value)
 	imgDelete.style.cursor = 'pointer';
 	imgDelete.setAttribute('title', mxResources.get('delete'));
 	td2.appendChild(imgDelete);
-	mxEvent.addListener(imgDelete, 'click', function(){
-
-	});
 
     tr.appendChild(td1);
     tr.appendChild(td0);
@@ -5207,10 +5205,15 @@ AttributePanel.prototype.collapsedImage = function(cell, value)
     div.appendChild(form.table);
 
     
-    mxEvent.addListener(imgInput, 'change', mxUtils.bind(this,function(){
+    mxEvent.addListener(imgInput, 'change', mxUtils.bind(this,function() {
 		this.uploadImg(imgInput, image, cell, value);
 	}));
 
+    mxEvent.addListener(imgDelete, 'click', mxUtils.bind(this, function() {
+    	if (mxUtils.confirm(mxResources.get('sureToDelete' , ['thumbnail?']))) {
+            this.deleteImg(image, cell, value);
+		}
+    }));
 };
 
 //图片上传
@@ -5253,6 +5256,21 @@ AttributePanel.prototype.uploadImg = function(imgInput, image, cell, value) {
 	}
 };
 
+//删除group的图片
+AttributePanel.prototype.deleteImg = function(image, cell, value) {
+    var ui = this.editorUi;
+    var graph = ui.editor.graph;
+    var src = mxGraph.prototype.collapsedImage.src;
+    image.src = src;
+    value.removeAttribute('image');
+    // value.setAttribute('image', src);
+    var model = graph.getModel();
+    model.setValue(cell, value);
+    if(graph.isCellCollapsed(cell)) {
+        graph.foldCells(false);
+        graph.foldCells(true);
+    }
+};
 /**
  * 创建固有属性面板
  * @param ui
@@ -5990,6 +6008,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
 
 		//打开右侧属性面板
 		var openAttributePanel = function(cell) {
+            graph.setSelectionCell(cell);
             currentCell = cell;
 			var ele = document.getElementsByClassName('geEnhancedRightDiv1');
 			if(ele && ele.length > 0) {
@@ -6279,7 +6298,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
 				
                 var title = document.createElement('div');
                 title.className = 'geEnhancedSideTitle';
-		    title.style.backgroundImage = 'url(\'' + IMAGE_PATH + '/expanded.gif' + '\')';
+		    	title.style.backgroundImage = 'url(\'' + IMAGE_PATH + '/expanded.gif' + '\')';
                 var titleLab = document.createElement('label');
                 titleLab.className = 'geEnhancedTitleLab';
                 titleLab.innerHTML = mxResources.get(e);
@@ -6330,7 +6349,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
 				imgA.appendChild(imgInput);
 				imgInsDiv.appendChild(imgA);
 		    
-		    var imgDelete = mxUtils.createImage(IMAGE_PATH + '/delete.png');
+		    	var imgDelete = mxUtils.createImage(IMAGE_PATH + '/delete.png');
 				imgDelete.style.height = '15px';
 				imgDelete.style.opacity = '.6';
   				imgDelete.style.marginTop = '15px';
@@ -6338,15 +6357,18 @@ AttributePanel.prototype.createEnhancedPanel = function()
 				imgDelete.style.cursor = 'pointer';
 				imgDelete.setAttribute('title', mxResources.get('delete'));
 				imgInsDiv.appendChild(imgDelete);
-				mxEvent.addListener(imgDelete, 'click', function(){
 
-				});
 		    
 				imgDiv.appendChild(imgInsDiv);
 
 				mxEvent.addListener(imgInput, 'change', mxUtils.bind(this,function(){
 					ui.format.panels[0].uploadImg(imgInput, image, currentCell, value);
 				}));
+                mxEvent.addListener(imgDelete, 'click', function(){
+                    if (mxUtils.confirm(mxResources.get('sureToDelete' , ['thumbnail?']))) {
+                        ui.format.panels[0].deleteImg(image, currentCell, value);
+                    }
+                });
             };
         };
 
@@ -6399,7 +6421,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
 			if(graph.getModel().isEdge(cell)){
 				var img = mxUtils.createImage(IMAGE_PATH + '/line.png');
 				img.className = 'geEnhancedListImg';
-				img.style.marginLeft = marginLeft + 'px';
+				img.style.marginLeft = leftPx;
 				div.appendChild(img);
 			}
 			else if(graph.getModel().isVertex(cell)){
@@ -6441,471 +6463,3 @@ AttributePanel.prototype.createEnhancedPanel = function()
 	}
 
 };
-
-AttributePanel.prototype.createEnhanced = function()
-{
-    // var ui = this.editorUi;
-    // var graph = ui.editor.graph;
-    var container = this.container;
-
-    var title = this.createTitle(mxResources.get('enhancedPanel'));
-    title.style.paddingLeft = '18px';
-    title.style.paddingTop = '10px';
-    title.style.paddingBottom = '6px';
-    container.appendChild(title);
-
-    var div = this.createPanel();
-    this.container.appendChild(div);
-    var enhancedDiv = document.createElement('div');
-    enhancedDiv.style.whiteSpace = 'nowrap';
-    enhancedDiv.style.marginTop = '10px';
-    enhancedDiv.style.textAlign = 'center';
-    div.appendChild(enhancedDiv);
-
-    var enBtn = mxUtils.button(mxResources.get('open'), Enhanced);
-
-    enBtn.style.width = '62%';
-    enBtn.className = 'btn-purple';
-    enhancedDiv.appendChild(enBtn);
-
-
-    // var container = this.container;
-    // var leftcoll = document.createElement('img');
-    // leftcoll.setAttribute('src', Format.prototype.leftOpen);
-    // leftcoll.className = 'geleftcoll';
-    // container.appendChild(leftcoll);
-
-    function Enhanced() {
-        var enhanced = document.getElementsByClassName('geEnhanced')[0];
-        if(enhanced){
-            enhanced.style.display = 'block';
-        }
-        else {
-            var editorcon = document.getElementsByClassName('geEditor')[0];
-            var side = document.getElementsByClassName('geSidebarContainer')[0];
-            var div = document.createElement('div');
-            div.style.width = 0.7 * document.body.clientWidth + 'px';
-            div.style.height = side.style.height;
-            div.className = 'geEnhanced';
-
-            //左右两部分Div
-            var leftD = document.createElement('div');
-            var rightD = document.createElement('div');
-            leftD.className = 'geEnhancedLeftDiv';
-            rightD.className = 'geEnhancedRightDiv';
-
-            // 左侧顶部栏
-            var leftT = document.createElement('div');
-            leftT.className = 'geEnhancedTitle';
-            var labL = document.createElement('label');
-            labL.className = 'geEnhancedLabel';
-            labL.innerHTML = 'LTE-TDD';
-            leftT.appendChild(labL);
-            var colDiv = document.createElement('img');
-            colDiv.setAttribute('src', Format.prototype.rightClose);
-            colDiv.className = 'geEnhancedCloseImg';
-            leftT.appendChild(colDiv);
-
-            mxEvent.addListener(colDiv, 'click', function () {
-                div.style.display = 'none';
-                // div.parentNode.removeChild(div);
-            });
-
-            leftD.appendChild(leftT);
-
-
-            //右侧顶部栏
-            var rightT = document.createElement('div');
-            rightT.className = 'geEnhancedTitle';
-            var labR = document.createElement('label');
-            labR.className = 'geEnhancedLabel';
-            labR.innerHTML = 'ATTRIBUTE OF MODEL';
-            rightT.appendChild(labR);
-            var okDiv = document.createElement('img');
-            okDiv.setAttribute('src', Format.prototype.sureImage);
-            okDiv.className = 'geokDiv';
-            rightT.appendChild(okDiv);
-            rightD.appendChild(rightT);
-
-
-            //左侧列表
-            var side = document.createElement('div');
-            side.className = 'geside';
-            leftD.appendChild(side);
-
-            var addOl = function (name,li,conname,img,oldiv) {
-                var liCon = document.createElement('div');
-                liCon.id =conname + 'liCon';
-                liCon.className = 'geolCon';
-                oldiv.appendChild(liCon);
-
-
-                for (var i = 0; i < name.length; i++) {
-                    var ol = document.createElement('div');
-                    // ol.id = name[i] + 'ol';
-                    ol.className = 'gesideOl';
-                    ol.innerHTML = name[i];
-                    liCon.appendChild(ol);
-                }
-
-                mxEvent.addListener(img, 'click', function()
-                {
-                    if(liCon.style.display == 'block'){
-                        liCon.style.display = 'none';
-                        img.setAttribute('src', Sidebar.prototype.collapsedImage);
-                    }else{
-                        liCon.style.display = 'block';
-                        img.setAttribute('src', Sidebar.prototype.expandedImage);
-                    }
-                });
-
-
-            };
-
-            var addLi = function (name,ul,title,img) {
-                var titleCon = document.createElement('div');
-                titleCon.id =title + 'Con';
-                titleCon.className = 'geliCon';
-                side.appendChild(titleCon);
-                for (var i = 0; i < name.length; i++) {
-                    var li = document.createElement('div');
-                    li.id = name[i] + 'li';
-                    li.className = 'gesideLi';
-                    titleCon.appendChild(li);
-                    var liLabel = document.createElement('label');
-                    liLabel.innerHTML = name[i];
-                    liLabel.className = 'geenLabel';
-                    li.appendChild(liLabel);
-                    var sideliCol = document.createElement('img');
-                    sideliCol.setAttribute('src', Sidebar.prototype.collapsedImage);
-                    sideliCol.className = 'gesideliCol';
-                    li.appendChild(sideliCol);
-                    addOl(['aaaa,aaaa,aaaa,aaaa,aaaa,aaaa,aaaa aaaa aaaa aaaa', 'bbbbb', 'ccc'],li,name[i],sideliCol,titleCon);
-                }
-
-                mxEvent.addListener(img, 'click', function()
-                {
-                    if(titleCon.style.display == 'block'){
-                        titleCon.style.display = 'none';
-                        img.setAttribute('src', Sidebar.prototype.collapsedImage);
-                    }else{
-                        titleCon.style.display = 'block';
-                        img.setAttribute('src', Sidebar.prototype.expandedImage);
-                    }
-                });
-            };
-
-            var addName = function (key) {
-                for (var i = 0; i < key.length; i++) {
-                    var ul = document.createElement('div');
-                    ul.id = key[i];
-                    ul.className = 'gesideUl';
-                    side.appendChild(ul);
-                    var enLabel = document.createElement('span');
-                    enLabel.innerHTML = key[i];
-                    enLabel.className = 'geenLabel';
-                    ul.appendChild(enLabel);
-                    var sideCol = document.createElement('img');
-                    sideCol.setAttribute('src', Sidebar.prototype.collapsedImage);
-                    sideCol.className = 'gesideCol';
-                    ul.appendChild(sideCol);
-
-                    addLi(['1111', '222', '333,333,333,333,333,','4444,4444,4444,4444,4444,4444,4444,4444,4444,'],ul,key[i],sideCol);
-                }
-            };
-            addName(['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE']);
-
-
-            //右侧属性
-            var con = document.createElement('div');
-            con.className = 'gecon';
-            rightD.appendChild(rightT);
-            rightD.appendChild(con);
-
-
-            var addpro = function (conDiv) {
-                var div = document.createElement('div');
-                div.className = 'geproDiv';
-                conDiv.appendChild(div);
-                var inputN = document.createElement('input');
-                inputN.className = 'geinputN';
-                inputN.placeholder = 'NAME';
-                div.appendChild(inputN);
-                var inputEn = document.createElement('input');
-                inputEn.className = 'gedefInput';
-                inputEn.placeholder = 'Type';
-                div.appendChild(inputEn);
-                var select = document.createElement('select');
-                select.className = 'geselectType';
-                div.appendChild(select);
-                var optN1 = document.createElement('option');
-                optN1.innerHTML = 'String';
-                var optN2 = document.createElement('option');
-                optN2.innerHTML = 'Number';
-                select.appendChild(optN1);
-                select.appendChild(optN2);
-                var select2 = document.createElement('select');
-                select2.className = 'geselectNo';
-                div.appendChild(select2);
-                var optN3 = document.createElement('option');
-                optN3.innerHTML = '==';
-                var optN4 = document.createElement('option');
-                optN4.innerHTML = '!==';
-                select2.appendChild(optN3);
-                select2.appendChild(optN4);
-                var inputV = document.createElement('input');
-                inputV.className = 'gedefInput';
-                inputV.placeholder = 'Value';
-                div.appendChild(inputV);
-                var select3 = document.createElement('select');
-                select3.className = 'geselectOpe';
-                div.appendChild(select3);
-                var optN5 = document.createElement('option');
-                optN5.innerHTML = 'none';
-                optN5.value = 'none';
-                var optN6 = document.createElement('option');
-                optN6.innerHTML = 'and';
-                optN6.value = 'and';
-                var optN7 = document.createElement('option');
-                optN7.innerHTML = 'or';
-                optN7.value = 'or';
-                select3.appendChild(optN5);
-                select3.appendChild(optN6);
-                select3.appendChild(optN7);
-                var del = document.createElement('img');
-                del.className = 'geDel';
-                del.setAttribute('src', Dialog.prototype.closeImage);
-                div.appendChild(del);
-                var br = document.createElement('br');
-                div.appendChild(br);
-
-                // del监听事件
-                var childs = div.childNodes;
-                var childsL = childs.length;
-                mxEvent.addListener(del, 'click', function () {
-                    for (var i = 0; i < childsL; i++) {
-                        div.removeChild(div.firstChild);
-                    }
-                });
-            };
-
-            var addTitle = function (tit) {
-                var title = document.createElement('div');
-                title.className = 'gesideTitle';
-                title.id = tit;
-                var titleLab = document.createElement('label');
-                titleLab.className = 'getitleLab';
-                titleLab.innerHTML = tit;
-                title.appendChild(titleLab);
-                var addCon = document.createElement('span');
-                addCon.className = 'geaddCon icon-24 icon-add';
-                // addCon.setAttribute('src', Format.prototype.addproCon);
-                title.appendChild(addCon);
-                con.appendChild(title);
-                var titleCon = document.createElement('div');
-                titleCon.className = 'getitleCon';
-                titleCon.id = tit + 'Con';
-                con.appendChild(titleCon);
-
-                var adddef = function (div, key, value) {
-                    var defDiv = document.createElement('div');
-                    defDiv.className = 'geproDiv';
-                    div.appendChild(defDiv);
-                    var inputN = document.createElement('input');
-                    inputN.className = 'geinputN';
-                    inputN.placeholder = 'NAME';
-                    defDiv.appendChild(inputN);
-                    var inputEn = document.createElement('input');
-                    inputEn.className = 'gedefInput';
-                    inputEn.placeholder = value;
-                    defDiv.appendChild(inputEn);
-                    var del = document.createElement('img');
-                    del.className = 'gedefDel';
-                    del.setAttribute('src', Dialog.prototype.closeImage);
-                    defDiv.appendChild(del);
-                    var br = document.createElement('br');
-                    defDiv.appendChild(br);
-
-                    // del监听事件
-                    var childs = defDiv.childNodes;
-                    var childsL = childs.length;
-                    mxEvent.addListener(del, 'click', function () {
-                        for (var i = 0; i < childsL; i++) {
-                            defDiv.removeChild(defDiv.firstChild);
-                        }
-                    });
-
-                };
-                adddef(titleCon, 'NAME', 'name');
-                adddef(titleCon, 'TYPE', 'type');
-                adddef(titleCon, 'CATEGORY', 'category');
-                mxEvent.addListener(addCon, 'click', function (oEvent) {
-                    adddef(titleCon);
-                    if (window.event) {
-                        window.event.cancelBubble = true;
-                    } else {
-                        oEvent.stopPropagation();
-                    }
-                });
-
-            };
-
-            var addDefTitle = function (tit) {
-                var title = document.createElement('div');
-                title.className = 'gesideTitle';
-                title.id = tit;
-                var titleLab = document.createElement('label');
-                titleLab.className = 'getitleLab';
-                titleLab.innerHTML = tit;
-                title.appendChild(titleLab);
-                var addCon = document.createElement('span');
-                addCon.className = 'geaddCon icon-24 icon-add';
-                addCon.setAttribute('src', Format.prototype.addproCon);
-                title.appendChild(addCon);
-                con.appendChild(title);
-                var titleCon = document.createElement('div');
-                titleCon.className = 'getitleCon';
-                titleCon.id = tit + 'Con';
-                con.appendChild(titleCon);
-
-                // 添加自定义属性事件
-                mxEvent.addListener(addCon, 'click', function (oEvent) {
-                    addpro(titleCon);
-                    if (window.event) {
-                        window.event.cancelBubble = true;
-                    } else {
-                        oEvent.stopPropagation();
-                    }
-                });
-            };
-
-            var addImgTitle = function (tit) {
-                var title = document.createElement('div');
-                title.className = 'gesideTitle';
-                title.id = tit;
-                var titleLab = document.createElement('label');
-                titleLab.className = 'getitleLab';
-                titleLab.innerHTML = tit;
-                title.appendChild(titleLab);
-                con.appendChild(title);
-                var titleCon = document.createElement('div');
-                titleCon.className = 'getitleCon';
-                titleCon.id = tit + 'Con';
-                con.appendChild(titleCon);
-
-                var addimg = function (conDiv) {
-                    var div = document.createElement('div');
-                    div.className = 'geproDiv';
-                    conDiv.appendChild(div);
-                    var inputI = document.createElement('input');
-                    inputI.className = 'geinputI';
-                    inputI.type = 'file';
-                    div.appendChild(inputI);
-                };
-                // 添加图片事件
-                addimg(titleCon);
-            };
-
-
-            addTitle(mxResources.get('intrinsic'));
-
-            addDefTitle(mxResources.get('extended'));
-
-            addImgTitle('IMAGE');
-
-
-            div.appendChild(leftD);
-            div.appendChild(rightD);
-            editorcon.appendChild(div);
-
-
-            var liDiv = document.getElementsByClassName('gesideLi');
-            var liChange = document.getElementsByClassName('geliChange');
-            var olDiv = document.getElementsByClassName('gesideOl');
-            var olChange = document.getElementsByClassName('geolChange');
-            var ulDiv = document.getElementsByClassName('gesideUl');
-            var ulChange = document.getElementsByClassName('geulChange');
-
-            for (var i = 0; i < ulDiv.length; i++)
-            {
-                mxEvent.addListener(ulDiv[i], 'click', function () {
-                    for (var k = 0; k < olChange.length; k++) {
-                        olChange[k].className = "gesideOl";
-                    }
-                    for (var j = 0; j < liChange.length; j++) {
-                        liChange[j].className = "gesideLi";
-                    }
-                    for (var n = 0; n < ulChange.length; n++) {
-                        ulChange[n].className = "gesideUl";
-                    }
-                    this.className = "geulChange";
-                });
-            }
-
-            for (var i = 0; i < liDiv.length; i++)
-            {
-                mxEvent.addListener(liDiv[i], 'click', function () {
-                    for (var k = 0; k < olChange.length; k++) {
-                        olChange[k].className = "gesideOl";
-                    }
-                    for (var j = 0; j < liChange.length; j++) {
-                        liChange[j].className = "gesideLi";
-                    }
-                    for (var n = 0; n < ulChange.length; n++) {
-                        ulChange[n].className = "gesideUl";
-                    }
-                    this.className = "geliChange";
-                });
-            }
-
-            for (var i = 0; i < olDiv.length; i++) {
-                mxEvent.addListener(olDiv[i], 'click', function () {
-                    for (var j = 0; j < liChange.length; j++) {
-                        liChange[j].className = "gesideLi";
-                    }
-                    for (var k = 0; k < olChange.length; k++) {
-                        olChange[k].className = "gesideOl";
-                    }
-                    for (var n = 0; n < ulChange.length; n++) {
-                        ulChange[n].className = "gesideUl";
-                    }
-                    this.className = "geolChange";
-                });
-            };
-
-            //INcol监听事件
-            var titlecoll1 = document.getElementById('Static Properties');
-            mxEvent.addListener(titlecoll1, 'click', function () {
-                var titlecon1 = document.getElementById('Static PropertiesCon');
-                if (titlecon1.style.display == 'block') {
-                    titlecon1.style.display = 'none';
-                } else {
-                    titlecon1.style.display = 'block';
-                }
-            });
-
-            //EXcol监听事件
-            var titlecoll2 = document.getElementById('Dynamic Properties');
-            mxEvent.addListener(titlecoll2, 'click', function () {
-                var titlecon2 = document.getElementById('Dynamic PropertiesCon');
-                if (titlecon2.style.display == 'block') {
-                    titlecon2.style.display = 'none';
-                } else {
-                    titlecon2.style.display = 'block';
-                }
-            });
-            //IMcol监听事件
-            var titlecoll4 = document.getElementById('IMAGE');
-            mxEvent.addListener(titlecoll4, 'click', function () {
-                var titlecon4 = document.getElementById('IMAGECon');
-                if (titlecon4.style.display == 'block') {
-                    titlecon4.style.display = 'none';
-                } else {
-                    titlecon4.style.display = 'block';
-                }
-            });
-
-        }
-    }
-
-}
