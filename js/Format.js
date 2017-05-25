@@ -5102,10 +5102,11 @@ AttributePanel.prototype.init = function()
             for(var o in editorUi.initAttributes){
                 obj.setAttribute(o,  JSON.stringify(editorUi.initAttributes[o]));
             }
+            graph.getModel().setValue(cell, obj);
         }
         value = obj;
     }
-    graph.getModel().setValue(cell, value);
+
     var attrs = value.attributes;
     var tObj = {};
     var allNames = [];

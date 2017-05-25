@@ -1194,7 +1194,7 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 	this.graph.labelsVisible = (showLabel == null || showLabel);
 	var fo = mxClient.NO_FO;
 	mxClient.NO_FO = Editor.prototype.originalNoForeignObject;
-	
+
 	var img_src = this.graph.getModel().getValue(cells[0]).getAttribute('image'),img_left,img_top;
 	if (img_src) {
 		img_left = (40 - width) / 2
@@ -1385,7 +1385,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 		}
 		this.createThumb(cells, w, h, elt, title, showLabel, showTitle, width, height);
 	}
-	var img_src = this.editorUi.editor.graph.getModel().getValue(cells[0]).getAttribute('image');
+	var img_src = this.graph.getModel().getValue(cells[0]).getAttribute('image');
 	if (img_src && img_src != 'null' && img_src != 'undefined')
 		createImgThumb.bind(this)(img_src)
 	else
