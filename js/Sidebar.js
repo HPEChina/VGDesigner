@@ -2610,7 +2610,10 @@ Sidebar.prototype.itemClicked = function(cells, ds, evt, elt)
 			this.editorUi.hoverIcons.update(graph.view.getState(graph.getSelectionCell()));
 		}
 	}
-	graph.foldCells(true)//折叠
+    if(graph.isCellFoldable(cells[0])) {
+        graph.foldCells(true);	//折叠
+	}
+
 };
 
 /**
