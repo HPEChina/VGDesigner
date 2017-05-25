@@ -1000,6 +1000,18 @@ EditorUi.prototype.foothsplitExpandStatus = false;
 EditorUi.prototype.allowAnimation = true;
 
 /**
+ * 点击sidebar创建cell的序号
+ */
+EditorUi.prototype.cellNumber = 0;
+
+/**
+ * 点击sidebar创建cell与上一个用同样方法创建的cell的间距,
+ * array[x, y]
+ * x,y : the number of grid size
+ */
+EditorUi.prototype.createCellSpacing = [4, 4];
+
+/**
  * 图形的初始化属性
  * @type {Array}
  */
