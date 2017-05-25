@@ -4061,6 +4061,7 @@ StyleFormatPanel.prototype.addStroke = function(container)
 	perimeterPanel.style.marginTop = '6px';
 	perimeterPanel.style.borderWidth = '0px';
 	perimeterPanel.style.paddingBottom = '18px';
+	perimeterPanel.style.display = 'none';
 
 	var span = document.createElement('div');
 	span.style.position = 'absolute';
