@@ -2565,7 +2565,8 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
  */
 Sidebar.prototype.itemClicked = function(cells, ds, evt, elt)
 {
-	var graph = this.editorUi.editor.graph;
+	var ui = this.editorUi;
+	var graph = ui.editor.graph;
 
 	// Alt+Click inserts and connects
 	if (mxEvent.isAltDown(evt))
@@ -2602,12 +2603,15 @@ Sidebar.prototype.itemClicked = function(cells, ds, evt, elt)
 	}
 	else
 	{
-		var pt = graph.getInsertPoint();
+		// var pt = graph.getInsertPoint();
+        var gs = graph.getGridSize();
+		var pt = new mxPoint(gs * (1 + ui.cellNumber * ui.createCellSpacing[0]) , gs * (1 + ui.cellNumber * ui.createCellSpacing[1]));
+        ui.cellNumber++;
 		ds.drop(graph, evt, null, pt.x, pt.y);
-		
-		if (this.editorUi.hoverIcons != null && mxEvent.isTouchEvent(evt))
+
+		if (ui.hoverIcons != null && mxEvent.isTouchEvent(evt))
 		{
-			this.editorUi.hoverIcons.update(graph.view.getState(graph.getSelectionCell()));
+			ui.hoverIcons.update(graph.view.getState(graph.getSelectionCell()));
 		}
 	}
     if(graph.isCellFoldable(cells[0])) {
