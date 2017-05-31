@@ -55,6 +55,7 @@ classic=Classic
 clearDefaultStyle=还原默认样式
 clearWaypoints=清除路径点
 # clipart=图形模型
+code=代码栏
 collapse=折叠
 collapseExpand=折叠/展开
 collapsible=可折叠的

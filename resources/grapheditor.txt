@@ -55,6 +55,7 @@ classic=Classic
 clearDefaultStyle=Clear Default Style
 clearWaypoints=Clear Waypoints
 # clipart=Clipart
+code=Code
 collapse=Collapse
 collapseExpand=Collapse/Expand
 collapsible=Collapsible
