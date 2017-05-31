@@ -335,12 +335,14 @@ Menus.prototype.init = function()
 			})(scales[i]);
 		}
 
-		this.addMenuItems(menu, ['-', 'fitWindow', 'fitPageWidth', 'fitPage', 'fitTwoPages', '-', 'customZoom'], parent);
+		// this.addMenuItems(menu, ['-', 'fitWindow', 'fitPageWidth', 'fitPage', 'fitTwoPages', '-', 'customZoom'], parent);
+        this.addMenuItems(menu, ['-', 'customZoom'], parent);
 	})));
 	this.put('file', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
         // this.addMenuItems(menu, ['new', 'open', '-', 'save', 'saveAs', '-', 'import', 'export', '-', 'pageSetup', 'print'], parent);
-		this.addMenuItems(menu, ['new', '-', 'save', '-', 'import', 'export', '-', 'pageSetup', 'print'], parent);
+        // this.addMenuItems(menu, ['new', '-', 'save', '-', 'import', 'export', '-', 'pageSetup', 'print'], parent);
+        this.addMenuItems(menu, ['new', '-', 'save', '-', 'import', 'export'], parent);
 	})));
 	this.put('edit', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
