@@ -928,6 +928,7 @@ EditorUi.compactUi = true;
  * Specifies the size of the split bar.
  */
 EditorUi.prototype.splitSize = (mxClient.IS_TOUCH || mxClient.IS_POINTER) ? 8 : 6;
+EditorUi.prototype.splitFootSize = (mxClient.IS_TOUCH || mxClient.IS_POINTER) ? 22 : 20;
 
 /**
  * Specifies the height of the menubar. Default is 34.
@@ -2125,7 +2126,7 @@ EditorUi.prototype.toggleFormatPanel = function(forceHide)
     this.formatContainer.style.width = fw + 'px';
     this.fsplit.style.right = fw + 'px';
     this.diagramContainer.style.right = fw + this.splitSize  + 'px';
-    this.footwallContainer.style.right = fw + this.splitSize  + 'px';
+    this.footwallContainer.style.right = fw + this.splitFootSize  + 'px';
 
 	this.fireEvent(new mxEventObject('formatWidthChanged'));
 };
@@ -2785,7 +2786,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	}
 	
 	var effHsplitPosition = Math.max(0, Math.min(this.hsplitPosition, w - this.splitSize - 20));
-    var efffootHsplitPosition = Math.max(0, Math.min(this.foothsplitPosition, h - this.splitSize - 20 - 14));
+    var efffootHsplitPosition = Math.max(0, Math.min(this.foothsplitPosition, h - this.splitFootSize - 20 - 14));
 	var efffsplitPosition = Math.max(0, Math.min(this.fsplitPosition, w - this.splitSize - 20));
 
 	var tmp = 0;
@@ -2949,6 +2950,7 @@ EditorUi.prototype.createDivs = function()
 	this.fsplit = this.createDiv('geFsplit');
     this.fsplit = this.createDiv('geFsplit');
     this.fsplit.setAttribute('title', mxResources.get('collapseExpand'));
+	mxUtils.write(this.foothsplit, mxResources.get('code'));
 
 	// Sets static style for containers
 	this.menubarContainer.style.top = '0px';
@@ -2970,7 +2972,7 @@ EditorUi.prototype.createDivs = function()
 	this.footerContainer.style.bottom = '0px';
 	this.footerContainer.style.zIndex = mxPopupMenu.prototype.zIndex - 2;
 
-    this.foothsplit.style.height = this.splitSize + 'px';
+    this.foothsplit.style.height = this.splitFootSize + 'px';
     this.hsplit.style.width = this.splitSize + 'px';
 	this.fsplit.style.width = this.splitSize + 'px';
 
@@ -3610,7 +3612,8 @@ EditorUi.prototype.saveFile = function(forceDialog)
 		if(this.interfaceParams.type == 'topology') {
 			filename = this.interfaceParams.name;
 			if(!filename) {
-                var intrAttr = this.editor.graph.model.getRoot().value.getAttribute('intrinsic');
+                	var intValue = this.editor.graph.model.getRoot().value;
+                	var intrAttr = intValue ? intValue.getAttribute('intrinsic') : null;
                 if(intrAttr) {
                     var arr = JSON.parse(intrAttr);
                     for(var o in arr) {

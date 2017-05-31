@@ -5580,15 +5580,15 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
         editTr.className = type + 'EditAttributes';
 
         var td1 = document.createElement('td');
-        td1.style.paddingTop = '3px';
         // td1.style.height = '100px';
 		td1.style.color = '#788da3';
 		td1.style.fontSize = '12px';
 		td1.style.borderTop = '0';
+	td1.style.verticalAlign = 'top';
 
         var td2 = document.createElement('td');
         td2.style.borderTop = '0';
-        td2.setAttribute('colspan', 2);
+        td2.setAttribute('colspan', 3);
 
         var br = document.createElement('br');
 
