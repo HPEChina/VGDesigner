@@ -1,18 +1,18 @@
 /*
 画图规则:parent在前,child在后(先定义后使用)
 */
-function js2data (json, interfaceParams) {
+function js2data(json, interfaceParams) {
   var envType = null
   if (interfaceParams) envType = interfaceParams.type || interfaceParams
-  var relations = [], resources = {}, resourcesID = [], properties = { name: '', id: '', type: '', author: '', from: '' }
-  function getAttrs (modelID, model) { // 获取属性面板数据
+  var result = {}, relations = [], resources = {}, resourcesID = [], properties = {}// { name: '', id: '', type: '', author: '', from: '' }
+  function getAttrs(modelID, model) { // 获取属性面板数据
     var resources_properties = {},
       operands = [],
       property = model['object@intrinsic']
     if (property) { // 静态属性
       property = JSON.parse(property)
       if (envType !== 'model' && modelID === '0') {
-                // topo忽略底板,只保留底板静态属性作为topo属性,忽略id
+        // topo忽略底板,只保留底板静态属性作为topo属性,忽略id
         return property.forEach(function (prop) {
           properties[prop.name] = prop.value[0]
         })
@@ -33,12 +33,12 @@ function js2data (json, interfaceParams) {
     resources_properties.id = modelID
     resources[modelID] = {
       properties: resources_properties,
-      operand: { operands: operands },
-      resources: [],
+      // resources: [],
       parent: model['object']['mxCell@parent']
     }
+    if (operands.length) resources[modelID].operand = { operands: operands }
   }
-  function getEdge (modelID, model) {
+  function getEdge(modelID, model) {
     if (envType !== 'model') {
       relations.push({
         properties: {
@@ -47,8 +47,8 @@ function js2data (json, interfaceParams) {
           type: model['mxCell@type'] || '',
           sourceId: model['mxCell@source'],
           targetId: model['mxCell@target']
-        },
-        relations: []
+        }//,
+        // relations: []
       })
     }
   }
@@ -71,11 +71,11 @@ function js2data (json, interfaceParams) {
       continue
     }
 
-        // 无属性的模型
+    // 无属性的模型
     resourcesID.push(modelID)
     resources[modelID] = {
       properties: { id: modelID },
-      resources: [],
+      // resources: [],
       parent: model['mxCell@parent']
     }
   }// end while
@@ -86,20 +86,22 @@ function js2data (json, interfaceParams) {
     return relation
   })
   if (envType !== 'model') { // topo
-    if (interfaceParams) { properties.name = interfaceParams.name || properties.name }
-    return {
-      properties: properties,
-      resources: list2tree(resources, resourcesID),
-      relations: relations
-    }
+    if (interfaceParams) { var nameData = interfaceParams.name || properties.name }
+    if (nameData) properties.name = nameData
+    result.properties = properties
+    var resourcesTree = list2tree(resources, resourcesID)
+    if (resourcesTree.length) result.resources = resourcesTree
+    if (relations.length) result.relations = relations
+    return result
   }
-    // model
-  return {
-    properties: { name: resources['0'] ? resources['0'].properties.name : '' }, // 底板name属性做为model name,err:有属性无模型时root节点是对象而非数组
-    resources: list2tree(resources, resourcesID)
-  }
+  // model
+  var nameData = resources['0'] ? resources['0'].properties.name : ''
+  result.properties = nameData ? { name: nameData } : {}// 底板name属性做为model name,err:有属性无模型时root节点是对象而非数组
+  var resourcesTree = list2tree(resources, resourcesID)
+  if (resourcesTree.length) result.resources = resourcesTree
+  return result
 }
-function getOperand (prop) {
+function getOperand(prop) {
   var key = prop.name,
     values = prop.value,
     operator = prop.operator,
@@ -129,7 +131,7 @@ function getOperand (prop) {
   }
   return operand
 }
-function findDevice (resources, sid, tid) {
+function findDevice(resources, sid, tid) {
   var sparent = resources[sid].parent,
     tparent = resources[tid].parent
   while (sparent !== '1' || tparent !== '1') {
@@ -144,7 +146,7 @@ function findDevice (resources, sid, tid) {
   }
   return { sid: sid, tid: tid }
 }
-function list2tree (resources, ids) { // 生成嵌套结构
+function list2tree(resources, ids) { // 生成嵌套结构
   while (ids.length) {
     var id = ids.pop()
     var parentId = resources[id].parent
@@ -152,6 +154,7 @@ function list2tree (resources, ids) { // 生成嵌套结构
     if (parentId) {
       if (!resources[parentId]) parentId = '0'// 忽略保存模型时强制加组,topo忽略底板
       if (resources[parentId]) {
+        if (!resources[parentId].resources) resources[parentId].resources = []
         resources[parentId].resources.push(resources[id])
         delete resources[id]
       }
@@ -159,7 +162,7 @@ function list2tree (resources, ids) { // 生成嵌套结构
   }
   return objValues(resources)
 }
-function objValues (obj) {
+function objValues(obj) {
   var arr = []
   for (var key in obj) {
     arr.push(obj[key])

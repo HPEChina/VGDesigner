@@ -221,15 +221,16 @@ Footwall.prototype.init = function()
                     JSON.parse(graphJSONData).mxGraphModel.root,
                     this.editorUi.interfaceParams
                 );
-                jsonTs.properties.id = this.editorUi.interfaceParams.id;
-                jsonTs.properties.author = this.editorUi.interfaceParams.user || this.editorUi.interfaceParams.author;
-                jsonTs.properties.from = this.editorUi.interfaceParams.from;
+                if (this.editorUi.interfaceParams.id) jsonTs.properties.id = this.editorUi.interfaceParams.id;
+                var authorData = this.editorUi.interfaceParams.user || this.editorUi.interfaceParams.author;
+                if (authorData) jsonTs.properties.author = authorData
+                if (this.editorUi.interfaceParams.from) jsonTs.properties.from = this.editorUi.interfaceParams.from;
                 if (this.editorUi.interfaceParams.type !== 'model') {//topo
-                        jsonTs.properties.type= 'topology';
-                        jsonTs.properties.designLibraryId= this.editorUi.interfaceParams.designLibraryId;
+                    jsonTs.properties.type = 'topology';
+                    if (this.editorUi.interfaceParams.designLibraryId) jsonTs.properties.designLibraryId = this.editorUi.interfaceParams.designLibraryId;
                 } else {//model
-                        jsonTs.properties.type= 'model';
-                        jsonTs.properties.productLine= this.editorUi.interfaceParams.designLibraryId;
+                    jsonTs.properties.type = 'model';
+                    if (this.editorUi.interfaceParams.designLibraryId) jsonTs.properties.productLine = this.editorUi.interfaceParams.designLibraryId;
                 }
                     
                 tValue = mxUtils.getPrettyJSON(jsonTs);
