@@ -4454,7 +4454,7 @@ DiagramFormatPanel.prototype.init = function()
 	if (graph.isEnabled())
 	{
 		this.container.appendChild(this.addOptions(this.createPanel()));
-		this.container.appendChild(this.addPaperSize(this.createPanel()));
+		// this.container.appendChild(this.addPaperSize(this.createPanel()));
 		this.container.appendChild(this.addStyleOps(this.createPanel()));
 	}
 };
@@ -4476,52 +4476,52 @@ DiagramFormatPanel.prototype.addView = function(div)
 	if (graph.isEnabled())
 	{
 		// Guides
-		div.appendChild(this.createOption(mxResources.get('guides'), function()
-		{
-			return graph.graphHandler.guidesEnabled;
-		}, function(checked)
-		{
-			ui.actions.get('guides').funct();
-		},
-		{
-			install: function(apply)
-			{
-				this.listener = function()
-				{
-					apply(graph.graphHandler.guidesEnabled);
-				};
-
-				ui.addListener('guidesEnabledChanged', this.listener);
-			},
-			destroy: function()
-			{
-				ui.removeListener(this.listener);
-			}
-		}));
+		// div.appendChild(this.createOption(mxResources.get('guides'), function()
+		// {
+		// 	return graph.graphHandler.guidesEnabled;
+		// }, function(checked)
+		// {
+		// 	ui.actions.get('guides').funct();
+		// },
+		// {
+		// 	install: function(apply)
+		// 	{
+		// 		this.listener = function()
+		// 		{
+		// 			apply(graph.graphHandler.guidesEnabled);
+		// 		};
+        //
+		// 		ui.addListener('guidesEnabledChanged', this.listener);
+		// 	},
+		// 	destroy: function()
+		// 	{
+		// 		ui.removeListener(this.listener);
+		// 	}
+		// }));
 
 		// Page View
-		div.appendChild(this.createOption(mxResources.get('pageView'), function()
-		{
-			return graph.pageVisible;
-		}, function(checked)
-		{
-			ui.actions.get('pageView').funct();
-		},
-		{
-			install: function(apply)
-			{
-				this.listener = function()
-				{
-					apply(graph.pageVisible);
-				};
-
-				ui.addListener('pageViewChanged', this.listener);
-			},
-			destroy: function()
-			{
-				ui.removeListener(this.listener);
-			}
-		}));
+		// div.appendChild(this.createOption(mxResources.get('pageView'), function()
+		// {
+		// 	return graph.pageVisible;
+		// }, function(checked)
+		// {
+		// 	ui.actions.get('pageView').funct();
+		// },
+		// {
+		// 	install: function(apply)
+		// 	{
+		// 		this.listener = function()
+		// 		{
+		// 			apply(graph.pageVisible);
+		// 		};
+        //
+		// 		ui.addListener('pageViewChanged', this.listener);
+		// 	},
+		// 	destroy: function()
+		// 	{
+		// 		ui.removeListener(this.listener);
+		// 	}
+		// }));
 
 		// Background
 		var bg = this.createColorOption(mxResources.get('background'), function()
