@@ -2857,7 +2857,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 
     var diagramHeight = Math.max(0, h - this.footerHeight - this.menubarHeight - this.toolbarHeight) - efffootHsplitPosition;
 
-    this.diagramContainer.style.height = diagramHeight - this.splitSize  + this.toolbarHeight + 'px';
+    this.diagramContainer.style.height = diagramHeight - this.splitFootSize  + this.toolbarHeight + 'px';
     this.hsplit.style.height = this.sidebarContainer.style.height;
 	this.fsplit.style.height = this.sidebarContainer.style.height;
     this.formatContainer.style.borderLeft = '1px solid #E0E0E0';
