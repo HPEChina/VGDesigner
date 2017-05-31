@@ -3612,8 +3612,8 @@ EditorUi.prototype.saveFile = function(forceDialog)
 		if(this.interfaceParams.type == 'topology') {
 			filename = this.interfaceParams.name;
 			if(!filename) {
-                	var intValue = this.editor.graph.model.getRoot().value;
-                	var intrAttr = intValue ? intValue.getAttribute('intrinsic') : null;
+				var intValue = this.editor.graph.model.getRoot().value;
+				var intrAttr = intValue ? intValue.getAttribute('intrinsic') : null;
                 if(intrAttr) {
                     var arr = JSON.parse(intrAttr);
                     for(var o in arr) {
@@ -3860,6 +3860,7 @@ EditorUi.prototype.showModel = function (params,outValue, saveFlag) {
  */
 EditorUi.prototype.saveDB = function(name, collection, action)
 {
+	name = mxUtils.trim(name, ' ');
     if (name != null)
     {
     	collection = collection || VIEWER_COLLECTION;
