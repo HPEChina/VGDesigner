@@ -117,9 +117,7 @@ Toolbar.prototype.init = function()
 		elts[1].setAttribute('title', mxResources.get('delete') + ' (' + this.editorUi.actions.get('delete').shortcut + ')');
 		// 4/17
         this.addItems(['-', 'lockUnlock']);
-        this.addItems(['-', 'collapsible']);
-        this.addItems(['-', 'expand']);
-        this.addItems(['-', 'collapse']);
+        this.addItems(['-', 'collapsible', 'expand', 'collapse']);
 	}
 	
 	if (sw >= 550)

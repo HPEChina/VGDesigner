@@ -4454,7 +4454,7 @@ DiagramFormatPanel.prototype.init = function()
 	if (graph.isEnabled())
 	{
 		this.container.appendChild(this.addOptions(this.createPanel()));
-		this.container.appendChild(this.addPaperSize(this.createPanel()));
+		// this.container.appendChild(this.addPaperSize(this.createPanel()));
 		this.container.appendChild(this.addStyleOps(this.createPanel()));
 	}
 };
@@ -4476,52 +4476,52 @@ DiagramFormatPanel.prototype.addView = function(div)
 	if (graph.isEnabled())
 	{
 		// Guides
-		div.appendChild(this.createOption(mxResources.get('guides'), function()
-		{
-			return graph.graphHandler.guidesEnabled;
-		}, function(checked)
-		{
-			ui.actions.get('guides').funct();
-		},
-		{
-			install: function(apply)
-			{
-				this.listener = function()
-				{
-					apply(graph.graphHandler.guidesEnabled);
-				};
-
-				ui.addListener('guidesEnabledChanged', this.listener);
-			},
-			destroy: function()
-			{
-				ui.removeListener(this.listener);
-			}
-		}));
+		// div.appendChild(this.createOption(mxResources.get('guides'), function()
+		// {
+		// 	return graph.graphHandler.guidesEnabled;
+		// }, function(checked)
+		// {
+		// 	ui.actions.get('guides').funct();
+		// },
+		// {
+		// 	install: function(apply)
+		// 	{
+		// 		this.listener = function()
+		// 		{
+		// 			apply(graph.graphHandler.guidesEnabled);
+		// 		};
+        //
+		// 		ui.addListener('guidesEnabledChanged', this.listener);
+		// 	},
+		// 	destroy: function()
+		// 	{
+		// 		ui.removeListener(this.listener);
+		// 	}
+		// }));
 
 		// Page View
-		div.appendChild(this.createOption(mxResources.get('pageView'), function()
-		{
-			return graph.pageVisible;
-		}, function(checked)
-		{
-			ui.actions.get('pageView').funct();
-		},
-		{
-			install: function(apply)
-			{
-				this.listener = function()
-				{
-					apply(graph.pageVisible);
-				};
-
-				ui.addListener('pageViewChanged', this.listener);
-			},
-			destroy: function()
-			{
-				ui.removeListener(this.listener);
-			}
-		}));
+		// div.appendChild(this.createOption(mxResources.get('pageView'), function()
+		// {
+		// 	return graph.pageVisible;
+		// }, function(checked)
+		// {
+		// 	ui.actions.get('pageView').funct();
+		// },
+		// {
+		// 	install: function(apply)
+		// 	{
+		// 		this.listener = function()
+		// 		{
+		// 			apply(graph.pageVisible);
+		// 		};
+        //
+		// 		ui.addListener('pageViewChanged', this.listener);
+		// 	},
+		// 	destroy: function()
+		// 	{
+		// 		ui.removeListener(this.listener);
+		// 	}
+		// }));
 
 		// Background
 		var bg = this.createColorOption(mxResources.get('background'), function()
@@ -5335,7 +5335,7 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
         // value = value.cloneNode(true);
         var arr = [];
         if(index != null) {
-        	var name = ele.name.value;
+        	var name = mxUtils.trim(ele.name.value, ' ');
         	if (name == '')
         	{
         		window.alert(mxResources.get('propertyNameIsEmpty'));
@@ -5364,11 +5364,11 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
                     arrAttr[index][o] = [];
                     for(var j in ele[o])
                     {
-                        arrAttr[index][o].push(ele[o][j].value);
+                        arrAttr[index][o].push(mxUtils.trim(ele[o][j].value, ' '));
                     }
                 }
                 else {
-                    arrAttr[index][o] = ele[o].value;
+                    arrAttr[index][o] = mxUtils.trim(ele[o].value, ' ');
                 }
             }
 		}
@@ -5912,7 +5912,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
                     mxUtils.alert(mxResources.get('propertyNameIsEmpty'));
                     return false;
                 }
-                allNames.push(names[i].value);
+                allNames.push(mxUtils.trim(names[i].value, ' '));
             }
             var ret = mxUtils.checkArrayIfDuplicateValues(allNames);
             if(ret.status)
@@ -5925,10 +5925,10 @@ AttributePanel.prototype.createEnhancedPanel = function()
             var arr = [];
             for(var i = 0; i < intrinsic.length; i++) {
                 var obj = {};
-                obj.name = intrinsic[i].getElementsByClassName('geEnhancedInputN')[0].value;
+                obj.name = mxUtils.trim(intrinsic[i].getElementsByClassName('geEnhancedInputN')[0].value, ' ');
                 obj.description = '';
                 obj.dataType = '';
-                obj.value = [intrinsic[i].getElementsByClassName('geEnhancedValueInput')[0].value];
+                obj.value = [mxUtils.trim(intrinsic[i].getElementsByClassName('geEnhancedValueInput')[0].value, ' ')];
                 obj.operator = [''];
                 obj.logic = [''];
                 arr.push(obj);
@@ -5940,25 +5940,25 @@ AttributePanel.prototype.createEnhancedPanel = function()
             for(var i = 0; i < extended.length; i++) {
                 var obj = {};
                 // { "name": "", "description": "", "dataType": "", "value": [""], "operator":[''], 'logic':[""] };
-                obj.name = extended[i].getElementsByClassName('geEnhancedInputN')[0].value;
-                obj.description = extended[i].getElementsByClassName('geEnhancedDefInput')[0].value;
-                obj.dataType = extended[i].getElementsByClassName('geEnhancedSelectType')[0].value;
+                obj.name = mxUtils.trim(extended[i].getElementsByClassName('geEnhancedInputN')[0].value, ' ');
+                obj.description = mxUtils.trim(extended[i].getElementsByClassName('geEnhancedDefInput')[0].value, ' ');
+                obj.dataType = mxUtils.trim(extended[i].getElementsByClassName('geEnhancedSelectType')[0].value, ' ');
                 var tmp = extended[i].getElementsByClassName('geEnhancedValueInput');
                 var tmpArr = [];
                 for(var j = 0; j < tmp.length; j++) {
-                    tmpArr.push(tmp[j].value);
+                    tmpArr.push(mxUtils.trim(tmp[j].value, ' '));
                 }
                 obj.value = tmpArr;
                 tmp = extended[i].getElementsByClassName('geEnhancedSelectOpr');
                 tmpArr = [];
                 for(var j = 0; j < tmp.length; j++) {
-                    tmpArr.push(tmp[j].value);
+                    tmpArr.push(mxUtils.trim(tmp[j].value, ' '));
                 }
                 obj.operator = tmpArr;
                 tmp = extended[i].getElementsByClassName('geEnhancedSelectLgc');
                 tmpArr = [];
                 for(var j = 0; j < tmp.length; j++) {
-                    tmpArr.push(tmp[j].value);
+                    tmpArr.push(mxUtils.trim(tmp[j].value, ' '));
                 }
                 obj.logic = tmpArr;
                 arr.push(obj);
