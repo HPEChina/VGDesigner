@@ -62,10 +62,12 @@ Toolbar.prototype.init = function()
 
 	if (sw >= 700)
 	{
-        this.addItems(['save','-','fitWindow','-']);
+
         var formatMenu = this.addMenu('', mxResources.get('view') + ' (' + mxResources.get('panTooltip') + ')', true, 'viewPanels', null, true);
 		this.addDropDownArrow(formatMenu, 'geSprite-formatpanel', 38, 50, -4, -3, 36, -8);
-		this.addSeparator();
+        this.addSeparator();
+
+        this.addItems(['new', 'save', '-']);
 	}
 	
 	var viewMenu = this.addMenu('', mxResources.get('zoom') + ' (Alt+Mousewheel)', true, 'viewZoom', null, true);
@@ -82,13 +84,13 @@ Toolbar.prototype.init = function()
 	{
 		viewMenu.style.width = (mxClient.IS_QUIRKS) ? '62px' : '36px';
 	}
-	
 	if (sw >= 420)
 	{
 		this.addSeparator();
-		var elts = this.addItems(['zoomIn', 'zoomOut']);
-		elts[0].setAttribute('title', mxResources.get('zoomIn') + ' (' + this.editorUi.actions.get('zoomIn').shortcut + ')');
-		elts[1].setAttribute('title', mxResources.get('zoomOut') + ' (' + this.editorUi.actions.get('zoomOut').shortcut + ')');
+		var elts = this.addItems(['fitWindow', 'zoomIn', 'zoomOut']);
+        elts[0].setAttribute('title', mxResources.get('fitWindow') + ' (' + this.editorUi.actions.get('fitWindow').shortcut + ')');
+		elts[1].setAttribute('title', mxResources.get('zoomIn') + ' (' + this.editorUi.actions.get('zoomIn').shortcut + ')');
+		elts[2].setAttribute('title', mxResources.get('zoomOut') + ' (' + this.editorUi.actions.get('zoomOut').shortcut + ')');
 	}
 	
 	// Updates the label if the scale changes
