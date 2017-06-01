@@ -633,7 +633,7 @@ Actions.prototype.init = function()
 	}, null, null, 'Ctrl+H');
 	this.addAction('zoomIn', function(evt) { graph.zoomIn(); }, null, null, 'Ctrl + / Alt+Mousewheel');
 	this.addAction('zoomOut', function(evt) { graph.zoomOut(); }, null, null, 'Ctrl - / Alt+Mousewheel');
-	this.addAction('fitWindow', function() { graph.fit(); }, null, null, 'Ctrl+Shift+H');
+	this.addAction('fitWindow', function() { graph.fit(null, null, 10, null, null, null, true, false); }, null, null, 'Ctrl+Shift+H');
 	this.addAction('fitPage', mxUtils.bind(this, function()
 	{
 		if (!graph.pageVisible)
