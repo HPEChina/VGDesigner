@@ -62,7 +62,7 @@ Toolbar.prototype.init = function()
 
 	if (sw >= 700)
 	{
-        this.addItems(['new','-']);
+        this.addItems(['save','-','fitWindow','-']);
         var formatMenu = this.addMenu('', mxResources.get('view') + ' (' + mxResources.get('panTooltip') + ')', true, 'viewPanels', null, true);
 		this.addDropDownArrow(formatMenu, 'geSprite-formatpanel', 38, 50, -4, -3, 36, -8);
 		this.addSeparator();

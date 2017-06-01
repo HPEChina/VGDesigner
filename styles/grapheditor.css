@@ -33,6 +33,7 @@ body{
 .geDiagramContainer {
 	background-color:#ffffff;
 	outline:none;
+	border: 1px solid #e5e5e5;
 }
 .geMenubar, .geToolbar {
 	white-space:nowrap;
@@ -474,10 +475,10 @@ div.mxWindow .geButton {
 	cursor:row-resize;
 	background-color: #337ab7;
 	color: #fff;
-	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAEBAMAAACw6DhOAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAFElEQVQImWNgNVdzYBAUFBRggLMAEzYBy29kEPgAAAAASUVORK5CYII=);
-	_background-image:url('thumb_horz.png');
+	background-image: url('../images/split.png');
 	background-repeat:no-repeat;
-	background-position:53% center;
+	background-position: 54% 2px;
+	background-size: 12px;
 	text-align: center;
 }
 .geVsplit {
@@ -869,7 +870,9 @@ div.mxWindow .geButton {
 	 /*height: auto;*/
  /*}*/
 .geEnhancedInputN{
-	width: 120px;
+	width: 140px;
+	height: 25px;
+	margin-bottom: 2px;
 	margin-left: 20px;
 }
 /*.geinputN{*/
@@ -877,7 +880,9 @@ div.mxWindow .geButton {
 	/*margin-left: 20px;*/
 /*}*/
 .geEnhancedDefInput, .geEnhancedValueInput{
-	width: 120px;
+	width: 140px;
+	height: 25px;
+	margin-bottom: 2px;
 	margin-left: 3px;
 }
 /*.gedefInput{*/
@@ -885,7 +890,8 @@ div.mxWindow .geButton {
 	/*margin-left: 3px;*/
 /*}*/
 .geEnhancedSelectType{
-	width: 80px;
+	width: 67px;
+	height: 25px;
 	margin-left: 3px;
 }
 /*.geselectType{*/
@@ -893,7 +899,8 @@ div.mxWindow .geButton {
 	/*margin-left: 3px;*/
 /*}*/
 .geEnhancedSelectOpr{
-	width: 60px;
+	width: 40px;
+	height: 25px;
 	margin-left: 3px;
 }
 /*.geselectNo{*/
@@ -901,7 +908,8 @@ div.mxWindow .geButton {
 	/*margin-left: 3px;*/
 /*}*/
 .geEnhancedSelectLgc{
-	width: 60px;
+	width: 55px;
+	height: 25px;
 	margin-left: 3px;
 }
 /*.geselectOpe{*/
@@ -919,7 +927,7 @@ div.mxWindow .geButton {
 .geEnhancedDel{
 	width: 10px;
 	height: 10px;
-	margin-top: 4px;
+	margin-top: 7px;
 	margin-left: 5px;
 	display: inline-block;
 	cursor: pointer;
@@ -1151,6 +1159,8 @@ div.mxWindow .geButton {
 .geSprite-new { background-position: 0 -6401px; }
 .geSprite-collapse { background-position: 0 -6315px; }
 .geSprite-expand { background-position: 0 -6359px; }
+.geSprite-save { background-image: url('../images/save.png');background-size: contain; }
+.geSprite-fitwindow { background-image: url('../images/layout.png');background-size: contain;background-position-y: 1px;}
 
 
 .geMenuImage{

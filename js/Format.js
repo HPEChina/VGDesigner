@@ -5583,8 +5583,7 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
         // td1.style.height = '100px';
 		td1.style.color = '#788da3';
 		td1.style.fontSize = '12px';
-		td1.style.borderTop = '0';
-	td1.style.verticalAlign = 'top';
+		td1.style.borderTop = '0'
 
         var td2 = document.createElement('td');
         td2.style.borderTop = '0';
@@ -5688,6 +5687,8 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
                     }
                 }
                 td2.appendChild(editElement[o]);
+		td1.style.verticalAlign = 'top';
+		td2.style.verticalAlign = 'top';
             }
             else if(o == 'value'){
                 editElement['operator'] = [];
