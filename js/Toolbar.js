@@ -87,8 +87,10 @@ Toolbar.prototype.init = function()
 	if (sw >= 420)
 	{
 		this.addSeparator();
+		var arrangeMenu = this.addMenu('', mxResources.get('layout'), true, 'layout', null, true);
+		this.addDropDownArrow(arrangeMenu, 'geSprite-arrange', 38, 50, -4, -3, 36, -8);
 		var elts = this.addItems(['fitWindow', 'zoomIn', 'zoomOut']);
-        elts[0].setAttribute('title', mxResources.get('fitWindow') + ' (' + this.editorUi.actions.get('fitWindow').shortcut + ')');
+        	elts[0].setAttribute('title', mxResources.get('fitWindow') + ' (' + this.editorUi.actions.get('fitWindow').shortcut + ')');
 		elts[1].setAttribute('title', mxResources.get('zoomIn') + ' (' + this.editorUi.actions.get('zoomIn').shortcut + ')');
 		elts[2].setAttribute('title', mxResources.get('zoomOut') + ' (' + this.editorUi.actions.get('zoomOut').shortcut + ')');
 	}
