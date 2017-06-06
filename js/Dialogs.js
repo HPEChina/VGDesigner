@@ -1142,10 +1142,10 @@ var FilenameDialog = function(editorUi, filename, buttonText, fn, label, validat
 	{
 		if (validateFn == null || validateFn(nameInput.value))
 		{
-			if (closeOnBtn)
-			{
-				editorUi.hideDialog();
-			}
+			// if (closeOnBtn)
+			// {
+			// 	editorUi.hideDialog();
+			// }
 			
 			fn(nameInput.value);
 		}

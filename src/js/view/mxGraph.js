@@ -2907,15 +2907,19 @@ mxGraph.prototype.getPreferredPageSize = function(bounds, width, height)
  * border - Optional number that specifies the border. Default is <border>.
  * keepOrigin - Optional boolean that specifies if the translate should be
  * changed. Default is false.
- * margin - Optional margin in pixels. Default is 0.
+ * margin - Optional margin in pixels. Default is 0. Do not follow the scale changes.
  * enabled - Optional boolean that specifies if the scale should be set or
  * just returned. Default is true.
  * ignoreWidth - Optional boolean that specifies if the width should be
  * ignored. Default is false.
  * ignoreHeight - Optional boolean that specifies if the height should be
  * ignored. Default is false.
+ * center - Optional boolean that specifies if the diagram should be
+ * align center. Default is false.
+ * zoomIn - Optional boolean that specifies if the diagram should be
+ * zoom in. Default is true.
  */
-mxGraph.prototype.fit = function(border, keepOrigin, margin, enabled, ignoreWidth, ignoreHeight)
+mxGraph.prototype.fit = function(border, keepOrigin, margin, enabled, ignoreWidth, ignoreHeight, center, zoomIn)
 {
 	if (this.container != null)
 	{
@@ -2925,11 +2929,13 @@ mxGraph.prototype.fit = function(border, keepOrigin, margin, enabled, ignoreWidt
 		enabled = (enabled != null) ? enabled : true;
 		ignoreWidth = (ignoreWidth != null) ? ignoreWidth : false;
 		ignoreHeight = (ignoreHeight != null) ? ignoreHeight : false;
-		
-		// Adds spacing and border from css
+		center = (center != null) ? center : false;
+		zoomIn = (zoomIn != null) ? zoomIn : true;
+
+		// Remove scrollbar width(=this.container.offsetWidth - this.container.clientWidth) , add spacings and border from css
 		var cssBorder = this.getBorderSizes();
-		var w1 = this.container.offsetWidth - cssBorder.x - cssBorder.width - 1;
-		var h1 = this.container.offsetHeight - cssBorder.y - cssBorder.height - 1;
+		var w1 = this.container.clientWidth - cssBorder.x - cssBorder.width - 1;
+		var h1 = this.container.clientHeight - cssBorder.y - cssBorder.height - 1;
 		var bounds = this.view.getGraphBounds();
 		
 		if (bounds.width > 0 && bounds.height > 0)
@@ -2955,13 +2961,16 @@ mxGraph.prototype.fit = function(border, keepOrigin, margin, enabled, ignoreWidt
 				h2 = Math.max(h2, this.backgroundImage.height - bounds.y / s);
 			}
 			
-			var b = ((keepOrigin) ? border : 2 * border) + margin;
-
+            var b = ((keepOrigin) ? border : 2 * border) + margin * 2;
 			w1 -= b;
 			h1 -= b;
 			
-			var s2 = (((ignoreWidth) ? h1 / h2 : (ignoreHeight) ? w1 / w2 :
-				Math.min(w1 / w2, h1 / h2)));
+			var s2 = (ignoreWidth) ? h1 / h2 : (ignoreHeight) ? w1 / w2 : Math.min(w1 / w2, h1 / h2);
+
+			//如果图形不需要放大，当图形大小小于面板大小时，图形不放大保持原有的缩放比例
+			if(!zoomIn && w1 >= w2 && h1 >= h2) {
+                s2 = s;
+            }
 			
 			if (this.minFitScale != null)
 			{
@@ -2991,12 +3000,12 @@ mxGraph.prototype.fit = function(border, keepOrigin, margin, enabled, ignoreWidt
 						
 						if (b2.x != null)
 						{
-							this.container.scrollLeft = b2.x;
+                            this.container.scrollLeft = b2.x - margin - (center ? (w1 - b2.width) / 2 : 0);
 						}
 						
 						if (b2.y != null)
 						{
-							this.container.scrollTop = b2.y;
+                            this.container.scrollTop = b2.y - margin - (center ? (h1 - b2.height) / 2 : 0);
 						}
 					}
 				}

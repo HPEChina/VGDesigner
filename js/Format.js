@@ -5583,8 +5583,7 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
         // td1.style.height = '100px';
 		td1.style.color = '#788da3';
 		td1.style.fontSize = '12px';
-		td1.style.borderTop = '0';
-	td1.style.verticalAlign = 'top';
+		td1.style.borderTop = '0'
 
         var td2 = document.createElement('td');
         td2.style.borderTop = '0';
@@ -5688,6 +5687,8 @@ AttributePanel.prototype.createAttrsPanel = function(cell, value, attrs, type, a
                     }
                 }
                 td2.appendChild(editElement[o]);
+		td1.style.verticalAlign = 'top';
+		td2.style.verticalAlign = 'top';
             }
             else if(o == 'value'){
                 editElement['operator'] = [];
@@ -5920,7 +5921,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
                 window.alert(mxResources.get('duplicateName') + ': "' + ret.data +'"');
                 return false;
             }
-            var value = currentCell.value;
+            var value = getCellValue(currentCell);
             var intrinsic = document.getElementsByClassName('geEnhancedIntrinsic');
             var arr = [];
             for(var i = 0; i < intrinsic.length; i++) {
@@ -6295,8 +6296,8 @@ AttributePanel.prototype.createEnhancedPanel = function()
 
             //添加图标
             function addImgTitle(container, e) {
-				var value = currentCell.value;
-				
+				var value = getCellValue(currentCell);
+
                 var title = document.createElement('div');
                 title.className = 'geEnhancedSideTitle';
 		    	title.style.backgroundImage = 'url(\'' + IMAGE_PATH + '/expanded.gif' + '\')';
@@ -6461,6 +6462,27 @@ AttributePanel.prototype.createEnhancedPanel = function()
         //默认打开root属性
         currentCell = root;
         openAttributePanel(currentCell);
+
+        function getCellValue(cell) {
+        	var value = cell.value;
+            if (!mxUtils.isNode(value))
+            {
+                var doc = mxUtils.createXmlDocument();
+                var obj = doc.createElement('object');
+                obj.setAttribute('label', value || '');
+
+                //如果新建图形，则object(id==0)设置默认初始属性
+                if(ui.interfaceParams.operator == 'new' && ui.interfaceParams.type == 'model' && currentCell.getId() == '0')
+                {
+                    for(var o in ui.initAttributes){
+                        obj.setAttribute(o,  JSON.stringify(ui.initAttributes[o]));
+                    }
+                    graph.getModel().setValue(currentCell, obj);
+                }
+                value = obj;
+            }
+            return value;
+		};
 	}
 
 };

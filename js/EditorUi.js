@@ -3948,6 +3948,7 @@ EditorUi.prototype.saveDB = function(name, collection, action)
 						if(window.parent.loadProductTopoNode)
 							window.parent.loadProductTopoNode(this.interfaceParams.designLibraryId);
 					}
+			this.hideDialog();
                 }
                 else {
                     mxUtils.alert(result.data.msg);
