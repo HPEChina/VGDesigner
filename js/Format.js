@@ -6023,7 +6023,7 @@ AttributePanel.prototype.createEnhancedPanel = function()
             rightDiv.appendChild(rightTitle);
             rightDiv.appendChild(container);
 
-            var value = cell.value;
+            var value = getCellValue(cell);
             var attrs = value.attributes;
             var tObj = {};
             if(attrs) {
