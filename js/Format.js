@@ -6419,20 +6419,20 @@ AttributePanel.prototype.createEnhancedPanel = function()
                 div.className = isRoot ? 'geEnhancedRoot' : 'geEnhancedItem';
                 itemClick(div, cell);
                 container.appendChild(div);
-		if(!isRoot && cell.style.split(';')[0].indexOf("group") < 0){
-			if(graph.getModel().isEdge(cell)){
-				var img = mxUtils.createImage(IMAGE_PATH + '/line.png');
-				img.className = 'geEnhancedListImg';
-				img.style.marginLeft = leftPx;
-				div.appendChild(img);
-			}
-			else if(graph.getModel().isVertex(cell)){
-				var img = mxUtils.createImage(IMAGE_PATH + '/model.png');
-				img.className = 'geEnhancedListImg';
-				img.style.marginLeft = leftPx;
-				div.appendChild(img);
-			}
-		}
+				if(!isRoot && cell.style.split(';')[0].indexOf("group") < 0){
+					if(graph.getModel().isEdge(cell)){
+						var img = mxUtils.createImage(IMAGE_PATH + '/line.png');
+						img.className = 'geEnhancedListImg';
+						img.style.marginLeft = leftPx;
+						div.appendChild(img);
+					}
+					else if(graph.getModel().isVertex(cell)){
+						var img = mxUtils.createImage(IMAGE_PATH + '/model.png');
+						img.className = 'geEnhancedListImg';
+						img.style.marginLeft = leftPx;
+						div.appendChild(img);
+					}
+				}
                 var enLabel = document.createElement('label');
                 enLabel.innerHTML = title;
                 enLabel.style.marginLeft = '5px';
@@ -6444,13 +6444,13 @@ AttributePanel.prototype.createEnhancedPanel = function()
                     	img.style.marginLeft = leftPx;
                     }
                     div.appendChild(img);
-			div.appendChild(enLabel);
+					div.appendChild(enLabel);
                     var div1 = document.createElement('div');
                     div1.className = 'geEnhancedListItem';
                     container.appendChild(div1);
                     listShow(children, false, div1, img);
                 }
-		else{
+				else{
 					div.appendChild(enLabel);
 				}
             }
