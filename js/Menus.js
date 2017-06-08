@@ -336,7 +336,7 @@ Menus.prototype.init = function()
 		}
 
 		// this.addMenuItems(menu, ['-', 'fitWindow', 'fitPageWidth', 'fitPage', 'fitTwoPages', '-', 'customZoom'], parent);
-        this.addMenuItems(menu, ['-', 'customZoom'], parent);
+        this.addMenuItems(menu, ['-', 'fitWindow', 'customZoom'], parent);
 	})));
 	this.put('file', new Menu(mxUtils.bind(this, function(menu, parent)
 	{
