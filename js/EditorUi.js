@@ -927,7 +927,7 @@ EditorUi.compactUi = true;
 /**
  * Specifies the size of the split bar.
  */
-EditorUi.prototype.splitSize = (mxClient.IS_TOUCH || mxClient.IS_POINTER) ? 8 : 6;
+EditorUi.prototype.splitSize = (mxClient.IS_TOUCH || mxClient.IS_POINTER) ? 18 : 16;
 EditorUi.prototype.splitFootSize = (mxClient.IS_TOUCH || mxClient.IS_POINTER) ? 22 : 20;
 
 /**
