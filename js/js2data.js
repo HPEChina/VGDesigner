@@ -45,9 +45,9 @@ function js2data (json, interfaceParams) {
     resourcesProperties.id = modelID
     resources[modelID].properties = resourcesProperties
     var parentID = model['object']['mxCell@parent']
-    if (parentID && resources[parentID]) {
+    if (parentID) {
       resources[modelID].parent = parentID
-      if (parentID !== '1') resources[parentID].active = true // 有后代
+      if (parentID !== '1' && resources[parentID]) resources[parentID].active = true // 有后代
     }
     if (operands.length) {
       resources[modelID].operand = { operands: operands }
@@ -89,9 +89,9 @@ function js2data (json, interfaceParams) {
     // 无属性的模型
     resourcesID.push(modelID)
     resources[modelID].properties = { id: modelID }
-    if (model['mxCell@parent'] && resources[model['mxCell@parent']]) {
+    if (model['mxCell@parent']) {
       resources[modelID].parent = model['mxCell@parent']
-      if (model['mxCell@parent'] !== '1') resources[model['mxCell@parent']].active = true // 有后代
+      if (model['mxCell@parent'] !== '1' && resources[model['mxCell@parent']]) resources[model['mxCell@parent']].active = true // 有后代
     }
   }// end while
 
