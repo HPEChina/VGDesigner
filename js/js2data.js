@@ -10,22 +10,34 @@
  * 6. 模型忽略保存时强制加组(parent=1的强加组被移除,强加组的子节点无父节点),topo忽略底板
  * 7. 性能考虑,暂不处理嵌套多层均为空的情况
  * @param {[object]} json 图形json数组
- * @param {any} interfaceParams
+ * @param {string} envType 环境类型 model OR topo,浏览器参数
  * @returns
  */
 function js2data (json, envType) {
   if (!Array.isArray(json)) return
-  var result = {}, relations = [], resources = {}, resourcesID = [], properties = {}
+  var relations = []// topo 连线
+  var resources = {}// 图元集合
+  var resourcesID = []// 图元ID数组
+  var properties = {}// 图形属性
+  /**
+   * 获取图元属性
+   * @param {string} modelID 图元ID
+   * @param {object} model 图元JSON
+   * @returns
+   */
   function getAttrs (modelID, model) { // 获取属性面板数据
-    var resourcesProperties = {}, operands = [], property = model['object@intrinsic']
+    var resourcesProperties = {}// 图元静态属性
+    var operands = []// 图元动态属性
+    var property = model['object@intrinsic']
     if (property) { // 静态属性
-      try { property = JSON.parse(property) } catch (err) { console.error(err) }
+      try { property = JSON.parse(property) } catch (e) { }
       if (Array.isArray(property) && property.length) {
         if (envType !== 'model' && modelID === '0') {
           // topo忽略底板,只保留底板静态属性作为topo属性,忽略id
-          return property.forEach(function (prop) {
+          property.forEach(function (prop) {
             properties[prop.name] = prop.value[0]
           })
+          return
         }
         property.forEach(function (prop) {
           resourcesProperties[prop.name] = prop.value[0]
@@ -36,7 +48,7 @@ function js2data (json, envType) {
     if (envType !== 'model' && modelID === '0') return// topo忽略底板
     property = model['object@extended']
     if (property) { // 动态属性
-      try { property = JSON.parse(property) } catch (err) { console.error(err) }
+      try { property = JSON.parse(property) } catch (e) { }
       if (Array.isArray(property) && property.length) {
         operands = property.map(function (prop) {
           return getOperand(prop)
@@ -56,6 +68,11 @@ function js2data (json, envType) {
       resources[modelID].active = true // 有属性
     }
   }
+  /**
+   * 获取topo连线
+   * @param {string} modelID 图元ID
+   * @param {object} model 图元JSON
+   */
   function getEdge (modelID, model) {
     if (envType !== 'model') {
       relations.push({
@@ -104,6 +121,7 @@ function js2data (json, envType) {
     return relation
   })
 
+  var result = {}// 返回值
   if (envType !== 'model') { // topo,双端执行
     result.properties = properties
     var resourcesTree = list2tree(resources, resourcesID)
@@ -117,16 +135,21 @@ function js2data (json, envType) {
   if (resourcesTree.length) result.resources = resourcesTree
   return result
 }
+/**
+ * 解析动态属性
+ * @param {object} prop 动态属性
+ * @returns
+ */
 function getOperand (prop) {
-  var key = prop.name,
-    values = prop.value,
-    operator = prop.operator,
-    composeType = prop.logic,
-    operand = {
-      key: key,
-      value: values[0],
-      operator: operator[0]
-    }
+  var key = prop.name// 属性名称
+  var values = prop.value// 属性值
+  var operator = prop.operator// 关系运算符
+  var composeType = prop.logic// 逻辑运算符
+  var operand = {
+    key: key,
+    value: values[0],
+    operator: operator[0]
+  }
   for (var i = 0; composeType[i] !== 'none'; i++) {
     if (operand.composeType !== composeType[i]) {
       operand = {
@@ -147,6 +170,13 @@ function getOperand (prop) {
   }
   return operand
 }
+/**
+ * 获取连线设备
+ * @param {object} resources 图元集合
+ * @param {string} sid 连线 source ID
+ * @param {string} tid 连线 target ID
+ * @returns
+ */
 function findDevice (resources, sid, tid) {
   var sparent = '1'
   var tparent = '1'
@@ -170,7 +200,13 @@ function findDevice (resources, sid, tid) {
   }
   return { sid: sid, tid: tid }
 }
-function list2tree (resources, ids) { // 生成嵌套结构
+/**
+ * 生成嵌套结构
+ * @param {object} resources 图元集合
+ * @param {[string]} ids 图元ID数组
+ * @returns
+ */
+function list2tree (resources, ids) {
   while (ids.length) {
     var id = ids.pop()
     if (!resources[id].active) { // kill三无,没意义(properties\operand)&没关系(relations)&没后代(嵌套子模型)
@@ -191,7 +227,13 @@ function list2tree (resources, ids) { // 生成嵌套结构
   }
   return objValues(resources)
 }
+/**
+ * Object.values(obj)
+ * @param {object} obj 嵌套结构图元集合
+ * @returns {[object]} 图元数组
+ */
 function objValues (obj) {
+  if (Object.values) return Object.values(obj)
   var arr = []
   for (var key in obj) {
     arr.push(obj[key])
