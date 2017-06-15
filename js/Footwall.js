@@ -219,8 +219,9 @@ Footwall.prototype.init = function()
                     .replace(/&quot;/g, '\\"')
                 var jsonTs = js2data(
                     JSON.parse(graphJSONData).mxGraphModel.root,
-                    this.editorUi.interfaceParams
+                    this.editorUi.interfaceParams.type
                 );
+                if (this.editorUi.interfaceParams.name) jsonTs.properties.name = this.editorUi.interfaceParams.name
                 if (this.editorUi.interfaceParams.id) jsonTs.properties.id = this.editorUi.interfaceParams.id;
                 var authorData = this.editorUi.interfaceParams.user || this.editorUi.interfaceParams.author;
                 if (authorData) jsonTs.properties.author = authorData

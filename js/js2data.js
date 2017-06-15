@@ -1,18 +1,20 @@
-/*
-画图规则:parent在前,child在后(先定义后使用)
-转换规则:
-1. 无空{}
-2. topo忽略底板,只保留底板静态属性作为topo属性
-3. kill三无,没意义(properties\operand)&没关系(relations)&没后代(嵌套子模型)
-4. 忽略id=1
-5. 模型name为底板name,topo name为filename
-6. 模型忽略保存时强制加组(parent=1的强加组被移除,强加组的子节点无父节点),topo忽略底板
-7. 性能考虑,暂不处理嵌套多层均为空的情况
-*/
-function js2data (json, interfaceParams) {
+/**
+ * JSON图形转数据,nodejs json拓扑转数据模块
+ * 画图规则:parent在前,child在后(先定义后使用)
+ * 转换规则:
+ * 1. 无空{}
+ * 2. topo忽略底板,只保留底板静态属性作为topo属性
+ * 3. kill三无,没意义(properties\operand)&没关系(relations)&没后代(嵌套子模型)
+ * 4. 忽略id=1
+ * 5. 模型name为底板name,topo name为filename
+ * 6. 模型忽略保存时强制加组(parent=1的强加组被移除,强加组的子节点无父节点),topo忽略底板
+ * 7. 性能考虑,暂不处理嵌套多层均为空的情况
+ * @param {[object]} json 图形json数组
+ * @param {any} interfaceParams
+ * @returns
+ */
+function js2data (json, envType) {
   if (!Array.isArray(json)) return
-  var envType = null
-  if (interfaceParams) envType = interfaceParams.type || interfaceParams
   var result = {}, relations = [], resources = {}, resourcesID = [], properties = {}
   function getAttrs (modelID, model) { // 获取属性面板数据
     var resourcesProperties = {}, operands = [], property = model['object@intrinsic']
@@ -102,18 +104,15 @@ function js2data (json, interfaceParams) {
     return relation
   })
 
-  if (envType !== 'model') { // topo
-    if (interfaceParams) { var nameData = interfaceParams.name || properties.name }
-    if (nameData) properties.name = nameData
+  if (envType !== 'model') { // topo,双端执行
     result.properties = properties
     var resourcesTree = list2tree(resources, resourcesID)
     if (resourcesTree.length) result.resources = resourcesTree
     if (relations.length) result.relations = relations
     return result
   }
-  // model
-  nameData = resources['0'] ? resources['0'].properties.name : ''
-  result.properties = nameData ? { name: nameData } : {}// 底板name属性做为model name,err:有属性无模型时root节点是对象而非数组
+  // model,浏览器执行
+  result.properties = { name: resources['0'] ? resources['0'].properties.name : '' }// 底板name属性做为model name
   resourcesTree = list2tree(resources, resourcesID)
   if (resourcesTree.length) result.resources = resourcesTree
   return result
