@@ -456,19 +456,19 @@ div.mxWindow .geButton {
 }
 .geHsplit {
 	cursor:col-resize;
-	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHBAMAAADdS/HjAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAHUlEQVQImWMQEGAQFWUQFmYQF2cQEmIQE2MQEQEACy4BF67hpEwAAAAASUVORK5CYII=);
-	_background-image:url('thumb_vertical.png');
+	background-image: url('../images/splitH.png');
+  	background-size: 12px;
 	background-repeat:no-repeat;
-	background-position:center 53%;
+	background-position:center 48%;
 	border-top: 1px solid #e5e5e5;
 	border-left: 1px solid #e5e5e5;
 }
 .geFsplit {
 	cursor:col-resize;
-	background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHBAMAAADdS/HjAAAAGFBMVEUzMzP///9tbW1QUFCKiopBQUF8fHxfX1/IXlmXAAAAHUlEQVQImWMQEGAQFWUQFmYQF2cQEmIQE2MQEQEACy4BF67hpEwAAAAASUVORK5CYII=);
-	_background-image:url('thumb_vertical.png');
+	background-image: url('../images/splitH.png');
+  	background-size: 12px;
 	background-repeat:no-repeat;
-	background-position:center 53%;
+	background-position:center 48%;
 	border-top: 1px solid #e5e5e5;
 }
 .gefootHsplit {
