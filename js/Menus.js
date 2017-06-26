@@ -7,7 +7,7 @@
 Menus = function(editorUi)
 {
 	this.editorUi = editorUi;
-	this.menus = new Object();
+	this.menus = {};
 	this.init();
 	
 	// Pre-fetches checkmark image
@@ -342,7 +342,7 @@ Menus.prototype.init = function()
 	{
         // this.addMenuItems(menu, ['new', 'open', '-', 'save', 'saveAs', '-', 'import', 'export', '-', 'pageSetup', 'print'], parent);
         // this.addMenuItems(menu, ['new', '-', 'save', '-', 'import', 'export', '-', 'pageSetup', 'print'], parent);
-        this.addMenuItems(menu, ['new', '-', 'save', '-', 'import', 'export'], parent);
+        this.addMenuItems(menu, ['new', 'save', '-', 'import', 'export'], parent);
 	})));
 	this.put('edit', new Menu(mxUtils.bind(this, function(menu, parent)
 	{

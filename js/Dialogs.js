@@ -508,7 +508,7 @@ var PageSetupDialog = function(editorUi)
 	// Adds all papersize options
 	var paperSizeSelect = document.createElement('select');
 	var detected = false;
-	var pf = new Object();
+	var pf = {};
 	var formats = PageSetupDialog.getFormats();
 
 	for (var i = 0; i < formats.length; i++)
