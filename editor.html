@@ -12,13 +12,14 @@
         <script type="text/javascript" src="js/VGDesigner.js"></script>
         <script type="text/javascript">
             (function(){
+                'use strict';
                 var interfaceParams = GetRequest();
                 var model = (interfaceParams.model != null) ? interfaceParams.model : 'editor';
 
                 var vgDesignerDiv = document.getElementsByClassName("geEditor")[0];
                 var vgDesigner = new VGDesigner(model, vgDesignerDiv);
                 window.onload = function(){ vgDesigner.init(interfaceParams); };
-            })();
+            }());
         </script>
     </body>
 </html>
