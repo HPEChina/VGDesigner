@@ -1,5 +1,8 @@
 /**
- * Created by jinbin on 2017/2/13.
+ * @file Main,Created by jinbin on 2017/2/13.
+ * @author jinbin
+ * @copyright DXC 2017
+ * @version 1.0.0
  */
 
 var VGDesigner = function(model, container) {
