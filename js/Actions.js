@@ -6,7 +6,7 @@
 /**
  * Constructs the actions object for the given UI.
  *
- * @param {Object} editorUi - graph editor constructor
+ * @param {EditorUi} editorUi: The instance of <EditorUi>
  */
 function Actions(editorUi)
 {
@@ -471,9 +471,9 @@ Actions.prototype.init = function ()
          //    }
 		// }
 
-		//原有的dialog编辑数据
+		// 原有的dialog编辑数据
 		// var cell = graph.getSelectionCell() || graph.getModel().getRoot();
-		//
+        //
 		// if (cell != null)
 		// {
 		// 	var dlg = new EditDataDialog(ui, cell);
@@ -774,13 +774,13 @@ Actions.prototype.init = function ()
     		value = state.style[mxConstants.STYLE_ROTATION] || value;
     	}
 
-		var dlg = new FilenameDialog(ui, value, mxResources.get('apply'), function(newValue)
+		var dlg = new FilenameDialog(ui, value, mxResources.get('apply'), function (newValue)
 		{
 			if (newValue != null && newValue.length > 0)
 			{
 				graph.setCellStyles(mxConstants.STYLE_ROTATION, newValue);
 			}
-		}, mxResources.get('enterValue') + ' (' + mxResources.get('rotation') + ' 0-360)');
+		}, mxResources.get('enterValue') + ' (' + mxResources.get('rotation') + ' 0-360)', null, null, null, false);
 		
 		ui.showDialog(dlg.container, 300, 80, true, true);
 		dlg.init();
@@ -812,7 +812,7 @@ Actions.prototype.init = function ()
 	}, null, null, 'Ctrl + / Alt+Mousewheel');
 
 	// Toolbar item action: Zoom Out
-	this.addAction('zoomOut', function(evt)
+	this.addAction('zoomOut', function (evt)
 	{
 		graph.zoomOut();
 	}, null, null, 'Ctrl - / Alt+Mousewheel');
@@ -1088,7 +1088,7 @@ Actions.prototype.init = function ()
 	// Font style actions
 	var toggleFontStyle = mxUtils.bind(this, function (key, style, fn, shortcut)
 	{
-		return this.addAction(key, function()
+		return this.addAction(key, function ()
 		{
 			if (fn != null && graph.cellEditor.isContentEditing())
 			{
@@ -1372,7 +1372,7 @@ Actions.prototype.init = function ()
 			graph.getModel().beginUpdate();
 			try
 			{
-				for (var i = 0; i < cells.length; i++)
+				for (var i = 0, len = cells.length; i < len; i++)
 				{
 					var cell = cells[i];
 					
@@ -1527,11 +1527,11 @@ Actions.prototype.init = function ()
 		{
 			// LATER: Check outline window for initial placement
 			this.layersWindow = new LayersWindow(ui, ui.container.offsetWidth - 280, 120, 220, 180);
-			this.layersWindow.window.addListener('show', function()
+			this.layersWindow.window.addListener('show', function ()
 			{
 				ui.fireEvent(new mxEventObject('layers'));
 			});
-			this.layersWindow.window.addListener('hide', function()
+			this.layersWindow.window.addListener('hide', function ()
 			{
 				ui.fireEvent(new mxEventObject('layers'));
 			});
@@ -1556,7 +1556,8 @@ Actions.prototype.init = function ()
 		ui.toggleFormatPanel();
 	}), null, null, 'Ctrl+Shift+P');
 	action.setToggleAction(true);
-	action.setSelectedCallback(mxUtils.bind(this, function (){
+	action.setSelectedCallback(mxUtils.bind(this, function ()
+	{
 		return ui.formatWidth > 0;
 	}));
 
@@ -1600,7 +1601,7 @@ Actions.prototype.init = function ()
  * @param {String} iconCls: Optional CSS class for the icon.
  * @param {String} shortcut: The shortcut key for the action.
  * @param {Array} params: Array of the values for the placeholders of the form {1}...{n}
- * @return {Object} The instance of action.
+ * @return {Action} The instance of <Action>.
  */
 Actions.prototype.addAction = function(key, funct, enabled, iconCls, shortcut, params)
 {
@@ -1635,8 +1636,8 @@ Actions.prototype.addAction = function(key, funct, enabled, iconCls, shortcut, p
  * Registers the given action under the given name.
  *
  * @param {String} name: The name of the action.
- * @param {Object} action: The instance of action.
- * @return {Object} The instance of action.
+ * @param {Action} action: The instance of <Action>.
+ * @return {Action} The instance of <Action>.
  */
 Actions.prototype.put = function(name, action)
 {
@@ -1649,7 +1650,7 @@ Actions.prototype.put = function(name, action)
  * Returns the action for the given name or null if no such action exists.
  *
  * @param {String} name: The name of the action.
- * @return {Object}  The instance of action.
+ * @return {Action}  The instance of <Action>.
  */
 Actions.prototype.get = function(name)
 {
@@ -1726,7 +1727,7 @@ Action.prototype.setSelectedCallback = function(funct)
 /**
  * Gets the selected state of the action.
  *
- * @return {Function()} The result of this.selectedCallback().
+ * @return {Boolean} The result of this.selectedCallback().
  */
 Action.prototype.isSelected = function()
 {
