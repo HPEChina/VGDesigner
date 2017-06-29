@@ -1,8 +1,16 @@
 /**
  * Copyright (c) 2006-2012, JGraph Ltd
+ * Revised by Jin Bin in June 29, 2017
+ * Version: 1.0.0.0
  */
 /**
  * Editor constructor executed on page load.
+ *
+ * @param {Boolean} chromeless: == 0 chromeless mode.
+ * @param {Object} themes: graph theme.
+ * @param {mxGraphModel} model: Optional <mxGraphModel> that constitutes the graph data.
+ * @param {Graph} graph: The instance of <Graph>.
+ * @param {Element} vgdContainer: The HTML element as a container.
  */
 Editor = function(chromeless, themes, model, graph, vgdContainer)
 {
@@ -48,7 +56,7 @@ Editor = function(chromeless, themes, model, graph, vgdContainer)
 		this.setModified(true);
 	};
 	
-	this.graph.getModel().addListener(mxEvent.CHANGE, mxUtils.bind(this, function()
+	this.graph.getModel().addListener(mxEvent.CHANGE, mxUtils.bind(this, function ()
 	{
 		this.graphChangeListener.apply(this, arguments);
 	}));
@@ -96,69 +104,75 @@ Editor.pageCounter = 0;
 Editor.useLocalStorage = typeof(Storage) != 'undefined' && mxClient.IS_IOS;
 
 /**
- * Images below are for lightbox and embedding toolbars.
+ * Specifies the image URL to be used for help.
+ * It is embedding toolbars or menu.
  */
 Editor.helpImage = (mxClient.IS_SVG) ? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAXVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC5BxTwAAAAH3RSTlMAlUF8boNQIE0LBgOgkGlHNSwqFIx/dGVUOjApmV9ezNACSAAAAIVJREFUGNNtjNsOgzAMQ5NeoVcKDAZs+//PXLKI8YKlWvaRU7jXuFpb9qsbdK05XILUiE8JHQox1Pv3OgFUzf1AGqWqUg+QBwLF0YAeegBlCNgRWOpB5vUfTCmeoHQ/wNdy0jLH/cM+b+wLTw4n/7ACEmHVVy8h6qy8V7MNcGowWpsNbvUFcGUEdSi1s/oAAAAASUVORK5CYII=' :
 	IMAGE_PATH + '/help.png';
 
 /**
- * Sets the default font size.
+ * Specifies the image URL to be used for check mark.
+ * It is embedding menu.
  */
 Editor.checkmarkImage = (mxClient.IS_SVG) ? 'data:image/gif;base64,R0lGODlhFQAVAMQfAGxsbHx8fIqKioaGhvb29nJycvr6+sDAwJqamltbW5OTk+np6YGBgeTk5Ly8vJiYmP39/fLy8qWlpa6ursjIyOLi4vj4+N/f3+3t7fT09LCwsHZ2dubm5r6+vmZmZv///yH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OEY4NTZERTQ5QUFBMTFFMUE5MTVDOTM5MUZGMTE3M0QiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OEY4NTZERTU5QUFBMTFFMUE5MTVDOTM5MUZGMTE3M0QiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Rjg1NkRFMjlBQUExMUUxQTkxNUM5MzkxRkYxMTczRCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Rjg1NkRFMzlBQUExMUUxQTkxNUM5MzkxRkYxMTczRCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAEAAB8ALAAAAAAVABUAAAVI4CeOZGmeaKqubKtylktSgCOLRyLd3+QJEJnh4VHcMoOfYQXQLBcBD4PA6ngGlIInEHEhPOANRkaIFhq8SuHCE1Hb8Lh8LgsBADs=' :
 	IMAGE_PATH + '/checkmark.gif';
 
 /**
- * Images below are for lightbox and embedding toolbars.
+ * Specifies the image URL to be used for check maximize.
+ * It is for lightbox and embedding toolbars.
  */
 Editor.maximizeImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVBAMAAABbObilAAAAElBMVEUAAAAAAAAAAAAAAAAAAAAAAADgKxmiAAAABXRSTlMA758vX1Pw3BoAAABJSURBVAjXY8AJQkODGBhUQ0MhbAUGBiYY24CBgRnGFmZgMISwgwwDGRhEhVVBbAVmEQYGRwMmBjIAQi/CTIRd6G5AuA3dzYQBAHj0EFdHkvV4AAAAAElFTkSuQmCC';
 
 /**
- * Specifies the image URL to be used for the transparent background.
+ * Specifies the image URL to be used for zoom.
+ * It is embedding toolbars.
  */
 Editor.zoomOutImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVBAMAAABbObilAAAAElBMVEUAAAAAAAAsLCxxcXEhISFgYGChjTUxAAAAAXRSTlMAQObYZgAAAEdJREFUCNdjIAMwCQrB2YKCggJQJqMwA7MglK1owMBgqABVApITgLJZXFxgbIQ4Qj3CHIT5ggoIe5kgNkM1KSDYKBKqxPkDAPo5BAZBE54hAAAAAElFTkSuQmCC';
 
 /**
- * Specifies the image URL to be used for the transparent background.
+ * Specifies the image URL to be used for zoom.
+ * It is embedding toolbar.
  */
 Editor.zoomInImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVBAMAAABbObilAAAAElBMVEUAAAAAAAAsLCwhISFxcXFgYGBavKaoAAAAAXRSTlMAQObYZgAAAElJREFUCNdjIAMwCQrB2YKCggJQJqMIA4sglK3owMzgqABVwsDMwCgAZTMbG8PYCHGEeoQ5CPMFFRD2MkFshmpSQLBRJFSJ8wcAEqcEM2uhl2MAAAAASUVORK5CYII=';
 
 /**
- * Specifies the image URL to be used for the transparent background.
+ * Specifies the image URL to be used for zoom.
+ * It is embedding toolbar.
  */
 Editor.zoomFitImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVBAMAAABbObilAAAAD1BMVEUAAAAAAAAwMDBwcHBgYGC1xl09AAAAAXRSTlMAQObYZgAAAEFJREFUCNdjIAMwCQrB2YKCggJQJqMwA7MglK1owMBgqABVApITwMdGqEeYgzBfUAFhLxPEZqgmBQQbRUKFOH8AAK5OA3lA+FFOAAAAAElFTkSuQmCC';
 
 /**
- * Specifies the image URL to be used for the transparent background.
+ * Specifies the image URL to be used for layer.
  */
 Editor.layersImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAMAAACeyVWkAAAAaVBMVEUAAAAgICAICAgdHR0PDw8WFhYICAgLCwsXFxcvLy8ODg4uLi4iIiIqKiokJCQYGBgKCgonJycFBQUCAgIqKiocHBwcHBwODg4eHh4cHBwnJycJCQkUFBQqKiojIyMuLi4ZGRkgICAEBATOWYXAAAAAGnRSTlMAD7+fnz8/H7/ff18/77+vr5+fn39/b28fH2xSoKsAAACQSURBVBjTrYxJEsMgDARZZMAY73sgCcn/HxnhKtnk7j6oRq0psfuoyndZ/SuODkHPLzfVT6KeyPePnJ7KrnkRjWMXTn4SMnN8mXe2SSM3ts8L/ZUxxrbAULSYJJULE0Iw9pjpenoICcgcX61mGgTgtCv9Be99pzCoDhNQWQnchD1mup5++CYGcoQexajZbfwAj/0MD8ZOaUgAAAAASUVORK5CYII=';
 
 /**
- * Specifies the image URL to be used for the transparent background.
+ * Specifies the image URL to be used for zoom.
  */
 Editor.zoomOutLargeImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAilBMVEUAAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////2N2iNAAAALXRSTlMA+vTcKMM96GRBHwXxi0YaX1HLrKWhiHpWEOnOr52Vb2xKSDcT19PKv5l/Ngdk8+viAAABJklEQVQ4y4WT2XaDMAxEvWD2nSSUNEnTJN3r//+9Sj7ILAY6L0ijC4ONYVZRpo6cByrz2YKSUGorGTpz71lPVHvT+avoB5wIkU/mxk8veceSuNoLg44IzziXjvpih72wKQnm8yc2UoiP/LAd8jQfe2Xf4Pq+2EyYIvv9wbzHHCgwxDdlBtWZOdqDfTCVgqpygQpsZaojVAVc9UjQxnAJDIBhiQv84tq3gMQCAVTxVoSibXJf8tMuc7e1TB/DCmejBNg/w1Y3c+AM5vv4w7xM59/oXamrHaLVqPQ+OTCnmMZxgz0SdL5zji0/ld6j88qGa5KIiBB6WeJGKfUKwSMKLuXgvl1TW0tm5R9UQL/efSDYsnzxD8CinhBsTTdugJatKpJwf8v+ADb8QmvW7AeAAAAAAElFTkSuQmCC';
 
 /**
- * Specifies the image URL to be used for the transparent background.
+ * Specifies the image URL to be used for zoom.
  */
 Editor.zoomInLargeImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAilBMVEUAAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////2N2iNAAAALXRSTlMA+vTcKMM96GRBHwXxi0YaX1HLrKWhiHpWEOnOr52Vb2xKSDcT19PKv5l/Ngdk8+viAAABKElEQVQ4y4WT6WKCMBCENwkBwn2oFKvWqr3L+79es4EkQIDOH2d3Pxk2ABiJlB8JCXjqw4LikHVGLHTm3nM3UeVN5690GBBN0GwyV/3kkrUQR+WeKnREeKpzaXWd77CmJiXGfPIEI4V4yQ9TIW/ntlcMBe731Vts9w5TWG8F5j3mQI4hvrKpdGeYA7CX9qAcl650gVJartxRuhyHVghF8idQAIbFLvCLu28BsQEC6aKtCK6Pyb3JT7PmbmtNH8Ny56CotD/2qOs5cJbuffxgXmCib+xddVU5RNOhkvvkhTlFehzVWCOh3++MYElOhfdovaImnRYVmqDdsuhNp1QrBBE6uGC2+3ZNjGdg5B94oD+9uyVgWT79BwAxEBTWdOu3bWBVgsn/N/AHUD9IC01Oe40AAAAASUVORK5CYII=';
 
 /**
- * Specifies the image URL to be used for the transparent background.
+ * Specifies the image URL to be used for actual size.
  */
 Editor.actualSizeLargeImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAilBMVEUAAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////2N2iNAAAALXRSTlMA+vTcKMM96GRBHwXxi0YaX1HLrKWhiHpWEOnOr52Vb2xKSDcT19PKv5l/Ngdk8+viAAABIUlEQVQ4y4WT2XqDIBCFBxDc9yTWNEnTJN3r+79eGT4BEbXnaubMr8dBBaM450dCQp4LWFAascGIRd48eB4cNYE7f6XjgGiCFs5c+dml6CFN6j1V6IQIlHPpdV/usKcmJcV88gQTRXjLD9Mhb+fWq8YG9/uCmTCFjeeDeY85UGKIUGUuqzN42kv7oCouq9oHamlzVR1lVfpAIu1QVRiW+sAv7r4FpAYIZZVsRXB9TP5Dfpo1d1trCgzz1iiptH/sUbdz4CzN9+mLeXHn3+hdddd4RDegsrvzwZwSs2GLPRJidAqCLTlVwaMPqpYMWjTWBB2WRW86pVkhSKyDK2bdt2tmagZG4sBD/evdLQHLEvQfAOKRoLCmG1FAB6uKmby+gz+REDn7O5+EwQAAAABJRU5ErkJggg==';
 
 /**
- * Specifies the image URL to be used for the transparent background.
+ * Specifies the image URL to be used for layer.
  */
 Editor.layersLargeImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAmVBMVEUAAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+/v7///+bnZkkAAAAMnRSTlMABPr8ByiD88KsTi/rvJb272mjeUA1CuPe1M/KjVxYHxMP6KZ0S9nYzGRGGRaznpGIbzaGUf0AAAHESURBVDjLbZLZYoIwEEVDgLCjbKIgAlqXqt3m/z+uNwu1rcyDhjl3ktnYL7OY254C0VX3yWFZfzDrOClbbgKxi0YDHjwl4jbnRkXxJS/C1YP3DbBhD1n7Ex4uaAqdVDb3yJ/4J/3nJD2to/ngQz/DfUvzMp4JJ5sSCaF5oXmemgQDfDxzbi+Kq4sU+vNcuAmx94JtyOP2DD4Epz2asWSCz4Z/4fECxyNj9zC9xNLHcdPEO+awDKeSaUu0W4twZQiO2hYVisTR3RCtK/c1X6t4xMEpiGqXqVntEBLolkZZsKY4QtwH6jzq67dEHlJysB1aNOD3XT7n1UkasQN59L4yC2RELMDSeCRtz3yV22Ub3ozIUTknYx8JWqDdQxbUes98cR2kZtUSveF/bAhcedwEWmlxIkpZUy4XOCb6VBjjxHvbwo/1lBAHHi2JCr0NI570QhyHq/DhJoE2lLgyA4RVe6KmZ47O/3b86MCP0HWa73A8/C3SUc5Qc1ajt6fgpXJ+RGpMvDSchepZDOOQRcZVIKcK90x2D7etqtI+56+u6n3sPriO6nfphitR4+O2m3EbM7lh3me1FM1o+LMI887rN+s3/wZdTFlpNVJiOAAAAABJRU5ErkJggg==';
 
 /**
- * Specifies the image URL to be used for the transparent background.
+ * Specifies the image URL to be used for close.
  */
 Editor.closeLargeImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAUVBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////8IN+deAAAAGnRSTlMAuvAIg/dDM/QlOeuFhj0S5s4vKgzjxJRQNiLSey0AAADNSURBVDjLfZLbEoMgDEQjRRRs1XqX///QNmOHJSnjPkHOGR7IEmeoGtJZstnwjqbRfIsmgEdtPCqe9Ynz7ZSc07rE2QiSc+qv8TvjRXA2PDUm3dpe82iJhOEUfxJJo3aCv+jKmRmH4lcCjCjeh9GWOdL/GZZkXH3PYYDrHBnfc4D/RVZf5sjoC1was+Y6HQxwaUxFvq/a0Pv343VCTxfBSRiB+ab3M3eiQZXmMNBJ3Y8pGRZtYQ7DgHMXJEdPLTaN/qBjzJOBc3nmNcbsA16bMR0oLqf+AAAAAElFTkSuQmCC';
 
 /**
- * Specifies the image URL to be used for the transparent background.
+ * Specifies the image URL to be used for edit.
  */
 Editor.editLargeImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAgMAAAAOFJJnAAAACVBMVEUAAAD///////9zeKVjAAAAAnRSTlMAgJsrThgAAABcSURBVBjThc6xDcAgDATAd8MQTEPW8TRUmYCGnzLRYyOlIV+dZFtvkICTFGqiJEzAG0/Uje9oL+e5Vu4F5yUYJxxqGKhQZ0eBvmgwYQLQaARKD1hbiPyDR0QOeAC31EyNe5X/kAAAAABJRU5ErkJggg==';
 
@@ -210,8 +224,7 @@ Editor.prototype.filename = null;
 Editor.prototype.modified = false;
 
 /**
- * Specifies if the diagram should be saved automatically if possible. Default
- * is true.
+ * Specifies if the diagram should be saved automatically if possible. Default is true.
  */
 Editor.prototype.autosave = true;
 
@@ -226,12 +239,12 @@ Editor.prototype.initialTopSpacing = 0;
 Editor.prototype.appName = document.title;
 
 /**
- * 
+ * Specifies the edit blank url.
  */
 Editor.prototype.editBlankUrl = window.location.protocol + '//' + window.location.host + '/?client=1';
 
 /**
- * 
+ * Specifies the edit blank fall back url.
  */
 Editor.prototype.editBlankFallbackUrl = window.location.protocol + '//' + window.location.host + '/?create=drawdata&splash=0';
 
@@ -261,7 +274,9 @@ Editor.prototype.init = function()
 };
 
 /**
- * Sets the XML node for the current diagram.
+ * Sets the auto save property for the current diagram.
+ *
+ * @param {Boolean} value: The value of the setting.
  */
 Editor.prototype.setAutosave = function(value)
 {
@@ -270,7 +285,10 @@ Editor.prototype.setAutosave = function(value)
 };
 
 /**
- * 
+ * Edit XML on the new page.
+ *
+ * @param {String} xml: String for the graph xml.
+ * @param {String} title: Window name.
  */
 Editor.prototype.editAsNew = function(xml, title)
 {
@@ -280,7 +298,7 @@ Editor.prototype.editAsNew = function(xml, title)
 	{
 		var wnd = null;
 		
-		var receive = mxUtils.bind(this, function(evt)
+		var receive = mxUtils.bind(this, function (evt)
 		{
 			if (evt.data == 'ready' && evt.source == wnd)
 			{
@@ -301,7 +319,11 @@ Editor.prototype.editAsNew = function(xml, title)
 };
 
 /**
- * Sets the XML node for the current diagram.
+ * Creates the graph for the current diagram.
+ *
+ * @param {Object} themes: graph theme.
+ * @param {mxGraphModel} model: Optional <mxGraphModel> that constitutes the graph data.
+ * @return {Graph} The instance of <Graph>.
  */
 Editor.prototype.createGraph = function(themes, model)
 {
@@ -312,7 +334,7 @@ Editor.prototype.createGraph = function(themes, model)
 };
 
 /**
- * Sets the XML node for the current diagram.
+ * Resets the graph for the current diagram.
  */
 Editor.prototype.resetGraph = function()
 {
@@ -333,7 +355,9 @@ Editor.prototype.resetGraph = function()
 };
 
 /**
- * Sets the XML node for the current diagram.
+ * Gets the graph state for the current diagram.
+ *
+ * @param {Element} node: Document element.
  */
 Editor.prototype.readGraphState = function(node)
 {
@@ -406,6 +430,8 @@ Editor.prototype.readGraphState = function(node)
 
 /**
  * Sets the XML node for the current diagram.
+ *
+ * @param {Element} node: Document element.
  */
 Editor.prototype.setGraphXml = function(node)
 {
@@ -463,6 +489,10 @@ Editor.prototype.setGraphXml = function(node)
 
 /**
  * Returns the XML node that represents the current diagram.
+ *
+ * @param {EditorUi} ui: The instance of <EditorUi>.
+ * @param {Boolean} ignoreSelection: Ignore selection state.
+ * @return {Element} The XML node.
  */
 Editor.prototype.getGraphXml = function(ui, ignoreSelection)
 {
@@ -514,7 +544,7 @@ Editor.prototype.getGraphXml = function(ui, ignoreSelection)
 };
 
 /**
- * Keeps the graph container in sync with the persistent graph state
+ * Keeps the graph container in sync with the persistent graph state.
  */
 Editor.prototype.updateGraphComponents = function()
 {
@@ -531,18 +561,23 @@ Editor.prototype.updateGraphComponents = function()
 
 /**
  * Sets the modified flag.
+ *
+ * @param {Boolean} value: The value of setting.
  */
 Editor.prototype.setModified = function(value)
 {
-	if(this.isFirstLoad){
+	if(this.isFirstLoad)
+	{
 		this.isFirstLoad = false;
-		return;
+		return undefined;
 	}
 	this.modified = value;
 };
 
 /**
  * Sets the filename.
+ *
+ * @param {String} value: The value of setting.
  */
 Editor.prototype.setFilename = function(value)
 {
@@ -551,6 +586,8 @@ Editor.prototype.setFilename = function(value)
 
 /**
  * Creates and returns a new undo manager.
+ *
+ * @return {mxUndoManager}
  */
 Editor.prototype.createUndoManager = function()
 {
@@ -601,7 +638,7 @@ Editor.prototype.createUndoManager = function()
 Editor.prototype.initStencilRegistry = function() { };
 
 /**
- * Creates and returns a new undo manager.
+ * Destroys the handler and all its resources and DOM nodes.
  */
 Editor.prototype.destroy = function()
 {
@@ -624,7 +661,9 @@ OpenFile = function(done)
 };
 
 /**
- * Registers the editor from the new window.
+ * Consumes the data.
+ *
+ * @param {Function} value: The function for execute.
  */
 OpenFile.prototype.setConsumer = function(value)
 {
@@ -634,6 +673,9 @@ OpenFile.prototype.setConsumer = function(value)
 
 /**
  * Sets the data from the loaded file.
+ *
+ * @param {String} value: The xml data of opened file.
+ * @param {String} filename: The file name.
  */
 OpenFile.prototype.setData = function(value, filename)
 {
@@ -720,7 +762,7 @@ OpenFile.prototype.cancel = function(cancel)
 						
 						// Adds listener for double click handling on background
 						mxEvent.addListener(this.backgroundPageShape.node, 'dblclick',
-							mxUtils.bind(this, function(evt)
+							mxUtils.bind(this, function (evt)
 							{
 								graph.dblClick(evt);
 							})
@@ -729,11 +771,11 @@ OpenFile.prototype.cancel = function(cancel)
 						// Adds basic listeners for graph event dispatching outside of the
 						// container and finishing the handling of a single gesture
 						mxEvent.addGestureListeners(this.backgroundPageShape.node,
-							mxUtils.bind(this, function(evt)
+							mxUtils.bind(this, function (evt)
 							{
 								graph.fireMouseEvent(mxEvent.MOUSE_DOWN, new mxMouseEvent(evt));
 							}),
-							mxUtils.bind(this, function(evt)
+							mxUtils.bind(this, function (evt)
 							{
 								// Hides the tooltip if mouse is outside container
 								if (graph.tooltipHandler != null && graph.tooltipHandler.isHideOnHover())
@@ -746,7 +788,7 @@ OpenFile.prototype.cancel = function(cancel)
 									graph.fireMouseEvent(mxEvent.MOUSE_MOVE, new mxMouseEvent(evt));
 								}
 							}),
-							mxUtils.bind(this, function(evt)
+							mxUtils.bind(this, function (evt)
 							{
 								graph.fireMouseEvent(mxEvent.MOUSE_UP, new mxMouseEvent(evt));
 							})
@@ -983,12 +1025,12 @@ OpenFile.prototype.cancel = function(cancel)
 				}
 			}
 			
-			for (var i = verticalCount; i < this.verticalPageBreaks.length; i++)
+			for (var i = verticalCount, len = this.verticalPageBreaks.length; i < len; i++)
 			{
 				this.verticalPageBreaks[i].destroy();
 			}
 			
-			this.verticalPageBreaks.splice(verticalCount, this.verticalPageBreaks.length - verticalCount);
+			this.verticalPageBreaks.splice(verticalCount, len - verticalCount);
 		}
 	};
 	
@@ -996,7 +1038,7 @@ OpenFile.prototype.cancel = function(cancel)
 	var mxGraphHandlerShouldRemoveCellsFromParent = mxGraphHandler.prototype.shouldRemoveCellsFromParent;
 	mxGraphHandler.prototype.shouldRemoveCellsFromParent = function(parent, cells, evt)
 	{
-		for (var i = 0; i < cells.length; i++)
+		for (var i = 0, len = cells.length; i < len; i++)
 		{
 			if (this.graph.getModel().isVertex(cells[i]))
 			{
@@ -1018,7 +1060,7 @@ OpenFile.prototype.cancel = function(cancel)
 	{
 		var marker = mxConnectionHandlerCreateMarker.apply(this, arguments);
 		
-		marker.intersects = mxUtils.bind(this, function(state, evt)
+		marker.intersects = mxUtils.bind(this, function (state, evt)
 		{
 			if (this.isConnecting())
 			{
@@ -1205,6 +1247,4 @@ OpenFile.prototype.cancel = function(cancel)
 		
 		return cell;
 	};
-
-
 })();
