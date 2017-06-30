@@ -4475,7 +4475,7 @@ DiagramFormatPanel.prototype.addView = function(div)
 
 	if (graph.isEnabled())
 	{
-		// Guides
+		// // Guides
 		// div.appendChild(this.createOption(mxResources.get('guides'), function()
 		// {
 		// 	return graph.graphHandler.guidesEnabled;
@@ -4499,7 +4499,7 @@ DiagramFormatPanel.prototype.addView = function(div)
 		// 	}
 		// }));
 
-		// Page View
+		// // Page View
 		// div.appendChild(this.createOption(mxResources.get('pageView'), function()
 		// {
 		// 	return graph.pageVisible;
@@ -4869,7 +4869,7 @@ DiagramFormatPanel.prototype.addPaperSize = function(div)
 	formatDiv.style.display = 'none';
 	customDiv.style.display = 'none';
 
-	var pf = new Object();
+	var pf = {};
 	var formats = PageSetupDialog.getFormats();
 
 	for (var i = 0; i < formats.length; i++)

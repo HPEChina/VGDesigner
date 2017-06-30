@@ -62,7 +62,7 @@ VGDesigner.prototype.init = function(interfaceParams)
         mxResources.parse(xhr[0].getText());
 
         // Configures the default graph theme
-        var themes = new Object();
+        var themes = {};
         themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
         // Main
@@ -154,7 +154,7 @@ VGDesigner.prototype.init = function(interfaceParams)
  */
 VGDesigner.prototype.urlParams = function(url)
 {
-    var result = new Object();
+    var result = {};
     var idx = url.lastIndexOf('?');
     if (idx > 0)
     {
@@ -221,7 +221,7 @@ function loadJsCssFiles(fileNames)
  */
 function GetRequest() {
     var url = location.search; //获取url中"?"符后的字串
-    var theRequest = new Object();
+    var theRequest = {};
     if (url.indexOf("?") != -1) {
         var str = url.substr(1);
         var strs = str.split("&");
